@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noventra</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #07111f;
+            color: white;
+        }
+
+        header {
+            padding: 22px 7%;
+            border-bottom: 1px solid #1d3048;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        nav a {
+            color: #9aabc0;
+            text-decoration: none;
+            margin-left: 20px;
+        }
+
+        .hero {
+            padding: 100px 7%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .small-title {
+            color: #7dd3fc;
+            letter-spacing: 3px;
+            font-size: 13px;
+        }
+
+        h1 {
+            font-size: 60px;
+            max-width: 700px;
+            margin: 20px 0;
+        }
+
+        .hero p {
+            color: #9aabc0;
+            font-size: 18px;
+            line-height: 1.7;
+            max-width: 600px;
+        }
+
+        .buttons {
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 15px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .primary {
+            background: #7dd3fc;
+            color: #07111f;
+        }
+
+        .secondary {
+            border: 1px solid #30445e;
+            color: white;
+        }
+
+        section {
+            max-width: 1100px;
+            margin: auto;
+            padding: 50px 7%;
+        }
+
+        h2 {
+            font-size: 32px;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: #9aabc0;
+            line-height: 1.6;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 30px;
+        }
+
+        .card {
+            background: #0d1b2e;
+            border: 1px solid #1d3048;
+            border-radius: 14px;
+            padding: 25px;
+        }
+
+        .number {
+            color: #7dd3fc;
+            font-weight: bold;
+        }
+
+        .card h3 {
+            margin: 15px 0 10px;
+        }
+
+        .card p {
+            color: #9aabc0;
+            line-height: 1.6;
+        }
+
+        footer {
+            border-top: 1px solid #1d3048;
+            padding: 30px 7%;
+            color: #9aabc0;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 42px;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">NOVENTRA</div>
+
+    <nav>
+        <a href="#how">Necə işləyir?</a>
+        <a href="#results">Nəticələr</a>
+        <a href="#faq">FAQ</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <div class="small-title">NOVENTRA PLATFORM</div>
+
+    <h1>Sadə. Aydın. Gündəlik nəticələr.</h1>
+
+    <p>
+        Noventra müasir trading strategiyalarına əsaslanan platformadır.
+        Sistemimizi kəşf edin, hesabınızı idarə edin və nəticələrinizi izləyin.
+    </p>
+
+    <div class="buttons">
+        <a href="#how" class="button primary">Necə işləyir?</a>
+        <a href="#faq" class="button secondary">Ətraflı məlumat</a>
+    </div>
+</section>
+
+<section id="how">
+    <h2>Noventra necə işləyir?</h2>
+
+    <p class="subtitle">
+        Hər şey sadə və aydın şəkildə hazırlanıb.
+    </p>
+
+    <div class="cards">
+
+        <div class="card">
+            <div class="number">01</div>
+            <h3>Hesab yarat</h3>
+            <p>
+                Bir neçə saniyəyə şəxsi hesabını yarat.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">02</div>
+            <h3>Sistemə qoşul</h3>
+            <p>
+                Platformanın iş prinsipi ilə tanış ol və hesabını aktivləşdir.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">03</div>
+            <h3>Nəticələri izlə</h3>
+            <p>
+                Şəxsi kabinetindən hesab məlumatlarını və nəticələri izləyin.
+            </p>
+        </div>
+
+        <div class="card">
+            <div class="number">04</div>
+            <h3>Hesabını idarə et</h3>
+            <p>
+                Hesabını, əməliyyatlarını və ödənişlərini bir yerdən idarə et.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+<section id="results">
+    <h2>Noventra</h2>
+
+    <p class="subtitle">
+        Müasir görünüş, sadə istifadə və aydın sistem.
+    </p>
+</section>
+
+<section id="faq">
+    <h2>Tez-tez verilən suallar</h2>
+
+    <div class="card">
+        <h3>Noventra nədir?</h3>
+        <p>
+            Noventra istifadəçilərin platforma ilə tanış olduğu və öz hesablarını idarə etdiyi müasir rəqəmsal sistemdir.
+        </p>
+    </div>
+</section>
+
+<footer>
+    © 2026 Noventra. All rights reserved.
+</footer>
+
+</body>
+</html>
