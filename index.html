@@ -1,325 +1,204 @@
-<!DOCTYPE html><html lang="az">
+<!DOCTYPE html>
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noventra</title><style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+<title>Noventra</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+font-family:Arial,sans-serif;
+background:#07111f;
+color:white;
+min-height:100vh;
 }
-
-body {
-    font-family: Arial, sans-serif;
-    background: #07111f;
-    color: #ffffff;
+header{
+padding:22px 7%;
+display:flex;
+justify-content:space-between;
+align-items:center;
+border-bottom:1px solid #1d3046;
 }
-
-header {
-    padding: 22px 7%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #1b2b40;
+.logo{
+font-size:24px;
+font-weight:bold;
+letter-spacing:4px;
 }
-
-.logo {
-    font-size: 23px;
-    font-weight: bold;
-    letter-spacing: 4px;
+.buttons{
+display:flex;
+gap:10px;
 }
-
-nav a {
-    color: #9aaabd;
-    text-decoration: none;
-    margin-left: 25px;
-    font-size: 14px;
+.btn{
+padding:12px 18px;
+border-radius:8px;
+text-decoration:none;
+font-size:14px;
+font-weight:bold;
 }
-
-.hero {
-    min-height: 650px;
-    display: flex;
-    align-items: center;
-    padding: 80px 7%;
-    background:
-    radial-gradient(circle at 80% 20%, #123b5d 0%, transparent 35%),
-    #07111f;
+.login{
+color:white;
+border:1px solid #334960;
 }
-
-.hero-content {
-    max-width: 760px;
+.register{
+background:#7dd3fc;
+color:#07111f;
 }
-
-.tag {
-    color: #7dd3fc;
-    letter-spacing: 4px;
-    font-size: 12px;
-    margin-bottom: 25px;
+.hero{
+min-height:620px;
+display:flex;
+align-items:center;
+padding:80px 7%;
+background:radial-gradient(circle at 80% 20%,#123b5d 0%,transparent 35%),#07111f;
 }
-
-h1 {
-    font-size: 68px;
-    line-height: 1.05;
-    margin-bottom: 25px;
+.content{
+max-width:750px;
 }
-
-.hero p {
-    color: #9aaabd;
-    font-size: 18px;
-    line-height: 1.7;
-    max-width: 600px;
+.tag{
+color:#7dd3fc;
+letter-spacing:4px;
+font-size:12px;
+margin-bottom:25px;
 }
-
-.buttons {
-    margin-top: 35px;
+h1{
+font-size:62px;
+line-height:1.05;
+margin-bottom:25px;
 }
-
-.btn {
-    display: inline-block;
-    padding: 16px 28px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-right: 10px;
+p{
+color:#9aaabd;
+font-size:18px;
+line-height:1.7;
 }
-
-.primary {
-    background: #7dd3fc;
-    color: #07111f;
+.mainbtn{
+display:inline-block;
+margin-top:30px;
+padding:16px 28px;
+background:#7dd3fc;
+color:#07111f;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
 }
-
-.secondary {
-    border: 1px solid #334960;
-    color: #ffffff;
+section{
+padding:75px 7%;
+max-width:1200px;
+margin:auto;
 }
-
-section {
-    padding: 80px 7%;
-    max-width: 1200px;
-    margin: auto;
+h2{
+font-size:36px;
+margin-bottom:15px;
 }
-
-.section-title {
-    font-size: 38px;
-    margin-bottom: 15px;
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-top:35px;
 }
-
-.section-text {
-    color: #9aaabd;
-    line-height: 1.7;
-    max-width: 650px;
+.card{
+background:#0d1c2e;
+border:1px solid #1d3046;
+border-radius:16px;
+padding:28px;
 }
-
-.cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-    margin-top: 40px;
+.card h3{
+margin-bottom:12px;
+font-size:20px;
 }
-
-.card {
-    background: #0d1c2e;
-    border: 1px solid #1d3046;
-    border-radius: 16px;
-    padding: 30px;
+.card p{
+font-size:15px;
 }
-
-.card:hover {
-    transform: translateY(-5px);
-    border-color: #7dd3fc;
+.cta{
+text-align:center;
+background:#0d1c2e;
+border-radius:20px;
+margin:40px 7%;
+padding:60px 20px;
 }
-
-.number {
-    color: #7dd3fc;
-    font-size: 14px;
-    letter-spacing: 2px;
+footer{
+text-align:center;
+padding:30px;
+border-top:1px solid #1d3046;
+color:#687b91;
 }
-
-.card h3 {
-    margin: 18px 0 12px;
-    font-size: 21px;
+@media(max-width:650px){
+h1{font-size:44px}
+header{padding:18px 5%}
+.logo{font-size:19px}
+.btn{padding:10px 12px;font-size:12px}
 }
+</style>
+</head>
 
-.card p {
-    color: #9aaabd;
-    line-height: 1.6;
-}
+<body>
 
-.stats {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 20px;
-    margin-top: 35px;
-}
+<header>
+<div class="logo">NOVENTRA</div>
 
-.stat {
-    padding: 30px;
-    border: 1px solid #1d3046;
-    border-radius: 14px;
-    background: #0a1727;
-}
-
-.stat h3 {
-    font-size: 30px;
-    color: #7dd3fc;
-}
-
-.stat p {
-    color: #9aaabd;
-    margin-top: 8px;
-}
-
-.cta {
-    text-align: center;
-    background: #0d1c2e;
-    border-radius: 20px;
-    margin: 50px 7%;
-    padding: 70px 20px;
-}
-
-.cta h2 {
-    font-size: 38px;
-    margin-bottom: 18px;
-}
-
-.cta p {
-    color: #9aaabd;
-    margin-bottom: 30px;
-}
-
-footer {
-    text-align: center;
-    padding: 35px;
-    color: #687b91;
-    border-top: 1px solid #1b2b40;
-    font-size: 13px;
-}
-
-@media (max-width: 650px) {
-    nav {
-        display: none;
-    }
-
-    h1 {
-        font-size: 46px;
-    }
-}
-</style></head><body><header>
-    <div class="logo">NOVENTRA</div><nav>
-    <a href="#how">Necə işləyir?</a>
-    <a href="#platform">Platforma</a>
-    <a href="#faq">FAQ</a>
-</nav>
-
-</header><section class="hero"><div class="hero-content">
-
-    <div class="tag">NOVENTRA PLATFORM</div>
-
-    <h1>
-        Bazarları daha sadə şəkildə izləyin.
-    </h1>
-
-    <p>
-        Noventra müasir bazar strategiyaları ilə işləyən rəqəmsal platformadır.
-        Hesabınızı idarə edin, platforma məlumatlarını izləyin və sistemlə tanış olun.
-    </p>
-
-    <div class="buttons">
-        <a href="#how" class="btn primary">
-            Necə işləyir?
-        </a>
-
-        <a href="#platform" class="btn secondary">
-            Platforma haqqında
-        </a>
-    </div>
-
+<div class="buttons">
+<a href="#login" class="btn login">Daxil ol</a>
+<a href="#register" class="btn register">Qeydiyyat</a>
 </div>
+</header>
 
-</section><section id="how"><h2 class="section-title">Sadə və aydın sistem</h2>
+<section class="hero">
+<div class="content">
 
-<p class="section-text">
-    Noventra istifadəçilər üçün rahat və anlaşılan platforma təcrübəsi yaratmaq üçün hazırlanıb.
+<div class="tag">NOVENTRA PLATFORM</div>
+
+<h1>
+Müasir bazar strategiyaları platforması.
+</h1>
+
+<p>
+Noventra müasir bazar strategiyalarını və rəqəmsal imkanları bir platformada birləşdirir.
+Sadə, aydın və rahat istifadə üçün hazırlanmış sistem.
 </p>
 
-<div class="cards">
-
-    <div class="card">
-        <div class="number">01</div>
-        <h3>Hesab yarat</h3>
-        <p>Şəxsi hesabını yarat və platformaya qoşul.</p>
-    </div>
-
-    <div class="card">
-        <div class="number">02</div>
-        <h3>Platformanı kəşf et</h3>
-        <p>Sistem haqqında məlumatları və platforma imkanlarını öyrən.</p>
-    </div>
-
-    <div class="card">
-        <div class="number">03</div>
-        <h3>Hesabını izlə</h3>
-        <p>Şəxsi hesab məlumatlarını rahat şəkildə idarə et.</p>
-    </div>
-
-    <div class="card">
-        <div class="number">04</div>
-        <h3>İdarə et</h3>
-        <p>Hesab fəaliyyətlərini bir mərkəzdən idarə et.</p>
-    </div>
-
-</div>
-
-</section><section id="platform"><h2 class="section-title">Noventra platforması</h2>
-
-<p class="section-text">
-    Müasir dizayn, rahat istifadə və aydın interfeys bir platformada.
-</p>
-
-<div class="stats">
-
-    <div class="stat">
-        <h3>24/7</h3>
-        <p>Platformaya giriş</p>
-    </div>
-
-    <div class="stat">
-        <h3>01</h3>
-        <p>Şəxsi hesab</p>
-    </div>
-
-    <div class="stat">
-        <h3>∞</h3>
-        <p>İnkişaf imkanları</p>
-    </div>
-
-</div>
-
-</section><div class="cta"><h2>Noventra ilə tanış ol</h2>
-
-<p>Platformanın imkanlarını kəşf etməyə başla.</p>
-
-<a href="#how" class="btn primary">
-    Başla
+<a href="#register" class="mainbtn">
+Platformaya qoşul
 </a>
 
-</div><section id="faq"><h2 class="section-title">Tez-tez verilən suallar</h2>
+</div>
+</section>
+
+<section>
+<h2>Noventra necə işləyir?</h2>
+
+<p>
+Platformaya qoşul, hesabını yarat və Noventra sistemini kəşf et.
+</p>
 
 <div class="cards">
 
-    <div class="card">
-        <h3>Noventra nədir?</h3>
-        <p>Noventra bazar strategiyaları ilə işləyən rəqəmsal platformadır.</p>
-    </div>
-
-    <div class="card">
-        <h3>Platforma necə işləyir?</h3>
-        <p>İstifadəçi hesab yaradır və platformadakı imkanlardan istifadə edir.</p>
-    </div>
-
+<div class="card">
+<h3>01 — Qeydiyyat</h3>
+<p>Şəxsi hesabını yarat və platformaya qoşul.</p>
 </div>
 
-</section><footer>
-    © 2026 Noventra. All rights reserved.
-</footer></body>
-                              </html>
+<div class="card">
+<h3>02 — Hesab</h3>
+<p>Şəxsi kabinetindən platformanı idarə et.</p>
+</div>
+
+<div class="card">
+<h3>03 — Platforma</h3>
+<p>Noventra imkanlarını kəşf et.</p>
+</div>
+
+</div>
+</section>
+
+<div class="cta" id="register">
+<h2>Noventra ilə tanış ol</h2>
+<p>Platformaya qoşulmaq üçün qeydiyyatdan keç.</p>
+<br>
+<a href="#" class="mainbtn">Qeydiyyatdan keç</a>
+</div>
+
+<footer>
+© 2026 Noventra. All rights reserved.
+</footer>
+
+</body>
+</html>
