@@ -27,8 +27,6 @@ button{
   font-weight:bold;
 }
 
-/* GİRİŞ */
-
 .auth{
   min-height:100vh;
   display:flex;
@@ -79,8 +77,6 @@ input{
   color:#8995aa;
   cursor:pointer;
 }
-
-/* SAYT */
 
 #app{
   min-height:100vh;
@@ -137,12 +133,9 @@ input{
   color:#8995aa;
 }
 
-/* KARTLAR */
-
 .stats{
   display:grid;
-  grid-template-columns:
-  repeat(3,1fr);
+  grid-template-columns:repeat(3,1fr);
   gap:18px;
 }
 
@@ -172,13 +165,10 @@ input{
   color:#9d87ff;
 }
 
-/* ANA SƏHİFƏ */
-
 .main-panel{
   margin-top:22px;
   display:grid;
-  grid-template-columns:
-  1.4fr 1fr;
+  grid-template-columns:1.4fr 1fr;
   gap:18px;
 }
 
@@ -209,12 +199,9 @@ input{
   border-radius:10px;
 }
 
-/* QAZANC */
-
 .earning-box{
   display:grid;
-  grid-template-columns:
-  1fr 1fr;
+  grid-template-columns:1fr 1fr;
   gap:18px;
 }
 
@@ -228,8 +215,6 @@ input{
 .muted{
   color:#8995aa;
 }
-
-/* HESAB */
 
 .account{
   max-width:700px;
@@ -249,8 +234,6 @@ input{
   background:#252e40;
   color:white;
 }
-
-/* MOBİL */
 
 @media(max-width:700px){
 
@@ -280,7 +263,6 @@ input{
 </head>
 
 <body>
-
 
 <!-- GİRİŞ -->
 
@@ -325,9 +307,7 @@ input{
 
 <!-- QEYDİYYAT -->
 
-<section
-  id="registerPage"
-  class="auth hidden">
+<section id="registerPage" class="auth hidden">
 
   <div class="auth-box">
 
@@ -368,17 +348,13 @@ input{
 
 <!-- ƏSAS SİSTEM -->
 
-<section
-  id="app"
-  class="hidden">
-
+<section id="app" class="hidden">
 
   <header class="header">
 
     <div class="logo">
       NOVENTRA
     </div>
-
 
     <nav class="nav">
 
@@ -391,7 +367,6 @@ input{
 
       </button>
 
-
       <button
         id="earnBtn"
         onclick="openPage('earnings')">
@@ -399,7 +374,6 @@ input{
         Qazanc
 
       </button>
-
 
       <button
         id="accountBtn"
@@ -416,12 +390,9 @@ input{
 
   <main class="content">
 
-
     <!-- ANA SƏHİFƏ -->
 
-    <div
-      id="homePage">
-
+    <div id="homePage">
 
       <div class="welcome">
 
@@ -435,9 +406,7 @@ input{
 
       </div>
 
-
       <div class="stats">
-
 
         <div class="card">
 
@@ -451,22 +420,17 @@ input{
 
         </div>
 
-
         <div class="card">
 
           <div class="label">
             Bugünkü qazanc
           </div>
 
-          <div
-            class="value green">
-
+          <div class="value green">
             2.00 AZN
-
           </div>
 
         </div>
-
 
         <div class="card">
 
@@ -474,21 +438,15 @@ input{
             Cari mərhələ
           </div>
 
-          <div
-            class="value purple">
-
+          <div class="value purple">
             1 / 4
-
           </div>
 
         </div>
 
-
       </div>
 
-
       <div class="main-panel">
-
 
         <div class="card activity">
 
@@ -497,4 +455,457 @@ input{
           </h2>
 
           <p class="muted">
-            Günün fəaliyyətini buradan idarə edə
+            Günün fəaliyyətini buradan idarə edə bilərsiniz.
+          </p>
+
+          <div class="task">
+
+            <span>
+              1 dəqiqəlik fəaliyyət
+            </span>
+
+            <button
+              onclick="startTask(this)">
+
+              Başla
+
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <h2>
+            Mərhələ
+          </h2>
+
+          <p class="muted">
+            Cari mərhələ: 1-ci həftə
+          </p>
+
+          <div class="earning-row">
+
+            <span>
+              1-ci həftə
+            </span>
+
+            <b class="green">
+              Aktiv
+            </b>
+
+          </div>
+
+          <div class="earning-row">
+
+            <span>
+              2-ci həftə
+            </span>
+
+            <span class="muted">
+              Gözləyir
+            </span>
+
+          </div>
+
+          <div class="earning-row">
+
+            <span>
+              3-cü həftə
+            </span>
+
+            <span class="muted">
+              Gözləyir
+            </span>
+
+          </div>
+
+          <div class="earning-row">
+
+            <span>
+              4-cü həftə
+            </span>
+
+            <span class="muted">
+              Gözləyir
+            </span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- QAZANC -->
+
+    <div id="earningsPage" class="hidden">
+
+      <div class="welcome">
+
+        <h1>
+          Qazanc
+        </h1>
+
+        <p>
+          Gündəlik qazanc məlumatlarınız
+        </p>
+
+      </div>
+
+      <div class="earning-box">
+
+        <div class="card">
+
+          <div class="label">
+            Bugünkü qazanc
+          </div>
+
+          <div class="value green">
+            2.00 AZN
+          </div>
+
+        </div>
+
+        <div class="card">
+
+          <div class="label">
+            Cari mərhələ
+          </div>
+
+          <div class="value purple">
+            1 / 4
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="card">
+
+        <h2>
+          Qazanc tarixçəsi
+        </h2>
+
+        <div class="earning-row">
+
+          <span>
+            Bugünkü qazanc
+          </span>
+
+          <b class="green">
+            +2.00 AZN
+          </b>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- HESABIM -->
+
+    <div id="accountPage" class="hidden">
+
+      <div class="welcome">
+
+        <h1>
+          Hesabım
+        </h1>
+
+        <p>
+          Hesab məlumatlarınız
+        </p>
+
+      </div>
+
+      <div class="card account">
+
+        <div class="account-row">
+
+          <span class="muted">
+            Email
+          </span>
+
+          <span id="accountEmail">
+            —
+          </span>
+
+        </div>
+
+        <div class="account-row">
+
+          <span class="muted">
+            Hesab statusu
+          </span>
+
+          <b class="green">
+            Aktiv
+          </b>
+
+        </div>
+
+        <div class="account-row">
+
+          <span class="muted">
+            Mərhələ
+          </span>
+
+          <span>
+            1 / 4
+          </span>
+
+        </div>
+
+        <button
+          class="logout"
+          onclick="logout()">
+
+          Hesabdan çıx
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</section>
+
+
+<script>
+
+function showRegister(){
+
+  document
+  .getElementById("loginPage")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("registerPage")
+  .classList
+  .remove("hidden");
+
+}
+
+
+function showLogin(){
+
+  document
+  .getElementById("registerPage")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("loginPage")
+  .classList
+  .remove("hidden");
+
+}
+
+
+function register(){
+
+  const email =
+  document
+  .getElementById("registerEmail")
+  .value
+  .trim();
+
+  const password =
+  document
+  .getElementById("registerPassword")
+  .value;
+
+
+  if(email === "" || password === ""){
+
+    return;
+
+  }
+
+
+  localStorage
+  .setItem(
+
+    "noventraUser",
+
+    JSON.stringify({
+
+      email:email,
+      password:password
+
+    })
+
+  );
+
+
+  showLogin();
+
+}
+
+
+function login(){
+
+  const email =
+  document
+  .getElementById("loginEmail")
+  .value
+  .trim();
+
+  const password =
+  document
+  .getElementById("loginPassword")
+  .value;
+
+
+  const savedUser =
+  localStorage
+  .getItem("noventraUser");
+
+
+  if(!savedUser){
+
+    showRegister();
+
+    return;
+
+  }
+
+
+  const user =
+  JSON
+  .parse(savedUser);
+
+
+  if(
+
+    user.email === email &&
+    user.password === password
+
+  ){
+
+    document
+    .getElementById("accountEmail")
+    .innerText = user.email;
+
+
+    document
+    .getElementById("loginPage")
+    .classList
+    .add("hidden");
+
+
+    document
+    .getElementById("app")
+    .classList
+    .remove("hidden");
+
+  }
+
+}
+
+
+function openPage(page){
+
+  document
+  .getElementById("homePage")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("earningsPage")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("accountPage")
+  .classList
+  .add("hidden");
+
+
+  document
+  .getElementById(page + "Page")
+  .classList
+  .remove("hidden");
+
+
+  document
+  .querySelectorAll(".nav button")
+  .forEach(function(button){
+
+    button
+    .classList
+    .remove("active");
+
+  });
+
+
+  if(page === "home"){
+
+    document
+    .getElementById("homeBtn")
+    .classList
+    .add("active");
+
+  }
+
+
+  if(page === "earnings"){
+
+    document
+    .getElementById("earnBtn")
+    .classList
+    .add("active");
+
+  }
+
+
+  if(page === "account"){
+
+    document
+    .getElementById("accountBtn")
+    .classList
+    .add("active");
+
+  }
+
+}
+
+
+function startTask(button){
+
+  button
+  .innerText = "✓";
+
+  button
+  .style
+  .background = "#24734d";
+
+}
+
+
+function logout(){
+
+  document
+  .getElementById("app")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("loginPage")
+  .classList
+  .remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
