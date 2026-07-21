@@ -6,305 +6,629 @@
 <title>Noventra</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
 body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#07111f;
-color:white;
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#0b1020;
+  color:#fff;
 }
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+
 header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:20px 7%;
-border-bottom:1px solid #26384c;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:15px 0;
 }
+
 .logo{
-font-size:24px;
-font-weight:bold;
-letter-spacing:4px;
+  font-size:28px;
+  font-weight:bold;
+  letter-spacing:1px;
 }
+
 button{
-border:0;
-cursor:pointer;
-padding:13px 20px;
-border-radius:8px;
-font-weight:bold;
+  border:0;
+  border-radius:10px;
+  padding:13px 18px;
+  cursor:pointer;
+  font-weight:bold;
 }
-.login{
-background:transparent;
-color:white;
-border:1px solid #526579;
-margin-right:8px;
+
+.primary{
+  background:#6c5ce7;
+  color:white;
 }
-.register{
-background:#7dd3fc;
-color:#07111f;
+
+.secondary{
+  background:#293452;
+  color:white;
 }
-.hero{
-padding:100px 7%;
-min-height:500px;
-display:flex;
-align-items:center;
+
+.card{
+  background:#151d35;
+  border:1px solid #293452;
+  border-radius:18px;
+  padding:22px;
+  margin:16px 0;
 }
-.content{
-max-width:750px;
-}
-.tag{
-color:#7dd3fc;
-letter-spacing:4px;
-font-size:13px;
-margin-bottom:20px;
-}
-h1{
-font-size:60px;
-line-height:1.05;
-margin:0 0 25px;
-}
-p{
-color:#a6b5c5;
-font-size:18px;
-line-height:1.6;
-}
-.main-button{
-margin-top:25px;
-background:#7dd3fc;
-color:#07111f;
-font-size:16px;
-}
-.modal{
-display:none;
-position:fixed;
-z-index:10;
-left:0;
-top:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.8);
-align-items:center;
-justify-content:center;
-padding:20px;
-}
-.modal-box{
-background:#102033;
-width:100%;
-max-width:400px;
-padding:30px;
-border-radius:16px;
-}
-.modal-box h2{
-margin-top:0;
-}
-.close{
-float:right;
-font-size:28px;
-cursor:pointer;
-}
+
 input{
-display:block;
-width:100%;
-padding:14px;
-margin:12px 0;
-border-radius:8px;
-border:1px solid #40566d;
-background:#07111f;
-color:white;
-font-size:16px;
+  width:100%;
+  padding:14px;
+  margin:8px 0;
+  border-radius:10px;
+  border:1px solid #394563;
+  background:#0e1528;
+  color:white;
 }
-.form-button{
-width:100%;
-background:#7dd3fc;
-color:#07111f;
-margin-top:8px;
+
+.hidden{
+  display:none;
 }
-.message{
-margin-top:15px;
-font-size:14px;
-color:#7dd3fc;
+
+.grid{
+  display:grid;
+  grid-template-columns:
+  repeat(auto-fit,minmax(220px,1fr));
+  gap:16px;
 }
-@media(max-width:600px){
-h1{font-size:42px}
-header{padding:18px 5%}
-.logo{font-size:18px}
+
+.stat{
+  font-size:26px;
+  font-weight:bold;
+  margin-top:8px;
+}
+
+small{
+  color:#9da8c4;
+}
+
+h1,h2,h3{
+  margin-top:0;
+}
+
+.task{
+  border:1px solid #34405e;
+  padding:16px;
+  border-radius:12px;
+  margin-top:12px;
+}
+
+.status{
+  color:#61e294;
+  font-weight:bold;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-<div class="logo">NOVENTRA</div>
+<div class="container">
 
-<div>
-<button class="login" onclick="openLogin()">Daxil ol</button>
-<button class="register" onclick="openRegister()">Qeydiyyat</button>
-</div>
+<header>
+  <div class="logo">NOVENTRA</div>
+
+  <button
+    class="secondary"
+    onclick="showPage('login')">
+    Daxil ol
+  </button>
 </header>
 
-<section class="hero">
-<div class="content">
 
-<div class="tag">NOVENTRA PLATFORM</div>
+<!-- ANA SƏHİFƏ -->
 
-<h1>Müasir bazar strategiyaları platforması.</h1>
+<section id="home">
 
-<p>
-Noventra müasir bazar strategiyalarını və rəqəmsal imkanları bir platformada birləşdirir.
-</p>
+  <div class="card">
 
-<button class="main-button" onclick="openRegister()">
-Platformaya qoşul
-</button>
+    <h1>Noventra platformasına xoş gəlmisiniz</h1>
 
-</div>
+    <p>
+      Platformaya qoşulun və şəxsi panelinizi idarə edin.
+    </p>
+
+    <button
+      class="primary"
+      onclick="showPage('register')">
+
+      Qeydiyyatdan keç
+
+    </button>
+
+  </div>
+
 </section>
 
-<div id="registerModal" class="modal">
 
-<div class="modal-box">
+<!-- QEYDİYYAT -->
 
-<span class="close" onclick="closeRegister()">×</span>
+<section id="register" class="hidden">
 
-<h2>Qeydiyyat</h2>
+  <div class="card">
 
-<input id="registerEmail" type="email" placeholder="E-poçt ünvanı">
+    <h2>Qeydiyyat</h2>
 
-<input id="registerPassword" type="password" placeholder="Şifrə">
+    <input
+      id="regName"
+      placeholder="Ad və soyad">
 
-<button class="form-button" onclick="registerUser()">
-Qeydiyyatdan keç
-</button>
+    <input
+      id="regEmail"
+      placeholder="Email">
 
-<div id="registerMessage" class="message"></div>
+    <input
+      id="regPassword"
+      type="password"
+      placeholder="Şifrə">
+
+    <button
+      class="primary"
+      onclick="register()">
+
+      Qeydiyyatdan keç
+
+    </button>
+
+    <button
+      class="secondary"
+      onclick="showPage('login')">
+
+      Artıq hesabım var
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- GİRİŞ -->
+
+<section id="login" class="hidden">
+
+  <div class="card">
+
+    <h2>Hesaba giriş</h2>
+
+    <input
+      id="loginEmail"
+      placeholder="Email">
+
+    <input
+      id="loginPassword"
+      type="password"
+      placeholder="Şifrə">
+
+    <button
+      class="primary"
+      onclick="login()">
+
+      Daxil ol
+
+    </button>
+
+    <button
+      class="secondary"
+      onclick="showPage('register')">
+
+      Qeydiyyatdan keç
+
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- İSTİFADƏÇİ PANELİ -->
+
+<section id="dashboard" class="hidden">
+
+  <h2>Şəxsi kabinet</h2>
+
+  <div class="grid">
+
+    <div class="card">
+
+      <small>Hesab statusu</small>
+
+      <div class="stat status">
+        Aktiv
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <small>Gündəlik qazanc</small>
+
+      <div
+        class="stat"
+        id="dailyEarning">
+
+        0.00 AZN
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <small>Həftə</small>
+
+      <div
+        class="stat">
+
+        1 / 4
+
+      </div>
+
+    </div>
+
+
+    <div class="card">
+
+      <small>Komanda</small>
+
+      <div
+        class="stat"
+        id="teamCount">
+
+        0 nəfər
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- GÜNLÜK FƏALİYYƏT -->
+
+  <div class="card">
+
+    <h3>Bugünkü fəaliyyət</h3>
+
+    <div class="task">
+
+      <p>
+        Bugünkü qısa fəaliyyəti tamamla.
+      </p>
+
+      <button
+        class="primary"
+        onclick="completeTask()">
+
+        Fəaliyyətə başla
+
+      </button>
+
+    </div>
+
+    <p
+      id="taskStatus"
+      class="status">
+
+      Fəaliyyət gözləyir
+
+    </p>
+
+  </div>
+
+
+  <!-- KOMANDA -->
+
+  <div class="card">
+
+    <h3>Mənim komandam</h3>
+
+    <p>
+      Bu bölmədə yalnız sənin komandan görünür.
+    </p>
+
+    <button
+      class="secondary">
+
+      Komandama bax
+
+    </button>
+
+  </div>
+
+
+  <!-- TELEGRAM -->
+
+  <div class="card">
+
+    <h3>Noventra Team</h3>
+
+    <p>
+      Məlumat və dəstək üçün Telegram-a keç.
+    </p>
+
+    <a
+      href="https://t.me/NoventraTeamBot"
+      target="_blank">
+
+      <button
+        class="primary">
+
+        Telegram-a keç
+
+      </button>
+
+    </a>
+
+  </div>
+
+
+  <button
+    class="secondary"
+    onclick="logout()">
+
+    Çıxış
+
+  </button>
+
+</section>
 
 </div>
 
-</div>
-
-<div id="loginModal" class="modal">
-
-<div class="modal-box">
-
-<span class="close" onclick="closeLogin()">×</span>
-
-<h2>Daxil ol</h2>
-
-<input id="loginEmail" type="email" placeholder="E-poçt ünvanı">
-
-<input id="loginPassword" type="password" placeholder="Şifrə">
-
-<button class="form-button" onclick="loginUser()">
-Daxil ol
-</button>
-
-<div id="loginMessage" class="message"></div>
-
-</div>
-
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
 
-const supabaseUrl =
-"https://yafncpfkjmealuwmvcgc.supabase.co";
 
-const supabaseKey =
-"sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+/* SƏHİFƏ KEÇİDLƏRİ */
 
-const client =
-window.supabase.createClient(
-supabaseUrl,
-supabaseKey
-);
+function showPage(page){
 
-function openRegister(){
-document.getElementById("registerModal").style.display="flex";
-}
+  document
+  .querySelectorAll("section")
+  .forEach(section=>{
 
-function closeRegister(){
-document.getElementById("registerModal").style.display="none";
-}
+    section
+    .classList
+    .add("hidden");
 
-function openLogin(){
-document.getElementById("loginModal").style.display="flex";
-}
+  });
 
-function closeLogin(){
-document.getElementById("loginModal").style.display="none";
-}
-
-async function registerUser(){
-
-const email =
-document.getElementById("registerEmail").value;
-
-const password =
-document.getElementById("registerPassword").value;
-
-if(!email || !password){
-
-document.getElementById("registerMessage").innerText =
-"E-poçt və şifrəni yaz.";
-
-return;
-}
-
-const result =
-await client.auth.signUp({
-email:email,
-password:password
-});
-
-if(result.error){
-
-document.getElementById("registerMessage").innerText =
-result.error.message;
-
-}else{
-
-document.getElementById("registerMessage").innerText =
-"Qeydiyyat uğurludur. E-poçtunu yoxla.";
+  document
+  .getElementById(page)
+  .classList
+  .remove("hidden");
 
 }
 
+
+/* QEYDİYYAT */
+
+function register(){
+
+  const name =
+  document
+  .getElementById("regName")
+  .value;
+
+  const email =
+  document
+  .getElementById("regEmail")
+  .value;
+
+  const password =
+  document
+  .getElementById("regPassword")
+  .value;
+
+
+  if(
+    !name ||
+    !email ||
+    !password
+  ){
+
+    alert(
+      "Bütün xanaları doldur."
+    );
+
+    return;
+
+  }
+
+
+  const user={
+
+    name:name,
+    email:email,
+    password:password,
+    dailyEarning:0,
+    teamCount:0
+
+  };
+
+
+  localStorage
+  .setItem(
+
+    "noventraUser",
+
+    JSON
+    .stringify(user)
+
+  );
+
+
+  alert(
+    "Qeydiyyat uğurla tamamlandı."
+  );
+
+
+  showPage("login");
+
 }
 
-async function loginUser(){
 
-const email =
-document.getElementById("loginEmail").value;
+/* GİRİŞ */
 
-const password =
-document.getElementById("loginPassword").value;
+function login(){
 
-if(!email || !password){
+  const email =
+  document
+  .getElementById("loginEmail")
+  .value;
 
-document.getElementById("loginMessage").innerText =
-"E-poçt və şifrəni yaz.";
+  const password =
+  document
+  .getElementById("loginPassword")
+  .value;
 
-return;
+
+  const user =
+  JSON
+  .parse(
+
+    localStorage
+    .getItem(
+      "noventraUser"
+    )
+
+  );
+
+
+  if(
+
+    user &&
+    user.email === email &&
+    user.password === password
+
+  ){
+
+    document
+    .getElementById(
+      "dailyEarning"
+    )
+    .innerText =
+
+    user.dailyEarning
+    .toFixed(2)
+    + " AZN";
+
+
+    document
+    .getElementById(
+      "teamCount"
+    )
+    .innerText =
+
+    user.teamCount
+    + " nəfər";
+
+
+    showPage(
+      "dashboard"
+    );
+
+
+  }else{
+
+    alert(
+      "Email və ya şifrə yanlışdır."
+    );
+
+  }
+
 }
 
-const result =
-await client.auth.signInWithPassword({
-email:email,
-password:password
-});
 
-if(result.error){
+/* FƏALİYYƏT */
 
-document.getElementById("loginMessage").innerText =
-result.error.message;
+function completeTask(){
 
-}else{
+  const user =
+  JSON
+  .parse(
 
-document.getElementById("loginMessage").innerText =
-"Daxil oldunuz!";
+    localStorage
+    .getItem(
+      "noventraUser"
+    )
+
+  );
+
+
+  if(!user){
+
+    alert(
+      "Əvvəlcə hesaba daxil ol."
+    );
+
+    return;
+
+  }
+
+
+  user.dailyEarning =
+  user.dailyEarning
+  + 2;
+
+
+  localStorage
+  .setItem(
+
+    "noventraUser",
+
+    JSON
+    .stringify(user)
+
+  );
+
+
+  document
+  .getElementById(
+    "dailyEarning"
+  )
+  .innerText =
+
+  user.dailyEarning
+  .toFixed(2)
+  + " AZN";
+
+
+  document
+  .getElementById(
+    "taskStatus"
+  )
+  .innerText =
+
+  "Bugünkü fəaliyyət tamamlandı ✓";
+
+
+  alert(
+    "Fəaliyyət tamamlandı."
+  );
 
 }
+
+
+/* ÇIXIŞ */
+
+function logout(){
+
+  showPage(
+    "home"
+  );
 
 }
 
