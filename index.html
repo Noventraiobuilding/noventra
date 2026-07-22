@@ -1,14 +1,9 @@
-<!DOCTYPE html>
-<html lang="az">
+<!DOCTYPE html><html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noventra</title>
-
-<style>
-*{
-  box-sizing:border-box;
-}
+<title>Noventra</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -17,9 +12,7 @@ body{
   color:#fff;
 }
 
-.hidden{
-  display:none!important;
-}
+.hidden{display:none!important}
 
 button{
   border:0;
@@ -78,6 +71,13 @@ input{
   cursor:pointer;
 }
 
+.message{
+  text-align:center;
+  margin-top:15px;
+  color:#ff8b8b;
+  font-size:14px;
+}
+
 #app{
   min-height:100vh;
   padding-bottom:90px;
@@ -90,9 +90,7 @@ input{
   text-align:center;
 }
 
-.header .logo{
-  margin:0;
-}
+.header .logo{margin:0}
 
 .nav{
   max-width:600px;
@@ -157,13 +155,8 @@ input{
   margin-top:12px;
 }
 
-.green{
-  color:#40dc91;
-}
-
-.purple{
-  color:#9d87ff;
-}
+.green{color:#40dc91}
+.purple{color:#9d87ff}
 
 .main-panel{
   margin-top:22px;
@@ -212,9 +205,7 @@ input{
   border-bottom:1px solid #263247;
 }
 
-.muted{
-  color:#8995aa;
-}
+.muted{color:#8995aa}
 
 .account{
   max-width:700px;
@@ -259,426 +250,295 @@ input{
   }
 
 }
-</style>
-</head>
+</style></head><body><section id="loginPage" class="auth">  <div class="auth-box"><div class="logo">NOVENTRA</div>
 
-<body>
+<input id="loginEmail" type="email" placeholder="Email">
 
-<!-- GİRİŞ -->
+<input id="loginPassword" type="password" placeholder="Şifrə">
 
-<section id="loginPage" class="auth">
+<button class="main-btn" onclick="login()">
+  Daxil ol
+</button>
 
-  <div class="auth-box">
+<div class="switch" onclick="showRegister()">
+  Hesab yarat
+</div>
 
-    <div class="logo">
-      NOVENTRA
+<div id="loginMessage" class="message"></div>
+
+  </div></section><section id="registerPage" class="auth hidden">  <div class="auth-box"><div class="logo">NOVENTRA</div>
+
+<input id="registerEmail" type="email" placeholder="Email">
+
+<input id="registerPassword" type="password" placeholder="Şifrə">
+
+<button class="main-btn" onclick="register()">
+  Qeydiyyatdan keç
+</button>
+
+<div class="switch" onclick="showLogin()">
+  Girişə qayıt
+</div>
+
+<div id="registerMessage" class="message"></div>
+
+  </div></section><section id="app" class="hidden">  <header class="header"><div class="logo">NOVENTRA</div>
+
+<nav class="nav">
+
+  <button id="homeBtn" class="active" onclick="openPage('home')">
+    Ana səhifə
+  </button>
+
+  <button id="earnBtn" onclick="openPage('earnings')">
+    Qazanc
+  </button>
+
+  <button id="accountBtn" onclick="openPage('account')">
+    Hesabım
+  </button>
+
+</nav>
+
+  </header>  <main class="content"><div id="homePage">
+
+  <div class="welcome">
+
+    <h1>
+      Xoş gəlmisiniz
+    </h1>
+
+    <p>
+      Hesabınızın ümumi vəziyyəti
+    </p>
+
+  </div>
+
+
+  <div class="stats">
+
+    <div class="card">
+
+      <div class="label">
+        Aktiv balans
+      </div>
+
+      <div id="balanceValue" class="value">
+        0.00 AZN
+      </div>
+
     </div>
 
-    <input
-      id="loginEmail"
-      type="email"
-      placeholder="Email">
 
-    <input
-      id="loginPassword"
-      type="password"
-      placeholder="Şifrə">
+    <div class="card">
 
-    <button
-      class="main-btn"
-      onclick="login()">
+      <div class="label">
+        Ümumi qazanc
+      </div>
 
-      Daxil ol
+      <div id="totalEarningsValue" class="value green">
+        0.00 AZN
+      </div>
 
-    </button>
+    </div>
 
-    <div
-      class="switch"
-      onclick="showRegister()">
 
-      Hesab yarat
+    <div class="card">
+
+      <div class="label">
+        Hesab statusu
+      </div>
+
+      <div class="value purple">
+        Aktiv
+      </div>
 
     </div>
 
   </div>
 
-</section>
 
+  <div class="main-panel">
 
-<!-- QEYDİYYAT -->
+    <div class="card activity">
 
-<section id="registerPage" class="auth hidden">
+      <h2>
+        Mövcud fəaliyyətlər
+      </h2>
 
-  <div class="auth-box">
+      <p class="muted">
+        Sistemə əlavə edilmiş fəaliyyətlər burada görünəcək.
+      </p>
 
-    <div class="logo">
-      NOVENTRA
+      <div id="tasksList">
+        Yüklənir...
+      </div>
+
     </div>
 
-    <input
-      id="registerEmail"
-      type="email"
-      placeholder="Email">
 
-    <input
-      id="registerPassword"
-      type="password"
-      placeholder="Şifrə">
+    <div class="card">
 
-    <button
-      class="main-btn"
-      onclick="register()">
+      <h2>
+        Hesab məlumatı
+      </h2>
 
-      Qeydiyyatdan keç
+      <div class="earning-row">
 
-    </button>
+        <span class="muted">
+          Status
+        </span>
 
-    <div
-      class="switch"
-      onclick="showLogin()">
+        <b class="green">
+          Aktiv
+        </b>
 
-      Girişə qayıt
+      </div>
+
+      <div class="earning-row">
+
+        <span class="muted">
+          E-poçt
+        </span>
+
+        <span id="homeEmail">
+          —
+        </span>
+
+      </div>
 
     </div>
 
   </div>
 
-</section>
+</div>
 
 
-<!-- ƏSAS SİSTEM -->
+<div id="earningsPage" class="hidden">
 
-<section id="app" class="hidden">
+  <div class="welcome">
 
-  <header class="header">
+    <h1>
+      Qazanc
+    </h1>
 
-    <div class="logo">
-      NOVENTRA
-    </div>
+    <p>
+      Real qazanc məlumatlarınız
+    </p>
 
-    <nav class="nav">
-
-      <button
-        id="homeBtn"
-        class="active"
-        onclick="openPage('home')">
-
-        Ana səhifə
-
-      </button>
-
-      <button
-        id="earnBtn"
-        onclick="openPage('earnings')">
-
-        Qazanc
-
-      </button>
-
-      <button
-        id="accountBtn"
-        onclick="openPage('account')">
-
-        Hesabım
-
-      </button>
-
-    </nav>
-
-  </header>
+  </div>
 
 
-  <main class="content">
+  <div class="earning-box">
 
-    <!-- ANA SƏHİFƏ -->
+    <div class="card">
 
-    <div id="homePage">
-
-      <div class="welcome">
-
-        <h1>
-          Xoş gəlmisiniz
-        </h1>
-
-        <p>
-          Hesabınızın ümumi vəziyyəti
-        </p>
-
+      <div class="label">
+        Ümumi qazanc
       </div>
 
-      <div class="stats">
-
-        <div class="card">
-
-          <div class="label">
-            Aktiv balans
-          </div>
-
-          <div class="value">
-            0.00 AZN
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="label">
-            Bugünkü qazanc
-          </div>
-
-          <div class="value green">
-            2.00 AZN
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="label">
-            Cari mərhələ
-          </div>
-
-          <div class="value purple">
-            1 / 4
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="main-panel">
-
-        <div class="card activity">
-
-          <h2>
-            Bugünkü fəaliyyət
-          </h2>
-
-          <p class="muted">
-            Günün fəaliyyətini buradan idarə edə bilərsiniz.
-          </p>
-
-          <div class="task">
-
-            <span>
-              1 dəqiqəlik fəaliyyət
-            </span>
-
-            <button
-              onclick="startTask(this)">
-
-              Başla
-
-            </button>
-
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <h2>
-            Mərhələ
-          </h2>
-
-          <p class="muted">
-            Cari mərhələ: 1-ci həftə
-          </p>
-
-          <div class="earning-row">
-
-            <span>
-              1-ci həftə
-            </span>
-
-            <b class="green">
-              Aktiv
-            </b>
-
-          </div>
-
-          <div class="earning-row">
-
-            <span>
-              2-ci həftə
-            </span>
-
-            <span class="muted">
-              Gözləyir
-            </span>
-
-          </div>
-
-          <div class="earning-row">
-
-            <span>
-              3-cü həftə
-            </span>
-
-            <span class="muted">
-              Gözləyir
-            </span>
-
-          </div>
-
-          <div class="earning-row">
-
-            <span>
-              4-cü həftə
-            </span>
-
-            <span class="muted">
-              Gözləyir
-            </span>
-
-          </div>
-
-        </div>
-
+      <div id="earningsTotal" class="value green">
+        0.00 AZN
       </div>
 
     </div>
 
 
-    <!-- QAZANC -->
+    <div class="card">
 
-    <div id="earningsPage" class="hidden">
-
-      <div class="welcome">
-
-        <h1>
-          Qazanc
-        </h1>
-
-        <p>
-          Gündəlik qazanc məlumatlarınız
-        </p>
-
+      <div class="label">
+        Aktiv balans
       </div>
 
-      <div class="earning-box">
-
-        <div class="card">
-
-          <div class="label">
-            Bugünkü qazanc
-          </div>
-
-          <div class="value green">
-            2.00 AZN
-          </div>
-
-        </div>
-
-        <div class="card">
-
-          <div class="label">
-            Cari mərhələ
-          </div>
-
-          <div class="value purple">
-            1 / 4
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="card">
-
-        <h2>
-          Qazanc tarixçəsi
-        </h2>
-
-        <div class="earning-row">
-
-          <span>
-            Bugünkü qazanc
-          </span>
-
-          <b class="green">
-            +2.00 AZN
-          </b>
-
-        </div>
-
+      <div id="earningsBalance" class="value purple">
+        0.00 AZN
       </div>
 
     </div>
 
+  </div>
 
-    <!-- HESABIM -->
 
-    <div id="accountPage" class="hidden">
+  <div class="card">
 
-      <div class="welcome">
+    <h2>
+      Qazanc tarixçəsi
+    </h2>
 
-        <h1>
-          Hesabım
-        </h1>
+    <div id="earningsHistory">
+      Yüklənir...
+    </div>
 
-        <p>
-          Hesab məlumatlarınız
-        </p>
+  </div>
 
-      </div>
+</div>
 
-      <div class="card account">
 
-        <div class="account-row">
+<div id="accountPage" class="hidden">
 
-          <span class="muted">
-            Email
-          </span>
+  <div class="welcome">
 
-          <span id="accountEmail">
-            —
-          </span>
+    <h1>
+      Hesabım
+    </h1>
 
-        </div>
+    <p>
+      Hesab məlumatlarınız
+    </p>
 
-        <div class="account-row">
+  </div>
 
-          <span class="muted">
-            Hesab statusu
-          </span>
 
-          <b class="green">
-            Aktiv
-          </b>
+  <div class="card account">
 
-        </div>
+    <div class="account-row">
 
-        <div class="account-row">
+      <span class="muted">
+        E-poçt
+      </span>
 
-          <span class="muted">
-            Mərhələ
-          </span>
-
-          <span>
-            1 / 4
-          </span>
-
-        </div>
-
-        <button
-          class="logout"
-          onclick="logout()">
-
-          Hesabdan çıx
-
-        </button>
-
-      </div>
+      <span id="accountEmail">
+        —
+      </span>
 
     </div>
 
-  </main>
 
-</section>
+    <div class="account-row">
+
+      <span class="muted">
+        Hesab statusu
+      </span>
+
+      <b class="green">
+        Aktiv
+      </b>
+
+    </div>
 
 
-<script>
+    <button class="logout" onclick="logout()">
+      Hesabdan çıx
+    </button>
+
+  </div>
+
+</div>
+
+  </main></section><script>
+
+const SUPABASE_URL =
+"https://yafncpfkjmealuwmvcgc.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+
+const supabaseClient =
+window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
 
 function showRegister(){
 
@@ -710,7 +570,7 @@ function showLogin(){
 }
 
 
-function register(){
+async function register(){
 
   const email =
   document
@@ -723,35 +583,70 @@ function register(){
   .getElementById("registerPassword")
   .value;
 
+  const message =
+  document
+  .getElementById("registerMessage");
 
-  if(email === "" || password === ""){
+
+  if(!email || !password){
+
+    message.innerText =
+    "Email və şifrəni doldurun.";
 
     return;
 
   }
 
 
-  localStorage
-  .setItem(
+  if(password.length < 6){
 
-    "noventraUser",
+    message.innerText =
+    "Şifrə ən azı 6 simvol olmalıdır.";
 
-    JSON.stringify({
+    return;
 
-      email:email,
-      password:password
-
-    })
-
-  );
+  }
 
 
-  showLogin();
+  message.innerText =
+  "Hesab yaradılır...";
+
+
+  const { data, error } =
+  await supabaseClient.auth.signUp({
+
+    email:email,
+    password:password
+
+  });
+
+
+  if(error){
+
+    message.innerText =
+    error.message;
+
+    return;
+
+  }
+
+
+  message.style.color =
+  "#40dc91";
+
+  message.innerText =
+  "Hesab uğurla yaradıldı.";
+
+  setTimeout(function(){
+
+    showLogin();
+
+  },1000);
 
 }
 
 
-function login(){
+async function login(){
 
   const email =
   document
@@ -764,50 +659,254 @@ function login(){
   .getElementById("loginPassword")
   .value;
 
+  const message =
+  document
+  .getElementById("loginMessage");
 
-  const savedUser =
-  localStorage
-  .getItem("noventraUser");
 
+  if(!email || !password){
 
-  if(!savedUser){
-
-    showRegister();
+    message.innerText =
+    "Email və şifrəni daxil edin.";
 
     return;
 
   }
 
 
-  const user =
-  JSON
-  .parse(savedUser);
+  message.innerText =
+  "Daxil olunur...";
 
 
-  if(
+  const { data, error } =
+  await supabaseClient.auth.signInWithPassword({
 
-    user.email === email &&
-    user.password === password
+    email:email,
+    password:password
 
-  ){
-
-    document
-    .getElementById("accountEmail")
-    .innerText = user.email;
+  });
 
 
-    document
-    .getElementById("loginPage")
-    .classList
-    .add("hidden");
+  if(error){
 
+    message.innerText =
+    "Email və ya şifrə yanlışdır.";
 
-    document
-    .getElementById("app")
-    .classList
-    .remove("hidden");
+    return;
 
   }
+
+
+  await openApp(data.user);
+
+}
+
+
+async function openApp(user){
+
+  document
+  .getElementById("loginPage")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("registerPage")
+  .classList
+  .add("hidden");
+
+  document
+  .getElementById("app")
+  .classList
+  .remove("hidden");
+
+
+  document
+  .getElementById("accountEmail")
+  .innerText =
+  user.email || "—";
+
+
+  document
+  .getElementById("homeEmail")
+  .innerText =
+  user.email || "—";
+
+
+  await loadEarnings();
+
+  await loadTasks();
+
+}
+
+
+async function loadEarnings(){
+
+  const { data, error } =
+  await supabaseClient
+  .from("earnings")
+  .select("*")
+  .order("created_at", {
+
+    ascending:false
+
+  });
+
+
+  if(error){
+
+    console.log(error);
+
+    return;
+
+  }
+
+
+  let total = 0;
+
+
+  data.forEach(function(item){
+
+    total +=
+    Number(item.amount || 0);
+
+  });
+
+
+  const formatted =
+  total.toFixed(2) + " AZN";
+
+
+  document
+  .getElementById("balanceValue")
+  .innerText =
+  formatted;
+
+
+  document
+  .getElementById("totalEarningsValue")
+  .innerText =
+  formatted;
+
+
+  document
+  .getElementById("earningsTotal")
+  .innerText =
+  formatted;
+
+
+  document
+  .getElementById("earningsBalance")
+  .innerText =
+  formatted;
+
+
+  const history =
+  document
+  .getElementById("earningsHistory");
+
+
+  if(!data.length){
+
+    history.innerHTML =
+    '<p class="muted">Hələ heç bir qazanc qeydə alınmayıb.</p>';
+
+    return;
+
+  }
+
+
+  history.innerHTML =
+  data.map(function(item){
+
+    return `
+
+      <div class="earning-row">
+
+        <span>
+          ${item.description || "Qazanc"}
+        </span>
+
+        <b class="green">
+          +${Number(item.amount).toFixed(2)} AZN
+        </b>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+
+
+async function loadTasks(){
+
+  const list =
+  document
+  .getElementById("tasksList");
+
+
+  const { data, error } =
+  await supabaseClient
+  .from("tasks")
+  .select("*")
+  .order("id");
+
+
+  if(error){
+
+    list.innerHTML =
+    '<p class="muted">Fəaliyyətləri yükləmək mümkün olmadı.</p>';
+
+    return;
+
+  }
+
+
+  if(!data || !data.length){
+
+    list.innerHTML =
+    '<p class="muted">Hazırda aktiv fəaliyyət yoxdur.</p>';
+
+    return;
+
+  }
+
+
+  list.innerHTML =
+  data.map(function(task){
+
+    return `
+
+      <div class="task">
+
+        <span>
+          ${task.title || "Fəaliyyət"}
+        </span>
+
+        <button
+          onclick="startTask(this)">
+
+          Başla
+
+        </button>
+
+      </div>
+
+    `;
+
+  }).join("");
+
+}
+
+
+function startTask(button){
+
+  button.innerText =
+  "Başladı";
+
+  button.style.background =
+  "#24734d";
 
 }
 
@@ -879,19 +978,9 @@ function openPage(page){
 }
 
 
-function startTask(button){
+async function logout(){
 
-  button
-  .innerText = "✓";
-
-  button
-  .style
-  .background = "#24734d";
-
-}
-
-
-function logout(){
+  await supabaseClient.auth.signOut();
 
   document
   .getElementById("app")
@@ -905,7 +994,23 @@ function logout(){
 
 }
 
-</script>
 
-</body>
+async function checkSession(){
+
+  const { data } =
+  await supabaseClient.auth.getSession();
+
+
+  if(data.session){
+
+    await openApp(data.session.user);
+
+  }
+
+}
+
+
+checkSession();
+
+</script></body>
 </html>
