@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="az">
+<!DOCTYPE html><html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noventra</title>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
+<title>Noventra</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 *{box-sizing:border-box}
 
 body{
@@ -231,6 +226,72 @@ input{
   color:white;
 }
 
+/* 30 SANİYƏLİK REKLAM */
+
+.ad-modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.94);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.ad-box{
+  width:100%;
+  max-width:600px;
+  min-height:390px;
+  background:linear-gradient(135deg,#111827,#1d1740);
+  border:1px solid #7357ff;
+  border-radius:24px;
+  padding:35px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  box-shadow:0 0 40px rgba(115,87,255,.25);
+}
+
+.ad-logo{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:6px;
+  color:#9d87ff;
+  margin-bottom:35px;
+}
+
+.ad-text{
+  font-size:24px;
+  font-weight:bold;
+  line-height:1.5;
+  min-height:100px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.ad-timer{
+  margin-top:30px;
+  font-size:18px;
+  color:#8995aa;
+}
+
+.ad-close{
+  margin-top:25px;
+  padding:14px;
+  border-radius:12px;
+  background:#40dc91;
+  color:#08110d;
+}
+
+.ad-close:disabled{
+  background:#252e40;
+  color:#8995aa;
+  cursor:not-allowed;
+}
+
 @media(max-width:700px){
 
   .stats{
@@ -254,285 +315,84 @@ input{
     font-size:13px;
   }
 
+  .ad-text{
+    font-size:21px;
+  }
+
 }
-</style>
-</head>
-
-<body>
-
-<section id="loginPage" class="auth">
-
-<div class="auth-box">
-
-<div class="logo">NOVENTRA</div>
-
-<input id="loginEmail" type="email" placeholder="Email">
-
-<input id="loginPassword" type="password" placeholder="Şifrə">
-
-<button class="main-btn" onclick="login()">
+</style></head><body><section id="loginPage" class="auth"><div class="auth-box"><div class="logo">NOVENTRA</div><input id="loginEmail" type="email" placeholder="Email"><input id="loginPassword" type="password" placeholder="Şifrə"><button class="main-btn" onclick="login()">
 Daxil ol
-</button>
-
-<div class="switch" onclick="showRegister()">
+</button><div class="switch" onclick="showRegister()">
 Hesab yarat
-</div>
-
-<div id="loginMessage" class="message"></div>
-
-</div>
-
-</section>
-
-<section id="registerPage" class="auth hidden">
-
-<div class="auth-box">
-
-<div class="logo">NOVENTRA</div>
-
-<input id="registerEmail" type="email" placeholder="Email">
-
-<input id="registerPassword" type="password" placeholder="Şifrə">
-
-<button class="main-btn" onclick="register()">
+</div><div id="loginMessage" class="message"></div></div></section><section id="registerPage" class="auth hidden"><div class="auth-box"><div class="logo">NOVENTRA</div><input id="registerEmail" type="email" placeholder="Email"><input id="registerPassword" type="password" placeholder="Şifrə"><button class="main-btn" onclick="register()">
 Qeydiyyatdan keç
-</button>
-
-<div class="switch" onclick="showLogin()">
+</button><div class="switch" onclick="showLogin()">
 Girişə qayıt
-</div>
-
-<div id="registerMessage" class="message"></div>
-
-</div>
-
-</section>
-
-<section id="app" class="hidden">
-
-<header class="header">
-
-<div class="logo">NOVENTRA</div>
-
-<nav class="nav">
-
-<button id="homeBtn" class="active" onclick="openPage('home')">
+</div><div id="registerMessage" class="message"></div></div></section><section id="app" class="hidden"><header class="header"><div class="logo">NOVENTRA</div><nav class="nav"><button id="homeBtn" class="active" onclick="openPage('home')">
 Ana səhifə
-</button>
-
-<button id="earnBtn" onclick="openPage('earnings')">
+</button><button id="earnBtn" onclick="openPage('earnings')">
 Qazanc
-</button>
-
-<button id="accountBtn" onclick="openPage('account')">
+</button><button id="accountBtn" onclick="openPage('account')">
 Hesabım
-</button>
-
-</nav>
-
-</header>
-
-<main class="content">
-
-<div id="homePage">
-
-<div class="welcome">
-
-<h1>Xoş gəlmisiniz</h1>
-
-<p>Hesabınızın ümumi vəziyyəti</p>
-
-</div>
-
-<div class="stats">
-
-<div class="card">
-
-<div class="label">
+</button></nav></header><main class="content"><div id="homePage"><div class="welcome"><h1>Xoş gəlmisiniz</h1><p>Hesabınızın ümumi vəziyyəti</p></div><div class="stats"><div class="card"><div class="label">
 Aktiv balans
-</div>
-
-<div id="balanceValue" class="value">
+</div><div id="balanceValue" class="value">
 0.00 AZN
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="label">
+</div></div><div class="card"><div class="label">
 Ümumi qazanc
-</div>
-
-<div id="totalEarningsValue" class="value green">
+</div><div id="totalEarningsValue" class="value green">
 0.00 AZN
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="label">
+</div></div><div class="card"><div class="label">
 Hesab statusu
-</div>
-
-<div class="value purple">
+</div><div class="value purple">
 Aktiv
-</div>
-
-</div>
-
-</div>
-
-<div class="main-panel">
-
-<div class="card activity">
-
-<h2>Mövcud fəaliyyətlər</h2>
-
-<p class="muted">
+</div></div></div><div class="main-panel"><div class="card activity"><h2>Mövcud fəaliyyətlər</h2><p class="muted">
 Sistemə əlavə edilmiş fəaliyyətlər burada görünəcək.
-</p>
-
-<div id="tasksList">
+</p><div id="tasksList">
 Yüklənir...
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Hesab məlumatı</h2>
-
-<div class="earning-row">
-
-<span class="muted">
+</div></div><div class="card"><h2>Hesab məlumatı</h2><div class="earning-row"><span class="muted">
 Status
-</span>
-
-<b class="green">
+</span><b class="green">
 Aktiv
-</b>
-
-</div>
-
-<div class="earning-row">
-
-<span class="muted">
+</b></div><div class="earning-row"><span class="muted">
 E-poçt
-</span>
-
-<span id="homeEmail">
+</span><span id="homeEmail">
 —
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div id="earningsPage" class="hidden">
-
-<div class="welcome">
-
-<h1>Qazanc</h1>
-
-<p>Real qazanc məlumatlarınız</p>
-
-</div>
-
-<div class="earning-box">
-
-<div class="card">
-
-<div class="label">
+</span></div></div></div></div><div id="earningsPage" class="hidden"><div class="welcome"><h1>Qazanc</h1><p>Real qazanc məlumatlarınız</p></div><div class="earning-box"><div class="card"><div class="label">
 Ümumi qazanc
-</div>
-
-<div id="earningsTotal" class="value green">
+</div><div id="earningsTotal" class="value green">
 0.00 AZN
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="label">
+</div></div><div class="card"><div class="label">
 Aktiv balans
-</div>
-
-<div id="earningsBalance" class="value purple">
+</div><div id="earningsBalance" class="value purple">
 0.00 AZN
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h2>Qazanc tarixçəsi</h2>
-
-<div id="earningsHistory">
+</div></div></div><div class="card"><h2>Qazanc tarixçəsi</h2><div id="earningsHistory">
 Yüklənir...
-</div>
-
-</div>
-
-</div>
-
-<div id="accountPage" class="hidden">
-
-<div class="welcome">
-
-<h1>Hesabım</h1>
-
-<p>Hesab məlumatlarınız</p>
-
-</div>
-
-<div class="card account">
-
-<div class="account-row">
-
-<span class="muted">
+</div></div></div><div id="accountPage" class="hidden"><div class="welcome"><h1>Hesabım</h1><p>Hesab məlumatlarınız</p></div><div class="card account"><div class="account-row"><span class="muted">
 E-poçt
-</span>
-
-<span id="accountEmail">
+</span><span id="accountEmail">
 —
-</span>
-
-</div>
-
-<div class="account-row">
-
-<span class="muted">
+</span></div><div class="account-row"><span class="muted">
 Hesab statusu
-</span>
-
-<b class="green">
+</span><b class="green">
 Aktiv
-</b>
-
-</div>
-
-<button class="logout" onclick="logout()">
+</b></div><button class="logout" onclick="logout()">
 Hesabdan çıx
-</button>
+</button></div></div></main></section><!-- REKLAM PƏNCƏRƏSİ --><div id="adModal" class="ad-modal hidden"><div class="ad-box"><div class="ad-logo">
+NOVENTRA
+</div><div id="adText" class="ad-text">
+Hər böyük yol bir addımla başlayır.
+</div><div id="adTimer" class="ad-timer">
+30 saniyə qalıb
+</div><button
+id="adClose"
+class="ad-close"
+disabled
+onclick="finishAd()">
 
-</div>
+30 saniyə gözləyin...
 
-</div>
-
-</main>
-
-</section>
-
-<script>
+</button></div></div><script>
 
 const SUPABASE_URL =
 "https://yafncpfkjmealuwmvcgc.supabase.co";
@@ -732,7 +592,7 @@ const { data, error } =
 await supabaseClient
 .from("earnings")
 .select("*")
-.order("created_at", {
+.order("created_at",{
 
 ascending:false
 
@@ -855,11 +715,8 @@ return `
 ${task.başlıq || "Fəaliyyət"}
 </span>
 
-<button
-onclick="startTask(this)">
-
+<button onclick="startTask(this)">
 Başla
-
 </button>
 
 </div>
@@ -870,13 +727,100 @@ Başla
 
 }
 
+let adTimerInterval;
+
 function startTask(button){
 
-button.innerText =
-"Başladı";
+const modal =
+document.getElementById("adModal");
 
-button.style.background =
-"#24734d";
+const text =
+document.getElementById("adText");
+
+const timer =
+document.getElementById("adTimer");
+
+const closeButton =
+document.getElementById("adClose");
+
+modal.classList.remove("hidden");
+
+closeButton.disabled = true;
+
+closeButton.innerText =
+"30 saniyə gözləyin...";
+
+const messages = [
+
+"Hər böyük yol bir addımla başlayır.",
+
+"Hər insan öz əsərinin qəhrəmanıdır.",
+
+"Sən öz hekayəni yazırsan.",
+
+"Güclü ol. Davam et. Heç vaxt dayanma.",
+
+"NOVENTRA — gələcəyini qurduğun yer.",
+
+"Noventra ilə güclü ol."
+
+];
+
+let seconds = 30;
+
+let messageIndex = 0;
+
+text.innerText =
+messages[0];
+
+timer.innerText =
+"30 saniyə qalıb";
+
+clearInterval(adTimerInterval);
+
+adTimerInterval =
+setInterval(function(){
+
+seconds--;
+
+if(seconds % 5 === 0 &&
+messageIndex < messages.length - 1){
+
+messageIndex++;
+
+text.innerText =
+messages[messageIndex];
+
+}
+
+timer.innerText =
+seconds + " saniyə qalıb";
+
+if(seconds <= 0){
+
+clearInterval(adTimerInterval);
+
+timer.innerText =
+"Reklam tamamlandı ✓";
+
+closeButton.disabled =
+false;
+
+closeButton.innerText =
+"Fəaliyyəti tamamla";
+
+}
+
+},1000);
+
+}
+
+function finishAd(){
+
+document
+.getElementById("adModal")
+.classList
+.add("hidden");
 
 }
 
@@ -972,7 +916,5 @@ await openApp(data.session.user);
 
 checkSession();
 
-</script>
-
-</body>
+</script></body>
 </html>
