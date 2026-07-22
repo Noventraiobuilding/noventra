@@ -2,8 +2,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noventra</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+<title>Noventra</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 *{box-sizing:border-box}
 
 body{
@@ -46,7 +45,7 @@ button{
   margin-bottom:30px;
 }
 
-input,textarea{
+input{
   width:100%;
   padding:15px;
   margin-bottom:14px;
@@ -55,11 +54,6 @@ input,textarea{
   background:#0b111d;
   color:white;
   outline:none;
-}
-
-textarea{
-  min-height:100px;
-  resize:vertical;
 }
 
 .main-btn{
@@ -368,22 +362,15 @@ textarea{
   }
 
 }
-</style></head><body><section id="loginPage" class="auth">
-<div class="auth-box">
-<div class="logo">NOVENTRA</div><input id="loginEmail" type="email" placeholder="Email">
-<input id="loginPassword" type="password" placeholder="Şifrə"><button class="main-btn" onclick="login()">Daxil ol</button>
-
-<div class="switch" onclick="showRegister()">Hesab yarat</div><div id="loginMessage" class="message"></div>
-</div>
-</section><section id="registerPage" class="auth hidden">
-<div class="auth-box">
-<div class="logo">NOVENTRA</div><input id="registerEmail" type="email" placeholder="Email">
-<input id="registerPassword" type="password" placeholder="Şifrə"><button class="main-btn" onclick="register()">Qeydiyyatdan keç</button>
-
-<div class="switch" onclick="showLogin()">Girişə qayıt</div><div id="registerMessage" class="message"></div>
-</div>
-</section><section id="app" class="hidden"><header class="header">
-<div class="logo">NOVENTRA</div><nav class="nav"><button id="homeBtn" class="active" onclick="openPage('home')">
+</style></head><body><section id="loginPage" class="auth"><div class="auth-box"><div class="logo">NOVENTRA</div><input id="loginEmail" type="email" placeholder="Email"><input id="loginPassword" type="password" placeholder="Şifrə"><button class="main-btn" onclick="login()">
+Daxil ol
+</button><div class="switch" onclick="showRegister()">
+Hesab yarat
+</div><div id="loginMessage" class="message"></div></div></section><section id="registerPage" class="auth hidden"><div class="auth-box"><div class="logo">NOVENTRA</div><input id="registerEmail" type="email" placeholder="Email"><input id="registerPassword" type="password" placeholder="Şifrə"><button class="main-btn" onclick="register()">
+Qeydiyyatdan keç
+</button><div class="switch" onclick="showLogin()">
+Girişə qayıt
+</div><div id="registerMessage" class="message"></div></div></section><section id="app" class="hidden"><header class="header"><div class="logo">NOVENTRA</div><nav class="nav"><button id="homeBtn" class="active" onclick="openPage('home')">
 Ana səhifə
 </button><button id="earnBtn" onclick="openPage('earnings')">
 Qazanc
@@ -393,82 +380,196 @@ Yatırım
 Çıxarış
 </button><button id="accountBtn" onclick="openPage('account')">
 Hesabım
-</button></nav>
-</header><main class="content"><div id="homePage"><div class="welcome">
-<h1>Xoş gəlmisiniz</h1>
-<p>Hesabınızın ümumi vəziyyəti</p>
-</div><div class="stats"><div class="card">
-<div class="label">Aktiv balans</div>
-<div id="balanceValue" class="value">0.00 AZN</div>
-</div><div class="card">
-<div class="label">Ümumi qazanc</div>
-<div id="totalEarningsValue" class="value green">0.00 AZN</div>
-</div><div class="card">
-<div class="label">Hesab statusu</div>
-<div class="value purple">Aktiv</div>
-</div></div><div class="main-panel"><div class="card activity"><h2>Mövcud fəaliyyətlər</h2><p id="taskTimeMessage" class="muted">
-Yüklənir...
+</button><button id="adminBtn" class="hidden" onclick="openPage('admin')">
+Admin
+</button></nav></header><main class="content"><div id="homePage"><div class="welcome"><h1>Xoş gəlmisiniz</h1><p>Hesabınızın ümumi vəziyyəti</p></div><div class="stats"><div class="card"><div class="label">Aktiv balans</div><div id="balanceValue" class="value">
+0.00 AZN
+</div></div><div class="card"><div class="label">Ümumi qazanc</div><div id="totalEarningsValue" class="value green">
+0.00 AZN
+</div></div><div class="card"><div class="label">Hesab statusu</div><div class="value purple">
+Aktiv
+</div></div></div><div class="main-panel"><div class="card activity"><h2>Mövcud fəaliyyətlər</h2><p id="taskTimeMessage" class="muted">
+Gündə 1 dəfə fəaliyyətə qoşulun və 2 AZN qazanın.
 </p><div id="tasksList">
 Yüklənir...
-</div></div><div class="card"><h2>Hesab məlumatı</h2><div class="earning-row">
-<span class="muted">Status</span>
-<b class="green">Aktiv</b>
-</div><div class="earning-row">
-<span class="muted">E-poçt</span>
-<span id="homeEmail">—</span>
-</div></div></div></div><div id="earningsPage" class="hidden"><div class="welcome">
-<h1>Qazanc</h1>
-<p>Real qazanc məlumatlarınız</p>
-</div><div class="earning-box"><div class="card">
-<div class="label">Ümumi qazanc</div>
-<div id="earningsTotal" class="value green">0.00 AZN</div>
-</div><div class="card">
-<div class="label">Aktiv balans</div>
-<div id="earningsBalance" class="value purple">0.00 AZN</div>
-</div></div><div class="card"><h2>Qazanc tarixçəsi</h2><div id="earningsHistory">
+</div></div><div class="card"><h2>Hesab məlumatı</h2><div class="earning-row"><span class="muted">Status</span>
+
+<b class="green">
+Aktiv
+</b></div><div class="earning-row"><span class="muted">E-poçt</span>
+
+<span id="homeEmail">
+—
+</span></div></div></div></div><div id="earningsPage" class="hidden"><div class="welcome"><h1>Qazanc</h1><p>Real qazanc məlumatlarınız</p></div><div class="earning-box"><div class="card"><div class="label">
+Ümumi qazanc
+</div><div id="earningsTotal" class="value green">
+0.00 AZN
+</div></div><div class="card"><div class="label">
+Aktiv balans
+</div><div id="earningsBalance" class="value purple">
+0.00 AZN
+</div></div></div><div class="card"><h2>
+Qazanc tarixçəsi
+</h2><div id="earningsHistory">
 Yüklənir...
-</div></div></div><div id="investPage" class="hidden"><div class="welcome">
-<h1>Yatırım</h1>
-<p>Yatırımınızı göndərin və təsdiqlənməsini gözləyin.</p>
-</div><div class="card form-card"><div class="info-box">
-<b>Yatırım üçün kart:</b><br>
-Sizin Unibank kartınızın 16 rəqəmli nömrəsini burada yazacaqsınız.
-</div><input id="investmentAmount" type="number" min="1" step="0.01" placeholder="Yatırım məbləği (AZN)"><input id="investmentReceipt" type="file" accept="image/*"><img id="receiptPreview" class="receipt-preview"><button class="main-btn" onclick="submitInvestment()">
+</div></div></div><div id="investPage" class="hidden"><div class="welcome"><h1>
+Yatırım
+</h1><p>
+Yatırımınızı admin kartına göndərin və çek yükləyin.
+</p></div><div class="card form-card"><div class="info-box"><b>Yatırım üçün admin kartı:</b>
+<br><br>
+
+<strong style="font-size:20px;letter-spacing:2px;">
+5243 7544 3976 1469
+</strong><br><br>
+
+Bu karta ödəniş etdikdən sonra çek şəklini aşağıda yükləyin.
+
+</div><input
+id="investmentAmount"
+type="number"
+min="1"
+step="0.01"
+placeholder="Yatırım məbləği (AZN)"
+
+«»
+
+<input
+id="investmentReceipt"
+type="file"
+accept="image/*"
+
+«»
+
+<img
+id="receiptPreview"
+class="receipt-preview"
+
+«»
+
+<button
+class="main-btn"
+onclick="submitInvestment()"
+
+«»
+
 Ödəniş etdim
-</button><div id="investmentMessage" class="message"></div></div><div class="card"><h2>Yatırım tarixçəm</h2><div id="investmentHistory">
+</button>
+
+<div
+id="investmentMessage"
+class="message"
+>
+</div></div><div class="card"><h2>
+Yatırım tarixçəm
+</h2><div id="investmentHistory">
 Yüklənir...
-</div></div></div><div id="withdrawPage" class="hidden"><div class="welcome">
-<h1>Çıxarış</h1>
-<p>Qazancınızı çıxarış üçün sorğu göndərin.</p>
-</div><div class="card form-card"><div class="info-box">
-<b>Çıxarış vaxtı:</b> 18:00-dan sonra.<br>
-Çıxarış sorğusundan sonra ödəniş sizin tərəfinizdən yoxlanılaraq həyata keçiriləcək.
-</div><input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Çıxarış məbləği (AZN)"><input id="withdrawCard" type="text" inputmode="numeric" maxlength="16" placeholder="16 rəqəmli kart nömrəsi"><button class="main-btn" onclick="submitWithdrawal()">
+</div></div></div><div id="withdrawPage" class="hidden"><div class="welcome"><h1>
+Çıxarış
+</h1><p>
+Qazancınızı çıxarış üçün sorğu göndərin.
+</p></div><div class="card form-card"><div class="info-box"><b>Çıxarış vaxtı:</b>
+<br>
+
+Çıxarış sorğuları yalnız 18:00-dan sonra qəbul edilir.
+
+<br><br>
+
+Məbləği və pulun köçürüləcəyi öz 16 rəqəmli kart nömrənizi yazın.
+
+</div><input
+id="withdrawAmount"
+type="number"
+min="1"
+step="0.01"
+placeholder="Çıxarış məbləği (AZN)"
+
+«»
+
+<input
+id="withdrawCard"
+type="text"
+inputmode="numeric"
+maxlength="16"
+placeholder="16 rəqəmli kart nömrəsi"
+
+«»
+
+<button
+class="main-btn"
+onclick="submitWithdrawal()"
+
+«»
+
 Çıxarış sorğusu göndər
-</button><div id="withdrawMessage" class="message"></div></div><div class="card"><h2>Çıxarış tarixçəm</h2><div id="withdrawHistory">
+</button>
+
+<div
+id="withdrawMessage"
+class="message"
+>
+</div></div><div class="card"><h2>
+Çıxarış tarixçəm
+</h2><div id="withdrawHistory">
 Yüklənir...
-</div></div></div><div id="accountPage" class="hidden"><div class="welcome">
-<h1>Hesabım</h1>
-<p>Hesab məlumatlarınız</p>
-</div><div class="card account"><div class="account-row">
-<span class="muted">E-poçt</span>
-<span id="accountEmail">—</span>
-</div><div class="account-row">
-<span class="muted">Hesab statusu</span>
-<b class="green">Aktiv</b>
-</div><h2>Əlaqə</h2><div class="info-box">
-<b>NOVENTRA dəstək</b><br>
+</div></div></div><div id="accountPage" class="hidden"><div class="welcome"><h1>
+Hesabım
+</h1><p>
+Hesab məlumatlarınız
+</p></div><div class="card account"><div class="account-row"><span class="muted">
+E-poçt
+</span><span id="accountEmail">
+—
+</span></div><div class="account-row"><span class="muted">
+Hesab statusu
+</span><b class="green">
+Aktiv
+</b></div><h2>
+Əlaqə
+</h2><div class="info-box"><b>NOVENTRA dəstək</b>
+<br>
+
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
-</div><button class="logout" onclick="logout()">
+
+</div><button
+class="logout"
+onclick="logout()"
+
+«»
+
 Hesabdan çıx
-</button></div></div></main>
-</section><div id="adModal" class="ad-modal hidden"><div class="ad-box"><div class="ad-logo">NOVENTRA</div><div id="adText" class="ad-text">
+</button>
+
+</div></div><div id="adminPage" class="hidden"><div class="welcome"><h1>
+Admin Paneli
+</h1><p>
+Yatırım və çıxarış sorğularının idarə edilməsi
+</p></div><div class="card"><h2>
+Yatırım sorğuları
+</h2><div id="adminInvestments">
+Yüklənir...
+</div></div><div class="card"><h2>
+Çıxarış sorğuları
+</h2><div id="adminWithdrawals">
+Yüklənir...
+</div></div></div></main></section><div id="adModal" class="ad-modal hidden"><div class="ad-box"><div class="ad-logo">
+NOVENTRA
+</div><div id="adText" class="ad-text">
 Hər böyük yol bir addımla başlayır.
 </div><div id="adTimer" class="ad-timer">
 30 saniyə qalıb
-</div><button id="adClose" class="ad-close" disabled onclick="finishAd()">
+</div><button
+id="adClose"
+class="ad-close"
+disabled
+onclick="finishAd()"
+
+«»
+
 30 saniyə gözləyin...
-</button></div></div><script>
+</button>
+
+</div></div><script>
 
 const SUPABASE_URL =
 "https://yafncpfkjmealuwmvcgc.supabase.co";
@@ -482,33 +583,60 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
+const ADMIN_EMAIL =
+"ayazdiana666@gmail.com";
+
+const INVESTMENT_CARD =
+"5243754439761469";
+
 let currentUser = null;
+
 let adTimerInterval;
 
 function showRegister(){
 
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("registerPage").classList.remove("hidden");
+document
+.getElementById("loginPage")
+.classList
+.add("hidden");
+
+document
+.getElementById("registerPage")
+.classList
+.remove("hidden");
 
 }
 
 function showLogin(){
 
-document.getElementById("registerPage").classList.add("hidden");
-document.getElementById("loginPage").classList.remove("hidden");
+document
+.getElementById("registerPage")
+.classList
+.add("hidden");
+
+document
+.getElementById("loginPage")
+.classList
+.remove("hidden");
 
 }
 
 async function register(){
 
 const email =
-document.getElementById("registerEmail").value.trim();
+document
+.getElementById("registerEmail")
+.value
+.trim();
 
 const password =
-document.getElementById("registerPassword").value;
+document
+.getElementById("registerPassword")
+.value;
 
 const message =
-document.getElementById("registerMessage");
+document
+.getElementById("registerMessage");
 
 if(!email || !password){
 
@@ -532,9 +660,14 @@ message.innerText =
 "Hesab yaradılır...";
 
 const { error } =
-await supabaseClient.auth.signUp({
+await supabaseClient
+.auth
+.signUp({
+
 email:email,
+
 password:password
+
 });
 
 if(error){
@@ -553,7 +686,9 @@ message.innerText =
 "Hesab uğurla yaradıldı.";
 
 setTimeout(function(){
+
 showLogin();
+
 },1000);
 
 }
@@ -561,13 +696,19 @@ showLogin();
 async function login(){
 
 const email =
-document.getElementById("loginEmail").value.trim();
+document
+.getElementById("loginEmail")
+.value
+.trim();
 
 const password =
-document.getElementById("loginPassword").value;
+document
+.getElementById("loginPassword")
+.value;
 
 const message =
-document.getElementById("loginMessage");
+document
+.getElementById("loginMessage");
 
 if(!email || !password){
 
@@ -582,9 +723,14 @@ message.innerText =
 "Daxil olunur...";
 
 const { data, error } =
-await supabaseClient.auth.signInWithPassword({
+await supabaseClient
+.auth
+.signInWithPassword({
+
 email:email,
+
 password:password
+
 });
 
 if(error){
@@ -602,66 +748,118 @@ await openApp(data.user);
 
 async function openApp(user){
 
-currentUser = user;
+currentUser =
+user;
 
-document.getElementById("loginPage").classList.add("hidden");
-document.getElementById("registerPage").classList.add("hidden");
-document.getElementById("app").classList.remove("hidden");
+document
+.getElementById("loginPage")
+.classList
+.add("hidden");
 
-document.getElementById("accountEmail").innerText =
+document
+.getElementById("registerPage")
+.classList
+.add("hidden");
+
+document
+.getElementById("app")
+.classList
+.remove("hidden");
+
+document
+.getElementById("accountEmail")
+.innerText =
 user.email || "—";
 
-document.getElementById("homeEmail").innerText =
+document
+.getElementById("homeEmail")
+.innerText =
 user.email || "—";
+
+if(
+user.email &&
+user.email.toLowerCase() === ADMIN_EMAIL
+){
+
+document
+.getElementById("adminBtn")
+.classList
+.remove("hidden");
+
+}
 
 await loadEarnings();
+
 await loadTasks();
+
 await loadInvestmentHistory();
+
 await loadWithdrawalHistory();
 
 }
 
 async function loadEarnings(){
 
-if(!currentUser) return;
+if(!currentUser)
+return;
 
 const { data, error } =
 await supabaseClient
 .from("earnings")
 .select("*")
 .eq("user_id",currentUser.id)
-.order("created_at",{ascending:false});
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error){
 
 console.log(error);
+
 return;
 
 }
 
-let total = 0;
+let total =
+0;
 
 data.forEach(function(item){
-total += Number(item.amount || 0);
+
+total +=
+Number(item.amount || 0);
+
 });
 
 const formatted =
-total.toFixed(2) + " AZN";
+total.toFixed(2) +
+" AZN";
 
-document.getElementById("balanceValue").innerText =
+document
+.getElementById("balanceValue")
+.innerText =
 formatted;
 
-document.getElementById("totalEarningsValue").innerText =
+document
+.getElementById("totalEarningsValue")
+.innerText =
 formatted;
 
-document.getElementById("earningsTotal").innerText =
+document
+.getElementById("earningsTotal")
+.innerText =
 formatted;
 
-document.getElementById("earningsBalance").innerText =
+document
+.getElementById("earningsBalance")
+.innerText =
 formatted;
 
 const history =
-document.getElementById("earningsHistory");
+document
+.getElementById("earningsHistory");
 
 if(!data.length){
 
@@ -673,70 +871,102 @@ return;
 }
 
 history.innerHTML =
-data.map(function(item){
+data
+.map(function(item){
 
 return `
+
 <div class="earning-row">
-<span>${item.description || "Qazanc"}</span>
+
+<span>
+${item.description || "Qazanc"}
+</span>
+
 <b class="green">
-+${Number(item.amount).toFixed(2)} AZN
+
++${Number(item.amount).toFixed(2)}
+AZN
+
 </b>
+
 </div>
+
 `;
 
-}).join("");
+})
+.join("");
 
 }
 
-function getBakuHour(){
+async function getTodayEarning(){
 
-return Number(
-new Intl.DateTimeFormat(
-"az-AZ",
-{
-timeZone:"Asia/Baku",
-hour:"2-digit",
-hour12:false
-}
-).format(new Date())
+if(!currentUser)
+return false;
+
+const now =
+new Date();
+
+const start =
+new Date(
+now.getFullYear(),
+now.getMonth(),
+now.getDate()
 );
 
+const end =
+new Date(
+now.getFullYear(),
+now.getMonth(),
+now.getDate() + 1
+);
+
+const { data, error } =
+await supabaseClient
+.from("earnings")
+.select("id")
+.eq(
+"user_id",
+currentUser.id
+)
+.eq(
+"description",
+"NOVENTRA 30 saniyəlik fəaliyyət"
+)
+.gte(
+"created_at",
+start.toISOString()
+)
+.lt(
+"created_at",
+end.toISOString()
+)
+.limit(1);
+
+if(error){
+
+console.log(error);
+
+return false;
+
 }
 
-function isTaskTime(){
-
-const hour =
-getBakuHour();
-
-return hour >= 12 && hour < 17;
-
-}
-
-function isWithdrawalTime(){
-
-return getBakuHour() >= 18;
+return data &&
+data.length > 0;
 
 }
 
 async function loadTasks(){
 
 const list =
-document.getElementById("tasksList");
+document
+.getElementById("tasksList");
 
 const timeMessage =
-document.getElementById("taskTimeMessage");
-
-if(!isTaskTime()){
-
-list.innerHTML =
-'<p class="muted">Fəaliyyətlər hazırda aktiv deyil.</p>';
+document
+.getElementById("taskTimeMessage");
 
 timeMessage.innerText =
-"Fəaliyyət vaxtı: 12:00–17:00.";
-
-return;
-
-}
+"Gündə 1 dəfə 30 saniyəlik fəaliyyətə baxın və 2 AZN qazanın.";
 
 const { data, error } =
 await supabaseClient
@@ -762,50 +992,73 @@ return;
 
 }
 
-timeMessage.innerText =
-"Fəaliyyətlər aktivdir: 12:00–17:00.";
-
 list.innerHTML =
-data.map(function(task){
+data
+.map(function(task){
 
 return `
+
 <div class="task">
-<span>${task.başlıq || "Fəaliyyət"}</span>
-<button onclick="startTask(this)">
+
+<span>
+${task.başlıq || "Fəaliyyət"}
+</span>
+
+<button
+onclick="startTask()"
+>
 Başla
 </button>
+
 </div>
+
 `;
 
-}).join("");
+})
+.join("");
 
 }
 
-function startTask(button){
+async function startTask(){
 
-if(!isTaskTime()){
+if(!currentUser)
+return;
 
-alert("Fəaliyyətlər yalnız 12:00–17:00 arası aktivdir.");
+const alreadyEarned =
+await getTodayEarning();
+
+if(alreadyEarned){
+
+alert(
+"Bu gün artıq fəaliyyət tamamlanıb. Sabah yenidən baxa bilərsiniz."
+);
 
 return;
 
 }
 
 const modal =
-document.getElementById("adModal");
+document
+.getElementById("adModal");
 
 const text =
-document.getElementById("adText");
+document
+.getElementById("adText");
 
 const timer =
-document.getElementById("adTimer");
+document
+.getElementById("adTimer");
 
 const closeButton =
-document.getElementById("adClose");
+document
+.getElementById("adClose");
 
-modal.classList.remove("hidden");
+modal
+.classList
+.remove("hidden");
 
-closeButton.disabled = true;
+closeButton.disabled =
+true;
 
 closeButton.innerText =
 "30 saniyə gözləyin...";
@@ -826,8 +1079,11 @@ const messages = [
 
 ];
 
-let seconds = 30;
-let messageIndex = 0;
+let seconds =
+30;
+
+let messageIndex =
+0;
 
 text.innerText =
 messages[0];
@@ -835,28 +1091,39 @@ messages[0];
 timer.innerText =
 "30 saniyə qalıb";
 
-clearInterval(adTimerInterval);
+clearInterval(
+adTimerInterval
+);
 
 adTimerInterval =
-setInterval(function(){
+setInterval(
+function(){
 
 seconds--;
 
-if(seconds % 5 === 0 &&
-messageIndex < messages.length - 1){
+if(
+seconds % 5 === 0 &&
+messageIndex < messages.length - 1
+){
 
 messageIndex++;
+
 text.innerText =
 messages[messageIndex];
 
 }
 
 timer.innerText =
-seconds + " saniyə qalıb";
+seconds +
+" saniyə qalıb";
 
-if(seconds <= 0){
+if(
+seconds <= 0
+){
 
-clearInterval(adTimerInterval);
+clearInterval(
+adTimerInterval
+);
 
 timer.innerText =
 "Reklam tamamlandı ✓";
@@ -869,7 +1136,9 @@ closeButton.innerText =
 
 }
 
-},1000);
+},
+1000
+);
 
 }
 
@@ -877,7 +1146,28 @@ async function finishAd(){
 
 if(!currentUser){
 
-alert("İstifadəçi tapılmadı.");
+alert(
+"İstifadəçi tapılmadı."
+);
+
+return;
+
+}
+
+const alreadyEarned =
+await getTodayEarning();
+
+if(alreadyEarned){
+
+alert(
+"Bu gün artıq 2 AZN qazanmısınız."
+);
+
+document
+.getElementById("adModal")
+.classList
+.add("hidden");
+
 return;
 
 }
@@ -887,9 +1177,14 @@ await supabaseClient
 .from("earnings")
 .insert({
 
-user_id:currentUser.id,
-amount:2.00,
-description:"NOVENTRA 30 saniyəlik fəaliyyət"
+user_id:
+currentUser.id,
+
+amount:
+2.00,
+
+description:
+"NOVENTRA 30 saniyəlik fəaliyyət"
 
 });
 
@@ -904,7 +1199,10 @@ return;
 
 }
 
-document.getElementById("adModal").classList.add("hidden");
+document
+.getElementById("adModal")
+.classList
+.add("hidden");
 
 alert(
 "Fəaliyyət tamamlandı! +2.00 AZN qazandınız."
@@ -917,10 +1215,13 @@ await loadEarnings();
 function previewReceipt(){
 
 const file =
-document.getElementById("investmentReceipt").files[0];
+document
+.getElementById("investmentReceipt")
+.files[0];
 
 const preview =
-document.getElementById("receiptPreview");
+document
+.getElementById("receiptPreview");
 
 if(!file){
 
@@ -958,22 +1259,24 @@ previewReceipt
 
 async function submitInvestment(){
 
-if(!currentUser){
-
+if(!currentUser)
 return;
-
-}
 
 const amount =
 Number(
-document.getElementById("investmentAmount").value
+document
+.getElementById("investmentAmount")
+.value
 );
 
 const file =
-document.getElementById("investmentReceipt").files[0];
+document
+.getElementById("investmentReceipt")
+.files[0];
 
 const message =
-document.getElementById("investmentMessage");
+document
+.getElementById("investmentMessage");
 
 if(!amount || amount <= 0){
 
@@ -1013,10 +1316,17 @@ await supabaseClient
 .from("investments")
 .insert({
 
-user_id:currentUser.id,
-amount:amount,
-receipt_url:receiptData,
-status:"pending"
+user_id:
+currentUser.id,
+
+amount:
+amount,
+
+receipt_url:
+receiptData,
+
+status:
+"pending"
 
 });
 
@@ -1026,7 +1336,8 @@ message.style.color =
 "#ff8b8b";
 
 message.innerText =
-"Xəta: " + error.message;
+"Xəta: " +
+error.message;
 
 return;
 
@@ -1038,13 +1349,26 @@ message.style.color =
 message.innerText =
 "Yatırım sorğusu göndərildi. Təsdiq gözlənilir.";
 
-document.getElementById("investmentAmount").value =
+document
+.getElementById(
+"investmentAmount"
+)
+.value =
 "";
 
-document.getElementById("investmentReceipt").value =
+document
+.getElementById(
+"investmentReceipt"
+)
+.value =
 "";
 
-document.getElementById("receiptPreview").style.display =
+document
+.getElementById(
+"receiptPreview"
+)
+.style
+.display =
 "none";
 
 await loadInvestmentHistory();
@@ -1057,17 +1381,29 @@ reader.readAsDataURL(file);
 
 async function loadInvestmentHistory(){
 
-if(!currentUser) return;
+if(!currentUser)
+return;
 
 const box =
-document.getElementById("investmentHistory");
+document
+.getElementById("investmentHistory");
 
 const { data, error } =
 await supabaseClient
 .from("investments")
-.select("amount,status,created_at")
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false});
+.select(
+"amount,status,created_at"
+)
+.eq(
+"user_id",
+currentUser.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error){
 
@@ -1088,28 +1424,72 @@ return;
 }
 
 box.innerHTML =
-data.map(function(item){
+data
+.map(function(item){
 
 return `
+
 <div class="earning-row">
-<span>${Number(item.amount).toFixed(2)} AZN</span>
+
+<span>
+${Number(item.amount).toFixed(2)}
+AZN
+</span>
+
 <b class="status-pending">
-${item.status === "approved" ? "Təsdiqləndi" : "Gözləyir"}
+
+${
+item.status === "approved"
+?
+"Təsdiqləndi"
+:
+"Gözləyir"
+}
+
 </b>
+
 </div>
+
 `;
 
-}).join("");
+})
+.join("");
+
+}
+
+function getBakuHour(){
+
+return Number(
+new Intl.DateTimeFormat(
+"az-AZ",
+{
+timeZone:"Asia/Baku",
+hour:"2-digit",
+hour12:false
+}
+)
+.format(
+new Date()
+)
+);
 
 }
 
 async function submitWithdrawal(){
 
-if(!currentUser) return;
+if(!currentUser)
+return;
 
-if(!isWithdrawalTime()){
+const hour =
+getBakuHour();
 
-document.getElementById("withdrawMessage").innerText =
+if(hour < 18){
+
+document
+.getElementById(
+"withdrawMessage"
+)
+.innerText =
 "Çıxarış yalnız 18:00-dan sonra aktivdir.";
 
 return;
@@ -1118,14 +1498,26 @@ return;
 
 const amount =
 Number(
-document.getElementById("withdrawAmount").value
+document
+.getElementById(
+"withdrawAmount"
+)
+.value
 );
 
 const card =
-document.getElementById("withdrawCard").value.trim();
+document
+.getElementById(
+"withdrawCard"
+)
+.value
+.trim();
 
 const message =
-document.getElementById("withdrawMessage");
+document
+.getElementById(
+"withdrawMessage"
+);
 
 if(!amount || amount <= 0){
 
@@ -1156,10 +1548,17 @@ await supabaseClient
 .from("withdrawals")
 .insert({
 
-user_id:currentUser.id,
-amount:amount,
-card_number:card,
-status:"pending"
+user_id:
+currentUser.id,
+
+amount:
+amount,
+
+card_number:
+card,
+
+status:
+"pending"
 
 });
 
@@ -1169,7 +1568,8 @@ message.style.color =
 "#ff8b8b";
 
 message.innerText =
-"Xəta: " + error.message;
+"Xəta: " +
+error.message;
 
 return;
 
@@ -1181,10 +1581,18 @@ message.style.color =
 message.innerText =
 "Çıxarış sorğusu göndərildi.";
 
-document.getElementById("withdrawAmount").value =
+document
+.getElementById(
+"withdrawAmount"
+)
+.value =
 "";
 
-document.getElementById("withdrawCard").value =
+document
+.getElementById(
+"withdrawCard"
+)
+.value =
 "";
 
 await loadWithdrawalHistory();
@@ -1193,17 +1601,31 @@ await loadWithdrawalHistory();
 
 async function loadWithdrawalHistory(){
 
-if(!currentUser) return;
+if(!currentUser)
+return;
 
 const box =
-document.getElementById("withdrawHistory");
+document
+.getElementById(
+"withdrawHistory"
+);
 
 const { data, error } =
 await supabaseClient
 .from("withdrawals")
-.select("amount,card_number,status,created_at")
-.eq("user_id",currentUser.id)
-.order("created_at",{ascending:false});
+.select(
+"amount,card_number,status,created_at"
+)
+.eq(
+"user_id",
+currentUser.id
+)
+.order(
+"created_at",
+{
+ascending:false
+}
+);
 
 if(error){
 
@@ -1224,18 +1646,182 @@ return;
 }
 
 box.innerHTML =
-data.map(function(item){
+data
+.map(function(item){
 
 return `
+
 <div class="earning-row">
-<span>${Number(item.amount).toFixed(2)} AZN</span>
+
+<span>
+${Number(item.amount).toFixed(2)}
+AZN
+</span>
+
 <b class="status-pending">
-${item.status === "paid" ? "Ödənildi" : "Gözləyir"}
+
+${
+item.status === "paid"
+?
+"Ödənildi"
+:
+"Gözləyir"
+}
+
 </b>
+
 </div>
+
 `;
 
-}).join("");
+})
+.join("");
+
+}
+
+async function loadAdminData(){
+
+if(
+!currentUser ||
+currentUser.email.toLowerCase()
+!== ADMIN_EMAIL
+){
+
+return;
+
+}
+
+const investments =
+document
+.getElementById(
+"adminInvestments"
+);
+
+const withdrawals =
+document
+.getElementById(
+"adminWithdrawals"
+);
+
+const investmentResult =
+await supabaseClient
+.from("investments")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(
+investmentResult.error
+){
+
+investments.innerHTML =
+"Yatırım məlumatları yüklənmədi.";
+
+}else{
+
+if(
+!investmentResult.data.length
+){
+
+investments.innerHTML =
+'<p class="muted">Yatırım sorğusu yoxdur.</p>';
+
+}else{
+
+investments.innerHTML =
+investmentResult.data
+.map(function(item){
+
+return `
+
+<div class="earning-row">
+
+<span>
+${Number(item.amount).toFixed(2)}
+AZN
+</span>
+
+<b class="yellow">
+${item.status}
+</b>
+
+</div>
+
+`;
+
+})
+.join("");
+
+}
+
+}
+
+const withdrawalResult =
+await supabaseClient
+.from("withdrawals")
+.select("*")
+.order(
+"created_at",
+{
+ascending:false
+}
+);
+
+if(
+withdrawalResult.error
+){
+
+withdrawals.innerHTML =
+"Çıxarış məlumatları yüklənmədi.";
+
+}else{
+
+if(
+!withdrawalResult.data.length
+){
+
+withdrawals.innerHTML =
+'<p class="muted">Çıxarış sorğusu yoxdur.</p>';
+
+}else{
+
+withdrawals.innerHTML =
+withdrawalResult.data
+.map(function(item){
+
+return `
+
+<div class="earning-row">
+
+<span>
+${Number(item.amount).toFixed(2)}
+AZN
+<br>
+
+<small class="muted">
+Kart: ${item.card_number}
+</small>
+
+</span>
+
+<b class="yellow">
+${item.status}
+</b>
+
+</div>
+
+`;
+
+})
+.join("");
+
+}
+
+}
 
 }
 
@@ -1243,48 +1829,89 @@ function openPage(page){
 
 document
 .querySelectorAll(
-"#homePage,#earningsPage,#investPage,#withdrawPage,#accountPage"
+"#homePage,#earningsPage,#investPage,#withdrawPage,#accountPage,#adminPage"
 )
 .forEach(function(section){
 
-section.classList.add("hidden");
+section
+.classList
+.add("hidden");
 
 });
 
 document
-.getElementById(page + "Page")
-.classList.remove("hidden");
+.getElementById(
+page + "Page"
+)
+.classList
+.remove("hidden");
 
 document
-.querySelectorAll(".nav button")
+.querySelectorAll(
+".nav button"
+)
 .forEach(function(button){
 
-button.classList.remove("active");
+button
+.classList
+.remove("active");
 
 });
 
 const buttonMap = {
 
-home:"homeBtn",
-earnings:"earnBtn",
-invest:"investBtn",
-withdraw:"withdrawBtn",
-account:"accountBtn"
+home:
+"homeBtn",
+
+earnings:
+"earnBtn",
+
+invest:
+"investBtn",
+
+withdraw:
+"withdrawBtn",
+
+account:
+"accountBtn",
+
+admin:
+"adminBtn"
 
 };
 
 document
-.getElementById(buttonMap[page])
-.classList.add("active");
+.getElementById(
+buttonMap[page]
+)
+.classList
+.add("active");
 
-if(page === "withdraw"){
+if(
+page === "withdraw"
+){
+
+const hour =
+getBakuHour();
 
 document
-.getElementById("withdrawMessage")
+.getElementById(
+"withdrawMessage"
+)
 .innerText =
-isWithdrawalTime()
-? "Çıxarış vaxtı aktivdir."
-: "Çıxarış yalnız 18:00-dan sonra aktivdir.";
+hour >= 18
+?
+"Çıxarış vaxtı aktivdir."
+:
+"Çıxarış yalnız 18:00-dan sonra aktivdir.";
+
+}
+
+if(
+page === "admin"
+){
+
+loadAdminData();
 
 }
 
@@ -1292,24 +1919,43 @@ isWithdrawalTime()
 
 async function logout(){
 
-await supabaseClient.auth.signOut();
+await supabaseClient
+.auth
+.signOut();
 
-currentUser = null;
+currentUser =
+null;
 
-document.getElementById("app").classList.add("hidden");
+document
+.getElementById(
+"app"
+)
+.classList
+.add("hidden");
 
-document.getElementById("loginPage").classList.remove("hidden");
+document
+.getElementById(
+"loginPage"
+)
+.classList
+.remove("hidden");
 
 }
 
 async function checkSession(){
 
 const { data } =
-await supabaseClient.auth.getSession();
+await supabaseClient
+.auth
+.getSession();
 
-if(data.session){
+if(
+data.session
+){
 
-await openApp(data.session.user);
+await openApp(
+data.session.user
+);
 
 }
 
