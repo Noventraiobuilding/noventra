@@ -61,9 +61,8 @@ color:white;
 outline:none;
 }
 
-textarea{
-min-height:100px;
-resize:vertical;
+input::placeholder{
+color:#8995aa;
 }
 
 .main-btn{
@@ -100,7 +99,9 @@ padding:25px 20px 10px;
 text-align:center;
 }
 
-.header .logo{margin:0}
+.header .logo{
+margin:0;
+}
 
 .nav{
 max-width:1100px;
@@ -271,6 +272,10 @@ display:none;
 color:#ffd166;
 }
 
+.status-approved{
+color:#40dc91;
+}
+
 .admin-box{
 border:1px solid #7357ff;
 background:#15112b;
@@ -429,6 +434,7 @@ Hesab yarat
 
 </section>
 
+
 <section id="registerPage" class="auth hidden">
 
 <div class="auth-box">
@@ -452,6 +458,7 @@ Girişə qayıt
 </div>
 
 </section>
+
 
 <section id="app" class="hidden">
 
@@ -489,7 +496,9 @@ Admin
 
 </header>
 
+
 <main class="content">
+
 
 <div id="homePage">
 
@@ -501,11 +510,14 @@ Admin
 
 </div>
 
+
 <div class="stats">
 
 <div class="card">
 
-<div class="label">Aktiv balans</div>
+<div class="label">
+Aktiv balans
+</div>
 
 <div id="balanceValue" class="value">
 0.00 AZN
@@ -513,9 +525,12 @@ Admin
 
 </div>
 
+
 <div class="card">
 
-<div class="label">Ümumi qazanc</div>
+<div class="label">
+Ümumi qazanc
+</div>
 
 <div id="totalEarningsValue" class="value green">
 0.00 AZN
@@ -523,9 +538,12 @@ Admin
 
 </div>
 
+
 <div class="card">
 
-<div class="label">Hesab statusu</div>
+<div class="label">
+Hesab statusu
+</div>
 
 <div class="value purple">
 Aktiv
@@ -534,6 +552,7 @@ Aktiv
 </div>
 
 </div>
+
 
 <div class="main-panel">
 
@@ -550,6 +569,7 @@ Yüklənir...
 </div>
 
 </div>
+
 
 <div class="card">
 
@@ -585,6 +605,7 @@ E-poçt
 
 </div>
 
+
 <div id="earningsPage" class="hidden">
 
 <div class="welcome">
@@ -594,6 +615,7 @@ E-poçt
 <p>Real qazanc məlumatlarınız</p>
 
 </div>
+
 
 <div class="earning-box">
 
@@ -609,6 +631,7 @@ E-poçt
 
 </div>
 
+
 <div class="card">
 
 <div class="label">
@@ -622,6 +645,7 @@ Aktiv balans
 </div>
 
 </div>
+
 
 <div class="card">
 
@@ -637,6 +661,7 @@ Yüklənir...
 
 </div>
 
+
 <div id="investPage" class="hidden">
 
 <div class="welcome">
@@ -651,20 +676,25 @@ Yatırımınızı göndərin və təsdiqlənməsini gözləyin.
 
 </div>
 
+
 <div class="card form-card">
 
 <div class="info-box">
 
 <b>Yatırım üçün admin kartı:</b>
-<br>
 
+<br><br>
+
+<strong class="yellow">
 5243754439761469
+</strong>
 
 <br><br>
 
 Bu karta pul köçürdükdən sonra çek şəklini aşağıda yükləyin.
 
 </div>
+
 
 <input
 id="investmentAmount"
@@ -674,16 +704,23 @@ step="0.01"
 placeholder="Yatırım məbləği (AZN)"
 >
 
+
+<label class="muted">
+Ödəniş çekini yükləyin:
+</label>
+
 <input
 id="investmentReceipt"
 type="file"
 accept="image/*"
 >
 
+
 <img
 id="receiptPreview"
 class="receipt-preview"
 >
+
 
 <button
 class="main-btn"
@@ -692,6 +729,7 @@ onclick="submitInvestment()"
 Ödəniş etdim
 </button>
 
+
 <div
 id="investmentMessage"
 class="message"
@@ -699,6 +737,7 @@ class="message"
 </div>
 
 </div>
+
 
 <div class="card">
 
@@ -714,6 +753,7 @@ Yüklənir...
 
 </div>
 
+
 <div id="withdrawPage" class="hidden">
 
 <div class="welcome">
@@ -728,18 +768,25 @@ Qazancınızı çıxarış üçün sorğu göndərin.
 
 </div>
 
+
 <div class="card form-card">
 
 <div class="info-box">
 
-<b>Çıxarış vaxtı:</b>
-18:00-dan sonra.
+<b class="yellow">
+Çıxarış vaxtı: 18:00-dan sonra.
+</b>
 
 <br><br>
 
 Məbləği və pulun köçürüləcəyi öz 16 rəqəmli kart nömrənizi yazın.
 
 </div>
+
+
+<label class="yellow">
+Çıxarış məbləği:
+</label>
 
 <input
 id="withdrawAmount"
@@ -749,13 +796,19 @@ step="0.01"
 placeholder="Çıxarış məbləği (AZN)"
 >
 
+
+<label class="yellow">
+Pulun köçürüləcəyi öz kartınız:
+</label>
+
 <input
 id="withdrawCard"
 type="text"
 inputmode="numeric"
 maxlength="16"
-placeholder="Öz 16 rəqəmli kart nömrəniz"
+placeholder="16 rəqəmli kart nömrəsi"
 >
+
 
 <button
 class="main-btn"
@@ -764,6 +817,7 @@ onclick="submitWithdrawal()"
 Çıxarış sorğusu göndər
 </button>
 
+
 <div
 id="withdrawMessage"
 class="message"
@@ -771,6 +825,7 @@ class="message"
 </div>
 
 </div>
+
 
 <div class="card">
 
@@ -786,6 +841,7 @@ Yüklənir...
 
 </div>
 
+
 <div id="accountPage" class="hidden">
 
 <div class="welcome">
@@ -799,6 +855,7 @@ Hesab məlumatlarınız
 </p>
 
 </div>
+
 
 <div class="card account">
 
@@ -814,6 +871,7 @@ E-poçt
 
 </div>
 
+
 <div class="account-row">
 
 <span class="muted">
@@ -826,18 +884,22 @@ Aktiv
 
 </div>
 
+
 <h2>
 Əlaqə
 </h2>
 
+
 <div class="info-box">
 
 <b>NOVENTRA dəstək</b>
+
 <br>
 
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 
 </div>
+
 
 <button
 class="logout"
@@ -849,6 +911,7 @@ Hesabdan çıx
 </div>
 
 </div>
+
 
 <div id="adminPage" class="hidden">
 
@@ -864,6 +927,7 @@ Yatırım və çıxarış sorğularının idarə olunması
 
 </div>
 
+
 <div class="card admin-box">
 
 <h2>
@@ -875,6 +939,7 @@ Yüklənir...
 </div>
 
 </div>
+
 
 <div class="card admin-box">
 
@@ -890,9 +955,11 @@ Yüklənir...
 
 </div>
 
+
 </main>
 
 </section>
+
 
 <div id="adModal" class="ad-modal hidden">
 
@@ -923,13 +990,16 @@ onclick="finishAd()"
 
 </div>
 
+
 <script>
 
 const SUPABASE_URL =
 "https://yafncpfkjmealuwmvcgc.supabase.co";
 
+
 const SUPABASE_KEY =
 "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+
 
 const supabaseClient =
 window.supabase.createClient(
@@ -937,12 +1007,17 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
-const ADMIN_EMAIL =
-"Ayazdiana666@gmail.com";
 
-let currentUser = null;
+const ADMIN_EMAIL =
+"ayazdiana666@gmail.com";
+
+
+let currentUser =
+null;
+
 
 let adTimerInterval;
+
 
 function showRegister(){
 
@@ -958,6 +1033,7 @@ document
 
 }
 
+
 function showLogin(){
 
 document
@@ -971,6 +1047,7 @@ document
 .remove("hidden");
 
 }
+
 
 async function register(){
 
@@ -989,6 +1066,7 @@ const message =
 document
 .getElementById("registerMessage");
 
+
 if(!email || !password){
 
 message.innerText =
@@ -997,6 +1075,7 @@ message.innerText =
 return;
 
 }
+
 
 if(password.length < 6){
 
@@ -1007,8 +1086,10 @@ return;
 
 }
 
+
 message.innerText =
 "Hesab yaradılır...";
+
 
 const { error } =
 await supabaseClient
@@ -1021,6 +1102,7 @@ password:password
 
 });
 
+
 if(error){
 
 message.innerText =
@@ -1029,6 +1111,7 @@ error.message;
 return;
 
 }
+
 
 message.style.color =
 "#40dc91";
@@ -1043,6 +1126,7 @@ showLogin();
 },1000);
 
 }
+
 
 async function login(){
 
@@ -1061,6 +1145,7 @@ const message =
 document
 .getElementById("loginMessage");
 
+
 if(!email || !password){
 
 message.innerText =
@@ -1070,8 +1155,10 @@ return;
 
 }
 
+
 message.innerText =
 "Daxil olunur...";
+
 
 const { data, error } =
 await supabaseClient
@@ -1084,6 +1171,7 @@ password:password
 
 });
 
+
 if(error){
 
 message.innerText =
@@ -1093,52 +1181,73 @@ return;
 
 }
 
+
 await openApp(data.user);
 
 }
+
 
 async function openApp(user){
 
 currentUser =
 user;
 
+
 document
 .getElementById("loginPage")
 .classList
 .add("hidden");
+
 
 document
 .getElementById("registerPage")
 .classList
 .add("hidden");
 
+
 document
 .getElementById("app")
 .classList
 .remove("hidden");
+
 
 document
 .getElementById("accountEmail")
 .innerText =
 user.email || "—";
 
+
 document
 .getElementById("homeEmail")
 .innerText =
 user.email || "—";
 
-if(
-user.email &&
-user.email.toLowerCase() ===
-ADMIN_EMAIL.toLowerCase()
-){
 
+const userEmail =
+String(user.email || "")
+.trim()
+.toLowerCase();
+
+
+const adminButton =
 document
-.getElementById("adminBtn")
+.getElementById("adminBtn");
+
+
+if(userEmail === ADMIN_EMAIL){
+
+adminButton
 .classList
 .remove("hidden");
 
+}else{
+
+adminButton
+.classList
+.add("hidden");
+
 }
+
 
 await loadEarnings();
 
@@ -1150,22 +1259,28 @@ await loadWithdrawalHistory();
 
 }
 
+
 async function loadEarnings(){
 
 if(!currentUser)
 return;
 
+
 const { data, error } =
 await supabaseClient
 .from("earnings")
 .select("*")
-.eq("user_id",currentUser.id)
+.eq(
+"user_id",
+currentUser.id
+)
 .order(
 "created_at",
 {
 ascending:false
 }
 );
+
 
 if(error){
 
@@ -1175,8 +1290,10 @@ return;
 
 }
 
+
 let total =
 0;
+
 
 data.forEach(function(item){
 
@@ -1185,33 +1302,40 @@ Number(item.amount || 0);
 
 });
 
+
 const formatted =
 total.toFixed(2) +
 " AZN";
+
 
 document
 .getElementById("balanceValue")
 .innerText =
 formatted;
 
+
 document
 .getElementById("totalEarningsValue")
 .innerText =
 formatted;
+
 
 document
 .getElementById("earningsTotal")
 .innerText =
 formatted;
 
+
 document
 .getElementById("earningsBalance")
 .innerText =
 formatted;
 
+
 const history =
 document
 .getElementById("earningsHistory");
+
 
 if(!data.length){
 
@@ -1221,6 +1345,7 @@ history.innerHTML =
 return;
 
 }
+
 
 history.innerHTML =
 data
@@ -1247,17 +1372,20 @@ ${item.description || "Qazanc"}
 
 }
 
+
 async function loadTasks(){
 
 const list =
 document
 .getElementById("tasksList");
 
+
 const { data, error } =
 await supabaseClient
 .from("tasks")
 .select("*")
 .order("id");
+
 
 if(error){
 
@@ -1268,6 +1396,7 @@ return;
 
 }
 
+
 if(!data || !data.length){
 
 list.innerHTML =
@@ -1276,6 +1405,7 @@ list.innerHTML =
 return;
 
 }
+
 
 list.innerHTML =
 data
@@ -1304,13 +1434,16 @@ Başla
 
 }
 
+
 async function getTodayEarning(){
 
 if(!currentUser)
 return false;
 
+
 const now =
 new Date();
+
 
 const start =
 new Date(
@@ -1319,12 +1452,14 @@ now.getMonth(),
 now.getDate()
 );
 
+
 const end =
 new Date(
 now.getFullYear(),
 now.getMonth(),
 now.getDate()+1
 );
+
 
 const { data, error } =
 await supabaseClient
@@ -1348,6 +1483,7 @@ end.toISOString()
 )
 .limit(1);
 
+
 if(error){
 
 console.log(error);
@@ -1356,18 +1492,22 @@ return false;
 
 }
 
+
 return data &&
 data.length > 0;
 
 }
+
 
 async function startTask(){
 
 if(!currentUser)
 return;
 
+
 const alreadyEarned =
 await getTodayEarning();
+
 
 if(alreadyEarned){
 
@@ -1379,31 +1519,39 @@ return;
 
 }
 
+
 const modal =
 document
 .getElementById("adModal");
+
 
 const text =
 document
 .getElementById("adText");
 
+
 const timer =
 document
 .getElementById("adTimer");
+
 
 const closeButton =
 document
 .getElementById("adClose");
 
+
 modal
 .classList
 .remove("hidden");
 
+
 closeButton.disabled =
 true;
 
+
 closeButton.innerText =
 "30 saniyə gözləyin...";
+
 
 const messages = [
 
@@ -1421,24 +1569,31 @@ const messages = [
 
 ];
 
+
 let seconds =
 30;
+
 
 let messageIndex =
 0;
 
+
 text.innerText =
 messages[0];
+
 
 timer.innerText =
 "30 saniyə qalıb";
 
+
 clearInterval(adTimerInterval);
+
 
 adTimerInterval =
 setInterval(function(){
 
 seconds--;
+
 
 if(
 seconds % 5 === 0 &&
@@ -1452,19 +1607,24 @@ messages[messageIndex];
 
 }
 
+
 timer.innerText =
 seconds +
 " saniyə qalıb";
+
 
 if(seconds <= 0){
 
 clearInterval(adTimerInterval);
 
+
 timer.innerText =
-"Reklam tamamlandı ✓";
+"Fəaliyyət tamamlandı ✓";
+
 
 closeButton.disabled =
 false;
+
 
 closeButton.innerText =
 "Fəaliyyəti tamamla";
@@ -1475,13 +1635,16 @@ closeButton.innerText =
 
 }
 
+
 async function finishAd(){
 
 if(!currentUser)
 return;
 
+
 const alreadyEarned =
 await getTodayEarning();
+
 
 if(alreadyEarned){
 
@@ -1489,14 +1652,17 @@ alert(
 "Bu gün artıq 2 AZN qazanmısınız."
 );
 
+
 document
 .getElementById("adModal")
 .classList
 .add("hidden");
 
+
 return;
 
 }
+
 
 const { error } =
 await supabaseClient
@@ -1514,6 +1680,7 @@ description:
 
 });
 
+
 if(error){
 
 alert(
@@ -1525,18 +1692,22 @@ return;
 
 }
 
+
 document
 .getElementById("adModal")
 .classList
 .add("hidden");
 
+
 alert(
 "Fəaliyyət tamamlandı! +2.00 AZN qazandınız."
 );
 
+
 await loadEarnings();
 
 }
+
 
 function previewReceipt(){
 
@@ -1545,9 +1716,11 @@ document
 .getElementById("investmentReceipt")
 .files[0];
 
+
 const preview =
 document
 .getElementById("receiptPreview");
+
 
 if(!file){
 
@@ -1558,8 +1731,10 @@ return;
 
 }
 
+
 const reader =
 new FileReader();
+
 
 reader.onload =
 function(e){
@@ -1567,14 +1742,17 @@ function(e){
 preview.src =
 e.target.result;
 
+
 preview.style.display =
 "block";
 
 };
 
+
 reader.readAsDataURL(file);
 
 }
+
 
 document
 .getElementById("investmentReceipt")
@@ -1583,10 +1761,12 @@ document
 previewReceipt
 );
 
+
 async function submitInvestment(){
 
 if(!currentUser)
 return;
+
 
 const amount =
 Number(
@@ -1595,14 +1775,17 @@ document
 .value
 );
 
+
 const file =
 document
 .getElementById("investmentReceipt")
 .files[0];
 
+
 const message =
 document
 .getElementById("investmentMessage");
+
 
 if(!amount || amount <= 0){
 
@@ -1613,6 +1796,7 @@ return;
 
 }
 
+
 if(!file){
 
 message.innerText =
@@ -1622,20 +1806,25 @@ return;
 
 }
 
+
 message.style.color =
 "#ffd166";
+
 
 message.innerText =
 "Yatırım sorğusu göndərilir...";
 
+
 const reader =
 new FileReader();
+
 
 reader.onload =
 async function(){
 
 const receiptData =
 reader.result;
+
 
 const { error } =
 await supabaseClient
@@ -1656,10 +1845,12 @@ status:
 
 });
 
+
 if(error){
 
 message.style.color =
 "#ff8b8b";
+
 
 message.innerText =
 "Xəta: " +
@@ -1669,21 +1860,26 @@ return;
 
 }
 
+
 message.style.color =
 "#40dc91";
 
+
 message.innerText =
 "Yatırım sorğusu göndərildi. Təsdiq gözlənilir.";
+
 
 document
 .getElementById("investmentAmount")
 .value =
 "";
 
+
 document
 .getElementById("investmentReceipt")
 .value =
 "";
+
 
 document
 .getElementById("receiptPreview")
@@ -1691,22 +1887,27 @@ document
 .display =
 "none";
 
+
 await loadInvestmentHistory();
 
 };
 
+
 reader.readAsDataURL(file);
 
 }
+
 
 async function loadInvestmentHistory(){
 
 if(!currentUser)
 return;
 
+
 const box =
 document
 .getElementById("investmentHistory");
+
 
 const { data, error } =
 await supabaseClient
@@ -1725,6 +1926,7 @@ ascending:false
 }
 );
 
+
 if(error){
 
 box.innerHTML =
@@ -1734,6 +1936,7 @@ return;
 
 }
 
+
 if(!data.length){
 
 box.innerHTML =
@@ -1742,6 +1945,7 @@ box.innerHTML =
 return;
 
 }
+
 
 box.innerHTML =
 data
@@ -1755,7 +1959,13 @@ return `
 ${Number(item.amount).toFixed(2)} AZN
 </span>
 
-<b class="status-pending">
+<b class="${
+item.status === "approved"
+?
+"status-approved"
+:
+"status-pending"
+}">
 
 ${
 item.status === "approved"
@@ -1776,10 +1986,41 @@ item.status === "approved"
 
 }
 
+
 async function submitWithdrawal(){
 
 if(!currentUser)
 return;
+
+
+const now =
+new Date();
+
+
+const bakuHour =
+Number(
+new Intl.DateTimeFormat(
+"az-AZ",
+{
+timeZone:"Asia/Baku",
+hour:"2-digit",
+hour12:false
+}
+).format(now)
+);
+
+
+if(bakuHour < 18){
+
+document
+.getElementById("withdrawMessage")
+.innerText =
+"Çıxarış yalnız 18:00-dan sonra aktivdir.";
+
+return;
+
+}
+
 
 const amount =
 Number(
@@ -1788,15 +2029,18 @@ document
 .value
 );
 
+
 const card =
 document
 .getElementById("withdrawCard")
 .value
 .trim();
 
+
 const message =
 document
 .getElementById("withdrawMessage");
+
 
 if(!amount || amount <= 0){
 
@@ -1807,6 +2051,7 @@ return;
 
 }
 
+
 if(!/^\d{16}$/.test(card)){
 
 message.innerText =
@@ -1816,11 +2061,14 @@ return;
 
 }
 
+
 message.style.color =
 "#ffd166";
 
+
 message.innerText =
 "Sorğu göndərilir...";
+
 
 const { error } =
 await supabaseClient
@@ -1841,10 +2089,12 @@ status:
 
 });
 
+
 if(error){
 
 message.style.color =
 "#ff8b8b";
+
 
 message.innerText =
 "Xəta: " +
@@ -1854,34 +2104,42 @@ return;
 
 }
 
+
 message.style.color =
 "#40dc91";
 
+
 message.innerText =
 "Çıxarış sorğusu göndərildi.";
+
 
 document
 .getElementById("withdrawAmount")
 .value =
 "";
 
+
 document
 .getElementById("withdrawCard")
 .value =
 "";
 
+
 await loadWithdrawalHistory();
 
 }
+
 
 async function loadWithdrawalHistory(){
 
 if(!currentUser)
 return;
 
+
 const box =
 document
 .getElementById("withdrawHistory");
+
 
 const { data, error } =
 await supabaseClient
@@ -1900,6 +2158,7 @@ ascending:false
 }
 );
 
+
 if(error){
 
 box.innerHTML =
@@ -1909,6 +2168,7 @@ return;
 
 }
 
+
 if(!data.length){
 
 box.innerHTML =
@@ -1917,6 +2177,7 @@ box.innerHTML =
 return;
 
 }
+
 
 box.innerHTML =
 data
@@ -1930,7 +2191,13 @@ return `
 ${Number(item.amount).toFixed(2)} AZN
 </span>
 
-<b class="status-pending">
+<b class="${
+item.status === "paid"
+?
+"status-approved"
+:
+"status-pending"
+}">
 
 ${
 item.status === "paid"
@@ -1951,30 +2218,44 @@ item.status === "paid"
 
 }
 
+
 async function loadAdminPanel(){
 
 if(!currentUser)
 return;
 
-if(
-currentUser.email.toLowerCase()
-!==
-ADMIN_EMAIL.toLowerCase()
-){
+
+const userEmail =
+String(currentUser.email || "")
+.trim()
+.toLowerCase();
+
+
+if(userEmail !== ADMIN_EMAIL){
+
+alert(
+"Bu bölməyə yalnız admin daxil ola bilər."
+);
 
 return;
 
 }
 
+
 const investmentsBox =
 document
 .getElementById("adminInvestments");
+
 
 const withdrawalsBox =
 document
 .getElementById("adminWithdrawals");
 
-const { data:investments } =
+
+const {
+data:investments,
+error:investmentError
+} =
 await supabaseClient
 .from("investments")
 .select("*")
@@ -1985,7 +2266,16 @@ ascending:false
 }
 );
 
-if(!investments || !investments.length){
+
+if(investmentError){
+
+investmentsBox.innerHTML =
+'<p class="red">Yatırımları yükləmək mümkün olmadı.</p>';
+
+}else if(
+!investments ||
+!investments.length
+){
 
 investmentsBox.innerHTML =
 '<p class="muted">Yatırım sorğusu yoxdur.</p>';
@@ -2001,19 +2291,23 @@ return `
 <div class="admin-item">
 
 <b>
-Yatırım: ${Number(item.amount).toFixed(2)} AZN
+Yatırım:
+${Number(item.amount).toFixed(2)}
+AZN
 </b>
 
-<br>
+<br><br>
 
 <span class="muted">
-İstifadəçi: ${item.user_id}
+İstifadəçi ID:
+${item.user_id}
 </span>
 
-<br>
+<br><br>
 
 <span class="yellow">
-Status: ${item.status}
+Status:
+${item.status}
 </span>
 
 <br>
@@ -2023,7 +2317,7 @@ item.receipt_url
 ?
 `<img src="${item.receipt_url}">`
 :
-"Çek yoxdur"
+"<p class='muted'>Çek yoxdur</p>"
 }
 
 <br>
@@ -2032,7 +2326,9 @@ item.receipt_url
 class="admin-btn"
 onclick="approveInvestment('${item.id}')"
 >
+
 Təsdiqlə
+
 </button>
 
 </div>
@@ -2044,7 +2340,11 @@ Təsdiqlə
 
 }
 
-const { data:withdrawals } =
+
+const {
+data:withdrawals,
+error:withdrawalError
+} =
 await supabaseClient
 .from("withdrawals")
 .select("*")
@@ -2055,7 +2355,16 @@ ascending:false
 }
 );
 
-if(!withdrawals || !withdrawals.length){
+
+if(withdrawalError){
+
+withdrawalsBox.innerHTML =
+'<p class="red">Çıxarışları yükləmək mümkün olmadı.</p>';
+
+}else if(
+!withdrawals ||
+!withdrawals.length
+){
 
 withdrawalsBox.innerHTML =
 '<p class="muted">Çıxarış sorğusu yoxdur.</p>';
@@ -2071,19 +2380,23 @@ return `
 <div class="admin-item">
 
 <b>
-Çıxarış: ${Number(item.amount).toFixed(2)} AZN
+Çıxarış:
+${Number(item.amount).toFixed(2)}
+AZN
 </b>
 
-<br>
+<br><br>
 
 <span class="muted">
-Kart: ${item.card_number}
+Kart:
+${item.card_number}
 </span>
 
-<br>
+<br><br>
 
 <span class="yellow">
-Status: ${item.status}
+Status:
+${item.status}
 </span>
 
 <br>
@@ -2092,7 +2405,9 @@ Status: ${item.status}
 class="admin-btn"
 onclick="markWithdrawalPaid('${item.id}')"
 >
+
 Ödənildi kimi işarələ
+
 </button>
 
 </div>
@@ -2106,20 +2421,25 @@ onclick="markWithdrawalPaid('${item.id}')"
 
 }
 
+
 async function approveInvestment(id){
 
-const { error } =
+const {
+error
+} =
 await supabaseClient
 .from("investments")
 .update({
 
-status:"approved"
+status:
+"approved"
 
 })
 .eq(
 "id",
 id
 );
+
 
 if(error){
 
@@ -2128,29 +2448,36 @@ alert(error.message);
 return;
 
 }
+
 
 alert(
 "Yatırım təsdiqləndi."
 );
 
+
 await loadAdminPanel();
 
 }
 
+
 async function markWithdrawalPaid(id){
 
-const { error } =
+const {
+error
+} =
 await supabaseClient
 .from("withdrawals")
 .update({
 
-status:"paid"
+status:
+"paid"
 
 })
 .eq(
 "id",
 id
 );
+
 
 if(error){
 
@@ -2160,13 +2487,16 @@ return;
 
 }
 
+
 alert(
 "Çıxarış ödənildi kimi işarələndi."
 );
 
+
 await loadAdminPanel();
 
 }
+
 
 function openPage(page){
 
@@ -2182,6 +2512,7 @@ section
 
 });
 
+
 document
 .getElementById(
 page +
@@ -2189,6 +2520,7 @@ page +
 )
 .classList
 .remove("hidden");
+
 
 document
 .querySelectorAll(".nav button")
@@ -2199,6 +2531,7 @@ button
 .remove("active");
 
 });
+
 
 const buttonMap = {
 
@@ -2222,12 +2555,14 @@ admin:
 
 };
 
+
 document
 .getElementById(
 buttonMap[page]
 )
 .classList
 .add("active");
+
 
 if(page === "admin"){
 
@@ -2237,19 +2572,23 @@ loadAdminPanel();
 
 }
 
+
 async function logout(){
 
 await supabaseClient
 .auth
 .signOut();
 
+
 currentUser =
 null;
+
 
 document
 .getElementById("app")
 .classList
 .add("hidden");
+
 
 document
 .getElementById("loginPage")
@@ -2258,12 +2597,16 @@ document
 
 }
 
+
 async function checkSession(){
 
-const { data } =
+const {
+data
+} =
 await supabaseClient
 .auth
 .getSession();
+
 
 if(data.session){
 
@@ -2274,6 +2617,7 @@ data.session.user
 }
 
 }
+
 
 checkSession();
 
