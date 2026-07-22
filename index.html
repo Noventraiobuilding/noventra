@@ -1,8 +1,13 @@
-<!DOCTYPE html><html lang="az">
+<!DOCTYPE html>
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Noventra</title><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
+<title>Noventra</title>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
 *{box-sizing:border-box}
 
 body{
@@ -250,282 +255,284 @@ input{
   }
 
 }
-</style></head><body><section id="loginPage" class="auth">  <div class="auth-box"><div class="logo">NOVENTRA</div>
+</style>
+</head>
+
+<body>
+
+<section id="loginPage" class="auth">
+
+<div class="auth-box">
+
+<div class="logo">NOVENTRA</div>
 
 <input id="loginEmail" type="email" placeholder="Email">
 
 <input id="loginPassword" type="password" placeholder="Şifrə">
 
 <button class="main-btn" onclick="login()">
-  Daxil ol
+Daxil ol
 </button>
 
 <div class="switch" onclick="showRegister()">
-  Hesab yarat
+Hesab yarat
 </div>
 
 <div id="loginMessage" class="message"></div>
 
-  </div></section><section id="registerPage" class="auth hidden">  <div class="auth-box"><div class="logo">NOVENTRA</div>
+</div>
+
+</section>
+
+<section id="registerPage" class="auth hidden">
+
+<div class="auth-box">
+
+<div class="logo">NOVENTRA</div>
 
 <input id="registerEmail" type="email" placeholder="Email">
 
 <input id="registerPassword" type="password" placeholder="Şifrə">
 
 <button class="main-btn" onclick="register()">
-  Qeydiyyatdan keç
+Qeydiyyatdan keç
 </button>
 
 <div class="switch" onclick="showLogin()">
-  Girişə qayıt
+Girişə qayıt
 </div>
 
 <div id="registerMessage" class="message"></div>
 
-  </div></section><section id="app" class="hidden">  <header class="header"><div class="logo">NOVENTRA</div>
+</div>
+
+</section>
+
+<section id="app" class="hidden">
+
+<header class="header">
+
+<div class="logo">NOVENTRA</div>
 
 <nav class="nav">
 
-  <button id="homeBtn" class="active" onclick="openPage('home')">
-    Ana səhifə
-  </button>
+<button id="homeBtn" class="active" onclick="openPage('home')">
+Ana səhifə
+</button>
 
-  <button id="earnBtn" onclick="openPage('earnings')">
-    Qazanc
-  </button>
+<button id="earnBtn" onclick="openPage('earnings')">
+Qazanc
+</button>
 
-  <button id="accountBtn" onclick="openPage('account')">
-    Hesabım
-  </button>
+<button id="accountBtn" onclick="openPage('account')">
+Hesabım
+</button>
 
 </nav>
 
-  </header>  <main class="content"><div id="homePage">
+</header>
 
-  <div class="welcome">
+<main class="content">
 
-    <h1>
-      Xoş gəlmisiniz
-    </h1>
+<div id="homePage">
 
-    <p>
-      Hesabınızın ümumi vəziyyəti
-    </p>
+<div class="welcome">
 
-  </div>
+<h1>Xoş gəlmisiniz</h1>
 
-
-  <div class="stats">
-
-    <div class="card">
-
-      <div class="label">
-        Aktiv balans
-      </div>
-
-      <div id="balanceValue" class="value">
-        0.00 AZN
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="label">
-        Ümumi qazanc
-      </div>
-
-      <div id="totalEarningsValue" class="value green">
-        0.00 AZN
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="label">
-        Hesab statusu
-      </div>
-
-      <div class="value purple">
-        Aktiv
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="main-panel">
-
-    <div class="card activity">
-
-      <h2>
-        Mövcud fəaliyyətlər
-      </h2>
-
-      <p class="muted">
-        Sistemə əlavə edilmiş fəaliyyətlər burada görünəcək.
-      </p>
-
-      <div id="tasksList">
-        Yüklənir...
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <h2>
-        Hesab məlumatı
-      </h2>
-
-      <div class="earning-row">
-
-        <span class="muted">
-          Status
-        </span>
-
-        <b class="green">
-          Aktiv
-        </b>
-
-      </div>
-
-      <div class="earning-row">
-
-        <span class="muted">
-          E-poçt
-        </span>
-
-        <span id="homeEmail">
-          —
-        </span>
-
-      </div>
-
-    </div>
-
-  </div>
+<p>Hesabınızın ümumi vəziyyəti</p>
 
 </div>
 
+<div class="stats">
+
+<div class="card">
+
+<div class="label">
+Aktiv balans
+</div>
+
+<div id="balanceValue" class="value">
+0.00 AZN
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="label">
+Ümumi qazanc
+</div>
+
+<div id="totalEarningsValue" class="value green">
+0.00 AZN
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="label">
+Hesab statusu
+</div>
+
+<div class="value purple">
+Aktiv
+</div>
+
+</div>
+
+</div>
+
+<div class="main-panel">
+
+<div class="card activity">
+
+<h2>Mövcud fəaliyyətlər</h2>
+
+<p class="muted">
+Sistemə əlavə edilmiş fəaliyyətlər burada görünəcək.
+</p>
+
+<div id="tasksList">
+Yüklənir...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Hesab məlumatı</h2>
+
+<div class="earning-row">
+
+<span class="muted">
+Status
+</span>
+
+<b class="green">
+Aktiv
+</b>
+
+</div>
+
+<div class="earning-row">
+
+<span class="muted">
+E-poçt
+</span>
+
+<span id="homeEmail">
+—
+</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
 
 <div id="earningsPage" class="hidden">
 
-  <div class="welcome">
+<div class="welcome">
 
-    <h1>
-      Qazanc
-    </h1>
+<h1>Qazanc</h1>
 
-    <p>
-      Real qazanc məlumatlarınız
-    </p>
-
-  </div>
-
-
-  <div class="earning-box">
-
-    <div class="card">
-
-      <div class="label">
-        Ümumi qazanc
-      </div>
-
-      <div id="earningsTotal" class="value green">
-        0.00 AZN
-      </div>
-
-    </div>
-
-
-    <div class="card">
-
-      <div class="label">
-        Aktiv balans
-      </div>
-
-      <div id="earningsBalance" class="value purple">
-        0.00 AZN
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div class="card">
-
-    <h2>
-      Qazanc tarixçəsi
-    </h2>
-
-    <div id="earningsHistory">
-      Yüklənir...
-    </div>
-
-  </div>
+<p>Real qazanc məlumatlarınız</p>
 
 </div>
 
+<div class="earning-box">
+
+<div class="card">
+
+<div class="label">
+Ümumi qazanc
+</div>
+
+<div id="earningsTotal" class="value green">
+0.00 AZN
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="label">
+Aktiv balans
+</div>
+
+<div id="earningsBalance" class="value purple">
+0.00 AZN
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Qazanc tarixçəsi</h2>
+
+<div id="earningsHistory">
+Yüklənir...
+</div>
+
+</div>
+
+</div>
 
 <div id="accountPage" class="hidden">
 
-  <div class="welcome">
+<div class="welcome">
 
-    <h1>
-      Hesabım
-    </h1>
+<h1>Hesabım</h1>
 
-    <p>
-      Hesab məlumatlarınız
-    </p>
-
-  </div>
-
-
-  <div class="card account">
-
-    <div class="account-row">
-
-      <span class="muted">
-        E-poçt
-      </span>
-
-      <span id="accountEmail">
-        —
-      </span>
-
-    </div>
-
-
-    <div class="account-row">
-
-      <span class="muted">
-        Hesab statusu
-      </span>
-
-      <b class="green">
-        Aktiv
-      </b>
-
-    </div>
-
-
-    <button class="logout" onclick="logout()">
-      Hesabdan çıx
-    </button>
-
-  </div>
+<p>Hesab məlumatlarınız</p>
 
 </div>
 
-  </main></section><script>
+<div class="card account">
+
+<div class="account-row">
+
+<span class="muted">
+E-poçt
+</span>
+
+<span id="accountEmail">
+—
+</span>
+
+</div>
+
+<div class="account-row">
+
+<span class="muted">
+Hesab statusu
+</span>
+
+<b class="green">
+Aktiv
+</b>
+
+</div>
+
+<button class="logout" onclick="logout()">
+Hesabdan çıx
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+</section>
+
+<script>
 
 const SUPABASE_URL =
 "https://yafncpfkjmealuwmvcgc.supabase.co";
@@ -535,482 +542,437 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
+SUPABASE_URL,
+SUPABASE_KEY
 );
-
 
 function showRegister(){
 
-  document
-  .getElementById("loginPage")
-  .classList
-  .add("hidden");
+document
+.getElementById("loginPage")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("registerPage")
-  .classList
-  .remove("hidden");
+document
+.getElementById("registerPage")
+.classList
+.remove("hidden");
 
 }
-
 
 function showLogin(){
 
-  document
-  .getElementById("registerPage")
-  .classList
-  .add("hidden");
+document
+.getElementById("registerPage")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("loginPage")
-  .classList
-  .remove("hidden");
+document
+.getElementById("loginPage")
+.classList
+.remove("hidden");
 
 }
-
 
 async function register(){
 
-  const email =
-  document
-  .getElementById("registerEmail")
-  .value
-  .trim();
+const email =
+document
+.getElementById("registerEmail")
+.value
+.trim();
 
-  const password =
-  document
-  .getElementById("registerPassword")
-  .value;
+const password =
+document
+.getElementById("registerPassword")
+.value;
 
-  const message =
-  document
-  .getElementById("registerMessage");
+const message =
+document
+.getElementById("registerMessage");
 
+if(!email || !password){
 
-  if(!email || !password){
+message.innerText =
+"Email və şifrəni doldurun.";
 
-    message.innerText =
-    "Email və şifrəni doldurun.";
-
-    return;
-
-  }
-
-
-  if(password.length < 6){
-
-    message.innerText =
-    "Şifrə ən azı 6 simvol olmalıdır.";
-
-    return;
-
-  }
-
-
-  message.innerText =
-  "Hesab yaradılır...";
-
-
-  const { data, error } =
-  await supabaseClient.auth.signUp({
-
-    email:email,
-    password:password
-
-  });
-
-
-  if(error){
-
-    message.innerText =
-    error.message;
-
-    return;
-
-  }
-
-
-  message.style.color =
-  "#40dc91";
-
-  message.innerText =
-  "Hesab uğurla yaradıldı.";
-
-  setTimeout(function(){
-
-    showLogin();
-
-  },1000);
+return;
 
 }
 
+if(password.length < 6){
+
+message.innerText =
+"Şifrə ən azı 6 simvol olmalıdır.";
+
+return;
+
+}
+
+message.innerText =
+"Hesab yaradılır...";
+
+const { error } =
+await supabaseClient.auth.signUp({
+
+email:email,
+password:password
+
+});
+
+if(error){
+
+message.innerText =
+error.message;
+
+return;
+
+}
+
+message.style.color =
+"#40dc91";
+
+message.innerText =
+"Hesab uğurla yaradıldı.";
+
+setTimeout(function(){
+
+showLogin();
+
+},1000);
+
+}
 
 async function login(){
 
-  const email =
-  document
-  .getElementById("loginEmail")
-  .value
-  .trim();
+const email =
+document
+.getElementById("loginEmail")
+.value
+.trim();
 
-  const password =
-  document
-  .getElementById("loginPassword")
-  .value;
+const password =
+document
+.getElementById("loginPassword")
+.value;
 
-  const message =
-  document
-  .getElementById("loginMessage");
+const message =
+document
+.getElementById("loginMessage");
 
+if(!email || !password){
 
-  if(!email || !password){
+message.innerText =
+"Email və şifrəni daxil edin.";
 
-    message.innerText =
-    "Email və şifrəni daxil edin.";
-
-    return;
-
-  }
-
-
-  message.innerText =
-  "Daxil olunur...";
-
-
-  const { data, error } =
-  await supabaseClient.auth.signInWithPassword({
-
-    email:email,
-    password:password
-
-  });
-
-
-  if(error){
-
-    message.innerText =
-    "Email və ya şifrə yanlışdır.";
-
-    return;
-
-  }
-
-
-  await openApp(data.user);
+return;
 
 }
 
+message.innerText =
+"Daxil olunur...";
+
+const { data, error } =
+await supabaseClient.auth.signInWithPassword({
+
+email:email,
+password:password
+
+});
+
+if(error){
+
+message.innerText =
+"Email və ya şifrə yanlışdır.";
+
+return;
+
+}
+
+await openApp(data.user);
+
+}
 
 async function openApp(user){
 
-  document
-  .getElementById("loginPage")
-  .classList
-  .add("hidden");
+document
+.getElementById("loginPage")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("registerPage")
-  .classList
-  .add("hidden");
+document
+.getElementById("registerPage")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("app")
-  .classList
-  .remove("hidden");
+document
+.getElementById("app")
+.classList
+.remove("hidden");
 
+document
+.getElementById("accountEmail")
+.innerText =
+user.email || "—";
 
-  document
-  .getElementById("accountEmail")
-  .innerText =
-  user.email || "—";
+document
+.getElementById("homeEmail")
+.innerText =
+user.email || "—";
 
+await loadEarnings();
 
-  document
-  .getElementById("homeEmail")
-  .innerText =
-  user.email || "—";
-
-
-  await loadEarnings();
-
-  await loadTasks();
+await loadTasks();
 
 }
-
 
 async function loadEarnings(){
 
-  const { data, error } =
-  await supabaseClient
-  .from("earnings")
-  .select("*")
-  .order("created_at", {
+const { data, error } =
+await supabaseClient
+.from("earnings")
+.select("*")
+.order("created_at", {
 
-    ascending:false
+ascending:false
 
-  });
+});
 
+if(error){
 
-  if(error){
+console.log(error);
 
-    console.log(error);
-
-    return;
-
-  }
-
-
-  let total = 0;
-
-
-  data.forEach(function(item){
-
-    total +=
-    Number(item.amount || 0);
-
-  });
-
-
-  const formatted =
-  total.toFixed(2) + " AZN";
-
-
-  document
-  .getElementById("balanceValue")
-  .innerText =
-  formatted;
-
-
-  document
-  .getElementById("totalEarningsValue")
-  .innerText =
-  formatted;
-
-
-  document
-  .getElementById("earningsTotal")
-  .innerText =
-  formatted;
-
-
-  document
-  .getElementById("earningsBalance")
-  .innerText =
-  formatted;
-
-
-  const history =
-  document
-  .getElementById("earningsHistory");
-
-
-  if(!data.length){
-
-    history.innerHTML =
-    '<p class="muted">Hələ heç bir qazanc qeydə alınmayıb.</p>';
-
-    return;
-
-  }
-
-
-  history.innerHTML =
-  data.map(function(item){
-
-    return `
-
-      <div class="earning-row">
-
-        <span>
-          ${item.description || "Qazanc"}
-        </span>
-
-        <b class="green">
-          +${Number(item.amount).toFixed(2)} AZN
-        </b>
-
-      </div>
-
-    `;
-
-  }).join("");
+return;
 
 }
 
+let total = 0;
+
+data.forEach(function(item){
+
+total +=
+Number(item.amount || 0);
+
+});
+
+const formatted =
+total.toFixed(2) + " AZN";
+
+document
+.getElementById("balanceValue")
+.innerText =
+formatted;
+
+document
+.getElementById("totalEarningsValue")
+.innerText =
+formatted;
+
+document
+.getElementById("earningsTotal")
+.innerText =
+formatted;
+
+document
+.getElementById("earningsBalance")
+.innerText =
+formatted;
+
+const history =
+document
+.getElementById("earningsHistory");
+
+if(!data.length){
+
+history.innerHTML =
+'<p class="muted">Hələ heç bir qazanc qeydə alınmayıb.</p>';
+
+return;
+
+}
+
+history.innerHTML =
+data.map(function(item){
+
+return `
+
+<div class="earning-row">
+
+<span>
+${item.description || "Qazanc"}
+</span>
+
+<b class="green">
++${Number(item.amount).toFixed(2)} AZN
+</b>
+
+</div>
+
+`;
+
+}).join("");
+
+}
 
 async function loadTasks(){
 
-  const list =
-  document
-  .getElementById("tasksList");
+const list =
+document
+.getElementById("tasksList");
 
+const { data, error } =
+await supabaseClient
+.from("tasks")
+.select("*")
+.order("id");
 
-  const { data, error } =
-  await supabaseClient
-  .from("tasks")
-  .select("*")
-  .order("id");
+if(error){
 
+list.innerHTML =
+'<p class="muted">Fəaliyyətləri yükləmək mümkün olmadı.</p>';
 
-  if(error){
-
-    list.innerHTML =
-    '<p class="muted">Fəaliyyətləri yükləmək mümkün olmadı.</p>';
-
-    return;
-
-  }
-
-
-  if(!data || !data.length){
-
-    list.innerHTML =
-    '<p class="muted">Hazırda aktiv fəaliyyət yoxdur.</p>';
-
-    return;
-
-  }
-
-
-  list.innerHTML =
-  data.map(function(task){
-
-    return `
-
-      <div class="task">
-
-        <span>
-          ${task.title || "Fəaliyyət"}
-        </span>
-
-        <button
-          onclick="startTask(this)">
-
-          Başla
-
-        </button>
-
-      </div>
-
-    `;
-
-  }).join("");
+return;
 
 }
 
+if(!data || !data.length){
+
+list.innerHTML =
+'<p class="muted">Hazırda aktiv fəaliyyət yoxdur.</p>';
+
+return;
+
+}
+
+list.innerHTML =
+data.map(function(task){
+
+return `
+
+<div class="task">
+
+<span>
+${task.başlıq || "Fəaliyyət"}
+</span>
+
+<button
+onclick="startTask(this)">
+
+Başla
+
+</button>
+
+</div>
+
+`;
+
+}).join("");
+
+}
 
 function startTask(button){
 
-  button.innerText =
-  "Başladı";
+button.innerText =
+"Başladı";
 
-  button.style.background =
-  "#24734d";
+button.style.background =
+"#24734d";
 
 }
-
 
 function openPage(page){
 
-  document
-  .getElementById("homePage")
-  .classList
-  .add("hidden");
+document
+.getElementById("homePage")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("earningsPage")
-  .classList
-  .add("hidden");
+document
+.getElementById("earningsPage")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("accountPage")
-  .classList
-  .add("hidden");
+document
+.getElementById("accountPage")
+.classList
+.add("hidden");
 
+document
+.getElementById(page + "Page")
+.classList
+.remove("hidden");
 
-  document
-  .getElementById(page + "Page")
-  .classList
-  .remove("hidden");
+document
+.querySelectorAll(".nav button")
+.forEach(function(button){
 
+button
+.classList
+.remove("active");
 
-  document
-  .querySelectorAll(".nav button")
-  .forEach(function(button){
+});
 
-    button
-    .classList
-    .remove("active");
+if(page === "home"){
 
-  });
-
-
-  if(page === "home"){
-
-    document
-    .getElementById("homeBtn")
-    .classList
-    .add("active");
-
-  }
-
-
-  if(page === "earnings"){
-
-    document
-    .getElementById("earnBtn")
-    .classList
-    .add("active");
-
-  }
-
-
-  if(page === "account"){
-
-    document
-    .getElementById("accountBtn")
-    .classList
-    .add("active");
-
-  }
+document
+.getElementById("homeBtn")
+.classList
+.add("active");
 
 }
 
+if(page === "earnings"){
+
+document
+.getElementById("earnBtn")
+.classList
+.add("active");
+
+}
+
+if(page === "account"){
+
+document
+.getElementById("accountBtn")
+.classList
+.add("active");
+
+}
+
+}
 
 async function logout(){
 
-  await supabaseClient.auth.signOut();
+await supabaseClient.auth.signOut();
 
-  document
-  .getElementById("app")
-  .classList
-  .add("hidden");
+document
+.getElementById("app")
+.classList
+.add("hidden");
 
-  document
-  .getElementById("loginPage")
-  .classList
-  .remove("hidden");
+document
+.getElementById("loginPage")
+.classList
+.remove("hidden");
 
 }
-
 
 async function checkSession(){
 
-  const { data } =
-  await supabaseClient.auth.getSession();
+const { data } =
+await supabaseClient.auth.getSession();
 
+if(data.session){
 
-  if(data.session){
-
-    await openApp(data.session.user);
-
-  }
+await openApp(data.session.user);
 
 }
 
+}
 
 checkSession();
 
-</script></body>
+</script>
+
+</body>
 </html>
