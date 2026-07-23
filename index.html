@@ -8,373 +8,94 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-margin:0;
-background:
-radial-gradient(circle at top,#1a2040 0%,#080b14 45%);
-color:#fff;
-font-family:Arial,sans-serif;
-}
-
+body{margin:0;background:#080b14;color:#fff;font-family:Arial}
 .hidden{display:none!important}
-
-.auth{
-min-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px
-}
-
-.box,.card{
-background:linear-gradient(145deg,#151c2d,#0d121e);
-border:1px solid #2b3850;
-border-radius:22px;
-padding:25px;
-box-shadow:0 15px 40px rgba(0,0,0,.35)
-}
-
-.box{
-width:100%;
-max-width:420px
-}
-
-.logo{
-text-align:center;
-font-size:28px;
-font-weight:bold;
-letter-spacing:4px;
-margin-bottom:25px;
-color:#fff;
-text-shadow:0 0 20px rgba(157,135,255,.5)
-}
-
-input{
-width:100%;
-padding:14px;
-margin:7px 0;
-border-radius:11px;
-border:1px solid #334155;
-background:#0b111d;
-color:#fff
-}
-
-button{
-border:0;
-border-radius:11px;
-padding:13px;
-cursor:pointer;
-font-weight:bold
-}
-
-.main{
-width:100%;
-background:linear-gradient(135deg,#7357ff,#9d87ff);
-color:#fff;
-margin-top:10px
-}
-
-.switch{
-text-align:center;
-color:#b8aaff;
-margin-top:18px;
-cursor:pointer
-}
-
-.msg{
-text-align:center;
-margin-top:15px;
-color:#ff7777
-}
-
-#app{
-padding:20px;
-max-width:1100px;
-margin:auto
-}
-
+.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box,.card{background:#111827;border:1px solid #263247;border-radius:20px;padding:25px}
+.box{width:100%;max-width:420px}
+.logo{text-align:center;font-size:28px;font-weight:bold;letter-spacing:4px;margin-bottom:25px}
+input{width:100%;padding:14px;margin:7px 0;border-radius:10px;border:1px solid #334155;background:#0b111d;color:#fff}
+button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
+.main{width:100%;background:#7357ff;color:#fff;margin-top:10px}
+.switch{text-align:center;color:#9d87ff;margin-top:18px;cursor:pointer}
+.msg{text-align:center;margin-top:15px;color:#ff7777}
+#app{padding:20px;max-width:1100px;margin:auto}
 .header{text-align:center}
-
-.nav{
-display:flex;
-gap:5px;
-overflow:auto;
-margin:25px 0;
-border-bottom:1px solid #263247
-}
-
-.nav button{
-background:none;
-color:#9aa5b5;
-white-space:nowrap
-}
-
-.nav button.active{
-color:#fff;
-border-bottom:2px solid #7357ff
-}
-
-.grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:15px
-}
-
-.two{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-margin-top:15px
-}
-
-.value{
-font-size:25px;
-font-weight:bold;
-margin-top:10px
-}
-
+.nav{display:flex;gap:5px;overflow:auto;margin:25px 0;border-bottom:1px solid #263247}
+.nav button{background:none;color:#9aa5b5;white-space:nowrap}
+.nav button.active{color:#fff;border-bottom:2px solid #7357ff}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
+.value{font-size:25px;font-weight:bold;margin-top:10px}
 .muted{color:#8995aa}
 .green{color:#40dc91}
 .yellow{color:#ffd166}
 .purple{color:#9d87ff}
-
-.row{
-display:flex;
-justify-content:space-between;
-padding:15px 0;
-border-bottom:1px solid #263247;
-gap:10px
-}
-
-.task{
-background:#0b111d;
-border:1px solid #263247;
-padding:15px;
-border-radius:12px;
-margin-top:12px;
-display:flex;
-justify-content:space-between;
-align-items:center
-}
-
-.task button{
-background:#7357ff;
-color:white
-}
-
-.refcode{
-font-size:25px;
-font-weight:bold;
-color:#ffd166;
-letter-spacing:3px;
-margin:12px 0;
-word-break:break-all;
-padding:10px;
-background:#0b111d;
-border-radius:8px
-}
-
-.info{
-background:#0b111d;
-border:1px solid #263247;
-padding:15px;
-border-radius:12px;
-margin:15px 0;
-line-height:1.6
-}
-
-.logout{
-background:#252e40;
-color:white;
-margin-top:20px
-}
-
-.admin{
-border-color:#7357ff
-}
-
-.admin-item{
-background:#0b111d;
-border:1px solid #263247;
-padding:15px;
-border-radius:12px;
-margin-top:12px
-}
-
-.admin-item img{
-max-width:100%;
-max-height:250px
-}
-
-.ad{
-position:fixed;
-inset:0;
-background:#000e;
-display:flex;
-align-items:center;
-justify-content:center;
-padding:20px;
-z-index:5
-}
-
-.adbox{
-background:#111827;
-border:1px solid #7357ff;
-border-radius:20px;
-padding:30px;
-text-align:center;
-width:100%;
-max-width:500px
-}
-
+.row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #263247}
+.task{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
+.task button{background:#7357ff;color:white}
+.refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0;word-break:break-all;padding:10px;background:#0b111d;border-radius:8px}
+.info{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin:15px 0;line-height:1.6}
+.logout{background:#252e40;color:white;margin-top:20px}
+.admin{border-color:#7357ff}
+.admin-item{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px}
+.admin-item img{max-width:100%;max-height:250px}
+.ad{position:fixed;inset:0;background:#000e;display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}
+.adbox{background:#111827;border:1px solid #7357ff;border-radius:20px;padding:30px;text-align:center;width:100%;max-width:500px}
 .adbox h1{color:#9d87ff}
+.adbox button{background:#40dc91;margin-top:20px}
 
-.adbox button{
-background:#40dc91;
-margin-top:20px
-}
-
-/* STATUS KARTLARI */
-
-.manager-premium{
-margin-top:18px;
-padding:20px;
-border-radius:20px;
+.rank-box{
+margin-top:18px;padding:20px;border-radius:18px;
 background:linear-gradient(145deg,#151b2b,#0b101b);
 border:1px solid rgba(157,135,255,.4);
 box-shadow:0 12px 35px rgba(0,0,0,.3)
 }
 
-.manager-premium-title{
-font-size:19px;
-font-weight:bold;
-margin-bottom:16px
-}
-
-.manager-premium-card{
-padding:17px;
-margin-top:13px;
-border-radius:16px;
+.rank-card{
+padding:18px;margin-top:14px;border-radius:15px;
 background:linear-gradient(145deg,#111827,#0c111d);
 border:1px solid #263247
 }
 
-.manager-premium-card.manager{
-border-color:rgba(157,135,255,.6)
-}
+.rank-card.active{border-color:#40dc91}
+.rank-card.selected{border-color:#7357ff}
+.rank-card.locked{opacity:.65}
 
-.manager-premium-card.head{
-border-color:rgba(255,209,102,.6)
-}
-
-.manager-premium-card.regional{
-border-color:rgba(64,220,145,.6)
-}
-
-.manager-premium-card.platinum{
-border-color:rgba(200,200,255,.7)
-}
-
-.manager-premium-card.locked{
-opacity:.65;
-border-color:#39455b;
-background:linear-gradient(145deg,#101521,#080c14)
-}
-
-.manager-premium-name{
-font-size:17px;
+.rank-title{
+font-size:18px;
 font-weight:bold;
-margin-bottom:10px
+margin-bottom:12px
 }
 
-.manager-premium-line{
+.rank-line{
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:9px 0;
+padding:8px 0;
 border-bottom:1px solid #263247;
 gap:10px
 }
 
-.manager-premium-line:last-child{
-border-bottom:0
-}
+.rank-line:last-child{border-bottom:0}
 
-.manager-premium-badge{
-padding:6px 10px;
-border-radius:8px;
-font-size:11px;
-font-weight:bold;
-white-space:nowrap
-}
-
-.manager-premium-badge.manager{
-background:rgba(157,135,255,.15);
-color:#b8aaff
-}
-
-.manager-premium-badge.head{
-background:rgba(255,209,102,.15);
-color:#ffd166
-}
-
-.manager-premium-badge.regional{
-background:rgba(64,220,145,.15);
-color:#40dc91
-}
-
-.manager-premium-badge.platinum{
-background:rgba(200,200,255,.15);
-color:#d7d7ff
-}
-
-.manager-premium-badge.locked{
-background:rgba(120,130,150,.15);
-color:#8995aa
-}
-
-.manager-btn{
+.rank-btn{
 width:100%;
 margin-top:15px;
-padding:14px;
-font-size:15px;
-border-radius:12px
-}
-
-.manager-btn.manager{
 background:#7357ff;
 color:#fff
 }
 
-.manager-btn.head{
-background:linear-gradient(135deg,#ffd166,#e6a928);
-color:#111
+.rank-btn.selected{
+background:#252e40
 }
 
-.manager-btn.regional{
-background:linear-gradient(135deg,#40dc91,#18a96c);
-color:#07130d
-}
-
-.manager-btn.platinum{
-background:linear-gradient(135deg,#d8d8ff,#8585c9);
-color:#10101b
-}
-
-.locked-btn{
-width:100%;
-margin-top:15px;
-padding:14px;
-background:#202938;
+.lock{
 color:#8995aa;
-cursor:not-allowed
+margin-top:12px
 }
 
 @media(max-width:700px){
-.grid,.two{
-grid-template-columns:1fr
-}
+.grid,.two{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -382,54 +103,27 @@ grid-template-columns:1fr
 <body>
 
 <section id="loginPage" class="auth">
-
 <div class="box">
-
 <div class="logo">NOVENTRA</div>
-
 <input id="loginEmail" type="email" placeholder="Email">
-
 <input id="loginPassword" type="password" placeholder="Şifrə">
-
 <button class="main" onclick="login()">Daxil ol</button>
-
-<div class="switch" onclick="showRegister()">
-Hesab yarat
-</div>
-
+<div class="switch" onclick="showRegister()">Hesab yarat</div>
 <div id="loginMsg" class="msg"></div>
-
 </div>
-
 </section>
-
 
 <section id="registerPage" class="auth hidden">
-
 <div class="box">
-
 <div class="logo">NOVENTRA</div>
-
 <input id="regEmail" type="email" placeholder="Email">
-
 <input id="regPassword" type="password" placeholder="Şifrə">
-
 <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)">
-
-<button class="main" onclick="register()">
-Qeydiyyatdan keç
-</button>
-
-<div class="switch" onclick="showLogin()">
-Girişə qayıt
-</div>
-
+<button class="main" onclick="register()">Qeydiyyatdan keç</button>
+<div class="switch" onclick="showLogin()">Girişə qayıt</div>
 <div id="regMsg" class="msg"></div>
-
 </div>
-
 </section>
-
 
 <section id="app" class="hidden">
 
@@ -437,149 +131,81 @@ Girişə qayıt
 <div class="logo">NOVENTRA</div>
 </div>
 
-
 <nav class="nav">
-
-<button id="homeBtn" class="active" onclick="page('home')">
-Ana səhifə
-</button>
-
-<button id="earnBtn" onclick="page('earn')">
-Qazanc
-</button>
-
-<button id="investBtn" onclick="page('invest')">
-Yatırım
-</button>
-
-<button id="accountBtn" onclick="page('account')">
-Hesabım
-</button>
-
-<button id="adminBtn" class="hidden" onclick="page('admin')">
-Admin
-</button>
-
+<button onclick="page('home')">Ana səhifə</button>
+<button onclick="page('earn')">Qazanc</button>
+<button onclick="page('invest')">Yatırım</button>
+<button onclick="page('account')">Hesabım</button>
+<button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
 </nav>
-
 
 <div id="homePage">
 
 <h1>Xoş gəlmisiniz</h1>
-
-<p class="muted">
-Hesabınızın ümumi vəziyyəti
-</p>
-
+<p class="muted">Hesabınızın ümumi vəziyyəti</p>
 
 <div class="grid">
 
 <div class="card">
-
-<div class="muted">
-Aktiv balans
+<div class="muted">Aktiv balans</div>
+<div id="balance" class="value">0.00 $</div>
 </div>
-
-<div id="balance" class="value">
-0.00 AZN
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="muted">
-Ümumi qazanc
+<div class="muted">Ümumi qazanc</div>
+<div id="total" class="value green">0.00 $</div>
 </div>
-
-<div id="total" class="value green">
-0.00 AZN
-</div>
-
-</div>
-
 
 <div class="card">
-
-<div class="muted">
-Status
-</div>
-
-<div id="status" class="value purple">
-1-ci həftə
+<div class="muted">Status</div>
+<div id="status" class="value purple">Yeni istifadəçi</div>
 </div>
 
 </div>
-
-</div>
-
 
 <div class="two">
 
-
 <div class="card">
-
 <h2>Fəaliyyət</h2>
-
 <p class="muted">
 Yatırım təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.
 </p>
-
 <div id="taskArea"></div>
-
 </div>
-
 
 <div class="card">
 
 <h2>Referal sistemi</h2>
 
-<p class="muted">
-Sənin dəvət kodun:
-</p>
+<p class="muted">Sənin dəvət kodun:</p>
 
 <div id="referralCode" class="refcode">
 Yüklənir...
 </div>
 
-
 <div class="row">
-
-<span class="muted">
-Dəvət etdiyin insanlar
-</span>
-
-<b id="refCount">
-0
-</b>
-
+<span class="muted">Aktiv referallar</span>
+<b id="refCount">0</b>
 </div>
 
-
-<div id="managerArea"></div>
+<div id="rankArea"></div>
 
 </div>
 
 </div>
 
 </div>
-
 
 <div id="earnPage" class="hidden">
 
 <h1>Qazanc</h1>
 
 <div class="card">
-
 <h2>Qazanc tarixçəsi</h2>
-
 <div id="history"></div>
-
 </div>
 
 </div>
-
 
 <div id="investPage" class="hidden">
 
@@ -588,34 +214,16 @@ Dəvət etdiyin insanlar
 <div class="card">
 
 <div class="info">
-
-<b>Yatırım şərtləri:</b>
-
+<b>Yatırım üçün məlumat</b>
 <br><br>
-
-💰 <b>Depozit: 20 AZN</b>
-
-<br>
-
-📈 <b>Gündəlik qazanc: 2 AZN</b>
-
+Yatırım etdikdən sonra ödəniş çekini yükləyin.
 <br><br>
-
 <b>Yatırım üçün kart:</b>
-
 <br><br>
-
 5243754439761469
-
-<br><br>
-
-Pul köçürdükdən sonra çek şəklini yükləyin.
-
 </div>
 
-
-<input id="investAmount" type="number" placeholder="Məbləğ">
-
+<input id="investAmount" type="number" placeholder="Məbləğ ($)">
 <input id="receipt" type="file" accept="image/*">
 
 <button class="main" onclick="invest()">
@@ -626,17 +234,12 @@ Pul köçürdükdən sonra çek şəklini yükləyin.
 
 </div>
 
-
 <div class="card">
-
 <h2>Yatırım tarixçəsi</h2>
-
 <div id="investHistory"></div>
-
 </div>
 
 </div>
-
 
 <div id="accountPage" class="hidden">
 
@@ -645,50 +248,25 @@ Pul köçürdükdən sonra çek şəklini yükləyin.
 <div class="card">
 
 <div class="row">
-
-<span class="muted">
-E-poçt
-</span>
-
+<span class="muted">E-poçt</span>
 <b id="email"></b>
-
 </div>
 
-
 <div class="row">
-
-<span class="muted">
-Hesab statusu
-</span>
-
+<span class="muted">Hesab statusu</span>
 <b id="accountStatus" class="green"></b>
-
 </div>
-
 
 <div class="row">
-
-<span class="muted">
-Referal kodun
-</span>
-
-<b id="accountRef" class="yellow">
-—
-</b>
-
+<span class="muted">Referal kodun</span>
+<b id="accountRef" class="yellow">—</b>
 </div>
-
 
 <div class="info">
-
 <b>NOVENTRA dəstək</b>
-
 <br>
-
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
-
 </div>
-
 
 <button class="logout" onclick="logout()">
 Hesabdan çıx
@@ -698,38 +276,29 @@ Hesabdan çıx
 
 </div>
 
-
 <div id="adminPage" class="hidden">
 
 <h1>Admin Panel</h1>
 
 <div class="card admin">
-
 <h2>Yatırım sorğuları</h2>
-
 <div id="adminInvest"></div>
-
 </div>
 
 </div>
-
 
 </section>
-
 
 <div id="adModal" class="ad hidden">
 
 <div class="adbox">
 
 <h1>NOVENTRA</h1>
-
 <h2>Fəaliyyət</h2>
 
 <p>30 saniyə gözləyin</p>
 
-<div id="timer">
-30
-</div>
+<div id="timer">30</div>
 
 <button id="finishBtn" disabled onclick="finishTask()">
 Gözləyin...
@@ -738,7 +307,6 @@ Gözləyin...
 </div>
 
 </div>
-
 
 <script>
 
@@ -754,58 +322,97 @@ SUPABASE_URL,
 SUPABASE_KEY
 );
 
-const ADMIN_EMAIL=
-"Ayazdiana666@gmail.com";
+const ADMIN_EMAIL="Ayazdiana666@gmail.com";
 
 let user=null;
 let profile=null;
 let timerInterval=null;
 
+const RANKS={
+
+"premium":{
+name:"🏆 PREMİUM RƏHBƏR",
+investment:50,
+referrals:10,
+refInvestment:23,
+leaderEarning:1.80,
+refEarning:1
+},
+
+"supreme":{
+name:"👑 SUPREME RƏHBƏR",
+investment:90,
+referrals:20,
+refInvestment:35,
+leaderEarning:2.50,
+refEarning:1.70
+},
+
+"elite":{
+name:"💠 ELİT KOMANDİR",
+investment:150,
+referrals:35,
+refInvestment:60,
+leaderEarning:4,
+refEarning:2.80
+},
+
+"platinum":{
+name:"💎 PLATİN RƏHBƏR",
+investment:320,
+referrals:55,
+refInvestment:87,
+leaderEarning:6.80,
+refEarning:3.60
+},
+
+"strategic":{
+name:"🌐 BAŞ STRATEJİ RƏHBƏR",
+investment:500,
+referrals:80,
+refInvestment:120,
+leaderEarning:10,
+refEarning:5,
+locked:true
+},
+
+"emperor":{
+name:"🔱 İMPERATOR RƏHBƏR",
+investment:1000,
+referrals:150,
+refInvestment:250,
+leaderEarning:20,
+refEarning:10,
+locked:true
+}
+
+};
 
 function generateCode(){
-
 return "NV"+
 Math.random()
 .toString(36)
 .substring(2,8)
 .toUpperCase();
-
 }
-
 
 function showRegister(){
-
 loginPage.classList.add("hidden");
-
 registerPage.classList.remove("hidden");
-
 }
-
 
 function showLogin(){
-
 registerPage.classList.add("hidden");
-
 loginPage.classList.remove("hidden");
-
 }
-
 
 async function register(){
 
-const email=
-regEmail.value.trim();
+const emailValue=regEmail.value.trim();
+const passwordValue=regPassword.value;
+const referral=regReferral.value.trim().toUpperCase();
 
-const password=
-regPassword.value;
-
-const referral=
-regReferral.value
-.trim()
-.toUpperCase();
-
-
-if(!email||!password){
+if(!emailValue||!passwordValue){
 
 regMsg.innerText=
 "Email və şifrəni doldurun.";
@@ -814,64 +421,40 @@ return;
 
 }
 
-
-regMsg.innerText=
-"Hesab yaradılır...";
-
+regMsg.innerText="Hesab yaradılır...";
 
 const {data,error}=
 await supabaseClient.auth.signUp({
 
-email,
-password
+email:emailValue,
+password:passwordValue
 
 });
 
-
 if(error){
 
-regMsg.innerText=
-error.message;
-
+regMsg.innerText=error.message;
 return;
 
 }
 
-
 if(data.user){
 
-const newCode=
-generateCode();
-
+const newCode=generateCode();
 
 const {error:profileError}=
 await supabaseClient
-
 .from("profiles")
-
 .insert({
 
 id:data.user.id,
-
-email:email,
-
+email:emailValue,
 referral_code:newCode,
-
-referred_by:
-referral||null,
-
-week:1,
-
-is_manager:false,
-
-is_head_manager:false,
-
-is_regional_manager:false,
-
-is_platinum_manager:false
+referred_by:referral||null,
+selected_rank:null,
+active_rank:null
 
 });
-
 
 if(profileError){
 
@@ -885,39 +468,25 @@ return;
 
 }
 
+regMsg.style.color="#40dc91";
+regMsg.innerText="Hesab yaradıldı.";
 
-regMsg.style.color=
-"#40dc91";
-
-regMsg.innerText=
-"Hesab yaradıldı.";
-
-setTimeout(
-showLogin,
-1000
-);
+setTimeout(showLogin,1000);
 
 }
 
-
 async function login(){
 
-const emailValue=
-loginEmail.value.trim();
-
-const passwordValue=
-loginPassword.value;
-
+const emailValue=loginEmail.value.trim();
+const passwordValue=loginPassword.value;
 
 const {data,error}=
 await supabaseClient.auth.signInWithPassword({
 
 email:emailValue,
-
 password:passwordValue
 
 });
-
 
 if(error){
 
@@ -928,58 +497,39 @@ return;
 
 }
 
-
 await openApp(data.user);
 
 }
-
 
 async function loadProfile(){
 
 const {data,error}=
 await supabaseClient
-
 .from("profiles")
-
 .select("*")
-
 .eq("id",user.id)
-
 .single();
-
 
 if(error){
 
-console.error(
-"Profile SELECT xətası:",
-error
-);
-
+console.error(error);
 return;
 
 }
-
 
 profile=data;
 
 }
 
-
 async function openApp(u){
 
 user=u;
 
-
 loginPage.classList.add("hidden");
-
 registerPage.classList.add("hidden");
-
 app.classList.remove("hidden");
 
-
-email.innerText=
-user.email;
-
+email.innerText=user.email;
 
 if(
 user.email.toLowerCase()
@@ -987,67 +537,43 @@ user.email.toLowerCase()
 ADMIN_EMAIL.toLowerCase()
 ){
 
-adminBtn.classList.remove(
-"hidden"
-);
+adminBtn.classList.remove("hidden");
 
 }
 
-
 await loadProfile();
-
 await loadEarnings();
-
 await loadReferral();
-
 await loadInvestment();
 
 }
-
 
 async function loadEarnings(){
 
 const {data}=
 await supabaseClient
-
 .from("earnings")
-
 .select("*")
-
 .eq("user_id",user.id)
-
-.order(
-"created_at",
-{ascending:false}
-);
-
+.order("created_at",{ascending:false});
 
 let sum=0;
 
-
 (data||[]).forEach(x=>{
 
-sum+=
-Number(x.amount||0);
+sum+=Number(x.amount||0);
 
 });
 
-
 balance.innerText=
-sum.toFixed(2)+
-" AZN";
-
+sum.toFixed(2)+" $";
 
 total.innerText=
-sum.toFixed(2)+
-" AZN";
-
+sum.toFixed(2)+" $";
 
 history.innerHTML=
 (data&&data.length)
-
 ?
-
 data.map(x=>`
 
 <div class="row">
@@ -1057,1205 +583,480 @@ ${x.description||"Qazanc"}
 </span>
 
 <b class="green">
-+${Number(x.amount).toFixed(2)} AZN
++${Number(x.amount).toFixed(2)} $
 </b>
 
 </div>
 
 `).join("")
-
 :
-
 "<p class='muted'>Hələ qazanc yoxdur.</p>";
 
 }
 
-
 async function loadReferral(){
 
-if(!profile){
-
-referralCode.innerText=
-"Profil yoxdur";
-
-accountRef.innerText=
-"Profil yoxdur";
-
-return;
-
-}
-
+if(!profile)return;
 
 if(!profile.referral_code){
 
-const newCode=
-generateCode();
+const newCode=generateCode();
 
-
-const {error}=
 await supabaseClient
-
 .from("profiles")
-
 .update({
-
 referral_code:newCode
-
 })
-
 .eq("id",user.id);
 
-
-if(error){
-
-referralCode.innerText=
-"Kod xətası";
-
-return;
+profile.referral_code=newCode;
 
 }
 
+const myCode=profile.referral_code;
 
-profile.referral_code=
-newCode;
+referralCode.innerText=myCode;
+accountRef.innerText=myCode;
 
-}
-
-
-const myCode=
-profile.referral_code;
-
-
-referralCode.innerText=
-myCode;
-
-accountRef.innerText=
-myCode;
-
-
-const {count}=
+const {data:refs}=
 await supabaseClient
-
 .from("profiles")
+.select("id")
+.eq("referred_by",myCode);
 
-.select(
-"*",
-{
-count:"exact",
-head:true
+const referralIds=
+(refs||[]).map(x=>x.id);
+
+let activeRefs=[];
+
+if(referralIds.length){
+
+const {data:approved}=
+await supabaseClient
+.from("investments")
+.select("user_id,amount")
+.in("user_id",referralIds)
+.eq("status","approved");
+
+const grouped={};
+
+(approved||[]).forEach(x=>{
+
+if(!grouped[x.user_id])
+grouped[x.user_id]=0;
+
+grouped[x.user_id]+=
+Number(x.amount||0);
+
+});
+
+activeRefs=
+Object.entries(grouped)
+.filter(([id,total])=>total>=1);
+
 }
-)
-
-.eq(
-"referred_by",
-myCode
-);
-
 
 const referralCount=
-count||0;
-
+activeRefs.length;
 
 refCount.innerText=
-referralCount+
-" nəfər";
+referralCount;
 
+await checkRankAutomatically();
+
+renderRanks(referralCount);
+
+}
+
+async function getApprovedInvestment(){
+
+const {data}=
+await supabaseClient
+.from("investments")
+.select("amount")
+.eq("user_id",user.id)
+.eq("status","approved");
+
+return Math.max(
+...(data||[]).map(x=>Number(x.amount)||0),
+0
+);
+
+}
+
+async function getActiveReferralInvestment(){
+
+const {data:refs}=
+await supabaseClient
+.from("profiles")
+.select("id")
+.eq("referred_by",profile.referral_code);
+
+const ids=
+(refs||[]).map(x=>x.id);
+
+if(!ids.length)return 0;
 
 const {data:investments}=
 await supabaseClient
-
 .from("investments")
+.select("user_id,amount")
+.in("user_id",ids)
+.eq("status","approved");
 
-.select(
-"amount,status"
-)
+const totals={};
 
-.eq(
-"user_id",
-user.id
-)
+(investments||[]).forEach(x=>{
 
-.eq(
-"status",
-"approved"
+if(!totals[x.user_id])
+totals[x.user_id]=0;
+
+totals[x.user_id]+=
+Number(x.amount||0);
+
+});
+
+return Object.values(totals)
+.filter(x=>x>0)
+.reduce((a,b)=>a+b,0);
+
+}
+
+async function checkRankAutomatically(){
+
+if(!profile||
+!profile.selected_rank||
+profile.active_rank
+)return;
+
+const rank=
+RANKS[profile.selected_rank];
+
+if(!rank)return;
+
+const ownInvestment=
+await getApprovedInvestment();
+
+const {data:refs}=
+await supabaseClient
+.from("profiles")
+.select("id")
+.eq("referred_by",profile.referral_code);
+
+const ids=
+(refs||[]).map(x=>x.id);
+
+let qualified=0;
+
+if(ids.length){
+
+const {data:investments}=
+await supabaseClient
+.from("investments")
+.select("user_id,amount")
+.in("user_id",ids)
+.eq("status","approved");
+
+const totals={};
+
+(investments||[]).forEach(x=>{
+
+if(!totals[x.user_id])
+totals[x.user_id]=0;
+
+totals[x.user_id]+=
+Number(x.amount||0);
+
+});
+
+qualified=
+Object.values(totals)
+.filter(x=>x>=rank.refInvestment)
+.length;
+
+}
+
+if(
+ownInvestment>=rank.investment &&
+qualified>=rank.referrals
+){
+
+await supabaseClient
+.from("profiles")
+.update({
+active_rank:profile.selected_rank
+})
+.eq("id",user.id);
+
+profile.active_rank=
+profile.selected_rank;
+
+alert(
+"Təbriklər! "+
+rank.name+
+" statusunuz avtomatik aktivləşdirildi."
 );
 
+}
 
-const approvedInvestment=
-Math.max(
+}
 
-...(investments||[])
-.map(
-x=>Number(x.amount)||0
-),
+function renderRanks(referralCount){
 
-0
+const selected=
+profile.selected_rank;
 
-);
+const active=
+profile.active_rank;
 
+let html=`
 
-const isManager=
-profile.is_manager===true;
+<div class="rank-box">
 
-const isHeadManager=
-profile.is_head_manager===true;
+<h2>🏆 Rəhbərlik səviyyələri</h2>
 
-const isRegional=
-profile.is_regional_manager===true;
+`;
 
-const isPlatinum=
-profile.is_platinum_manager===true;
+Object.entries(RANKS)
+.forEach(([key,rank])=>{
 
+const isLocked=rank.locked;
 
-/* PLATİN RƏHBƏR */
+const isSelected=
+selected===key;
 
-if(isPlatinum){
+const isActive=
+active===key;
 
-status.innerText=
-"💎 PLATİN RƏHBƏR";
+html+=`
 
-accountStatus.innerText=
-"💎 PLATİN RƏHBƏR";
+<div class="rank-card
+${isActive?"active":""}
+${isSelected&&!isActive?"selected":""}
+${isLocked?"locked":""}">
 
-
-managerArea.innerHTML=`
-
-<div class="manager-premium">
-
-<div class="manager-premium-title">
-🏆 Statusunuz
+<div class="rank-title">
+${rank.name}
 </div>
 
-
-<div class="manager-premium-card platinum">
-
-<div class="manager-premium-name">
-💎 PLATİN RƏHBƏR
+<div class="rank-line">
+<span class="muted">
+Öz yatırımınız
+</span>
+<b>${rank.investment} $</b>
 </div>
 
+<div class="rank-line">
+<span class="muted">
+Gətirilən aktiv referal
+</span>
+<b>${rank.referrals} nəfər</b>
+</div>
 
-<div class="manager-premium-line">
+<div class="rank-line">
+<span class="muted">
+Referal üçün yatırım
+</span>
+<b>${rank.refInvestment} $</b>
+</div>
 
+<div class="rank-line">
 <span class="muted">
 Rəhbər qazancı
 </span>
-
 <b class="green">
-6.80 $
+${rank.leaderEarning} $
 </b>
-
 </div>
 
-
-<div class="manager-premium-line">
-
+<div class="rank-line">
 <span class="muted">
 Referal qazancı
 </span>
-
 <b class="yellow">
-3.60 $
+${rank.refEarning} $
 </b>
-
 </div>
 
+`;
 
-<div class="manager-premium-line">
+if(isActive){
 
-<span class="muted">
-Status
-</span>
+html+=`
 
-<span class="manager-premium-badge platinum">
-AKTİV
-</span>
-
-</div>
-
-</div>
-
+<div class="info green">
+🎉 Bu status artıq aktivdir.
 </div>
 
 `;
 
 }
 
+else if(isLocked){
 
-/* REGİONAL RƏHBƏR */
+html+=`
 
-else if(isRegional){
-
-status.innerText=
-"🏆 REGİONAL RƏHBƏR";
-
-accountStatus.innerText=
-"🏆 REGİONAL RƏHBƏR";
-
-
-managerArea.innerHTML=`
-
-<div class="manager-premium">
-
-<div class="manager-premium-title">
-🏆 Statusunuz
-</div>
-
-
-<div class="manager-premium-card regional">
-
-<div class="manager-premium-name green">
-🏆 REGİONAL RƏHBƏR
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-4.00 $
-</b>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-2.80 $
-</b>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Status
-</span>
-
-<span class="manager-premium-badge regional">
-AKTİV
-</span>
-
-</div>
-
-</div>
-
+<div class="lock">
+🔒 Bu səviyyə gələcəkdə aktiv olacaq.
 </div>
 
 `;
 
 }
 
+else if(isSelected){
 
-/* BAŞ MENECER */
+html+=`
 
-else if(isHeadManager){
+<button class="rank-btn selected">
+✓ BU SƏVİYYƏ SEÇİLİB
+</button>
 
-status.innerText=
-"⭐ BAŞ MENECER";
-
-accountStatus.innerText=
-"⭐ BAŞ MENECER";
-
-
-managerArea.innerHTML=`
-
-<div class="manager-premium">
-
-<div class="manager-premium-title">
-🏆 Statusunuz
-</div>
-
-
-<div class="manager-premium-card head">
-
-<div class="manager-premium-name yellow">
-⭐ BAŞ MENECER
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-2.50 $
-</b>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-1.70 $
-</b>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Status
-</span>
-
-<span class="manager-premium-badge head">
-AKTİV
-</span>
-
-</div>
-
-</div>
-
+<div class="info">
+Sistem bu səviyyənin şərtlərini avtomatik izləyir.
 </div>
 
 `;
 
 }
 
+else{
 
-/* MENECER */
+html+=`
 
-else if(isManager){
+<button
+class="rank-btn"
+onclick="selectRank('${key}')">
 
-status.innerText=
-"👑 MENECER";
+${rank.name} ÜÇÜN QOŞUL
 
-accountStatus.innerText=
-"👑 MENECER";
-
-
-managerArea.innerHTML=`
-
-<div class="manager-premium">
-
-<div class="manager-premium-title">
-🏆 Statusunuz
-</div>
-
-
-<div class="manager-premium-card manager">
-
-<div class="manager-premium-name purple">
-👑 MENECER
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-1.80 $
-</b>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-1.00 $
-</b>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Status
-</span>
-
-<span class="manager-premium-badge manager">
-AKTİV
-</span>
-
-</div>
-
-</div>
-
-</div>
+</button>
 
 `;
 
 }
 
+html+=`
 
-/* STATUS ŞƏRTLƏRİ */
+</div>
+
+`;
+
+});
+
+html+=`
+
+</div>
+
+`;
+
+rankArea.innerHTML=html;
+
+if(active){
+
+status.innerText=
+RANKS[active].name;
+
+accountStatus.innerText=
+RANKS[active].name;
+
+}
+
+else if(selected){
+
+status.innerText=
+RANKS[selected].name+
+" üçün hazırlıq";
+
+accountStatus.innerText=
+RANKS[selected].name+
+" üçün hazırlıq";
+
+}
 
 else{
 
 status.innerText=
-"1-ci həftə";
+"Yeni istifadəçi";
 
 accountStatus.innerText=
-"1-ci həftə";
-
-
-managerArea.innerHTML=`
-
-<div class="manager-premium">
-
-<div class="manager-premium-title">
-🏆 Status şərtləri
-</div>
-
-
-<!-- MENECER -->
-
-<div class="manager-premium-card manager">
-
-<div class="manager-premium-name purple">
-👑 MENECER
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Menecer olmaq üçün yatırım
-</span>
-
-<b class="yellow">
-50 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Gətirilən referal
-</span>
-
-<b>
-10 nəfər
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal üçün yatırım
-</span>
-
-<b class="yellow">
-23 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-1.80 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-1.00 $
-</b>
-</div>
-
-
-${
-referralCount>=10 &&
-approvedInvestment>=50
-
-?
-
-`
-
-<button
-class="manager-btn manager"
-onclick="becomeManager()"
->
-
-👑 MENECER OL
-
-</button>
-
-`
-
-:
-
-`
-
-<div class="muted">
-
-🔒 Şərtlər tamamlandıqdan sonra
-Menecer ola bilərsiniz.
-
-</div>
-
-`
-
-}
-
-</div>
-
-
-<!-- BAŞ MENECER -->
-
-<div class="manager-premium-card head">
-
-<div class="manager-premium-name yellow">
-⭐ BAŞ MENECER
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Baş menecer olmaq üçün yatırım
-</span>
-
-<b class="yellow">
-90 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Gətirilən referal
-</span>
-
-<b>
-20 nəfər
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal üçün yatırım
-</span>
-
-<b class="yellow">
-35 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-2.50 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-1.70 $
-</b>
-</div>
-
-
-${
-referralCount>=20 &&
-approvedInvestment>=90
-
-?
-
-`
-
-<button
-class="manager-btn head"
-onclick="becomeHeadManager()"
->
-
-⭐ BAŞ MENECER OL
-
-</button>
-
-`
-
-:
-
-`
-
-<div class="muted">
-
-🔒 Şərtlər tamamlandıqdan sonra
-Baş Menecer ola bilərsiniz.
-
-</div>
-
-`
-
-}
-
-</div>
-
-
-<!-- REGİONAL RƏHBƏR -->
-
-<div class="manager-premium-card regional">
-
-<div class="manager-premium-name green">
-🏆 REGİONAL RƏHBƏR
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Regional Rəhbər olmaq üçün yatırım
-</span>
-
-<b class="yellow">
-150 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Gətirilən referal
-</span>
-
-<b>
-35 nəfər
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal üçün yatırım
-</span>
-
-<b class="yellow">
-60 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-4.00 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-2.80 $
-</b>
-</div>
-
-
-${
-referralCount>=35 &&
-approvedInvestment>=150
-
-?
-
-`
-
-<button
-class="manager-btn regional"
-onclick="becomeRegional()"
->
-
-🏆 REGİONAL RƏHBƏR OL
-
-</button>
-
-`
-
-:
-
-`
-
-<div class="muted">
-
-🔒 Şərtlər tamamlandıqdan sonra
-Regional Rəhbər ola bilərsiniz.
-
-</div>
-
-`
-
-}
-
-</div>
-
-
-<!-- PLATİN RƏHBƏR -->
-
-<div class="manager-premium-card platinum">
-
-<div class="manager-premium-name">
-💎 PLATİN RƏHBƏR
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Platin Rəhbər olmaq üçün yatırım
-</span>
-
-<b class="yellow">
-320 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Gətirilən referal
-</span>
-
-<b>
-55 nəfər
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal üçün yatırım
-</span>
-
-<b class="yellow">
-87 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Rəhbər qazancı
-</span>
-
-<b class="green">
-6.80 $
-</b>
-</div>
-
-
-<div class="manager-premium-line">
-<span class="muted">
-Referal qazancı
-</span>
-
-<b class="yellow">
-3.60 $
-</b>
-</div>
-
-
-${
-referralCount>=55 &&
-approvedInvestment>=320
-
-?
-
-`
-
-<button
-class="manager-btn platinum"
-onclick="becomePlatinum()"
->
-
-💎 PLATİN RƏHBƏR OL
-
-</button>
-
-`
-
-:
-
-`
-
-<div class="muted">
-
-🔒 Şərtlər tamamlandıqdan sonra
-Platin Rəhbər ola bilərsiniz.
-
-</div>
-
-`
-
-}
-
-</div>
-
-
-<!-- 5-Cİ STATUS -->
-
-<div class="manager-premium-card locked">
-
-<div class="manager-premium-name">
-🌐 BAŞ STRATEJİ RƏHBƏR 🔒
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Status
-</span>
-
-<span class="manager-premium-badge locked">
-KİLİDLİ
-</span>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Gündəlik qazanc
-</span>
-
-<b>
-🔒 TEZLİKLƏ
-</b>
-
-</div>
-
-
-<button
-class="locked-btn"
-disabled
->
-
-🔒 TEZLİKLƏ AKTİV OLACAQ
-
-</button>
-
-</div>
-
-
-<!-- 6-CI STATUS -->
-
-<div class="manager-premium-card locked">
-
-<div class="manager-premium-name">
-🔱 İMPERATOR RƏHBƏR 🔒
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Status
-</span>
-
-<span class="manager-premium-badge locked">
-KİLİDLİ
-</span>
-
-</div>
-
-
-<div class="manager-premium-line">
-
-<span class="muted">
-Gündəlik qazanc
-</span>
-
-<b>
-🔒 TEZLİKLƏ
-</b>
-
-</div>
-
-
-<button
-class="locked-btn"
-disabled
->
-
-🔒 TEZLİKLƏ AKTİV OLACAQ
-
-</button>
-
-</div>
-
-
-</div>
-
-`;
+"Yeni istifadəçi";
 
 }
 
 }
 
+async function selectRank(key){
 
-async function becomeManager(){
+const rank=
+RANKS[key];
 
-if(
-!confirm(
-"Menecer olmaq istəyirsiniz?"
-)
-)return;
+if(rank.locked){
 
-
-const {error}=
-await supabaseClient
-
-.from("profiles")
-
-.update({
-
-is_manager:true
-
-})
-
-.eq(
-"id",
-user.id
+alert(
+"Bu səviyyə hələ kilidlidir."
 );
-
-
-if(error){
-
-alert(error.message);
 
 return;
 
 }
 
+if(profile.selected_rank){
 
-alert(
-"Təbriklər! MENECER statusunuz aktivdir."
-);
+const old=
+RANKS[profile.selected_rank];
 
-
-await loadProfile();
-
-await loadReferral();
+if(!confirm(
+"Artıq "+
+old.name+
+" seçmisiniz. Yeni səviyyəyə keçmək istəyirsiniz?"
+))return;
 
 }
 
-
-async function becomeHeadManager(){
-
-if(
-!confirm(
-"Baş Menecer olmaq istəyirsiniz?"
-)
-)return;
-
-
 const {error}=
 await supabaseClient
-
 .from("profiles")
-
 .update({
 
-is_head_manager:true,
-
-is_manager:true
+selected_rank:key,
+active_rank:null
 
 })
-
-.eq(
-"id",
-user.id
-);
-
+.eq("id",user.id);
 
 if(error){
 
 alert(error.message);
-
 return;
 
 }
 
+profile.selected_rank=key;
+profile.active_rank=null;
 
 alert(
-"Təbriklər! BAŞ MENECER statusunuz aktivdir."
+rank.name+
+" seçildi. İndi sistem həmin səviyyənin şərtlərini avtomatik izləyəcək."
 );
-
-
-await loadProfile();
 
 await loadReferral();
 
 }
-
-
-async function becomeRegional(){
-
-if(
-!confirm(
-"Regional Rəhbər olmaq istəyirsiniz?"
-)
-)return;
-
-
-const {error}=
-await supabaseClient
-
-.from("profiles")
-
-.update({
-
-is_regional_manager:true,
-
-is_head_manager:true,
-
-is_manager:true
-
-})
-
-.eq(
-"id",
-user.id
-);
-
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-
-alert(
-"Təbriklər! REGİONAL RƏHBƏR statusunuz aktivdir."
-);
-
-
-await loadProfile();
-
-await loadReferral();
-
-}
-
-
-async function becomePlatinum(){
-
-if(
-!confirm(
-"Platin Rəhbər olmaq istəyirsiniz?"
-)
-)return;
-
-
-const {error}=
-await supabaseClient
-
-.from("profiles")
-
-.update({
-
-is_platinum_manager:true,
-
-is_regional_manager:true,
-
-is_head_manager:true,
-
-is_manager:true
-
-})
-
-.eq(
-"id",
-user.id
-);
-
-
-if(error){
-
-alert(error.message);
-
-return;
-
-}
-
-
-alert(
-"Təbriklər! PLATİN RƏHBƏR statusunuz aktivdir."
-);
-
-
-await loadProfile();
-
-await loadReferral();
-
-}
-
 
 async function loadInvestment(){
 
 const {data}=
 await supabaseClient
-
 .from("investments")
-
 .select("*")
-
-.eq(
-"user_id",
-user.id
-)
-
-.order(
-"created_at",
-{ascending:false}
-);
-
+.eq("user_id",user.id)
+.order("created_at",{ascending:false});
 
 const approved=
-(data||[])
-.some(
+(data||[]).some(
 x=>x.status==="approved"
 );
-
 
 if(approved){
 
@@ -2281,15 +1082,13 @@ taskArea.innerHTML=`
 
 <div class="info">
 
-Yatırım etmədən fəaliyyətə
-başlamaq mümkün deyil.
+Yatırım təsdiqlənmədən fəaliyyətə başlamaq mümkün deyil.
 
 <br><br>
 
 <button
 class="main"
-onclick="page('invest')"
->
+onclick="page('invest')">
 
 YATIRIM ET
 
@@ -2301,29 +1100,22 @@ YATIRIM ET
 
 }
 
-
 investHistory.innerHTML=
 (data&&data.length)
-
 ?
-
 data.map(x=>`
 
 <div class="row">
 
 <span>
-${Number(x.amount).toFixed(2)} AZN
+${Number(x.amount).toFixed(2)} $
 </span>
 
-<b
-class="${
+<b class="${
 x.status==="approved"
-?
-"green"
-:
-"yellow"
-}"
->
+?"green"
+:"yellow"
+}">
 
 ${x.status}
 
@@ -2332,50 +1124,32 @@ ${x.status}
 </div>
 
 `).join("")
-
 :
-
 "<p class='muted'>Yatırım tarixçəsi yoxdur.</p>";
 
 }
 
-
 async function startTask(){
 
-const today=
-new Date();
+const today=new Date();
 
-today.setHours(
-0,0,0,0
-);
-
+today.setHours(0,0,0,0);
 
 const {data}=
 await supabaseClient
-
 .from("earnings")
-
 .select("id")
-
-.eq(
-"user_id",
-user.id
-)
-
+.eq("user_id",user.id)
 .eq(
 "description",
 "NOVENTRA 30 saniyəlik fəaliyyət"
 )
-
 .gte(
 "created_at",
 today.toISOString()
 );
 
-
-if(
-data&&data.length
-){
+if(data&&data.length){
 
 alert(
 "Bu gün artıq fəaliyyət etmisiniz."
@@ -2385,46 +1159,27 @@ return;
 
 }
 
+adModal.classList.remove("hidden");
 
-adModal.classList.remove(
-"hidden"
-);
+finishBtn.disabled=true;
 
+let sec=30;
 
-finishBtn.disabled=
-true;
+timer.innerText=sec;
 
+clearInterval(timerInterval);
 
-let sec=
-30;
-
-
-timer.innerText=
-sec;
-
-
-clearInterval(
-timerInterval
-);
-
-
-timerInterval=
-setInterval(()=>{
+timerInterval=setInterval(()=>{
 
 sec--;
 
-timer.innerText=
-sec;
-
+timer.innerText=sec;
 
 if(sec<=0){
 
-clearInterval(
-timerInterval
-);
+clearInterval(timerInterval);
 
-finishBtn.disabled=
-false;
+finishBtn.disabled=false;
 
 finishBtn.innerText=
 "Qazancı götür";
@@ -2435,68 +1190,60 @@ finishBtn.innerText=
 
 }
 
-
 async function finishTask(){
+
+const rank=
+profile.active_rank
+?
+RANKS[profile.active_rank]
+:null;
+
+const earning=
+rank
+?
+rank.leaderEarning
+:1;
 
 const {error}=
 await supabaseClient
-
 .from("earnings")
-
 .insert({
 
 user_id:user.id,
-
-amount:1,
-
+amount:earning,
 description:
-"NOVENTRA 30 saniyəlik fəaliyyət"
+"NOVENTRA "+
+(rank?rank.name:"fəaliyyət")
 
 });
 
-
 if(error){
 
-alert(
-error.message
-);
-
+alert(error.message);
 return;
 
 }
 
-
-adModal.classList.add(
-"hidden"
-);
-
+adModal.classList.add("hidden");
 
 await loadEarnings();
 
-
 alert(
-"1 AZN qazanc əlavə edildi."
+earning+
+" $ qazanc əlavə edildi."
 );
 
 }
 
-
 async function invest(){
 
 const amount=
-Number(
-investAmount.value
-);
-
+Number(investAmount.value);
 
 const file=
 receipt.files[0];
 
-
-if(
-!amount||
-amount<=0
-){
+if(!amount||amount<=0){
 
 investMsg.innerText=
 "Məbləği yazın.";
@@ -2504,7 +1251,6 @@ investMsg.innerText=
 return;
 
 }
-
 
 if(!file){
 
@@ -2515,10 +1261,8 @@ return;
 
 }
 
-
 investMsg.innerText=
 "Yüklənir...";
-
 
 const name=
 user.id+
@@ -2527,17 +1271,10 @@ Date.now()+
 "-"+
 file.name;
 
-
 const {error:uploadError}=
 await supabaseClient.storage
-
 .from("receipts")
-
-.upload(
-name,
-file
-);
-
+.upload(name,file);
 
 if(uploadError){
 
@@ -2548,36 +1285,22 @@ return;
 
 }
 
-
 const {data:urlData}=
 supabaseClient.storage
-
 .from("receipts")
-
-.getPublicUrl(
-name
-);
-
+.getPublicUrl(name);
 
 const {error}=
 await supabaseClient
-
 .from("investments")
-
 .insert({
 
 user_id:user.id,
-
 amount,
-
-receipt_url:
-urlData.publicUrl,
-
-status:
-"pending"
+receipt_url:urlData.publicUrl,
+status:"pending"
 
 });
-
 
 if(error){
 
@@ -2588,19 +1311,15 @@ return;
 
 }
 
-
 investMsg.style.color=
 "#40dc91";
-
 
 investMsg.innerText=
 "Yatırım sorğusu göndərildi.";
 
-
 await loadInvestment();
 
 }
-
 
 function page(name){
 
@@ -2612,7 +1331,6 @@ const pages=[
 "admin"
 ];
 
-
 pages.forEach(x=>{
 
 document
@@ -2621,56 +1339,39 @@ document
 
 });
 
-
 document
 .getElementById(name+"Page")
 .classList.remove("hidden");
 
-
-if(name==="admin"){
-
+if(name==="admin")
 loadAdmin();
 
 }
 
-}
-
-
 async function logout(){
 
-await supabaseClient
-.auth
-.signOut();
+await supabaseClient.auth.signOut();
 
 location.reload();
 
 }
 
-
 async function loadAdmin(){
 
 const {data}=
 await supabaseClient
-
 .from("investments")
-
 .select("*")
-
-.order(
-"created_at",
-{ascending:false}
-);
-
+.order("created_at",{ascending:false});
 
 adminInvest.innerHTML=
 (data||[])
-
 .map(x=>`
 
 <div class="admin-item">
 
 <b>
-${Number(x.amount).toFixed(2)} AZN
+${Number(x.amount).toFixed(2)} $
 </b>
 
 <p>
@@ -2681,15 +1382,13 @@ ${
 x.receipt_url
 ?
 `<img src="${x.receipt_url}">`
-:
-""
+:""
 }
 
 <br>
 
 <button
-onclick="approve('${x.id}')"
->
+onclick="approve('${x.id}')">
 
 Təsdiqlə
 
@@ -2698,43 +1397,28 @@ Təsdiqlə
 </div>
 
 `)
-
 .join("");
 
 }
 
-
 async function approve(id){
 
 await supabaseClient
-
 .from("investments")
-
 .update({
-
 status:"approved"
-
 })
-
-.eq(
-"id",
-id
-);
-
+.eq("id",id);
 
 await loadAdmin();
 
 }
 
-
-supabaseClient
-.auth
+supabaseClient.auth
 .getSession()
 .then(x=>{
 
-if(
-x.data.session
-){
+if(x.data.session){
 
 openApp(
 x.data.session.user
@@ -2747,4 +1431,4 @@ x.data.session.user
 </script>
 
 </body>
-</html>
+  </html>
