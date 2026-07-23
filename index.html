@@ -43,38 +43,89 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .adbox button{background:#40dc91;margin-top:20px}
 
 .manager-premium{
-margin-top:18px;padding:20px;border-radius:18px;
+margin-top:18px;
+padding:20px;
+border-radius:18px;
 background:linear-gradient(145deg,#151b2b,#0b101b);
 border:1px solid rgba(157,135,255,.4);
 box-shadow:0 12px 35px rgba(0,0,0,.3)
 }
-.manager-premium-title{font-size:19px;font-weight:bold;margin-bottom:16px}
+
+.manager-premium-title{
+font-size:19px;
+font-weight:bold;
+margin-bottom:16px
+}
+
 .manager-premium-card{
-padding:16px;margin-top:12px;border-radius:14px;
+padding:16px;
+margin-top:12px;
+border-radius:14px;
 background:linear-gradient(145deg,#111827,#0c111d);
 border:1px solid #263247
 }
-.manager-premium-card.platinum{border-color:rgba(185,242,255,.6)}
-.manager-premium-card.supreme{border-color:rgba(255,209,102,.7)}
-.manager-premium-card.premium{border-color:rgba(157,135,255,.7)}
-.manager-premium-card.elite{border-color:rgba(64,220,145,.6)}
-.manager-premium-card.locked{opacity:.55;filter:grayscale(.4)}
-.manager-premium-name{font-size:17px;font-weight:bold;margin-bottom:10px}
+
+.manager-premium-card.manager{
+border-color:rgba(157,135,255,.5)
+}
+
+.manager-premium-card.head{
+border-color:rgba(255,209,102,.55)
+}
+
+.manager-premium-name{
+font-size:17px;
+font-weight:bold;
+margin-bottom:10px
+}
+
 .manager-premium-line{
-display:flex;justify-content:space-between;align-items:center;
-padding:9px 0;border-bottom:1px solid #263247;gap:10px
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:9px 0;
+border-bottom:1px solid #263247;
+gap:10px
 }
-.manager-premium-line:last-child{border-bottom:0}
+
+.manager-premium-line:last-child{
+border-bottom:0
+}
+
+.manager-premium-badge{
+padding:6px 10px;
+border-radius:8px;
+font-size:11px;
+font-weight:bold;
+white-space:nowrap
+}
+
+.manager-premium-badge.manager{
+background:rgba(157,135,255,.15);
+color:#b8aaff
+}
+
+.manager-premium-badge.head{
+background:rgba(255,209,102,.15);
+color:#ffd166
+}
+
 .manager-btn{
-width:100%;margin-top:15px;padding:14px;font-size:15px;border-radius:12px
+width:100%;
+margin-top:15px;
+padding:14px;
+font-size:15px;
+border-radius:12px
 }
-.manager-btn.platinum{background:linear-gradient(135deg,#b9f2ff,#6fc9df);color:#071017}
-.manager-btn.supreme{background:linear-gradient(135deg,#ffd166,#e6a928);color:#111}
-.manager-btn.premium{background:#7357ff;color:#fff}
-.manager-btn.elite{background:linear-gradient(135deg,#40dc91,#159b62);color:#071017}
-.locked-badge{
-padding:6px 10px;border-radius:8px;font-size:11px;
-font-weight:bold;background:rgba(150,150,150,.15);color:#9aa5b5
+
+.manager-btn.manager{
+background:#7357ff;
+color:#fff
+}
+
+.manager-btn.head{
+background:linear-gradient(135deg,#ffd166,#e6a928);
+color:#111
 }
 
 @media(max-width:700px){
@@ -108,22 +159,25 @@ font-weight:bold;background:rgba(150,150,150,.15);color:#9aa5b5
 <button id="accountBtn" onclick="page('account')">Hesabım</button>
 <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
 </nav><div id="homePage"><h1>Xoş gəlmisiniz</h1>
-<p class="muted">Hesabınızın ümumi vəziyyəti</p><div class="grid"><div class="card">
+<p class="muted">Hesabınızın ümumi vəziyyəti</p><div class="grid">
+<div class="card">
 <div class="muted">Aktiv balans</div>
-<div id="balance" class="value">0.00 $</div>
+<div id="balance" class="value">0.00 AZN</div>
 </div><div class="card">
 <div class="muted">Ümumi qazanc</div>
-<div id="total" class="value green">0.00 $</div>
+<div id="total" class="value green">0.00 AZN</div>
 </div><div class="card">
 <div class="muted">Status</div>
-<div id="status" class="value purple">Başlanğıc</div>
-</div></div><div class="two"><div class="card">
+<div id="status" class="value purple">1-ci həftə</div>
+</div>
+</div><div class="two"><div class="card">
 <h2>Fəaliyyət</h2>
 <p class="muted">Yatırım təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.</p>
 <div id="taskArea"></div>
 </div><div class="card">
 <h2>Referal sistemi</h2>
-<p class="muted">Sənin dəvət kodun:</p><div id="referralCode" class="refcode">Yüklənir...</div><div class="row">
+<p class="muted">Sənin dəvət kodun:</p>
+<div id="referralCode" class="refcode">Yüklənir...</div><div class="row">
 <span class="muted">Dəvət etdiyin insanlar</span>
 <b id="refCount">0/55</b>
 </div><div id="managerArea"></div></div></div>
@@ -138,9 +192,9 @@ font-weight:bold;background:rgba(150,150,150,.15);color:#9aa5b5
 <div class="info">
 <b>Yatırım şərtləri:</b>
 <br><br>
-💰 <b>Depozit: 20 $</b>
+💰 <b>Depozit: 20 AZN</b>
 <br>
-📈 <b>Gündəlik qazanc: 2 $</b>
+📈 <b>Gündəlik qazanc: 2 AZN</b>
 <br><br>
 <b>Yatırım üçün kart:</b>
 <br><br>
@@ -175,8 +229,7 @@ Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 <h1>Admin Panel</h1><div class="card admin">
 <h2>Yatırım sorğuları</h2>
 <div id="adminInvest"></div>
-</div>
-</div></section><div id="adModal" class="ad hidden">
+</div></div></section><div id="adModal" class="ad hidden">
 <div class="adbox">
 <h1>NOVENTRA</h1>
 <h2>Fəaliyyət</h2>
@@ -251,7 +304,8 @@ referral_code:newCode,
 referred_by:referral||null,
 week:1,
 is_manager:false,
-is_head_manager:false
+is_head_manager:false,
+rank:"none"
 });
 
 if(profileError){
@@ -339,15 +393,15 @@ let sum=0;
 sum+=Number(x.amount||0);
 });
 
-balance.innerText=sum.toFixed(2)+" $";
-total.innerText=sum.toFixed(2)+" $";
+balance.innerText=sum.toFixed(2)+" AZN";
+total.innerText=sum.toFixed(2)+" AZN";
 
 history.innerHTML=(data&&data.length)
 ?
 data.map(x=>`
 <div class="row">
 <span>${x.description||"Qazanc"}</span>
-<b class="green">+${Number(x.amount).toFixed(2)} $</b>
+<b class="green">+${Number(x.amount).toFixed(2)} AZN</b>
 </div>
 `).join("")
 :
@@ -378,7 +432,6 @@ return;
 }
 
 profile.referral_code=newCode;
-
 }
 
 const myCode=profile.referral_code;
@@ -395,177 +448,49 @@ const referralCount=count||0;
 
 refCount.innerText=referralCount+"/55";
 
+const {data:investments}=await supabaseClient
+.from("investments")
+.select("amount,status")
+.eq("user_id",user.id)
+.eq("status","approved");
+
+const approvedInvestment=Math.max(
+...(investments||[]).map(x=>Number(x.amount)||0),
+0
+);
+
+const rank=profile.rank||"none";
+
+if(rank==="zam_rehber"){
+
+status.innerText="ZAM RƏHBƏR KOMANDİRİ";
+accountStatus.innerText="ZAM RƏHBƏR KOMANDİRİ";
+
 managerArea.innerHTML=`
 
 <div class="manager-premium">
 
-<div class="manager-premium-title">
-🏆 NOVENTRA STATUS SİSTEMİ
-</div>
+<div class="manager-premium-title">🏆 Aktiv statusunuz</div>
 
-<div class="manager-premium-card platinum">
+<div class="manager-premium-card head">
 
-<div class="manager-premium-name" style="color:#b9f2ff">
-💎 PLATİN RƏHBƏR
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal şərti</span>
-<b>10 nəfər</b>
+<div class="manager-premium-name yellow">
+🔱 ZAM RƏHBƏR KOMANDİRİ
 </div>
 
 <div class="manager-premium-line">
-<span class="muted">Yatırım şərti</span>
-<b class="yellow">23 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Gündəlik qazanc</span>
-<b class="green">1.80 $</b>
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">6.80 $ / gün</b>
 </div>
 
 <div class="manager-premium-line">
 <span class="muted">Referal qazancı</span>
-<b class="green">1 $</b>
-</div>
-
-<button class="manager-btn platinum" onclick="applyStatus('platinum')">
-💎 PLATİN RƏHBƏR OL
-</button>
-
-</div>
-
-
-<div class="manager-premium-card supreme">
-
-<div class="manager-premium-name" style="color:#ffd166">
-👑 SUPREME RƏHBƏR
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal şərti</span>
-<b>20 nəfər</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Yatırım şərti</span>
-<b class="yellow">35 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Gündəlik qazanc</span>
-<b class="green">2.50 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal qazancı</span>
-<b class="green">1.70 $</b>
-</div>
-
-<button class="manager-btn supreme" onclick="applyStatus('supreme')">
-👑 SUPREME RƏHBƏR OL
-</button>
-
-</div>
-
-
-<div class="manager-premium-card premium">
-
-<div class="manager-premium-name" style="color:#b8aaff">
-🏆 PREMİUM RƏHBƏR
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal şərti</span>
-<b>35 nəfər</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Yatırım şərti</span>
-<b class="yellow">60 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Gündəlik qazanc</span>
-<b class="green">4 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal qazancı</span>
-<b class="green">2.80 $</b>
-</div>
-
-<button class="manager-btn premium" onclick="applyStatus('premium')">
-🏆 PREMİUM RƏHBƏR OL
-</button>
-
-</div>
-
-
-<div class="manager-premium-card elite">
-
-<div class="manager-premium-name" style="color:#40dc91">
-💠 ELİT KOMANDİR
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal şərti</span>
-<b>55 nəfər</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Yatırım şərti</span>
-<b class="yellow">87 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Gündəlik qazanc</span>
-<b class="green">6.80 $</b>
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Referal qazancı</span>
-<b class="green">3.60 $</b>
-</div>
-
-<button class="manager-btn elite" onclick="applyStatus('elite')">
-💠 ELİT KOMANDİR OL
-</button>
-
-</div>
-
-
-<div class="manager-premium-card locked">
-
-<div class="manager-premium-name">
-🌐 BAŞ STRATEJİ RƏHBƏR
+<b class="yellow">3.60 $ / gün</b>
 </div>
 
 <div class="manager-premium-line">
 <span class="muted">Status</span>
-<span class="locked-badge">🔒 KİLİDLİ</span>
-</div>
-
-<div class="muted">
-Bu status sonradan aktivləşdiriləcək.
-</div>
-
-</div>
-
-
-<div class="manager-premium-card locked">
-
-<div class="manager-premium-name">
-🔱 İMPERATOR RƏHBƏR
-</div>
-
-<div class="manager-premium-line">
-<span class="muted">Status</span>
-<span class="locked-badge">🔒 KİLİDLİ</span>
-</div>
-
-<div class="muted">
-Bu status sonradan aktivləşdiriləcək.
+<span class="manager-premium-badge head">AKTİV</span>
 </div>
 
 </div>
@@ -576,73 +501,404 @@ Bu status sonradan aktivləşdiriləcək.
 
 }
 
-async function applyStatus(statusName){
+else if(rank==="regional_rehber"){
 
-const requirements={
-platinum:{name:"PLATİN RƏHBƏR",referrals:10,investment:23},
-supreme:{name:"SUPREME RƏHBƏR",referrals:20,investment:35},
-premium:{name:"PREMİUM RƏHBƏR",referrals:35,investment:60},
-elite:{name:"ELİT KOMANDİR",referrals:55,investment:87}
-};
+status.innerText="REGİONAL RƏHBƏR";
+accountStatus.innerText="REGİONAL RƏHBƏR";
 
-const selected=requirements[statusName];
+managerArea.innerHTML=`
 
-const {count}=await supabaseClient
-.from("profiles")
-.select("*",{count:"exact",head:true})
-.eq("referred_by",profile.referral_code);
+<div class="manager-premium">
 
-const {data:investments}=await supabaseClient
-.from("investments")
-.select("amount")
-.eq("user_id",user.id)
-.eq("status","approved");
+<div class="manager-premium-title">🏆 Aktiv statusunuz</div>
 
-const approvedInvestment=Math.max(
-...(investments||[]).map(x=>Number(x.amount)||0),
-0
-);
+<div class="manager-premium-card head">
 
-if((count||0)<selected.referrals){
+<div class="manager-premium-name yellow">
+🌐 REGİONAL RƏHBƏR
+</div>
 
-alert(
-`Bu status üçün ${selected.referrals} referal lazımdır.`
-);
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">4.00 $ / gün</b>
+</div>
 
-return;
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">2.80 $ / gün</b>
+</div>
 
-}
+<div class="manager-premium-line">
+<span class="muted">Status</span>
+<span class="manager-premium-badge head">AKTİV</span>
+</div>
 
-if(approvedInvestment<selected.investment){
+</div>
 
-alert(
-`Bu status üçün ən azı ${selected.investment} $ təsdiqlənmiş yatırım lazımdır.`
-);
+</div>
 
-return;
+`;
 
 }
 
-if(!confirm(`${selected.name} statusuna keçmək istəyirsiniz?`))return;
+else if(profile.is_head_manager===true){
+
+status.innerText="BAŞ MENECER";
+accountStatus.innerText="BAŞ MENECER";
+
+managerArea.innerHTML=`
+
+<div class="manager-premium">
+
+<div class="manager-premium-title">🏆 Aktiv statusunuz</div>
+
+<div class="manager-premium-card head">
+
+<div class="manager-premium-name yellow">
+⭐ BAŞ MENECER
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">2.50 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">1.70 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Status</span>
+<span class="manager-premium-badge head">AKTİV</span>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+else if(profile.is_manager===true){
+
+status.innerText="MENECER";
+accountStatus.innerText="MENECER";
+
+managerArea.innerHTML=`
+
+<div class="manager-premium">
+
+<div class="manager-premium-title">🏆 Aktiv statusunuz</div>
+
+<div class="manager-premium-card manager">
+
+<div class="manager-premium-name purple">
+👑 MENECER
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">1.80 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">1.00 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Status</span>
+<span class="manager-premium-badge manager">AKTİV</span>
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+else{
+
+status.innerText="1-ci həftə";
+accountStatus.innerText="1-ci həftə";
+
+managerArea.innerHTML=`
+
+<div class="manager-premium">
+
+<div class="manager-premium-title">
+🏆 Status şərtləri
+</div>
+
+
+<div class="manager-premium-card manager">
+
+<div class="manager-premium-name purple">
+👑 MENECER
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Menecer olmaq üçün yatırım</span>
+<b>50 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Gətirdiyi referal</span>
+<b>10 nəfər</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal üçün yatırım</span>
+<b class="yellow">23 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">1.80 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">1.00 $ / gün</b>
+</div>
+
+${
+referralCount>=10 && approvedInvestment>=50
+?
+`
+<button class="manager-btn manager" onclick="becomeManager()">
+👑 MENECER OL
+</button>
+`
+:
+`
+<div class="muted">
+Şərtlər tamamlandıqdan sonra müraciət edə bilərsiniz.
+</div>
+`
+}
+
+</div>
+
+
+<div class="manager-premium-card head">
+
+<div class="manager-premium-name yellow">
+⭐ BAŞ MENECER
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Baş menecer olmaq üçün yatırım</span>
+<b>90 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Gətirdiyi referal</span>
+<b>20 nəfər</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal üçün yatırım</span>
+<b class="yellow">35 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">2.50 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">1.70 $ / gün</b>
+</div>
+
+${
+referralCount>=20 && approvedInvestment>=90
+?
+`
+<button class="manager-btn head" onclick="becomeHeadManager()">
+⭐ BAŞ MENECER OL
+</button>
+`
+:
+`
+<div class="muted">
+Şərtlər tamamlandıqdan sonra müraciət edə bilərsiniz.
+</div>
+`
+}
+
+</div>
+
+
+<div class="manager-premium-card head">
+
+<div class="manager-premium-name yellow">
+🌐 REGİONAL RƏHBƏR
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Regional rəhbər olmaq üçün yatırım</span>
+<b>150 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Gətirdiyi referal</span>
+<b>35 nəfər</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal üçün yatırım</span>
+<b class="yellow">60 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">4.00 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">2.80 $ / gün</b>
+</div>
+
+${
+referralCount>=35 && approvedInvestment>=150
+?
+`
+<button class="manager-btn head" onclick="becomeRegionalManager()">
+🌐 REGİONAL RƏHBƏR OL
+</button>
+`
+:
+`
+<div class="muted">
+Şərtlər tamamlandıqdan sonra müraciət edə bilərsiniz.
+</div>
+`
+}
+
+</div>
+
+
+<div class="manager-premium-card head">
+
+<div class="manager-premium-name yellow">
+🔱 ZAM RƏHBƏR KOMANDİRİ
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Status üçün yatırım</span>
+<b>320 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Gətirdiyi referal</span>
+<b>55 nəfər</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal üçün yatırım</span>
+<b class="yellow">87 $</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">6.80 $ / gün</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal qazancı</span>
+<b class="yellow">3.60 $ / gün</b>
+</div>
+
+<div class="muted">
+🔒 Bu status daha sonra aktiv ediləcək.
+</div>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+}
+
+async function becomeManager(){
+
+if(!confirm("Menecer olmaq istəyirsiniz?"))return;
 
 const {error}=await supabaseClient
 .from("profiles")
 .update({
-status:statusName
+is_manager:true,
+is_head_manager:false,
+rank:"manager"
 })
 .eq("id",user.id);
 
 if(error){
-
-alert(
-"Status sütunu Supabase-də yoxdur. profiles cədvəlinə status sütunu əlavə edin."
-);
-
+alert(error.message);
 return;
+}
+
+alert("Təbriklər! MENECER statusunuz aktivdir.");
+
+await loadProfile();
+await loadReferral();
 
 }
 
-alert(`Təbriklər! ${selected.name} statusunuz aktivdir.`);
+async function becomeHeadManager(){
+
+if(!confirm("Baş menecer olmaq istəyirsiniz?"))return;
+
+const {error}=await supabaseClient
+.from("profiles")
+.update({
+is_head_manager:true,
+is_manager:true,
+rank:"head_manager"
+})
+.eq("id",user.id);
+
+if(error){
+alert(error.message);
+return;
+}
+
+alert("Təbriklər! BAŞ MENECER statusunuz aktivdir.");
+
+await loadProfile();
+await loadReferral();
+
+}
+
+async function becomeRegionalManager(){
+
+if(!confirm("Regional Rəhbər olmaq istəyirsiniz?"))return;
+
+const {error}=await supabaseClient
+.from("profiles")
+.update({
+is_head_manager:true,
+is_manager:true,
+rank:"regional_rehber"
+})
+.eq("id",user.id);
+
+if(error){
+alert(error.message);
+return;
+}
+
+alert("Təbriklər! REGİONAL RƏHBƏR statusunuz aktivdir.");
 
 await loadProfile();
 await loadReferral();
@@ -691,7 +947,7 @@ investHistory.innerHTML=(data&&data.length)
 data.map(x=>`
 
 <div class="row">
-<span>${Number(x.amount).toFixed(2)} $</span>
+<span>${Number(x.amount).toFixed(2)} AZN</span>
 <b class="${x.status==="approved"?"green":"yellow"}">
 ${x.status}
 </b>
@@ -716,18 +972,14 @@ const {data}=await supabaseClient
 .gte("created_at",today.toISOString());
 
 if(data&&data.length){
-
 alert("Bu gün artıq fəaliyyət etmisiniz.");
 return;
-
 }
 
 adModal.classList.remove("hidden");
-
 finishBtn.disabled=true;
 
 let sec=30;
-
 timer.innerText=sec;
 
 clearInterval(timerInterval);
@@ -735,15 +987,12 @@ clearInterval(timerInterval);
 timerInterval=setInterval(()=>{
 
 sec--;
-
 timer.innerText=sec;
 
 if(sec<=0){
 
 clearInterval(timerInterval);
-
 finishBtn.disabled=false;
-
 finishBtn.innerText="Qazancı götür";
 
 }
@@ -775,7 +1024,7 @@ adModal.classList.add("hidden");
 
 await loadEarnings();
 
-alert("1 $ qazanc əlavə edildi.");
+alert("1 AZN qazanc əlavə edildi.");
 
 }
 
@@ -836,7 +1085,6 @@ return;
 }
 
 investMsg.style.color="#40dc91";
-
 investMsg.innerText="Yatırım sorğusu göndərildi.";
 
 await loadInvestment();
@@ -862,7 +1110,6 @@ loadAdmin();
 async function logout(){
 
 await supabaseClient.auth.signOut();
-
 location.reload();
 
 }
@@ -878,7 +1125,7 @@ adminInvest.innerHTML=(data||[]).map(x=>`
 
 <div class="admin-item">
 
-<b>${Number(x.amount).toFixed(2)} $</b>
+<b>${Number(x.amount).toFixed(2)} AZN</b>
 
 <p>Status: ${x.status}</p>
 
@@ -910,9 +1157,7 @@ await loadAdmin();
 supabaseClient.auth.getSession().then(x=>{
 
 if(x.data.session){
-
 openApp(x.data.session.user);
-
 }
 
 });
