@@ -34,7 +34,7 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #263247}
 .task{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
 .task button{background:#7357ff;color:white}
-.refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0}
+.refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0;word-break:break-all}
 .info{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin:15px 0;line-height:1.6}
 .logout{background:#252e40;color:white;margin-top:20px}
 .admin{border-color:#7357ff}
@@ -280,10 +280,7 @@ const {error:profileError}=await supabaseClient
 
 id:data.user.id,
 email:email,
-
-/* DÜZGÜN SÜTUN ADI */
 referral_code:newCode,
-
 referred_by:referral||null,
 week:1,
 is_manager:false
@@ -339,12 +336,13 @@ const {data,error}=await supabaseClient
 
 if(error){
 
-console.log(error);
+console.error("Profile yüklənməsi xətası:",error);
 return;
 
 }
 
 profile=data;
+console.log("Profil yükləndi:",profile);
 
 }
 
@@ -403,10 +401,17 @@ data.map(x=>`
 
 async function loadReferral(){
 
-if(!profile)return;
+if(!profile){
+console.warn("Profil hələ yüklənmədi");
+setTimeout(loadReferral,500);
+return;
+}
 
-/* DÜZGÜN SÜTUN ADI */
+console.log("Referal yüklənir...",profile);
+
 const myCode=profile.referral_code;
+
+console.log("Dəvət kodu:",myCode);
 
 referralCode.innerText=myCode||"Kod yoxdur";
 accountRef.innerText=myCode||"Kod yoxdur";
@@ -634,6 +639,10 @@ document.getElementById(x+"Page").classList.add("hidden");
 });
 
 document.getElementById(name+"Page").classList.remove("hidden");
+
+if(name==="admin"){
+loadAdmin();
+}
 
 }
 
