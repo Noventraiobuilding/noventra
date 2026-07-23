@@ -1,12 +1,9 @@
-<!DOCTYPE html>
-<html lang="az">
+<!DOCTYPE html><html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Noventra</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>
 *{box-sizing:border-box}
 body{margin:0;background:#080b14;color:#fff;font-family:Arial}
 .hidden{display:none!important}
@@ -45,7 +42,6 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .adbox h1{color:#9d87ff}
 .adbox button{background:#40dc91;margin-top:20px}
 
-/* PREMIUM MENECER ŞƏRTLƏRİ */
 .manager-premium{
 margin-top:18px;
 padding:20px;
@@ -117,12 +113,7 @@ color:#ffd166;
 @media(max-width:700px){
 .grid,.two{grid-template-columns:1fr}
 }
-</style>
-</head>
-
-<body>
-
-<section id="loginPage" class="auth">
+</style></head><body><section id="loginPage" class="auth">
 <div class="box">
 <div class="logo">NOVENTRA</div>
 <input id="loginEmail" type="email" placeholder="Email">
@@ -131,9 +122,7 @@ color:#ffd166;
 <div class="switch" onclick="showRegister()">Hesab yarat</div>
 <div id="loginMsg" class="msg"></div>
 </div>
-</section>
-
-<section id="registerPage" class="auth hidden">
+</section><section id="registerPage" class="auth hidden">
 <div class="box">
 <div class="logo">NOVENTRA</div>
 <input id="regEmail" type="email" placeholder="Email">
@@ -143,81 +132,45 @@ color:#ffd166;
 <div class="switch" onclick="showLogin()">Girişə qayıt</div>
 <div id="regMsg" class="msg"></div>
 </div>
-</section>
-
-<section id="app" class="hidden">
-
-<div class="header">
+</section><section id="app" class="hidden"><div class="header">
 <div class="logo">NOVENTRA</div>
-</div>
-
-<nav class="nav">
+</div><nav class="nav">
 <button id="homeBtn" class="active" onclick="page('home')">Ana səhifə</button>
 <button id="earnBtn" onclick="page('earn')">Qazanc</button>
 <button id="investBtn" onclick="page('invest')">Yatırım</button>
 <button id="accountBtn" onclick="page('account')">Hesabım</button>
 <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
-</nav>
-
-<div id="homePage">
-
-<h1>Xoş gəlmisiniz</h1>
-<p class="muted">Hesabınızın ümumi vəziyyəti</p>
-
-<div class="grid">
+</nav><div id="homePage"><h1>Xoş gəlmisiniz</h1>
+<p class="muted">Hesabınızın ümumi vəziyyəti</p><div class="grid">
 <div class="card">
 <div class="muted">Aktiv balans</div>
 <div id="balance" class="value">0.00 AZN</div>
-</div>
-
-<div class="card">
+</div><div class="card">
 <div class="muted">Ümumi qazanc</div>
 <div id="total" class="value green">0.00 AZN</div>
-</div>
-
-<div class="card">
+</div><div class="card">
 <div class="muted">Status</div>
 <div id="status" class="value purple">1-ci həftə</div>
 </div>
-</div>
-
-<div class="two">
-
-<div class="card">
+</div><div class="two"><div class="card">
 <h2>Fəaliyyət</h2>
 <p class="muted">Yatırım təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.</p>
 <div id="taskArea"></div>
-</div>
-
-<div class="card">
+</div><div class="card">
 <h2>Referal sistemi</h2>
 <p class="muted">Sənin dəvət kodun:</p>
-<div id="referralCode" class="refcode">Yüklənir...</div>
-
-<div class="row">
+<div id="referralCode" class="refcode">Yüklənir...</div><div class="row">
 <span class="muted">Dəvət etdiyin insanlar</span>
-<b id="refCount">0/10</b>
-</div>
-
-<div id="managerArea"></div>
-
-</div>
-
-</div>
-</div>
-
-<div id="earnPage" class="hidden">
+<b id="refCount">0/15</b>
+</div><div id="managerArea"></div></div></div>
+</div><div id="earnPage" class="hidden">
 <h1>Qazanc</h1>
 <div class="card">
 <h2>Qazanc tarixçəsi</h2>
 <div id="history"></div>
 </div>
-</div>
-
-<div id="investPage" class="hidden">
-<h1>Yatırım</h1>
-
-<div class="card">
+</div><div id="investPage" class="hidden">
+<h1>Yatırım</h1><div class="card">
 <div class="info">
 <b>Yatırım şərtləri:</b>
 <br><br>
@@ -230,63 +183,36 @@ color:#ffd166;
 5243754439761469
 <br><br>
 Pul köçürdükdən sonra çek şəklini yükləyin.
-</div>
-
-<input id="investAmount" type="number" placeholder="Məbləğ">
+</div><input id="investAmount" type="number" placeholder="Məbləğ">
 <input id="receipt" type="file" accept="image/*">
 <button class="main" onclick="invest()">Ödəniş etdim</button>
 <div id="investMsg" class="msg"></div>
-</div>
-
-<div class="card">
+</div><div class="card">
 <h2>Yatırım tarixçəsi</h2>
 <div id="investHistory"></div>
 </div>
-</div>
-
-<div id="accountPage" class="hidden">
-<h1>Hesabım</h1>
-
-<div class="card">
-
-<div class="row">
+</div><div id="accountPage" class="hidden">
+<h1>Hesabım</h1><div class="card"><div class="row">
 <span class="muted">E-poçt</span>
 <b id="email"></b>
-</div>
-
-<div class="row">
+</div><div class="row">
 <span class="muted">Hesab statusu</span>
 <b id="accountStatus" class="green"></b>
-</div>
-
-<div class="row">
+</div><div class="row">
 <span class="muted">Referal kodun</span>
 <b id="accountRef" class="yellow">—</b>
-</div>
-
-<div class="info">
+</div><div class="info">
 <b>NOVENTRA dəstək</b><br>
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
-</div>
-
-<button class="logout" onclick="logout()">Hesabdan çıx</button>
+</div><button class="logout" onclick="logout()">Hesabdan çıx</button>
 
 </div>
-</div>
-
-<div id="adminPage" class="hidden">
-<h1>Admin Panel</h1>
-
-<div class="card admin">
+</div><div id="adminPage" class="hidden">
+<h1>Admin Panel</h1><div class="card admin">
 <h2>Yatırım sorğuları</h2>
 <div id="adminInvest"></div>
 </div>
-
-</div>
-
-</section>
-
-<div id="adModal" class="ad hidden">
+</div></section><div id="adModal" class="ad hidden">
 <div class="adbox">
 <h1>NOVENTRA</h1>
 <h2>Fəaliyyət</h2>
@@ -294,9 +220,7 @@ Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 <div id="timer">30</div>
 <button id="finishBtn" disabled onclick="finishTask()">Gözləyin...</button>
 </div>
-</div>
-
-<script>
+</div><script>
 
 const SUPABASE_URL =
 "https://yafncpfkjmealuwmvcgc.supabase.co";
@@ -312,6 +236,7 @@ const ADMIN_EMAIL="Ayazdiana666@gmail.com";
 let user=null;
 let profile=null;
 let timerInterval=null;
+let currentDailyEarning=1;
 
 function generateCode(){
 return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
@@ -501,13 +426,35 @@ const {count}=await supabaseClient
 .select("*",{count:"exact",head:true})
 .eq("referred_by",myCode);
 
-refCount.innerText=(count||0)+"/15";
+const referralCount=count||0;
 
-const manager=profile.is_manager===true;
-const week=profile.week||1;
+refCount.innerText=referralCount+"/15";
 
-status.innerText=manager?"Menecer":week+"-ci həftə";
-accountStatus.innerText=manager?"Menecer":week+"-ci həftə";
+const {data:investments}=await supabaseClient
+.from("investments")
+.select("amount,status")
+.eq("user_id",user.id)
+.eq("status","approved");
+
+const approvedInvestment=Math.max(
+...(investments||[]).map(x=>Number(x.amount)||0),
+0
+);
+
+let userStatus="1-ci həftə";
+currentDailyEarning=1;
+
+if(referralCount>=15 && approvedInvestment>=70){
+userStatus="BAŞ MENECER";
+currentDailyEarning=15;
+}
+else if(referralCount>=8 && approvedInvestment>=45){
+userStatus="MENECER";
+currentDailyEarning=10;
+}
+
+status.innerText=userStatus;
+accountStatus.innerText=userStatus;
 
 managerArea.innerHTML=`
 
@@ -534,6 +481,11 @@ managerArea.innerHTML=`
 </div>
 
 <div class="manager-premium-line">
+<span class="muted">Gündəlik qazanc</span>
+<b class="green">10 AZN</b>
+</div>
+
+<div class="manager-premium-line">
 <span class="muted">Status</span>
 <span class="manager-premium-badge manager">MENECER</span>
 </div>
@@ -554,6 +506,11 @@ managerArea.innerHTML=`
 <div class="manager-premium-line">
 <span class="muted">Yatırım şərti</span>
 <b class="yellow">70 AZN</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Gündəlik qazanc</span>
+<b class="green">15 AZN</b>
 </div>
 
 <div class="manager-premium-line">
@@ -582,7 +539,7 @@ const approved=(data||[]).some(x=>x.status==="approved");
 if(approved){
 taskArea.innerHTML=`
 <div class="task">
-<span>30 saniyəlik fəaliyyət</span>
+<span>Gündəlik fəaliyyət — ${currentDailyEarning} AZN</span>
 <button onclick="startTask()">Başla</button>
 </div>
 `;
@@ -622,7 +579,7 @@ const {data}=await supabaseClient
 .from("earnings")
 .select("id")
 .eq("user_id",user.id)
-.eq("description","NOVENTRA 30 saniyəlik fəaliyyət")
+.eq("description","NOVENTRA gündəlik fəaliyyət")
 .gte("created_at",today.toISOString());
 
 if(data&&data.length){
@@ -657,8 +614,8 @@ const {error}=await supabaseClient
 .from("earnings")
 .insert({
 user_id:user.id,
-amount:1,
-description:"NOVENTRA 30 saniyəlik fəaliyyət"
+amount:currentDailyEarning,
+description:"NOVENTRA gündəlik fəaliyyət"
 });
 
 if(error){
@@ -668,7 +625,7 @@ return;
 
 adModal.classList.add("hidden");
 await loadEarnings();
-alert("1 AZN qazanc əlavə edildi.");
+alert(currentDailyEarning+" AZN qazanc əlavə edildi.");
 
 }
 
@@ -786,7 +743,5 @@ openApp(x.data.session.user);
 
 });
 
-</script>
-
-</body>
+</script></body>
 </html>
