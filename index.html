@@ -34,7 +34,7 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #263247}
 .task{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
 .task button{background:#7357ff;color:white}
-.refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0;word-break:break-all}
+.refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0;word-break:break-all;padding:10px;background:#0b111d;border-radius:8px}
 .info{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin:15px 0;line-height:1.6}
 .logout{background:#252e40;color:white;margin-top:20px}
 .admin{border-color:#7357ff}
@@ -233,7 +233,7 @@ let user=null;
 let profile=null;
 let timerInterval=null;
 
-function code(){
+function generateCode(){
 return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
 }
 
@@ -272,26 +272,25 @@ return;
 
 if(data.user){
 
-const newCode=code();
+const newCode=generateCode();
+
+console.log("Yeni profil yaradılıyor:", {id: data.user.id, email, referral_code: newCode});
 
 const {error:profileError}=await supabaseClient
 .from("profiles")
 .insert({
-
 id:data.user.id,
 email:email,
 referral_code:newCode,
 referred_by:referral||null,
 week:1,
 is_manager:false
-
 });
 
 if(profileError){
-
-regMsg.innerText=profileError.message;
+console.error("Profile insert xətası:", profileError);
+regMsg.innerText="Profil xətası: "+profileError.message;
 return;
-
 }
 
 }
@@ -309,17 +308,13 @@ const emailValue=loginEmail.value.trim();
 const passwordValue=loginPassword.value;
 
 const {data,error}=await supabaseClient.auth.signInWithPassword({
-
 email:emailValue,
 password:passwordValue
-
 });
 
 if(error){
-
 loginMsg.innerText="Email və ya şifrə yanlışdır.";
 return;
-
 }
 
 await openApp(data.user);
@@ -328,6 +323,8 @@ await openApp(data.user);
 
 async function loadProfile(){
 
+console.log("loadProfile başladı, user.id=",user.id);
+
 const {data,error}=await supabaseClient
 .from("profiles")
 .select("*")
@@ -335,15 +332,12 @@ const {data,error}=await supabaseClient
 .single();
 
 if(error){
-
-console.error("Profile yüklənməsi xətası:",error);
-return false;
-
+console.error("Profile SELECT xətası:", error);
+return;
 }
 
 profile=data;
-console.log("Profil uğurla yükləndi:",profile);
-return true;
+console.log("Profil yükləndi:",profile);
 
 }
 
@@ -358,19 +352,13 @@ app.classList.remove("hidden");
 email.innerText=user.email;
 
 if(user.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
-
 adminBtn.classList.remove("hidden");
-
 }
 
 await loadProfile();
-console.log("loadProfile bitdi, profile:",profile);
 await loadEarnings();
-console.log("loadEarnings bitdi");
 await loadReferral();
-console.log("loadReferral bitdi");
 await loadInvestment();
-console.log("loadInvestment bitdi");
 
 }
 
@@ -408,16 +396,34 @@ async function loadReferral(){
 
 console.log("loadReferral başladı, profile=",profile);
 
-if(!profile || !profile.referral_code){
-console.warn("Profil NULL və ya referral_code yoxdur!");
-referralCode.innerText="Kod yoxdur";
-accountRef.innerText="Kod yoxdur";
+if(!profile){
+referralCode.innerText="Profil yoxdur";
+accountRef.innerText="Profil yoxdur";
 return;
 }
 
-const myCode=profile.referral_code;
+if(!profile.referral_code){
+console.warn("Referral code NULL!");
 
-console.log("Dəvət kodu tapıldı:",myCode);
+const newCode=generateCode();
+console.log("Yeni kod yaradılıyor:",newCode);
+
+const {error}=await supabaseClient
+.from("profiles")
+.update({referral_code:newCode})
+.eq("id",user.id);
+
+if(error){
+console.error("Update xətası:",error);
+referralCode.innerText="Kod xətası";
+return;
+}
+
+profile.referral_code=newCode;
+}
+
+const myCode=profile.referral_code;
+console.log("Kod göstərilir:",myCode);
 
 referralCode.innerText=myCode;
 accountRef.innerText=myCode;
@@ -464,16 +470,13 @@ const {data}=await supabaseClient
 const approved=(data||[]).some(x=>x.status==="approved");
 
 if(approved){
-
 taskArea.innerHTML=`
 <div class="task">
 <span>30 saniyəlik fəaliyyət</span>
 <button onclick="startTask()">Başla</button>
 </div>
 `;
-
 }else{
-
 taskArea.innerHTML=`
 <div class="info">
 Yatırım etmədən fəaliyyətə başlamaq mümkün deyil.
@@ -483,7 +486,6 @@ YATIRIM ET
 </button>
 </div>
 `;
-
 }
 
 investHistory.innerHTML=(data&&data.length)
@@ -514,14 +516,11 @@ const {data}=await supabaseClient
 .gte("created_at",today.toISOString());
 
 if(data&&data.length){
-
 alert("Bu gün artıq fəaliyyət etmisiniz.");
 return;
-
 }
 
 adModal.classList.remove("hidden");
-
 finishBtn.disabled=true;
 
 let sec=30;
@@ -530,18 +529,14 @@ timer.innerText=sec;
 clearInterval(timerInterval);
 
 timerInterval=setInterval(()=>{
-
 sec--;
 timer.innerText=sec;
 
 if(sec<=0){
-
 clearInterval(timerInterval);
 finishBtn.disabled=false;
 finishBtn.innerText="Qazancı götür";
-
 }
-
 },1000);
 
 }
@@ -551,24 +546,18 @@ async function finishTask(){
 const {error}=await supabaseClient
 .from("earnings")
 .insert({
-
 user_id:user.id,
 amount:1,
 description:"NOVENTRA 30 saniyəlik fəaliyyət"
-
 });
 
 if(error){
-
 alert(error.message);
 return;
-
 }
 
 adModal.classList.add("hidden");
-
 await loadEarnings();
-
 alert("1 AZN qazanc əlavə edildi.");
 
 }
@@ -579,17 +568,13 @@ const amount=Number(investAmount.value);
 const file=receipt.files[0];
 
 if(!amount||amount<=0){
-
 investMsg.innerText="Məbləği yazın.";
 return;
-
 }
 
 if(!file){
-
 investMsg.innerText="Çek şəklini seçin.";
 return;
-
 }
 
 investMsg.innerText="Yüklənir...";
@@ -601,10 +586,8 @@ const {error:uploadError}=await supabaseClient.storage
 .upload(name,file);
 
 if(uploadError){
-
 investMsg.innerText=uploadError.message;
 return;
-
 }
 
 const {data:urlData}=supabaseClient.storage
@@ -614,19 +597,15 @@ const {data:urlData}=supabaseClient.storage
 const {error}=await supabaseClient
 .from("investments")
 .insert({
-
 user_id:user.id,
 amount,
 receipt_url:urlData.publicUrl,
 status:"pending"
-
 });
 
 if(error){
-
 investMsg.innerText=error.message;
 return;
-
 }
 
 investMsg.style.color="#40dc91";
@@ -637,9 +616,7 @@ await loadInvestment();
 }
 
 function page(name){
-
 const pages=["home","earn","invest","account","admin"];
-
 pages.forEach(x=>{
 document.getElementById(x+"Page").classList.add("hidden");
 });
@@ -649,15 +626,11 @@ document.getElementById(name+"Page").classList.remove("hidden");
 if(name==="admin"){
 loadAdmin();
 }
-
 }
 
 async function logout(){
-
 await supabaseClient.auth.signOut();
-
 location.reload();
-
 }
 
 async function loadAdmin(){
@@ -668,46 +641,32 @@ const {data}=await supabaseClient
 .order("created_at",{ascending:false});
 
 adminInvest.innerHTML=(data||[]).map(x=>`
-
 <div class="admin-item">
-
 <b>${Number(x.amount).toFixed(2)} AZN</b>
-
 <p>Status: ${x.status}</p>
-
 ${x.receipt_url?`<img src="${x.receipt_url}">`:""}
-
 <br>
-
 <button onclick="approve('${x.id}')">
 Təsdiqlə
 </button>
-
 </div>
-
 `).join("");
 
 }
 
 async function approve(id){
-
 await supabaseClient
 .from("investments")
 .update({status:"approved"})
 .eq("id",id);
 
 await loadAdmin();
-
 }
 
 supabaseClient.auth.getSession().then(x=>{
-
 if(x.data.session){
-
 openApp(x.data.session.user);
-
 }
-
 });
 
 </script>
