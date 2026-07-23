@@ -214,16 +214,33 @@ Yüklənir...
 <div class="card">
 
 <div class="info">
+
 <b>Yatırım üçün məlumat</b>
+
 <br><br>
+
+💰 <b>Minimum yatırım: 20 $</b>
+
+<br>
+
+📈 <b>İlk həftə gündəlik qazanc: 1 $</b>
+
+<br><br>
+
 Yatırım etdikdən sonra ödəniş çekini yükləyin.
+
 <br><br>
+
 <b>Yatırım üçün kart:</b>
+
 <br><br>
+
 5243754439761469
+
 </div>
 
-<input id="investAmount" type="number" placeholder="Məbləğ ($)">
+<input id="investAmount" type="number" min="20" placeholder="Məbləğ ($)">
+
 <input id="receipt" type="file" accept="image/*">
 
 <button class="main" onclick="invest()">
@@ -389,21 +406,27 @@ locked:true
 };
 
 function generateCode(){
+
 return "NV"+
 Math.random()
 .toString(36)
 .substring(2,8)
 .toUpperCase();
+
 }
 
 function showRegister(){
+
 loginPage.classList.add("hidden");
 registerPage.classList.remove("hidden");
+
 }
 
 function showLogin(){
+
 registerPage.classList.add("hidden");
 loginPage.classList.remove("hidden");
+
 }
 
 async function register(){
@@ -681,44 +704,6 @@ return Math.max(
 ...(data||[]).map(x=>Number(x.amount)||0),
 0
 );
-
-}
-
-async function getActiveReferralInvestment(){
-
-const {data:refs}=
-await supabaseClient
-.from("profiles")
-.select("id")
-.eq("referred_by",profile.referral_code);
-
-const ids=
-(refs||[]).map(x=>x.id);
-
-if(!ids.length)return 0;
-
-const {data:investments}=
-await supabaseClient
-.from("investments")
-.select("user_id,amount")
-.in("user_id",ids)
-.eq("status","approved");
-
-const totals={};
-
-(investments||[]).forEach(x=>{
-
-if(!totals[x.user_id])
-totals[x.user_id]=0;
-
-totals[x.user_id]+=
-Number(x.amount||0);
-
-});
-
-return Object.values(totals)
-.filter(x=>x>0)
-.reduce((a,b)=>a+b,0);
 
 }
 
@@ -1243,10 +1228,10 @@ Number(investAmount.value);
 const file=
 receipt.files[0];
 
-if(!amount||amount<=0){
+if(!amount||amount<20){
 
 investMsg.innerText=
-"Məbləği yazın.";
+"Minimum yatırım məbləği 20 $ olmalıdır.";
 
 return;
 
@@ -1431,4 +1416,4 @@ x.data.session.user
 </script>
 
 </body>
-  </html>
+</html>
