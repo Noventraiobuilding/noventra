@@ -337,12 +337,13 @@ const {data,error}=await supabaseClient
 if(error){
 
 console.error("Profile yüklənməsi xətası:",error);
-return;
+return false;
 
 }
 
 profile=data;
-console.log("Profil yükləndi:",profile);
+console.log("Profil uğurla yükləndi:",profile);
+return true;
 
 }
 
@@ -363,9 +364,13 @@ adminBtn.classList.remove("hidden");
 }
 
 await loadProfile();
+console.log("loadProfile bitdi, profile:",profile);
 await loadEarnings();
+console.log("loadEarnings bitdi");
 await loadReferral();
+console.log("loadReferral bitdi");
 await loadInvestment();
+console.log("loadInvestment bitdi");
 
 }
 
@@ -401,20 +406,21 @@ data.map(x=>`
 
 async function loadReferral(){
 
-if(!profile){
-console.warn("Profil hələ yüklənmədi");
-setTimeout(loadReferral,500);
+console.log("loadReferral başladı, profile=",profile);
+
+if(!profile || !profile.referral_code){
+console.warn("Profil NULL və ya referral_code yoxdur!");
+referralCode.innerText="Kod yoxdur";
+accountRef.innerText="Kod yoxdur";
 return;
 }
 
-console.log("Referal yüklənir...",profile);
-
 const myCode=profile.referral_code;
 
-console.log("Dəvət kodu:",myCode);
+console.log("Dəvət kodu tapıldı:",myCode);
 
-referralCode.innerText=myCode||"Kod yoxdur";
-accountRef.innerText=myCode||"Kod yoxdur";
+referralCode.innerText=myCode;
+accountRef.innerText=myCode;
 
 const {count}=await supabaseClient
 .from("profiles")
