@@ -9,415 +9,70 @@
 
 <style>
 *{box-sizing:border-box}
-
-body{
-margin:0;
-font-family:Arial,sans-serif;
-background:#080b14;
-color:#fff;
-}
-
+body{margin:0;font-family:Arial,sans-serif;background:#080b14;color:#fff}
 .hidden{display:none!important}
-
-button{
-border:0;
-cursor:pointer;
-font-weight:bold;
-}
-
-.auth{
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-}
-
-.auth-box{
-width:100%;
-max-width:420px;
-background:#111827;
-padding:35px;
-border-radius:24px;
-border:1px solid #263247;
-}
-
-.logo{
-text-align:center;
-font-size:28px;
-font-weight:900;
-letter-spacing:3px;
-margin-bottom:30px;
-}
-
-input,textarea{
-width:100%;
-padding:15px;
-margin-bottom:14px;
-border-radius:12px;
-border:1px solid #2c3a52;
-background:#0b111d;
-color:white;
-outline:none;
-}
-
-.main-btn{
-width:100%;
-padding:15px;
-border-radius:12px;
-background:#7357ff;
-color:white;
-}
-
-.switch{
-text-align:center;
-margin-top:20px;
-color:#8995aa;
-cursor:pointer;
-}
-
-.message{
-text-align:center;
-margin-top:15px;
-color:#ff8b8b;
-font-size:14px;
-}
-
-#app{
-min-height:100vh;
-padding-bottom:90px;
-}
-
-.header{
-max-width:1100px;
-margin:auto;
-padding:25px 20px 10px;
-text-align:center;
-}
-
+button{border:0;cursor:pointer;font-weight:bold}
+.auth{min-height:100vh;display:flex;justify-content:center;align-items:center;padding:20px}
+.auth-box{width:100%;max-width:420px;background:#111827;padding:35px;border-radius:24px;border:1px solid #263247}
+.logo{text-align:center;font-size:28px;font-weight:900;letter-spacing:3px;margin-bottom:30px}
+input,textarea{width:100%;padding:15px;margin-bottom:14px;border-radius:12px;border:1px solid #2c3a52;background:#0b111d;color:white;outline:none}
+.main-btn{width:100%;padding:15px;border-radius:12px;background:#7357ff;color:white}
+.switch{text-align:center;margin-top:20px;color:#8995aa;cursor:pointer}
+.message{text-align:center;margin-top:15px;color:#ff8b8b;font-size:14px}
+#app{min-height:100vh;padding-bottom:90px}
+.header{max-width:1100px;margin:auto;padding:25px 20px 10px;text-align:center}
 .header .logo{margin:0}
-
-.nav{
-max-width:1100px;
-margin:25px auto;
-display:flex;
-justify-content:space-around;
-border-bottom:1px solid #263247;
-overflow-x:auto;
-}
-
-.nav button{
-background:none;
-color:#8995aa;
-padding:15px 14px;
-font-size:14px;
-white-space:nowrap;
-}
-
-.nav button.active{
-color:white;
-border-bottom:2px solid #7357ff;
-}
-
-.content{
-max-width:1100px;
-margin:auto;
-padding:0 20px;
-}
-
-.welcome{
-margin:30px 0;
-}
-
-.welcome h1{
-font-size:32px;
-margin-bottom:8px;
-}
-
-.welcome p{
-color:#8995aa;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:18px;
-}
-
-.card{
-background:#111827;
-border:1px solid #263247;
-border-radius:20px;
-padding:24px;
-margin-bottom:18px;
-}
-
-.label{
-color:#8995aa;
-font-size:14px;
-}
-
-.value{
-font-size:28px;
-font-weight:bold;
-margin-top:12px;
-}
-
-.green{color:#40dc91}
-.purple{color:#9d87ff}
-.yellow{color:#ffd166}
-.red{color:#ff7373}
-
-.main-panel{
-margin-top:22px;
-display:grid;
-grid-template-columns:1.4fr 1fr;
-gap:18px;
-}
-
-.task{
-margin-top:20px;
-padding:18px;
-background:#0b111d;
-border-radius:15px;
-border:1px solid #263247;
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:15px;
-}
-
-.task button{
-background:#7357ff;
-color:white;
-padding:11px 16px;
-border-radius:10px;
-}
-
-.earning-box{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:18px;
-}
-
-.earning-row,
-.account-row{
-display:flex;
-justify-content:space-between;
-padding:18px 0;
-border-bottom:1px solid #263247;
-gap:15px;
-}
-
-.muted{
-color:#8995aa;
-}
-
-.account{
-max-width:700px;
-}
-
-.logout{
-margin-top:25px;
-padding:14px 20px;
-border-radius:10px;
-background:#252e40;
-color:white;
-}
-
-.form-card{
-max-width:700px;
-}
-
-.info-box{
-padding:15px;
-border-radius:12px;
-background:#0b111d;
-border:1px solid #263247;
-margin-bottom:18px;
-line-height:1.6;
-}
-
-.receipt-preview{
-max-width:100%;
-max-height:250px;
-border-radius:12px;
-margin-top:10px;
-display:none;
-}
-
-.status-pending{
-color:#ffd166;
-}
-
-.admin-box{
-border:1px solid #7357ff;
-background:#15112b;
-}
-
-.admin-item{
-background:#0b111d;
-border:1px solid #263247;
-border-radius:15px;
-padding:18px;
-margin-top:15px;
-}
-
-.admin-item img{
-max-width:100%;
-max-height:300px;
-border-radius:12px;
-margin-top:12px;
-}
-
-.admin-btn{
-padding:10px 15px;
-border-radius:10px;
-background:#40dc91;
-color:#08110d;
-margin-top:12px;
-}
-
-.week-card{
-background:linear-gradient(135deg,#111827,#17132e);
-border:1px solid #7357ff;
-border-radius:22px;
-padding:25px;
-margin-bottom:20px;
-}
-
-.week-title{
-font-size:22px;
-font-weight:bold;
-margin-bottom:10px;
-}
-
-.week-lock{
-font-size:35px;
-margin-bottom:10px;
-}
-
-.manager-box{
-background:linear-gradient(135deg,#2b1e5e,#17132e);
-border:1px solid #9d87ff;
-}
-
-.manager-btn{
-width:100%;
-padding:15px;
-border-radius:12px;
-background:#ffd166;
-color:#16120a;
-margin-top:15px;
-}
-
-.referral-code{
-font-size:24px;
-font-weight:bold;
-letter-spacing:3px;
-color:#ffd166;
-margin:10px 0;
-}
-
-.ad-modal{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.94);
-display:flex;
-justify-content:center;
-align-items:center;
-padding:20px;
-z-index:9999;
-}
-
-.ad-box{
-width:100%;
-max-width:600px;
-min-height:390px;
-background:linear-gradient(135deg,#111827,#1d1740);
-border:1px solid #7357ff;
-border-radius:24px;
-padding:35px;
-text-align:center;
-display:flex;
-flex-direction:column;
-justify-content:center;
-}
-
-.ad-logo{
-font-size:34px;
-font-weight:900;
-letter-spacing:6px;
-color:#9d87ff;
-margin-bottom:35px;
-}
-
-.ad-text{
-font-size:24px;
-font-weight:bold;
-line-height:1.5;
-min-height:100px;
-display:flex;
-justify-content:center;
-align-items:center;
-}
-
-.ad-timer{
-margin-top:30px;
-font-size:18px;
-color:#8995aa;
-}
-
-.ad-close{
-margin-top:25px;
-padding:14px;
-border-radius:12px;
-background:#40dc91;
-color:#08110d;
-}
-
-.ad-close:disabled{
-background:#252e40;
-color:#8995aa;
-cursor:not-allowed;
-}
+.nav{max-width:1100px;margin:25px auto;display:flex;justify-content:space-around;border-bottom:1px solid #263247;overflow-x:auto}
+.nav button{background:none;color:#8995aa;padding:15px 14px;font-size:14px;white-space:nowrap}
+.nav button.active{color:white;border-bottom:2px solid #7357ff}
+.content{max-width:1100px;margin:auto;padding:0 20px}
+.welcome{margin:30px 0}
+.welcome h1{font-size:32px;margin-bottom:8px}
+.welcome p{color:#8995aa}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{background:#111827;border:1px solid #263247;border-radius:20px;padding:24px;margin-bottom:18px}
+.label{color:#8995aa;font-size:14px}
+.value{font-size:28px;font-weight:bold;margin-top:12px}
+.green{color:#40dc91}.purple{color:#9d87ff}.yellow{color:#ffd166}.red{color:#ff7373}
+.main-panel{margin-top:22px;display:grid;grid-template-columns:1.4fr 1fr;gap:18px}
+.task{margin-top:20px;padding:18px;background:#0b111d;border-radius:15px;border:1px solid #263247;display:flex;justify-content:space-between;align-items:center;gap:15px}
+.task button{background:#7357ff;color:white;padding:11px 16px;border-radius:10px}
+.earning-box{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.earning-row,.account-row{display:flex;justify-content:space-between;padding:18px 0;border-bottom:1px solid #263247;gap:15px}
+.muted{color:#8995aa}
+.account{max-width:700px}
+.logout{margin-top:25px;padding:14px 20px;border-radius:10px;background:#252e40;color:white}
+.form-card{max-width:700px}
+.info-box{padding:15px;border-radius:12px;background:#0b111d;border:1px solid #263247;margin-bottom:18px;line-height:1.6}
+.receipt-preview{max-width:100%;max-height:250px;border-radius:12px;margin-top:10px;display:none}
+.status-pending{color:#ffd166}
+.admin-box{border:1px solid #7357ff;background:#15112b}
+.admin-item{background:#0b111d;border:1px solid #263247;border-radius:15px;padding:18px;margin-top:15px}
+.admin-item img{max-width:100%;max-height:300px;border-radius:12px;margin-top:12px}
+.admin-btn{padding:10px 15px;border-radius:10px;background:#40dc91;color:#08110d;margin-top:12px}
+.week-card{background:linear-gradient(135deg,#111827,#17132e);border:1px solid #7357ff;border-radius:22px;padding:25px;margin-bottom:20px}
+.week-title{font-size:22px;font-weight:bold;margin-bottom:10px}
+.week-lock{font-size:35px;margin-bottom:10px}
+.manager-box{background:linear-gradient(135deg,#2b1e5e,#17132e);border:1px solid #9d87ff}
+.manager-btn{width:100%;padding:15px;border-radius:12px;background:#ffd166;color:#16120a;margin-top:15px}
+.referral-code{font-size:24px;font-weight:bold;letter-spacing:3px;color:#ffd166;margin:10px 0}
+.ad-modal{position:fixed;inset:0;background:rgba(0,0,0,.94);display:flex;justify-content:center;align-items:center;padding:20px;z-index:9999}
+.ad-box{width:100%;max-width:600px;min-height:390px;background:linear-gradient(135deg,#111827,#1d1740);border:1px solid #7357ff;border-radius:24px;padding:35px;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.ad-logo{font-size:34px;font-weight:900;letter-spacing:6px;color:#9d87ff;margin-bottom:35px}
+.ad-text{font-size:24px;font-weight:bold;line-height:1.5;min-height:100px;display:flex;justify-content:center;align-items:center}
+.ad-timer{margin-top:30px;font-size:18px;color:#8995aa}
+.ad-close{margin-top:25px;padding:14px;border-radius:12px;background:#40dc91;color:#08110d}
+.ad-close:disabled{background:#252e40;color:#8995aa;cursor:not-allowed}
 
 @media(max-width:700px){
-
-.stats{
-grid-template-columns:1fr;
-}
-
-.main-panel{
-grid-template-columns:1fr;
-}
-
-.earning-box{
-grid-template-columns:1fr;
-}
-
-.welcome h1{
-font-size:25px;
-}
-
-.nav button{
-padding:14px 8px;
-font-size:12px;
-}
-
-.ad-text{
-font-size:21px;
-}
-
-.task{
-flex-direction:column;
-align-items:stretch;
-}
-
-.task button{
-width:100%;
-}
-
+.stats{grid-template-columns:1fr}
+.main-panel{grid-template-columns:1fr}
+.earning-box{grid-template-columns:1fr}
+.welcome h1{font-size:25px}
+.nav button{padding:14px 8px;font-size:12px}
+.ad-text{font-size:21px}
+.task{flex-direction:column;align-items:stretch}
+.task button{width:100%}
 }
 </style>
 </head>
@@ -425,83 +80,41 @@ width:100%;
 <body>
 
 <section id="loginPage" class="auth">
-
 <div class="auth-box">
-
 <div class="logo">NOVENTRA</div>
-
 <input id="loginEmail" type="email" placeholder="Email">
-
 <input id="loginPassword" type="password" placeholder="Şifrə">
-
 <button class="main-btn" onclick="login()">Daxil ol</button>
-
 <div class="switch" onclick="showRegister()">Hesab yarat</div>
-
 <div id="loginMessage" class="message"></div>
-
 </div>
-
 </section>
 
 <section id="registerPage" class="auth hidden">
-
 <div class="auth-box">
-
 <div class="logo">NOVENTRA</div>
-
 <input id="registerEmail" type="email" placeholder="Email">
-
 <input id="registerPassword" type="password" placeholder="Şifrə">
-
 <input id="registerReferral" type="text" placeholder="Dəvət kodu (istəyə bağlı)">
-
-<button class="main-btn" onclick="register()">
-Qeydiyyatdan keç
-</button>
-
+<button class="main-btn" onclick="register()">Qeydiyyatdan keç</button>
 <div class="switch" onclick="showLogin()">Girişə qayıt</div>
-
 <div id="registerMessage" class="message"></div>
-
 </div>
-
 </section>
 
 <section id="app" class="hidden">
 
 <header class="header">
-
 <div class="logo">NOVENTRA</div>
 
 <nav class="nav">
-
-<button id="homeBtn" class="active" onclick="openPage('home')">
-Ana səhifə
-</button>
-
-<button id="earnBtn" onclick="openPage('earnings')">
-Qazanc
-</button>
-
-<button id="investBtn" onclick="openPage('invest')">
-Yatırım
-</button>
-
-<button id="withdrawBtn" onclick="openPage('withdraw')">
-Çıxarış
-</button>
-
-<button id="accountBtn" onclick="openPage('account')">
-Hesabım
-</button>
-
-<button id="adminBtn" class="hidden" onclick="openPage('admin')">
-Admin
-</button>
-
+<button id="homeBtn" class="active" onclick="openPage('home')">Ana səhifə</button>
+<button id="earnBtn" onclick="openPage('earnings')">Qazanc</button>
+<button id="investBtn" onclick="openPage('invest')">Yatırım</button>
+<button id="withdrawBtn" onclick="openPage('withdraw')">Çıxarış</button>
+<button id="accountBtn" onclick="openPage('account')">Hesabım</button>
+<button id="adminBtn" class="hidden" onclick="openPage('admin')">Admin</button>
 </nav>
-
 </header>
 
 <main class="content">
@@ -509,43 +122,25 @@ Admin
 <div id="homePage">
 
 <div class="welcome">
-
 <h1>Xoş gəlmisiniz</h1>
-
 <p>Hesabınızın ümumi vəziyyəti</p>
-
 </div>
 
 <div class="stats">
 
 <div class="card">
-
 <div class="label">Aktiv balans</div>
-
-<div id="balanceValue" class="value">
-0.00 AZN
-</div>
-
+<div id="balanceValue" class="value">0.00 AZN</div>
 </div>
 
 <div class="card">
-
 <div class="label">Ümumi qazanc</div>
-
-<div id="totalEarningsValue" class="value green">
-0.00 AZN
-</div>
-
+<div id="totalEarningsValue" class="value green">0.00 AZN</div>
 </div>
 
 <div class="card">
-
 <div class="label">Hesab statusu</div>
-
-<div id="accountStatus" class="value purple">
-1-ci həftə
-</div>
-
+<div id="accountStatus" class="value purple">1-ci həftə</div>
 </div>
 
 </div>
@@ -553,93 +148,53 @@ Admin
 <div class="main-panel">
 
 <div class="card">
-
 <h2>Mövcud fəaliyyətlər</h2>
-
-<p class="muted">
-Gündə 1 dəfə 30 saniyəlik fəaliyyətə baxın.
-</p>
-
-<div id="tasksList">
-Yüklənir...
-</div>
-
+<p class="muted">Gündə 1 dəfə 30 saniyəlik fəaliyyətə baxın.</p>
+<div id="tasksList">Yüklənir...</div>
 </div>
 
 <div class="card">
-
 <h2>Referal sistemi</h2>
 
-<div class="muted">
-Sənin dəvət kodun:
-</div>
+<div class="muted">Sənin dəvət kodun:</div>
 
-<div id="myReferralCode" class="referral-code">
-Yüklənir...
-</div>
+<div id="myReferralCode" class="referral-code">Yüklənir...</div>
 
 <div class="earning-row">
-
-<span class="muted">
-Dəvət etdiyin insanlar
-</span>
-
-<b id="referralCount">
-0/10
-</b>
-
+<span class="muted">Dəvət etdiyin insanlar</span>
+<b id="referralCount">0/10</b>
 </div>
 
 <div id="managerBox"></div>
-
 </div>
 
 </div>
-
 </div>
 
 <div id="earningsPage" class="hidden">
 
 <div class="welcome">
-
 <h1>Qazanc</h1>
-
 <p>Real qazanc məlumatlarınız</p>
-
 </div>
 
 <div class="earning-box">
 
 <div class="card">
-
 <div class="label">Ümumi qazanc</div>
-
-<div id="earningsTotal" class="value green">
-0.00 AZN
-</div>
-
+<div id="earningsTotal" class="value green">0.00 AZN</div>
 </div>
 
 <div class="card">
-
 <div class="label">Aktiv balans</div>
-
-<div id="earningsBalance" class="value purple">
-0.00 AZN
-</div>
-
+<div id="earningsBalance" class="value purple">0.00 AZN</div>
 </div>
 
 </div>
 
 <div class="card">
-
 <h2>Qazanc tarixçəsi</h2>
-
-<div id="earningsHistory">
-Yüklənir...
-</div>
-
+<div id="earningsHistory">Yüklənir...</div>
 </div>
 
 </div>
@@ -647,51 +202,32 @@ Yüklənir...
 <div id="investPage" class="hidden">
 
 <div class="welcome">
-
 <h1>Yatırım</h1>
-
 <p>Yatırımınızı göndərin və təsdiqlənməsini gözləyin.</p>
-
 </div>
 
 <div class="card form-card">
 
 <div class="info-box">
-
 <b>Yatırım üçün admin kartı:</b>
-
 <br><br>
-
 5243754439761469
-
 <br><br>
-
 Bu karta pul köçürdükdən sonra çek şəklini aşağıda yükləyin.
-
 </div>
 
 <input id="investmentAmount" type="number" min="1" step="0.01" placeholder="Yatırım məbləği (AZN)">
-
 <input id="investmentReceipt" type="file" accept="image/*">
-
 <img id="receiptPreview" class="receipt-preview">
 
-<button class="main-btn" onclick="submitInvestment()">
-Ödəniş etdim
-</button>
-
+<button class="main-btn" onclick="submitInvestment()">Ödəniş etdim</button>
 <div id="investmentMessage" class="message"></div>
 
 </div>
 
 <div class="card">
-
 <h2>Yatırım tarixçəm</h2>
-
-<div id="investmentHistory">
-Yüklənir...
-</div>
-
+<div id="investmentHistory">Yüklənir...</div>
 </div>
 
 </div>
@@ -699,46 +235,30 @@ Yüklənir...
 <div id="withdrawPage" class="hidden">
 
 <div class="welcome">
-
 <h1>Çıxarış</h1>
-
 <p>Qazancınızı çıxarış üçün sorğu göndərin.</p>
-
 </div>
 
 <div class="card form-card">
 
 <div class="info-box">
-
 <b>Çıxarış vaxtı:</b>
 18:00-dan sonra.
-
 <br><br>
-
 Məbləği və pulun köçürüləcəyi öz 16 rəqəmli kart nömrənizi yazın.
-
 </div>
 
 <input id="withdrawAmount" type="number" min="1" step="0.01" placeholder="Çıxarış məbləği (AZN)">
-
 <input id="withdrawCard" type="text" inputmode="numeric" maxlength="16" placeholder="Öz 16 rəqəmli kart nömrəniz">
 
-<button class="main-btn" onclick="submitWithdrawal()">
-Çıxarış sorğusu göndər
-</button>
-
+<button class="main-btn" onclick="submitWithdrawal()">Çıxarış sorğusu göndər</button>
 <div id="withdrawMessage" class="message"></div>
 
 </div>
 
 <div class="card">
-
 <h2>Çıxarış tarixçəm</h2>
-
-<div id="withdrawHistory">
-Yüklənir...
-</div>
-
+<div id="withdrawHistory">Yüklənir...</div>
 </div>
 
 </div>
@@ -746,97 +266,60 @@ Yüklənir...
 <div id="accountPage" class="hidden">
 
 <div class="welcome">
-
 <h1>Hesabım</h1>
-
 <p>Hesab məlumatlarınız</p>
-
 </div>
 
 <div class="card account">
 
 <div class="account-row">
-
 <span class="muted">E-poçt</span>
-
 <span id="accountEmail">—</span>
-
 </div>
 
 <div class="account-row">
-
 <span class="muted">Hesab statusu</span>
-
-<b id="accountStatusText" class="green">
-1-ci həftə
-</b>
-
+<b id="accountStatusText" class="green">1-ci həftə</b>
 </div>
 
 <div class="account-row">
-
 <span class="muted">Referal kodun</span>
-
-<b id="accountReferralCode" class="yellow">
-—
-</b>
-
+<b id="accountReferralCode" class="yellow">—</b>
 </div>
 
 <h2>Əlaqə</h2>
 
 <div class="info-box">
-
 <b>NOVENTRA dəstək</b>
-
 <br>
-
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
-
 </div>
 
-<button class="logout" onclick="logout()">
-Hesabdan çıx
-</button>
+<button class="logout" onclick="logout()">Hesabdan çıx</button>
 
 </div>
-
 </div>
 
 <div id="adminPage" class="hidden">
 
 <div class="welcome">
-
 <h1>Admin Panel</h1>
-
 <p>Yatırım və çıxarış sorğularının idarə olunması</p>
-
 </div>
 
 <div class="card admin-box">
-
 <h2>Yatırım sorğuları</h2>
-
-<div id="adminInvestments">
-Yüklənir...
-</div>
-
+<div id="adminInvestments">Yüklənir...</div>
 </div>
 
 <div class="card admin-box">
-
 <h2>Çıxarış sorğuları</h2>
-
-<div id="adminWithdrawals">
-Yüklənir...
-</div>
-
+<div id="adminWithdrawals">Yüklənir...</div>
 </div>
 
 </div>
 
 </main>
-
 </section>
 
 <div id="adModal" class="ad-modal hidden">
@@ -858,7 +341,6 @@ Hər böyük yol bir addımla başlayır.
 </button>
 
 </div>
-
 </div>
 
 <script>
@@ -880,7 +362,7 @@ const ADMIN_EMAIL =
 
 let currentUser = null;
 let currentProfile = null;
-let adTimerInterval;
+let adTimerInterval = null;
 
 function generateReferralCode(){
 
@@ -895,7 +377,6 @@ Math.random()
 function showRegister(){
 
 document.getElementById("loginPage").classList.add("hidden");
-
 document.getElementById("registerPage").classList.remove("hidden");
 
 }
@@ -903,7 +384,6 @@ document.getElementById("registerPage").classList.remove("hidden");
 function showLogin(){
 
 document.getElementById("registerPage").classList.add("hidden");
-
 document.getElementById("loginPage").classList.remove("hidden");
 
 }
@@ -943,7 +423,7 @@ return;
 message.innerText =
 "Hesab yaradılır...";
 
-const { data, error } =
+const {data,error} =
 await supabaseClient.auth.signUp({
 
 email:email,
@@ -965,23 +445,28 @@ if(data.user){
 const referralCode =
 generateReferralCode();
 
+const {error:profileError} =
 await supabaseClient
 .from("profiles")
 .insert({
 
 id:data.user.id,
-
 email:email,
-
 referal_kodu:referralCode,
-
 referred_by:referral || null,
-
 week:1,
-
 is_manager:false
 
 });
+
+if(profileError){
+
+message.innerText =
+profileError.message;
+
+return;
+
+}
 
 }
 
@@ -1022,7 +507,7 @@ return;
 message.innerText =
 "Daxil olunur...";
 
-const { data, error } =
+const {data,error} =
 await supabaseClient.auth.signInWithPassword({
 
 email:email,
@@ -1045,7 +530,7 @@ await openApp(data.user);
 
 async function loadProfile(){
 
-const { data, error } =
+const {data,error} =
 await supabaseClient
 .from("profiles")
 .select("*")
@@ -1055,7 +540,6 @@ await supabaseClient
 if(error){
 
 console.log(error);
-
 return;
 
 }
@@ -1071,9 +555,7 @@ currentUser =
 user;
 
 document.getElementById("loginPage").classList.add("hidden");
-
 document.getElementById("registerPage").classList.add("hidden");
-
 document.getElementById("app").classList.remove("hidden");
 
 document.getElementById("accountEmail").innerText =
@@ -1090,33 +572,33 @@ document.getElementById("adminBtn").classList.remove("hidden");
 }
 
 await loadProfile();
-
 await loadEarnings();
-
 await loadTasks();
-
 await loadReferralInfo();
-
 await loadInvestmentHistory();
-
 await loadWithdrawalHistory();
 
 }
 
 async function loadEarnings(){
 
-const { data, error } =
+const {data,error} =
 await supabaseClient
 .from("earnings")
 .select("*")
 .eq("user_id",currentUser.id)
 .order("created_at",{ascending:false});
 
-if(error)return;
+if(error){
+
+console.log(error);
+return;
+
+}
 
 let total = 0;
 
-data.forEach(function(item){
+(data || []).forEach(function(item){
 
 total += Number(item.amount || 0);
 
@@ -1138,8 +620,10 @@ document.getElementById("earningsBalance").innerText =
 formatted;
 
 document.getElementById("earningsHistory").innerHTML =
-data.length
+data && data.length
+
 ?
+
 data.map(function(item){
 
 return `
@@ -1149,7 +633,7 @@ return `
 <span>${item.description || "Qazanc"}</span>
 
 <b class="green">
-+${Number(item.amount).toFixed(2)} AZN
++${Number(item.amount || 0).toFixed(2)} AZN
 </b>
 
 </div>
@@ -1157,7 +641,9 @@ return `
 `;
 
 }).join("")
+
 :
+
 '<p class="muted">Hələ qazanc yoxdur.</p>';
 
 }
@@ -1175,7 +661,7 @@ code;
 document.getElementById("accountReferralCode").innerText =
 code;
 
-const { count } =
+const {count} =
 await supabaseClient
 .from("profiles")
 .select("*",{count:"exact",head:true})
@@ -1215,7 +701,7 @@ MENECER STATUSU
 </div>
 
 <p class="muted">
-Siz 10 nəfər dəvət etdiniz. 2-ci həftəyə yatırım etmədən keçirsiniz.
+Siz 10 nəfər dəvət etdiniz.
 </p>
 
 <b class="yellow">
@@ -1237,7 +723,8 @@ Menecer ol
 </div>
 
 <p>
-10 nəfər dəvət etdiniz. İndi menecer statusunu aktivləşdirə bilərsiniz.
+10 nəfər dəvət etdiniz.
+İndi menecer statusunu aktivləşdirə bilərsiniz.
 </p>
 
 <button class="manager-btn" onclick="becomeManager()">
@@ -1278,7 +765,7 @@ Gündəlik qazanc: 6 AZN
 
 async function becomeManager(){
 
-const { error } =
+const {error} =
 await supabaseClient
 .from("profiles")
 .update({
@@ -1292,7 +779,6 @@ week:2
 if(error){
 
 alert(error.message);
-
 return;
 
 }
@@ -1302,7 +788,6 @@ alert(
 );
 
 await loadProfile();
-
 await loadReferralInfo();
 
 }
@@ -1312,7 +797,7 @@ async function loadTasks(){
 const list =
 document.getElementById("tasksList");
 
-const { data, error } =
+const {data,error} =
 await supabaseClient
 .from("tasks")
 .select("*")
@@ -1329,7 +814,9 @@ return;
 
 list.innerHTML =
 data && data.length
+
 ?
+
 data.map(function(task){
 
 return `
@@ -1349,7 +836,9 @@ Başla
 `;
 
 }).join("")
+
 :
+
 '<p class="muted">Hazırda fəaliyyət yoxdur.</p>';
 
 }
@@ -1373,7 +862,7 @@ now.getMonth(),
 now.getDate()+1
 );
 
-const { data } =
+const {data} =
 await supabaseClient
 .from("earnings")
 .select("id")
@@ -1404,3 +893,641 @@ alert(
 return;
 
 }
+
+const modal =
+document.getElementById("adModal");
+
+const closeBtn =
+document.getElementById("adClose");
+
+const timerText =
+document.getElementById("adTimer");
+
+modal.classList.remove("hidden");
+
+closeBtn.disabled =
+true;
+
+closeBtn.innerText =
+"30 saniyə gözləyin...";
+
+let seconds =
+30;
+
+timerText.innerText =
+seconds + " saniyə qalıb";
+
+clearInterval(adTimerInterval);
+
+adTimerInterval =
+setInterval(function(){
+
+seconds--;
+
+timerText.innerText =
+seconds + " saniyə qalıb";
+
+closeBtn.innerText =
+seconds > 0
+?
+seconds + " saniyə gözləyin..."
+:
+"Qazancı götür";
+
+if(seconds <= 0){
+
+clearInterval(adTimerInterval);
+
+closeBtn.disabled =
+false;
+
+}
+
+},1000);
+
+}
+
+async function finishAd(){
+
+const closeBtn =
+document.getElementById("adClose");
+
+if(closeBtn.disabled)return;
+
+clearInterval(adTimerInterval);
+
+const {error} =
+await supabaseClient
+.from("earnings")
+.insert({
+
+user_id:currentUser.id,
+amount:1,
+description:"NOVENTRA 30 saniyəlik fəaliyyət"
+
+});
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+document
+.getElementById("adModal")
+.classList.add("hidden");
+
+alert(
+"1 AZN qazanc balansınıza əlavə edildi."
+);
+
+await loadEarnings();
+
+}
+
+async function submitInvestment(){
+
+const amount =
+Number(
+document.getElementById("investmentAmount").value
+);
+
+const file =
+document.getElementById("investmentReceipt").files[0];
+
+const message =
+document.getElementById("investmentMessage");
+
+if(!amount || amount <= 0){
+
+message.innerText =
+"Yatırım məbləğini yazın.";
+
+return;
+
+}
+
+if(!file){
+
+message.innerText =
+"Çek şəklini seçin.";
+
+return;
+
+}
+
+message.innerText =
+"Yüklənir...";
+
+const fileName =
+currentUser.id +
+"-" +
+Date.now() +
+"-" +
+file.name;
+
+const {error:uploadError} =
+await supabaseClient.storage
+.from("receipts")
+.upload(fileName,file);
+
+if(uploadError){
+
+message.innerText =
+uploadError.message;
+
+return;
+
+}
+
+const {data:urlData} =
+supabaseClient.storage
+.from("receipts")
+.getPublicUrl(fileName);
+
+const {error} =
+await supabaseClient
+.from("investments")
+.insert({
+
+user_id:currentUser.id,
+amount:amount,
+receipt_url:urlData.publicUrl,
+status:"pending"
+
+});
+
+if(error){
+
+message.innerText =
+error.message;
+
+return;
+
+}
+
+message.style.color =
+"#40dc91";
+
+message.innerText =
+"Yatırım sorğusu göndərildi.";
+
+document.getElementById("investmentAmount").value =
+"";
+
+document.getElementById("investmentReceipt").value =
+"";
+
+await loadInvestmentHistory();
+
+}
+
+async function loadInvestmentHistory(){
+
+const box =
+document.getElementById("investmentHistory");
+
+const {data,error} =
+await supabaseClient
+.from("investments")
+.select("*")
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false});
+
+if(error){
+
+box.innerHTML =
+'<p class="muted">Yüklənmədi.</p>';
+
+return;
+
+}
+
+box.innerHTML =
+data && data.length
+
+?
+
+data.map(function(item){
+
+return `
+
+<div class="earning-row">
+
+<span>
+${Number(item.amount || 0).toFixed(2)} AZN
+</span>
+
+<b class="${
+item.status === "approved"
+?
+"green"
+:
+"status-pending"
+}">
+
+${item.status || "pending"}
+
+</b>
+
+</div>
+
+`;
+
+}).join("")
+
+:
+
+'<p class="muted">Yatırım tarixçəsi yoxdur.</p>';
+
+}
+
+async function submitWithdrawal(){
+
+const amount =
+Number(
+document.getElementById("withdrawAmount").value
+);
+
+const card =
+document.getElementById("withdrawCard").value.trim();
+
+const message =
+document.getElementById("withdrawMessage");
+
+if(!amount || amount <= 0){
+
+message.innerText =
+"Məbləği düzgün yazın.";
+
+return;
+
+}
+
+if(!/^\d{16}$/.test(card)){
+
+message.innerText =
+"16 rəqəmli kart nömrəsi daxil edin.";
+
+return;
+
+}
+
+message.innerText =
+"Göndərilir...";
+
+const {error} =
+await supabaseClient
+.from("withdrawals")
+.insert({
+
+user_id:currentUser.id,
+amount:amount,
+card_number:card,
+status:"pending"
+
+});
+
+if(error){
+
+message.innerText =
+error.message;
+
+return;
+
+}
+
+message.style.color =
+"#40dc91";
+
+message.innerText =
+"Çıxarış sorğusu göndərildi.";
+
+document.getElementById("withdrawAmount").value =
+"";
+
+document.getElementById("withdrawCard").value =
+"";
+
+await loadWithdrawalHistory();
+
+}
+
+async function loadWithdrawalHistory(){
+
+const box =
+document.getElementById("withdrawHistory");
+
+const {data,error} =
+await supabaseClient
+.from("withdrawals")
+.select("*")
+.eq("user_id",currentUser.id)
+.order("created_at",{ascending:false});
+
+if(error){
+
+box.innerHTML =
+'<p class="muted">Yüklənmədi.</p>';
+
+return;
+
+}
+
+box.innerHTML =
+data && data.length
+
+?
+
+data.map(function(item){
+
+return `
+
+<div class="earning-row">
+
+<span>
+${Number(item.amount || 0).toFixed(2)} AZN
+</span>
+
+<b class="status-pending">
+${item.status || "pending"}
+</b>
+
+</div>
+
+`;
+
+}).join("")
+
+:
+
+'<p class="muted">Çıxarış tarixçəsi yoxdur.</p>';
+
+}
+
+async function openPage(page){
+
+const pages =
+[
+"home",
+"earnings",
+"invest",
+"withdraw",
+"account",
+"admin"
+];
+
+pages.forEach(function(name){
+
+const element =
+document.getElementById(name + "Page");
+
+if(element){
+
+element.classList.add("hidden");
+
+}
+
+});
+
+document
+.getElementById(page + "Page")
+.classList.remove("hidden");
+
+document
+.querySelectorAll(".nav button")
+.forEach(function(button){
+
+button.classList.remove("active");
+
+});
+
+const button =
+document.getElementById(page + "Btn");
+
+if(button){
+
+button.classList.add("active");
+
+}
+
+if(page === "admin"){
+
+await loadAdminData();
+
+}
+
+}
+
+async function loadAdminData(){
+
+const investments =
+document.getElementById("adminInvestments");
+
+const withdrawals =
+document.getElementById("adminWithdrawals");
+
+const {data:invData} =
+await supabaseClient
+.from("investments")
+.select("*")
+.order("created_at",{ascending:false});
+
+investments.innerHTML =
+invData && invData.length
+
+?
+
+invData.map(function(item){
+
+return `
+
+<div class="admin-item">
+
+<b>Yatırım: ${Number(item.amount || 0).toFixed(2)} AZN</b>
+
+<p class="muted">
+Status: ${item.status || "pending"}
+</p>
+
+${
+item.receipt_url
+?
+`<img src="${item.receipt_url}">`
+:
+""
+}
+
+<br>
+
+<button class="admin-btn"
+onclick="approveInvestment('${item.id}')">
+
+Təsdiqlə
+
+</button>
+
+</div>
+
+`;
+
+}).join("")
+
+:
+
+'<p class="muted">Sorğu yoxdur.</p>';
+
+const {data:withData} =
+await supabaseClient
+.from("withdrawals")
+.select("*")
+.order("created_at",{ascending:false});
+
+withdrawals.innerHTML =
+withData && withData.length
+
+?
+
+withData.map(function(item){
+
+return `
+
+<div class="admin-item">
+
+<b>Çıxarış: ${Number(item.amount || 0).toFixed(2)} AZN</b>
+
+<p class="muted">
+Kart: ${item.card_number || ""}
+</p>
+
+<p class="muted">
+Status: ${item.status || "pending"}
+</p>
+
+<button class="admin-btn"
+onclick="approveWithdrawal('${item.id}')">
+
+Təsdiqlə
+
+</button>
+
+</div>
+
+`;
+
+}).join("")
+
+:
+
+'<p class="muted">Sorğu yoxdur.</p>';
+
+}
+
+async function approveInvestment(id){
+
+const {error} =
+await supabaseClient
+.from("investments")
+.update({
+
+status:"approved"
+
+})
+.eq("id",id);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Yatırım təsdiqləndi.");
+
+await loadAdminData();
+
+}
+
+async function approveWithdrawal(id){
+
+const {error} =
+await supabaseClient
+.from("withdrawals")
+.update({
+
+status:"approved"
+
+})
+.eq("id",id);
+
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Çıxarış təsdiqləndi.");
+
+await loadAdminData();
+
+}
+
+async function logout(){
+
+await supabaseClient.auth.signOut();
+
+currentUser =
+null;
+
+currentProfile =
+null;
+
+document.getElementById("app").classList.add("hidden");
+
+document.getElementById("loginPage").classList.remove("hidden");
+
+}
+
+document
+.getElementById("investmentReceipt")
+.addEventListener("change",function(){
+
+const file =
+this.files[0];
+
+const preview =
+document.getElementById("receiptPreview");
+
+if(file){
+
+preview.src =
+URL.createObjectURL(file);
+
+preview.style.display =
+"block";
+
+}
+
+});
+
+supabaseClient.auth
+.getSession()
+.then(function(result){
+
+const session =
+result.data.session;
+
+if(session){
+
+openApp(session.user);
+
+}
+
+});
+
+</script>
+
+</body>
+</html>
