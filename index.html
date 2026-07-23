@@ -44,6 +44,76 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .adbox{background:#111827;border:1px solid #7357ff;border-radius:20px;padding:30px;text-align:center;width:100%;max-width:500px}
 .adbox h1{color:#9d87ff}
 .adbox button{background:#40dc91;margin-top:20px}
+
+/* PREMIUM MENECER ŞƏRTLƏRİ */
+.manager-premium{
+margin-top:18px;
+padding:20px;
+border-radius:18px;
+background:linear-gradient(145deg,#151b2b,#0b101b);
+border:1px solid rgba(157,135,255,.4);
+box-shadow:0 12px 35px rgba(0,0,0,.3);
+}
+
+.manager-premium-title{
+font-size:19px;
+font-weight:bold;
+margin-bottom:16px;
+}
+
+.manager-premium-card{
+padding:16px;
+margin-top:12px;
+border-radius:14px;
+background:linear-gradient(145deg,#111827,#0c111d);
+border:1px solid #263247;
+}
+
+.manager-premium-card.manager{
+border-color:rgba(157,135,255,.5);
+}
+
+.manager-premium-card.head{
+border-color:rgba(255,209,102,.55);
+}
+
+.manager-premium-name{
+font-size:17px;
+font-weight:bold;
+margin-bottom:10px;
+}
+
+.manager-premium-line{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:9px 0;
+border-bottom:1px solid #263247;
+gap:10px;
+}
+
+.manager-premium-line:last-child{
+border-bottom:0;
+}
+
+.manager-premium-badge{
+padding:6px 10px;
+border-radius:8px;
+font-size:11px;
+font-weight:bold;
+white-space:nowrap;
+}
+
+.manager-premium-badge.manager{
+background:rgba(157,135,255,.15);
+color:#b8aaff;
+}
+
+.manager-premium-badge.head{
+background:rgba(255,209,102,.15);
+color:#ffd166;
+}
+
 @media(max-width:700px){
 .grid,.two{grid-template-columns:1fr}
 }
@@ -123,11 +193,14 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 <h2>Referal sistemi</h2>
 <p class="muted">Sənin dəvət kodun:</p>
 <div id="referralCode" class="refcode">Yüklənir...</div>
+
 <div class="row">
 <span class="muted">Dəvət etdiyin insanlar</span>
 <b id="refCount">0/10</b>
 </div>
+
 <div id="managerArea"></div>
+
 </div>
 
 </div>
@@ -281,8 +354,6 @@ if(data.user){
 
 const newCode=generateCode();
 
-console.log("Yeni profil yaradılıyor:", {id: data.user.id, email, referral_code: newCode});
-
 const {error:profileError}=await supabaseClient
 .from("profiles")
 .insert({
@@ -295,7 +366,6 @@ is_manager:false
 });
 
 if(profileError){
-console.error("Profile insert xətası:", profileError);
 regMsg.innerText="Profil xətası: "+profileError.message;
 return;
 }
@@ -330,8 +400,6 @@ await openApp(data.user);
 
 async function loadProfile(){
 
-console.log("loadProfile başladı, user.id=",user.id);
-
 const {data,error}=await supabaseClient
 .from("profiles")
 .select("*")
@@ -344,7 +412,6 @@ return;
 }
 
 profile=data;
-console.log("Profil yükləndi:",profile);
 
 }
 
@@ -401,8 +468,6 @@ data.map(x=>`
 
 async function loadReferral(){
 
-console.log("loadReferral başladı, profile=",profile);
-
 if(!profile){
 referralCode.innerText="Profil yoxdur";
 accountRef.innerText="Profil yoxdur";
@@ -436,7 +501,7 @@ const {count}=await supabaseClient
 .select("*",{count:"exact",head:true})
 .eq("referred_by",myCode);
 
-refCount.innerText=(count||0)+"/10";
+refCount.innerText=(count||0)+"/15";
 
 const manager=profile.is_manager===true;
 const week=profile.week||1;
@@ -444,20 +509,62 @@ const week=profile.week||1;
 status.innerText=manager?"Menecer":week+"-ci həftə";
 accountStatus.innerText=manager?"Menecer":week+"-ci həftə";
 
-managerArea.innerHTML=manager
-?
-`
-<div class="info">
-👑 <b class="yellow">MENECER STATUSU</b><br><br>
-Gündəlik qazanc sistemi aktivdir.
+managerArea.innerHTML=`
+
+<div class="manager-premium">
+
+<div class="manager-premium-title">
+🏆 Status şərtləri
 </div>
-`
-:
-`
-<div class="info">
-🔒 <b>Menecer statusu</b><br><br>
-10 nəfər referal dəvət etdikdən sonra menecer statusu aktivləşdirilə bilər.
+
+<div class="manager-premium-card manager">
+
+<div class="manager-premium-name purple">
+👑 MENECER
 </div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal şərti</span>
+<b>8 nəfər</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Yatırım şərti</span>
+<b class="yellow">45 AZN</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Status</span>
+<span class="manager-premium-badge manager">MENECER</span>
+</div>
+
+</div>
+
+<div class="manager-premium-card head">
+
+<div class="manager-premium-name yellow">
+⭐ BAŞ MENECER
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Referal şərti</span>
+<b>15 nəfər</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Yatırım şərti</span>
+<b class="yellow">70 AZN</b>
+</div>
+
+<div class="manager-premium-line">
+<span class="muted">Status</span>
+<span class="manager-premium-badge head">BAŞ MENECER</span>
+</div>
+
+</div>
+
+</div>
+
 `;
 
 }
@@ -619,6 +726,7 @@ await loadInvestment();
 }
 
 function page(name){
+
 const pages=["home","earn","invest","account","admin"];
 
 pages.forEach(x=>{
@@ -630,6 +738,7 @@ document.getElementById(name+"Page").classList.remove("hidden");
 if(name==="admin"){
 loadAdmin();
 }
+
 }
 
 async function logout(){
