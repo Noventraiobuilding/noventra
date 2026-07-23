@@ -146,7 +146,14 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 
 <div class="card">
 <div class="info">
-<b>Yatırım üçün kart:</b><br><br>
+<b>Yatırım şərtləri:</b>
+<br><br>
+💰 <b>Depozit: 20 AZN</b>
+<br>
+📈 <b>Gündəlik qazanc: 2 AZN</b>
+<br><br>
+<b>Yatırım üçün kart:</b>
+<br><br>
 5243754439761469
 <br><br>
 Pul köçürdükdən sonra çek şəklini yükləyin.
@@ -403,10 +410,8 @@ return;
 }
 
 if(!profile.referral_code){
-console.warn("Referral code NULL!");
 
 const newCode=generateCode();
-console.log("Yeni kod yaradılıyor:",newCode);
 
 const {error}=await supabaseClient
 .from("profiles")
@@ -414,7 +419,6 @@ const {error}=await supabaseClient
 .eq("id",user.id);
 
 if(error){
-console.error("Update xətası:",error);
 referralCode.innerText="Kod xətası";
 return;
 }
@@ -423,7 +427,6 @@ profile.referral_code=newCode;
 }
 
 const myCode=profile.referral_code;
-console.log("Kod göstərilir:",myCode);
 
 referralCode.innerText=myCode;
 accountRef.innerText=myCode;
@@ -617,6 +620,7 @@ await loadInvestment();
 
 function page(name){
 const pages=["home","earn","invest","account","admin"];
+
 pages.forEach(x=>{
 document.getElementById(x+"Page").classList.add("hidden");
 });
@@ -655,18 +659,22 @@ Təsdiqlə
 }
 
 async function approve(id){
+
 await supabaseClient
 .from("investments")
 .update({status:"approved"})
 .eq("id",id);
 
 await loadAdmin();
+
 }
 
 supabaseClient.auth.getSession().then(x=>{
+
 if(x.data.session){
 openApp(x.data.session.user);
 }
+
 });
 
 </script>
