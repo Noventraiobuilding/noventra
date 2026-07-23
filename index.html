@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Noventra</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080b14;color:#fff;font-family:Arial}
@@ -14,7 +13,7 @@ body{margin:0;background:#080b14;color:#fff;font-family:Arial}
 .box,.card{background:#111827;border:1px solid #263247;border-radius:20px;padding:25px}
 .box{width:100%;max-width:420px}
 .logo{text-align:center;font-size:28px;font-weight:bold;letter-spacing:4px;margin-bottom:25px}
-input{width:100%;padding:14px;margin:7px 0;border-radius:10px;border:1px solid #334155;background:#0b111d;color:#fff}
+input,select{width:100%;padding:14px;margin:7px 0;border-radius:10px;border:1px solid #334155;background:#0b111d;color:#fff}
 button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .main{width:100%;background:#7357ff;color:#fff;margin-top:10px}
 .switch{text-align:center;color:#9d87ff;margin-top:18px;cursor:pointer}
@@ -23,7 +22,6 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .header{text-align:center}
 .nav{display:flex;gap:5px;overflow:auto;margin:25px 0;border-bottom:1px solid #263247}
 .nav button{background:none;color:#9aa5b5;white-space:nowrap}
-.nav button.active{color:#fff;border-bottom:2px solid #7357ff}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
 .value{font-size:25px;font-weight:bold;margin-top:10px}
@@ -31,72 +29,33 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .green{color:#40dc91}
 .yellow{color:#ffd166}
 .purple{color:#9d87ff}
-.row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #263247}
-.task{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px;display:flex;justify-content:space-between;align-items:center}
-.task button{background:#7357ff;color:white}
+.row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #263247;gap:10px}
+.task,.rank-card,.admin-item{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px}
+.task{display:flex;justify-content:space-between;align-items:center}
+.task button,.rank-btn{background:#7357ff;color:#fff}
 .refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0;word-break:break-all;padding:10px;background:#0b111d;border-radius:8px}
 .info{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin:15px 0;line-height:1.6}
 .logout{background:#252e40;color:white;margin-top:20px}
 .admin{border-color:#7357ff}
-.admin-item{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px}
 .admin-item img{max-width:100%;max-height:250px}
 .ad{position:fixed;inset:0;background:#000e;display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}
 .adbox{background:#111827;border:1px solid #7357ff;border-radius:20px;padding:30px;text-align:center;width:100%;max-width:500px}
 .adbox h1{color:#9d87ff}
 .adbox button{background:#40dc91;margin-top:20px}
-
-.rank-box{
-margin-top:18px;padding:20px;border-radius:18px;
-background:linear-gradient(145deg,#151b2b,#0b101b);
-border:1px solid rgba(157,135,255,.4);
-box-shadow:0 12px 35px rgba(0,0,0,.3)
-}
-
-.rank-card{
-padding:18px;margin-top:14px;border-radius:15px;
-background:linear-gradient(145deg,#111827,#0c111d);
-border:1px solid #263247
-}
-
+.rank-box{margin-top:18px;padding:20px;border-radius:18px;background:linear-gradient(145deg,#151b2b,#0b101b);border:1px solid rgba(157,135,255,.4)}
 .rank-card.active{border-color:#40dc91}
 .rank-card.selected{border-color:#7357ff}
 .rank-card.locked{opacity:.65}
-
-.rank-title{
-font-size:18px;
-font-weight:bold;
-margin-bottom:12px
-}
-
-.rank-line{
-display:flex;
-justify-content:space-between;
-padding:8px 0;
-border-bottom:1px solid #263247;
-gap:10px
-}
-
-.rank-line:last-child{border-bottom:0}
-
-.rank-btn{
-width:100%;
-margin-top:15px;
-background:#7357ff;
-color:#fff
-}
-
-.rank-btn.selected{
-background:#252e40
-}
-
-.lock{
-color:#8995aa;
-margin-top:12px
-}
-
-@media(max-width:700px){
-.grid,.two{grid-template-columns:1fr}
-}
+.rank-title{font-size:18px;font-weight:bold;margin-bottom:12px}
+.rank-line{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #263247;gap:10px}
+.rank-btn{width:100%;margin-top:15px}
+.rank-btn.selected{background:#252e40}
+.lock{color:#8995aa;margin-top:12px}
+.withdraw-box{margin-top:20px;border:1px solid #7357ff}
+.withdraw-btn{width:100%;background:#40dc91;color:#07110c;margin-top:10px}
+.paid{color:#40dc91;font-weight:bold}
+.pending{color:#ffd166;font-weight:bold}
+@media(max-width:700px){.grid,.two{grid-template-columns:1fr}}
 </style>
 </head>
 
@@ -127,9 +86,7 @@ margin-top:12px
 
 <section id="app" class="hidden">
 
-<div class="header">
-<div class="logo">NOVENTRA</div>
-</div>
+<div class="header"><div class="logo">NOVENTRA</div></div>
 
 <nav class="nav">
 <button onclick="page('home')">Ana səhifə</button>
@@ -145,7 +102,6 @@ margin-top:12px
 <p class="muted">Hesabınızın ümumi vəziyyəti</p>
 
 <div class="grid">
-
 <div class="card">
 <div class="muted">Aktiv balans</div>
 <div id="balance" class="value">0.00 $</div>
@@ -160,92 +116,61 @@ margin-top:12px
 <div class="muted">Status</div>
 <div id="status" class="value purple">Yeni istifadəçi</div>
 </div>
-
 </div>
 
 <div class="two">
 
 <div class="card">
 <h2>Fəaliyyət</h2>
-<p class="muted">
-Yatırım təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.
-</p>
+<p class="muted">Yatırım təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.</p>
 <div id="taskArea"></div>
 </div>
 
 <div class="card">
-
 <h2>Referal sistemi</h2>
-
 <p class="muted">Sənin dəvət kodun:</p>
-
-<div id="referralCode" class="refcode">
-Yüklənir...
-</div>
-
+<div id="referralCode" class="refcode">Yüklənir...</div>
 <div class="row">
 <span class="muted">Aktiv referallar</span>
 <b id="refCount">0</b>
 </div>
-
 <div id="rankArea"></div>
-
 </div>
 
 </div>
-
 </div>
 
 <div id="earnPage" class="hidden">
-
 <h1>Qazanc</h1>
-
 <div class="card">
 <h2>Qazanc tarixçəsi</h2>
 <div id="history"></div>
 </div>
-
 </div>
 
 <div id="investPage" class="hidden">
-
 <h1>Yatırım</h1>
 
 <div class="card">
 
 <div class="info">
-
 <b>Yatırım üçün məlumat</b>
-
 <br><br>
-
-💰 <b>Minimum yatırım: 20 $</b>
-
+💰 <b>Minimum yatırım ilk həftə üçün: 20 $</b>
 <br>
-
-📈 <b>İlk həftə gündəlik qazanc: 1 $</b>
-
+📈 <b>Gündəlik qazanc: 1 $</b>
 <br><br>
-
 Yatırım etdikdən sonra ödəniş çekini yükləyin.
-
 <br><br>
-
 <b>Yatırım üçün kart:</b>
-
 <br><br>
-
 5243754439761469
-
 </div>
 
-<input id="investAmount" type="number" min="20" placeholder="Məbləğ ($)">
-
+<input id="investAmount" type="number" placeholder="Məbləğ ($)">
 <input id="receipt" type="file" accept="image/*">
 
-<button class="main" onclick="invest()">
-Ödəniş etdim
-</button>
+<button class="main" onclick="invest()">Ödəniş etdim</button>
 
 <div id="investMsg" class="msg"></div>
 
@@ -279,16 +204,49 @@ Yatırım etdikdən sonra ödəniş çekini yükləyin.
 <b id="accountRef" class="yellow">—</b>
 </div>
 
+</div>
+
+<div class="card withdraw-box">
+
+<h2>💸 Çıxarış</h2>
+
+<div class="info">
+<b>Minimum çıxarış: 4 $</b>
+<br><br>
+Çıxarış üçün ödəniş üsulunu seçin və məlumatı daxil edin.
+</div>
+
+<input id="withdrawAmount" type="number" placeholder="Çıxarış məbləği ($)">
+
+<select id="withdrawMethod" onchange="changeWithdrawMethod()">
+<option value="">Ödəniş üsulu seçin</option>
+<option value="card">💳 Bank kartı</option>
+<option value="binance">🟡 Binance</option>
+</select>
+
+<input id="withdrawAddress" placeholder="Kart nömrəsi və ya Binance UID">
+
+<button class="withdraw-btn" onclick="requestWithdraw()">
+ÇIXARIŞ SORĞUSU GÖNDƏR
+</button>
+
+<div id="withdrawMsg" class="msg"></div>
+
+</div>
+
+<div class="card">
+<h2>📜 Çıxarış tarixçəsi</h2>
+<div id="withdrawHistory"></div>
+</div>
+
+<div class="card">
 <div class="info">
 <b>NOVENTRA dəstək</b>
 <br>
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 </div>
 
-<button class="logout" onclick="logout()">
-Hesabdan çıx
-</button>
-
+<button class="logout" onclick="logout()">Hesabdan çıx</button>
 </div>
 
 </div>
@@ -302,39 +260,32 @@ Hesabdan çıx
 <div id="adminInvest"></div>
 </div>
 
+<div class="card admin">
+<h2>💸 Çıxarış sorğuları</h2>
+<div id="adminWithdraw"></div>
+</div>
+
 </div>
 
 </section>
 
 <div id="adModal" class="ad hidden">
-
 <div class="adbox">
-
 <h1>NOVENTRA</h1>
 <h2>Fəaliyyət</h2>
-
 <p>30 saniyə gözləyin</p>
-
 <div id="timer">30</div>
-
-<button id="finishBtn" disabled onclick="finishTask()">
-Gözləyin...
-</button>
-
+<button id="finishBtn" disabled onclick="finishTask()">Gözləyin...</button>
 </div>
-
 </div>
 
 <script>
 
-const SUPABASE_URL=
-"https://yafncpfkjmealuwmvcgc.supabase.co";
+const SUPABASE_URL="https://yafncpfkjmealuwmvcgc.supabase.co";
 
-const SUPABASE_KEY=
-"sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+const SUPABASE_KEY="sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
 
-const supabaseClient=
-supabase.createClient(
+const supabaseClient=supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
@@ -347,7 +298,7 @@ let timerInterval=null;
 
 const RANKS={
 
-"premium":{
+premium:{
 name:"🏆 PREMİUM RƏHBƏR",
 investment:50,
 referrals:10,
@@ -356,7 +307,7 @@ leaderEarning:1.80,
 refEarning:1
 },
 
-"supreme":{
+supreme:{
 name:"👑 SUPREME RƏHBƏR",
 investment:90,
 referrals:20,
@@ -365,7 +316,7 @@ leaderEarning:2.50,
 refEarning:1.70
 },
 
-"elite":{
+elite:{
 name:"💠 ELİT KOMANDİR",
 investment:150,
 referrals:35,
@@ -374,7 +325,7 @@ leaderEarning:4,
 refEarning:2.80
 },
 
-"platinum":{
+platinum:{
 name:"💎 PLATİN RƏHBƏR",
 investment:320,
 referrals:55,
@@ -383,7 +334,7 @@ leaderEarning:6.80,
 refEarning:3.60
 },
 
-"strategic":{
+strategic:{
 name:"🌐 BAŞ STRATEJİ RƏHBƏR",
 investment:500,
 referrals:80,
@@ -393,7 +344,7 @@ refEarning:5,
 locked:true
 },
 
-"emperor":{
+emperor:{
 name:"🔱 İMPERATOR RƏHBƏR",
 investment:1000,
 referrals:150,
@@ -437,17 +388,14 @@ const referral=regReferral.value.trim().toUpperCase();
 
 if(!emailValue||!passwordValue){
 
-regMsg.innerText=
-"Email və şifrəni doldurun.";
-
+regMsg.innerText="Email və şifrəni doldurun.";
 return;
 
 }
 
 regMsg.innerText="Hesab yaradılır...";
 
-const {data,error}=
-await supabaseClient.auth.signUp({
+const {data,error}=await supabaseClient.auth.signUp({
 
 email:emailValue,
 password:passwordValue
@@ -463,16 +411,13 @@ return;
 
 if(data.user){
 
-const newCode=generateCode();
-
-const {error:profileError}=
-await supabaseClient
+const {error:profileError}=await supabaseClient
 .from("profiles")
 .insert({
 
 id:data.user.id,
 email:emailValue,
-referral_code:newCode,
+referral_code:generateCode(),
 referred_by:referral||null,
 selected_rank:null,
 active_rank:null
@@ -481,10 +426,7 @@ active_rank:null
 
 if(profileError){
 
-regMsg.innerText=
-"Profil xətası: "+
-profileError.message;
-
+regMsg.innerText="Profil xətası: "+profileError.message;
 return;
 
 }
@@ -503,8 +445,7 @@ async function login(){
 const emailValue=loginEmail.value.trim();
 const passwordValue=loginPassword.value;
 
-const {data,error}=
-await supabaseClient.auth.signInWithPassword({
+const {data,error}=await supabaseClient.auth.signInWithPassword({
 
 email:emailValue,
 password:passwordValue
@@ -513,9 +454,7 @@ password:passwordValue
 
 if(error){
 
-loginMsg.innerText=
-"Email və ya şifrə yanlışdır.";
-
+loginMsg.innerText="Email və ya şifrə yanlışdır.";
 return;
 
 }
@@ -526,8 +465,7 @@ await openApp(data.user);
 
 async function loadProfile(){
 
-const {data,error}=
-await supabaseClient
+const {data,error}=await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
@@ -554,11 +492,7 @@ app.classList.remove("hidden");
 
 email.innerText=user.email;
 
-if(
-user.email.toLowerCase()
-===
-ADMIN_EMAIL.toLowerCase()
-){
+if(user.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
 
 adminBtn.classList.remove("hidden");
 
@@ -568,13 +502,13 @@ await loadProfile();
 await loadEarnings();
 await loadReferral();
 await loadInvestment();
+await loadWithdrawals();
 
 }
 
 async function loadEarnings(){
 
-const {data}=
-await supabaseClient
+const {data}=await supabaseClient
 .from("earnings")
 .select("*")
 .eq("user_id",user.id)
@@ -588,22 +522,16 @@ sum+=Number(x.amount||0);
 
 });
 
-balance.innerText=
-sum.toFixed(2)+" $";
+balance.innerText=sum.toFixed(2)+" $";
+total.innerText=sum.toFixed(2)+" $";
 
-total.innerText=
-sum.toFixed(2)+" $";
-
-history.innerHTML=
-(data&&data.length)
+history.innerHTML=(data&&data.length)
 ?
 data.map(x=>`
 
 <div class="row">
 
-<span>
-${x.description||"Qazanc"}
-</span>
+<span>${x.description||"Qazanc"}</span>
 
 <b class="green">
 +${Number(x.amount).toFixed(2)} $
@@ -621,80 +549,51 @@ async function loadReferral(){
 
 if(!profile)return;
 
-if(!profile.referral_code){
-
-const newCode=generateCode();
-
-await supabaseClient
-.from("profiles")
-.update({
-referral_code:newCode
-})
-.eq("id",user.id);
-
-profile.referral_code=newCode;
-
-}
-
 const myCode=profile.referral_code;
 
 referralCode.innerText=myCode;
 accountRef.innerText=myCode;
 
-const {data:refs}=
-await supabaseClient
+const {data:refs}=await supabaseClient
 .from("profiles")
 .select("id")
 .eq("referred_by",myCode);
 
-const referralIds=
-(refs||[]).map(x=>x.id);
+const ids=(refs||[]).map(x=>x.id);
 
-let activeRefs=[];
+let qualified=0;
 
-if(referralIds.length){
+if(ids.length){
 
-const {data:approved}=
-await supabaseClient
+const {data:investments}=await supabaseClient
 .from("investments")
 .select("user_id,amount")
-.in("user_id",referralIds)
+.in("user_id",ids)
 .eq("status","approved");
 
-const grouped={};
+const totals={};
 
-(approved||[]).forEach(x=>{
+(investments||[]).forEach(x=>{
 
-if(!grouped[x.user_id])
-grouped[x.user_id]=0;
-
-grouped[x.user_id]+=
-Number(x.amount||0);
+totals[x.user_id]=(totals[x.user_id]||0)+Number(x.amount||0);
 
 });
 
-activeRefs=
-Object.entries(grouped)
-.filter(([id,total])=>total>=1);
+qualified=Object.values(totals).filter(x=>x>0).length;
 
 }
 
-const referralCount=
-activeRefs.length;
-
-refCount.innerText=
-referralCount;
+refCount.innerText=qualified;
 
 await checkRankAutomatically();
 
-renderRanks(referralCount);
+renderRanks(qualified);
 
 }
 
 async function getApprovedInvestment(){
 
-const {data}=
-await supabaseClient
+const {data}=await supabaseClient
 .from("investments")
 .select("amount")
 .eq("user_id",user.id)
@@ -709,34 +608,26 @@ return Math.max(
 
 async function checkRankAutomatically(){
 
-if(!profile||
-!profile.selected_rank||
-profile.active_rank
-)return;
+if(!profile.selected_rank||profile.active_rank)return;
 
-const rank=
-RANKS[profile.selected_rank];
+const rank=RANKS[profile.selected_rank];
 
 if(!rank)return;
 
-const ownInvestment=
-await getApprovedInvestment();
+const ownInvestment=await getApprovedInvestment();
 
-const {data:refs}=
-await supabaseClient
+const {data:refs}=await supabaseClient
 .from("profiles")
 .select("id")
 .eq("referred_by",profile.referral_code);
 
-const ids=
-(refs||[]).map(x=>x.id);
+const ids=(refs||[]).map(x=>x.id);
 
 let qualified=0;
 
 if(ids.length){
 
-const {data:investments}=
-await supabaseClient
+const {data:investments}=await supabaseClient
 .from("investments")
 .select("user_id,amount")
 .in("user_id",ids)
@@ -746,72 +637,46 @@ const totals={};
 
 (investments||[]).forEach(x=>{
 
-if(!totals[x.user_id])
-totals[x.user_id]=0;
-
-totals[x.user_id]+=
-Number(x.amount||0);
+totals[x.user_id]=(totals[x.user_id]||0)+Number(x.amount||0);
 
 });
 
-qualified=
-Object.values(totals)
+qualified=Object.values(totals)
 .filter(x=>x>=rank.refInvestment)
 .length;
 
 }
 
-if(
-ownInvestment>=rank.investment &&
-qualified>=rank.referrals
-){
+if(ownInvestment>=rank.investment&&qualified>=rank.referrals){
 
 await supabaseClient
 .from("profiles")
-.update({
-active_rank:profile.selected_rank
-})
+.update({active_rank:profile.selected_rank})
 .eq("id",user.id);
 
-profile.active_rank=
-profile.selected_rank;
+profile.active_rank=profile.selected_rank;
 
-alert(
-"Təbriklər! "+
-rank.name+
-" statusunuz avtomatik aktivləşdirildi."
-);
+alert("Təbriklər! "+rank.name+" statusunuz avtomatik aktivləşdirildi.");
 
 }
 
 }
 
-function renderRanks(referralCount){
+function renderRanks(){
 
-const selected=
-profile.selected_rank;
-
-const active=
-profile.active_rank;
+const selected=profile.selected_rank;
+const active=profile.active_rank;
 
 let html=`
-
 <div class="rank-box">
-
 <h2>🏆 Rəhbərlik səviyyələri</h2>
-
 `;
 
-Object.entries(RANKS)
-.forEach(([key,rank])=>{
+Object.entries(RANKS).forEach(([key,rank])=>{
 
 const isLocked=rank.locked;
-
-const isSelected=
-selected===key;
-
-const isActive=
-active===key;
+const isSelected=selected===key;
+const isActive=active===key;
 
 html+=`
 
@@ -820,76 +685,43 @@ ${isActive?"active":""}
 ${isSelected&&!isActive?"selected":""}
 ${isLocked?"locked":""}">
 
-<div class="rank-title">
-${rank.name}
-</div>
+<div class="rank-title">${rank.name}</div>
 
 <div class="rank-line">
-<span class="muted">
-Öz yatırımınız
-</span>
+<span class="muted">Öz yatırımınız</span>
 <b>${rank.investment} $</b>
 </div>
 
 <div class="rank-line">
-<span class="muted">
-Gətirilən aktiv referal
-</span>
+<span class="muted">Gətirilən aktiv referal</span>
 <b>${rank.referrals} nəfər</b>
 </div>
 
 <div class="rank-line">
-<span class="muted">
-Referal üçün yatırım
-</span>
+<span class="muted">Referal üçün yatırım</span>
 <b>${rank.refInvestment} $</b>
 </div>
 
 <div class="rank-line">
-<span class="muted">
-Rəhbər qazancı
-</span>
-<b class="green">
-${rank.leaderEarning} $
-</b>
+<span class="muted">Rəhbər qazancı</span>
+<b class="green">${rank.leaderEarning} $</b>
 </div>
 
 <div class="rank-line">
-<span class="muted">
-Referal qazancı
-</span>
-<b class="yellow">
-${rank.refEarning} $
-</b>
+<span class="muted">Referal qazancı</span>
+<b class="yellow">${rank.refEarning} $</b>
 </div>
-
 `;
 
 if(isActive){
 
-html+=`
+html+=`<div class="info green">🎉 Bu status artıq aktivdir.</div>`;
 
-<div class="info green">
-🎉 Bu status artıq aktivdir.
-</div>
+}else if(isLocked){
 
-`;
+html+=`<div class="lock">🔒 Bu səviyyə gələcəkdə aktiv olacaq.</div>`;
 
-}
-
-else if(isLocked){
-
-html+=`
-
-<div class="lock">
-🔒 Bu səviyyə gələcəkdə aktiv olacaq.
-</div>
-
-`;
-
-}
-
-else if(isSelected){
+}else if(isSelected){
 
 html+=`
 
@@ -903,69 +735,40 @@ Sistem bu səviyyənin şərtlərini avtomatik izləyir.
 
 `;
 
-}
-
-else{
+}else{
 
 html+=`
 
-<button
-class="rank-btn"
-onclick="selectRank('${key}')">
-
+<button class="rank-btn" onclick="selectRank('${key}')">
 ${rank.name} ÜÇÜN QOŞUL
-
 </button>
 
 `;
 
 }
 
-html+=`
-
-</div>
-
-`;
+html+=`</div>`;
 
 });
 
-html+=`
-
-</div>
-
-`;
+html+=`</div>`;
 
 rankArea.innerHTML=html;
 
 if(active){
 
-status.innerText=
-RANKS[active].name;
+status.innerText=RANKS[active].name;
+accountStatus.innerText=RANKS[active].name;
 
-accountStatus.innerText=
-RANKS[active].name;
+}else if(selected){
 
-}
+status.innerText=RANKS[selected].name+" üçün hazırlıq";
+accountStatus.innerText=RANKS[selected].name+" üçün hazırlıq";
 
-else if(selected){
+}else{
 
-status.innerText=
-RANKS[selected].name+
-" üçün hazırlıq";
-
-accountStatus.innerText=
-RANKS[selected].name+
-" üçün hazırlıq";
-
-}
-
-else{
-
-status.innerText=
-"Yeni istifadəçi";
-
-accountStatus.innerText=
-"Yeni istifadəçi";
+status.innerText="Yeni istifadəçi";
+accountStatus.innerText="Yeni istifadəçi";
 
 }
 
@@ -973,34 +776,24 @@ accountStatus.innerText=
 
 async function selectRank(key){
 
-const rank=
-RANKS[key];
+const rank=RANKS[key];
 
 if(rank.locked){
 
-alert(
-"Bu səviyyə hələ kilidlidir."
-);
-
+alert("Bu səviyyə hələ kilidlidir.");
 return;
 
 }
 
 if(profile.selected_rank){
 
-const old=
-RANKS[profile.selected_rank];
+const old=RANKS[profile.selected_rank];
 
-if(!confirm(
-"Artıq "+
-old.name+
-" seçmisiniz. Yeni səviyyəyə keçmək istəyirsiniz?"
-))return;
+if(!confirm("Artıq "+old.name+" seçmisiniz. Yeni səviyyəyə keçmək istəyirsiniz?"))return;
 
 }
 
-const {error}=
-await supabaseClient
+const {error}=await supabaseClient
 .from("profiles")
 .update({
 
@@ -1020,10 +813,7 @@ return;
 profile.selected_rank=key;
 profile.active_rank=null;
 
-alert(
-rank.name+
-" seçildi. İndi sistem həmin səviyyənin şərtlərini avtomatik izləyəcək."
-);
+alert(rank.name+" seçildi. Sistem şərtləri avtomatik izləyəcək.");
 
 await loadReferral();
 
@@ -1031,17 +821,13 @@ await loadReferral();
 
 async function loadInvestment(){
 
-const {data}=
-await supabaseClient
+const {data}=await supabaseClient
 .from("investments")
 .select("*")
 .eq("user_id",user.id)
 .order("created_at",{ascending:false});
 
-const approved=
-(data||[]).some(
-x=>x.status==="approved"
-);
+const approved=(data||[]).some(x=>x.status==="approved");
 
 if(approved){
 
@@ -1049,13 +835,9 @@ taskArea.innerHTML=`
 
 <div class="task">
 
-<span>
-30 saniyəlik fəaliyyət
-</span>
+<span>30 saniyəlik fəaliyyət</span>
 
-<button onclick="startTask()">
-Başla
-</button>
+<button onclick="startTask()">Başla</button>
 
 </div>
 
@@ -1071,12 +853,8 @@ Yatırım təsdiqlənmədən fəaliyyətə başlamaq mümkün deyil.
 
 <br><br>
 
-<button
-class="main"
-onclick="page('invest')">
-
+<button class="main" onclick="page('invest')">
 YATIRIM ET
-
 </button>
 
 </div>
@@ -1085,25 +863,16 @@ YATIRIM ET
 
 }
 
-investHistory.innerHTML=
-(data&&data.length)
+investHistory.innerHTML=(data&&data.length)
 ?
 data.map(x=>`
 
 <div class="row">
 
-<span>
-${Number(x.amount).toFixed(2)} $
-</span>
+<span>${Number(x.amount).toFixed(2)} $</span>
 
-<b class="${
-x.status==="approved"
-?"green"
-:"yellow"
-}">
-
+<b class="${x.status==="approved"?"green":"yellow"}">
 ${x.status}
-
 </b>
 
 </div>
@@ -1117,39 +886,26 @@ ${x.status}
 async function startTask(){
 
 const today=new Date();
-
 today.setHours(0,0,0,0);
 
-const {data}=
-await supabaseClient
+const {data}=await supabaseClient
 .from("earnings")
 .select("id")
 .eq("user_id",user.id)
-.eq(
-"description",
-"NOVENTRA 30 saniyəlik fəaliyyət"
-)
-.gte(
-"created_at",
-today.toISOString()
-);
+.eq("description","NOVENTRA 30 saniyəlik fəaliyyət")
+.gte("created_at",today.toISOString());
 
 if(data&&data.length){
 
-alert(
-"Bu gün artıq fəaliyyət etmisiniz."
-);
-
+alert("Bu gün artıq fəaliyyət etmisiniz.");
 return;
 
 }
 
 adModal.classList.remove("hidden");
-
 finishBtn.disabled=true;
 
 let sec=30;
-
 timer.innerText=sec;
 
 clearInterval(timerInterval);
@@ -1157,17 +913,13 @@ clearInterval(timerInterval);
 timerInterval=setInterval(()=>{
 
 sec--;
-
 timer.innerText=sec;
 
 if(sec<=0){
 
 clearInterval(timerInterval);
-
 finishBtn.disabled=false;
-
-finishBtn.innerText=
-"Qazancı götür";
+finishBtn.innerText="Qazancı götür";
 
 }
 
@@ -1177,28 +929,16 @@ finishBtn.innerText=
 
 async function finishTask(){
 
-const rank=
-profile.active_rank
-?
-RANKS[profile.active_rank]
-:null;
+const rank=profile.active_rank?RANKS[profile.active_rank]:null;
+const earning=rank?rank.leaderEarning:1;
 
-const earning=
-rank
-?
-rank.leaderEarning
-:1;
-
-const {error}=
-await supabaseClient
+const {error}=await supabaseClient
 .from("earnings")
 .insert({
 
 user_id:user.id,
 amount:earning,
-description:
-"NOVENTRA "+
-(rank?rank.name:"fəaliyyət")
+description:"NOVENTRA "+(rank?rank.name:"fəaliyyət")
 
 });
 
@@ -1213,70 +953,49 @@ adModal.classList.add("hidden");
 
 await loadEarnings();
 
-alert(
-earning+
-" $ qazanc əlavə edildi."
-);
+alert(earning+" $ qazanc əlavə edildi.");
 
 }
 
 async function invest(){
 
-const amount=
-Number(investAmount.value);
+const amount=Number(investAmount.value);
+const file=receipt.files[0];
 
-const file=
-receipt.files[0];
+if(!amount||amount<=0){
 
-if(!amount||amount<20){
-
-investMsg.innerText=
-"Minimum yatırım məbləği 20 $ olmalıdır.";
-
+investMsg.innerText="Məbləği yazın.";
 return;
 
 }
 
 if(!file){
 
-investMsg.innerText=
-"Çek şəklini seçin.";
-
+investMsg.innerText="Çek şəklini seçin.";
 return;
 
 }
 
-investMsg.innerText=
-"Yüklənir...";
+investMsg.innerText="Yüklənir...";
 
-const name=
-user.id+
-"-"+
-Date.now()+
-"-"+
-file.name;
+const name=user.id+"-"+Date.now()+"-"+file.name;
 
-const {error:uploadError}=
-await supabaseClient.storage
+const {error:uploadError}=await supabaseClient.storage
 .from("receipts")
 .upload(name,file);
 
 if(uploadError){
 
-investMsg.innerText=
-uploadError.message;
-
+investMsg.innerText=uploadError.message;
 return;
 
 }
 
-const {data:urlData}=
-supabaseClient.storage
+const {data:urlData}=supabaseClient.storage
 .from("receipts")
 .getPublicUrl(name);
 
-const {error}=
-await supabaseClient
+const {error}=await supabaseClient
 .from("investments")
 .insert({
 
@@ -1289,95 +1008,286 @@ status:"pending"
 
 if(error){
 
-investMsg.innerText=
-error.message;
-
+investMsg.innerText=error.message;
 return;
 
 }
 
-investMsg.style.color=
-"#40dc91";
-
-investMsg.innerText=
-"Yatırım sorğusu göndərildi.";
+investMsg.style.color="#40dc91";
+investMsg.innerText="Yatırım sorğusu göndərildi.";
 
 await loadInvestment();
 
 }
 
-function page(name){
+function changeWithdrawMethod(){
 
-const pages=[
-"home",
-"earn",
-"invest",
-"account",
-"admin"
-];
+const method=withdrawMethod.value;
 
-pages.forEach(x=>{
+if(method==="card"){
 
-document
-.getElementById(x+"Page")
-.classList.add("hidden");
+withdrawAddress.placeholder="Bank kartı nömrəsi";
+
+}else if(method==="binance"){
+
+withdrawAddress.placeholder="Binance UID";
+
+}else{
+
+withdrawAddress.placeholder="Kart nömrəsi və ya Binance UID";
+
+}
+
+}
+
+async function requestWithdraw(){
+
+const amount=Number(withdrawAmount.value);
+const method=withdrawMethod.value;
+const address=withdrawAddress.value.trim();
+
+if(amount<4){
+
+withdrawMsg.innerText="Minimum çıxarış məbləği 4 $-dır.";
+return;
+
+}
+
+if(!method){
+
+withdrawMsg.innerText="Ödəniş üsulunu seçin.";
+return;
+
+}
+
+if(!address){
+
+withdrawMsg.innerText="Kart nömrəsi və ya Binance UID daxil edin.";
+return;
+
+}
+
+const {data:earnings}=await supabaseClient
+.from("earnings")
+.select("amount")
+.eq("user_id",user.id);
+
+const totalEarned=(earnings||[])
+.reduce((a,b)=>a+Number(b.amount||0),0);
+
+const {data:withdrawals}=await supabaseClient
+.from("withdrawals")
+.select("amount")
+.eq("user_id",user.id)
+.in("status",["pending","paid"]);
+
+const totalWithdrawn=(withdrawals||[])
+.reduce((a,b)=>a+Number(b.amount||0),0);
+
+const available=totalEarned-totalWithdrawn;
+
+if(amount>available){
+
+withdrawMsg.innerText=
+"Balansınızda kifayət qədər vəsait yoxdur. Mövcud balans: "+
+available.toFixed(2)+" $";
+
+return;
+
+}
+
+const {error}=await supabaseClient
+.from("withdrawals")
+.insert({
+
+user_id:user.id,
+amount,
+method,
+address,
+status:"pending"
 
 });
 
-document
-.getElementById(name+"Page")
-.classList.remove("hidden");
+if(error){
 
-if(name==="admin")
+withdrawMsg.innerText=error.message;
+return;
+
+}
+
+withdrawMsg.style.color="#40dc91";
+withdrawMsg.innerText="Çıxarış sorğusu göndərildi.";
+
+withdrawAmount.value="";
+withdrawMethod.value="";
+withdrawAddress.value="";
+
+await loadWithdrawals();
+
+}
+
+async function loadWithdrawals(){
+
+const {data,error}=await supabaseClient
+.from("withdrawals")
+.select("*")
+.eq("user_id",user.id)
+.order("created_at",{ascending:false});
+
+if(error){
+
+withdrawHistory.innerHTML=
+"<p class='muted'>Çıxarış tarixçəsi yüklənmədi.</p>";
+
+return;
+
+}
+
+withdrawHistory.innerHTML=(data&&data.length)
+?
+data.map(x=>`
+
+<div class="row">
+
+<div>
+<b>${Number(x.amount).toFixed(2)} $</b>
+<br>
+<span class="muted">
+${x.method==="card"?"💳 Bank kartı":"🟡 Binance"}
+</span>
+</div>
+
+<span class="${x.status==="paid"?"paid":"pending"}">
+
+${x.status==="paid"?"✅ Ödənildi":"⏳ Gözləyir"}
+
+</span>
+
+</div>
+
+`).join("")
+:
+"<p class='muted'>Hələ çıxarış yoxdur.</p>";
+
+}
+
+function page(name){
+
+const pages=["home","earn","invest","account","admin"];
+
+pages.forEach(x=>{
+
+document.getElementById(x+"Page").classList.add("hidden");
+
+});
+
+document.getElementById(name+"Page").classList.remove("hidden");
+
+if(name==="admin"){
+
 loadAdmin();
+loadAdminWithdrawals();
+
+}
 
 }
 
 async function logout(){
 
 await supabaseClient.auth.signOut();
-
 location.reload();
 
 }
 
 async function loadAdmin(){
 
-const {data}=
-await supabaseClient
+const {data}=await supabaseClient
 .from("investments")
 .select("*")
 .order("created_at",{ascending:false});
 
-adminInvest.innerHTML=
-(data||[])
+adminInvest.innerHTML=(data||[])
 .map(x=>`
 
 <div class="admin-item">
 
-<b>
-${Number(x.amount).toFixed(2)} $
-</b>
+<b>${Number(x.amount).toFixed(2)} $</b>
 
-<p>
-Status: ${x.status}
-</p>
+<p>Status: ${x.status}</p>
 
-${
-x.receipt_url
-?
-`<img src="${x.receipt_url}">`
-:""
-}
+${x.receipt_url?`<img src="${x.receipt_url}">`:""}
 
 <br>
 
-<button
-onclick="approve('${x.id}')">
-
+<button onclick="approve('${x.id}')">
 Təsdiqlə
-
 </button>
+
+</div>
+
+`).join("");
+
+}
+
+async function approve(id){
+
+await supabaseClient
+.from("investments")
+.update({status:"approved"})
+.eq("id",id);
+
+await loadAdmin();
+
+}
+
+async function loadAdminWithdrawals(){
+
+const {data}=await supabaseClient
+.from("withdrawals")
+.select("*")
+.order("created_at",{ascending:false});
+
+adminWithdraw.innerHTML=(data||[])
+.map(x=>`
+
+<div class="admin-item">
+
+<b>${Number(x.amount).toFixed(2)} $</b>
+
+<p>
+İstifadəçi ID:<br>
+${x.user_id}
+</p>
+
+<p>
+Ödəniş üsulu:
+${x.method==="card"?"💳 Bank kartı":"🟡 Binance"}
+</p>
+
+<p>
+Məlumat:
+<br>
+<b>${x.address}</b>
+</p>
+
+<p>
+Status:
+<span class="${x.status==="paid"?"paid":"pending"}">
+${x.status==="paid"?"✅ Ödənildi":"⏳ Gözləyir"}
+</span>
+</p>
+
+${
+x.status!=="paid"
+?
+`
+<button onclick="markWithdrawPaid('${x.id}')">
+✅ ÖDƏNİLDİ
+</button>
+`
+:
+""
+}
 
 </div>
 
@@ -1386,16 +1296,30 @@ Təsdiqlə
 
 }
 
-async function approve(id){
+async function markWithdrawPaid(id){
 
-await supabaseClient
-.from("investments")
+if(!confirm("Bu çıxarışın ödənişini etdiniz?"))return;
+
+const {error}=await supabaseClient
+.from("withdrawals")
 .update({
-status:"approved"
+
+status:"paid",
+paid_at:new Date().toISOString()
+
 })
 .eq("id",id);
 
-await loadAdmin();
+if(error){
+
+alert(error.message);
+return;
+
+}
+
+alert("Çıxarış statusu ÖDƏNİLDİ olaraq dəyişdirildi.");
+
+await loadAdminWithdrawals();
 
 }
 
@@ -1405,9 +1329,7 @@ supabaseClient.auth
 
 if(x.data.session){
 
-openApp(
-x.data.session.user
-);
+openApp(x.data.session.user);
 
 }
 
@@ -1416,4 +1338,4 @@ x.data.session.user
 </script>
 
 </body>
-</html>
+  </html>
