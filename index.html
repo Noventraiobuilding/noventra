@@ -61,7 +61,9 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .paid{color:#40dc91;font-weight:bold}
 .pending{color:#ffd166;font-weight:bold}
 .rejected{color:#ff5555;font-weight:bold}
-@media(max-width:700px){.grid,.two{grid-template-columns:1fr}}
+@media(max-width:700px){
+.grid,.two{grid-template-columns:1fr}
+}
 </style>
 </head>
 
@@ -153,11 +155,14 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 </div>
 
 <div id="earnPage" class="hidden">
+
 <h1>Qazanc</h1>
+
 <div class="card">
 <h2>Qazanc tarixçəsi</h2>
 <div id="history"></div>
 </div>
+
 </div>
 
 <div id="investPage" class="hidden">
@@ -202,8 +207,10 @@ Yatırım etdikdən sonra ödəniş çekini yükləyin.
 </div>
 
 <div class="card">
+
 <h2>Yatırım tarixçəsi</h2>
 <div id="investHistory"></div>
+
 </div>
 
 </div>
@@ -266,8 +273,10 @@ Yatırım etdikdən sonra ödəniş çekini yükləyin.
 </div>
 
 <div class="card">
+
 <h2>📜 Çıxarış tarixçəsi</h2>
 <div id="withdrawHistory"></div>
+
 </div>
 
 <div class="card">
@@ -282,7 +291,9 @@ Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 
 </div>
 
-<button class="logout" onclick="logout()">Hesabdan çıx</button>
+<button class="logout" onclick="logout()">
+Hesabdan çıx
+</button>
 
 </div>
 
@@ -293,13 +304,17 @@ Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 <h1>Admin Panel</h1>
 
 <div class="card admin">
+
 <h2>Yatırım sorğuları</h2>
 <div id="adminInvest"></div>
+
 </div>
 
 <div class="card admin">
+
 <h2>💸 Çıxarış sorğuları</h2>
 <div id="adminWithdraw"></div>
+
 </div>
 
 </div>
@@ -345,7 +360,7 @@ let user=null;
 let profile=null;
 let timerInterval=null;
 let investmentChannel=null;
-let investmentPollInterval=null;
+let investmentRefreshInterval=null;
 
 const RANKS={
 
@@ -557,50 +572,39 @@ function subscribeToInvestmentChanges(){
 if(investmentChannel){
 
 supabaseClient.removeChannel(investmentChannel);
-investmentChannel=null;
 
 }
 
 investmentChannel=
 supabaseClient
-.channel("investment-status-"+user.id)
+.channel("investment-status-"+user.id+"-"+Date.now())
 .on(
 "postgres_changes",
 {
-event:"*",
+event:"UPDATE",
 schema:"public",
 table:"investments",
 filter:"user_id=eq."+user.id
 },
-async()=>{
+async(payload)=>{
+
+if(
+payload.new &&
+payload.new.status==="approved"
+){
 
 await loadInvestment();
 await loadReferral();
 
-}
-)
-.subscribe();
-
-}
-
-function startInvestmentPolling(){
-
-if(investmentPollInterval){
-
-clearInterval(investmentPollInterval);
-
-}
-
-investmentPollInterval=
-setInterval(async()=>{
-
-if(user){
+}else{
 
 await loadInvestment();
 
 }
 
-},5000);
+}
+)
+.subscribe();
 
 }
 
@@ -628,7 +632,23 @@ await loadInvestment();
 await loadWithdrawals();
 
 subscribeToInvestmentChanges();
-startInvestmentPolling();
+
+if(investmentRefreshInterval){
+
+clearInterval(investmentRefreshInterval);
+
+}
+
+investmentRefreshInterval=
+setInterval(async()=>{
+
+if(user){
+
+await loadInvestment();
+
+}
+
+},3000);
 
 }
 
@@ -832,6 +852,8 @@ rank.name+
 }
 
 function renderRanks(){
+
+if(!profile)return;
 
 const selected=profile.selected_rank;
 const active=profile.active_rank;
@@ -1038,7 +1060,7 @@ await supabaseClient
 
 if(error){
 
-console.error(error);
+console.error("Investment status error:",error);
 return;
 
 }
@@ -1065,6 +1087,30 @@ Başla
 
 }else{
 
+const pending=
+(data||[]).some(x=>x.status==="pending");
+
+if(pending){
+
+document.getElementById("taskArea")
+.innerHTML=`
+
+<div class="info">
+
+Yatırım sorğunuz yoxlanılır.
+
+<br><br>
+
+<span class="pending">
+⏳ Gözləyir
+</span>
+
+</div>
+
+`;
+
+}else{
+
 document.getElementById("taskArea")
 .innerHTML=`
 
@@ -1084,6 +1130,8 @@ YATIRIM ET
 </div>
 
 `;
+
+}
 
 }
 
@@ -1214,7 +1262,8 @@ await supabaseClient
 user_id:user.id,
 amount:earning,
 description:
-"NOVENTRA 30 saniyəlik fəaliyyət"
+"NOVENTRA "+
+(rank?rank.name:"fəaliyyət")
 
 });
 
@@ -1333,15 +1382,18 @@ document.getElementById("withdrawAddress");
 
 if(method==="card"){
 
-address.placeholder="Bank kartı nömrəsi";
+address.placeholder=
+"Bank kartı nömrəsi";
 
 }else if(method==="binance"){
 
-address.placeholder="Binance UID";
+address.placeholder=
+"Binance UID";
 
 }else{
 
-address.placeholder="Kart nömrəsi və ya Binance UID";
+address.placeholder=
+"Kart nömrəsi və ya Binance UID";
 
 }
 
@@ -1351,11 +1403,13 @@ async function requestWithdraw(){
 
 const amount=
 Number(
-document.getElementById("withdrawAmount").value
+document.getElementById("withdrawAmount")
+.value
 );
 
 const method=
-document.getElementById("withdrawMethod").value;
+document.getElementById("withdrawMethod")
+.value;
 
 const address=
 document.getElementById("withdrawAddress")
@@ -1376,7 +1430,9 @@ return;
 
 if(!method){
 
-msg.innerText="Ödəniş üsulunu seçin.";
+msg.innerText=
+"Ödəniş üsulunu seçin.";
+
 return;
 
 }
@@ -1452,11 +1508,17 @@ return;
 }
 
 msg.style.color="#40dc91";
-msg.innerText="Çıxarış sorğusu göndərildi.";
+msg.innerText=
+"Çıxarış sorğusu göndərildi.";
 
-document.getElementById("withdrawAmount").value="";
-document.getElementById("withdrawMethod").value="";
-document.getElementById("withdrawAddress").value="";
+document.getElementById("withdrawAmount")
+.value="";
+
+document.getElementById("withdrawMethod")
+.value="";
+
+document.getElementById("withdrawAddress")
+.value="";
 
 await loadWithdrawals();
 
@@ -1578,9 +1640,9 @@ await supabaseClient
 
 }
 
-if(investmentPollInterval){
+if(investmentRefreshInterval){
 
-clearInterval(investmentPollInterval);
+clearInterval(investmentRefreshInterval);
 
 }
 
@@ -1705,7 +1767,9 @@ const {error}=
 await supabaseClient
 .from("investments")
 .update({
+
 status:"approved"
+
 })
 .eq("id",id);
 
@@ -1738,7 +1802,9 @@ const {error}=
 await supabaseClient
 .from("investments")
 .update({
+
 status:"rejected"
+
 })
 .eq("id",id);
 
@@ -1753,7 +1819,9 @@ return;
 
 }
 
-alert("Yatırım sorğusundan imtina edildi.");
+alert(
+"Yatırım sorğusundan imtina edildi."
+);
 
 await loadAdmin();
 
@@ -1790,22 +1858,33 @@ ${Number(x.amount).toFixed(2)} $
 </b>
 
 <p>
+
 İstifadəçi ID:
+
 <br>
+
 ${x.user_id}
+
 </p>
 
 <p>
+
 Ödəniş üsulu:
+
 ${x.method==="card"
 ?"💳 Bank kartı"
 :"🟡 Binance"}
+
 </p>
 
 <p>
+
 Məlumat:
+
 <br>
+
 <b>${x.address}</b>
+
 </p>
 
 <p>
@@ -1918,7 +1997,9 @@ const {error}=
 await supabaseClient
 .from("withdrawals")
 .update({
+
 status:"rejected"
+
 })
 .eq("id",id);
 
@@ -1956,4 +2037,4 @@ openApp(x.data.session.user);
 </script>
 
 </body>
-  </html>
+</html>
