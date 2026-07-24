@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Noventra</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 *{box-sizing:border-box}
 body{margin:0;background:#080b14;color:#fff;font-family:Arial}
@@ -37,7 +38,10 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .info{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin:15px 0;line-height:1.6}
 .logout{background:#252e40;color:white;margin-top:20px}
 .admin{border-color:#7357ff}
-.admin-item img{max-width:100%;max-height:250px}
+.admin-item img{max-width:100%;max-height:250px;border-radius:10px;margin-top:10px}
+.admin-item button{margin-top:10px}
+.approve-btn{background:#40dc91;color:#07110c}
+.reject-btn{background:#ff5555;color:#fff;margin-left:8px}
 .ad{position:fixed;inset:0;background:#000e;display:flex;align-items:center;justify-content:center;padding:20px;z-index:5}
 .adbox{background:#111827;border:1px solid #7357ff;border-radius:20px;padding:30px;text-align:center;width:100%;max-width:500px}
 .adbox h1{color:#9d87ff}
@@ -55,6 +59,7 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 .withdraw-btn{width:100%;background:#40dc91;color:#07110c;margin-top:10px}
 .paid{color:#40dc91;font-weight:bold}
 .pending{color:#ffd166;font-weight:bold}
+.rejected{color:#ff5555;font-weight:bold}
 @media(max-width:700px){.grid,.two{grid-template-columns:1fr}}
 </style>
 </head>
@@ -86,7 +91,9 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 
 <section id="app" class="hidden">
 
-<div class="header"><div class="logo">NOVENTRA</div></div>
+<div class="header">
+<div class="logo">NOVENTRA</div>
+</div>
 
 <nav class="nav">
 <button onclick="page('home')">Ana səhifə</button>
@@ -102,6 +109,7 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 <p class="muted">Hesabınızın ümumi vəziyyəti</p>
 
 <div class="grid">
+
 <div class="card">
 <div class="muted">Aktiv balans</div>
 <div id="balance" class="value">0.00 $</div>
@@ -116,6 +124,7 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 <div class="muted">Status</div>
 <div id="status" class="value purple">Yeni istifadəçi</div>
 </div>
+
 </div>
 
 <div class="two">
@@ -130,44 +139,64 @@ button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
 <h2>Referal sistemi</h2>
 <p class="muted">Sənin dəvət kodun:</p>
 <div id="referralCode" class="refcode">Yüklənir...</div>
+
 <div class="row">
 <span class="muted">Aktiv referallar</span>
 <b id="refCount">0</b>
 </div>
+
 <div id="rankArea"></div>
 </div>
 
 </div>
+
 </div>
 
 <div id="earnPage" class="hidden">
+
 <h1>Qazanc</h1>
+
 <div class="card">
 <h2>Qazanc tarixçəsi</h2>
 <div id="history"></div>
 </div>
+
 </div>
 
 <div id="investPage" class="hidden">
+
 <h1>Yatırım</h1>
 
 <div class="card">
 
 <div class="info">
+
 <b>Yatırım üçün məlumat</b>
+
 <br><br>
+
 💰 <b>Minimum yatırım ilk həftə üçün: 20 $</b>
+
 <br>
+
 📈 <b>Gündəlik qazanc: 1 $</b>
+
 <br><br>
+
 Yatırım etdikdən sonra ödəniş çekini yükləyin.
+
 <br><br>
+
 <b>Yatırım üçün kart:</b>
+
 <br><br>
+
 5243754439761469
+
 </div>
 
 <input id="investAmount" type="number" placeholder="Məbləğ ($)">
+
 <input id="receipt" type="file" accept="image/*">
 
 <button class="main" onclick="invest()">Ödəniş etdim</button>
@@ -177,8 +206,11 @@ Yatırım etdikdən sonra ödəniş çekini yükləyin.
 </div>
 
 <div class="card">
+
 <h2>Yatırım tarixçəsi</h2>
+
 <div id="investHistory"></div>
+
 </div>
 
 </div>
@@ -211,23 +243,43 @@ Yatırım etdikdən sonra ödəniş çekini yükləyin.
 <h2>💸 Çıxarış</h2>
 
 <div class="info">
+
 <b>Minimum çıxarış: 4 $</b>
+
 <br><br>
+
 Çıxarış üçün ödəniş üsulunu seçin və məlumatı daxil edin.
+
 </div>
 
-<input id="withdrawAmount" type="number" placeholder="Çıxarış məbləği ($)">
+<input
+id="withdrawAmount"
+type="number"
+placeholder="Çıxarış məbləği ($)"
+>
 
 <select id="withdrawMethod" onchange="changeWithdrawMethod()">
+
 <option value="">Ödəniş üsulu seçin</option>
+
 <option value="card">💳 Bank kartı</option>
+
 <option value="binance">🟡 Binance</option>
+
 </select>
 
-<input id="withdrawAddress" placeholder="Kart nömrəsi və ya Binance UID">
+<input
+id="withdrawAddress"
+placeholder="Kart nömrəsi və ya Binance UID"
+>
 
-<button class="withdraw-btn" onclick="requestWithdraw()">
+<button
+class="withdraw-btn"
+onclick="requestWithdraw()"
+>
+
 ÇIXARIŞ SORĞUSU GÖNDƏR
+
 </button>
 
 <div id="withdrawMsg" class="msg"></div>
@@ -235,18 +287,29 @@ Yatırım etdikdən sonra ödəniş çekini yükləyin.
 </div>
 
 <div class="card">
+
 <h2>📜 Çıxarış tarixçəsi</h2>
+
 <div id="withdrawHistory"></div>
+
 </div>
 
 <div class="card">
+
 <div class="info">
+
 <b>NOVENTRA dəstək</b>
+
 <br>
+
 Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
+
 </div>
 
-<button class="logout" onclick="logout()">Hesabdan çıx</button>
+<button class="logout" onclick="logout()">
+Hesabdan çıx
+</button>
+
 </div>
 
 </div>
@@ -256,13 +319,19 @@ Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 <h1>Admin Panel</h1>
 
 <div class="card admin">
+
 <h2>Yatırım sorğuları</h2>
+
 <div id="adminInvest"></div>
+
 </div>
 
 <div class="card admin">
+
 <h2>💸 Çıxarış sorğuları</h2>
+
 <div id="adminWithdraw"></div>
+
 </div>
 
 </div>
@@ -270,27 +339,47 @@ Yardım və suallarınız üçün platforma rəhbərliyi ilə əlaqə saxlayın.
 </section>
 
 <div id="adModal" class="ad hidden">
+
 <div class="adbox">
+
 <h1>NOVENTRA</h1>
+
 <h2>Fəaliyyət</h2>
+
 <p>30 saniyə gözləyin</p>
+
 <div id="timer">30</div>
-<button id="finishBtn" disabled onclick="finishTask()">Gözləyin...</button>
+
+<button
+id="finishBtn"
+disabled
+onclick="finishTask()"
+>
+
+Gözləyin...
+
+</button>
+
 </div>
+
 </div>
 
 <script>
 
-const SUPABASE_URL="https://yafncpfkjmealuwmvcgc.supabase.co";
+const SUPABASE_URL=
+"https://yafncpfkjmealuwmvcgc.supabase.co";
 
-const SUPABASE_KEY="sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+const SUPABASE_KEY=
+"sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
 
-const supabaseClient=supabase.createClient(
+const supabaseClient=
+supabase.createClient(
 SUPABASE_URL,
 SUPABASE_KEY
 );
 
-const ADMIN_EMAIL="Ayazdiana666@gmail.com";
+const ADMIN_EMAIL=
+"Ayazdiana666@gmail.com";
 
 let user=null;
 let profile=null;
@@ -382,20 +471,29 @@ loginPage.classList.remove("hidden");
 
 async function register(){
 
-const emailValue=regEmail.value.trim();
-const passwordValue=regPassword.value;
-const referral=regReferral.value.trim().toUpperCase();
+const emailValue=
+regEmail.value.trim();
+
+const passwordValue=
+regPassword.value;
+
+const referral=
+regReferral.value.trim().toUpperCase();
 
 if(!emailValue||!passwordValue){
 
-regMsg.innerText="Email və şifrəni doldurun.";
+regMsg.innerText=
+"Email və şifrəni doldurun.";
+
 return;
 
 }
 
-regMsg.innerText="Hesab yaradılır...";
+regMsg.innerText=
+"Hesab yaradılır...";
 
-const {data,error}=await supabaseClient.auth.signUp({
+const {data,error}=
+await supabaseClient.auth.signUp({
 
 email:emailValue,
 password:passwordValue
@@ -404,14 +502,17 @@ password:passwordValue
 
 if(error){
 
-regMsg.innerText=error.message;
+regMsg.innerText=
+error.message;
+
 return;
 
 }
 
 if(data.user){
 
-const {error:profileError}=await supabaseClient
+const {error:profileError}=
+await supabaseClient
 .from("profiles")
 .insert({
 
@@ -426,15 +527,21 @@ active_rank:null
 
 if(profileError){
 
-regMsg.innerText="Profil xətası: "+profileError.message;
+regMsg.innerText=
+"Profil xətası: "+
+profileError.message;
+
 return;
 
 }
 
 }
 
-regMsg.style.color="#40dc91";
-regMsg.innerText="Hesab yaradıldı.";
+regMsg.style.color=
+"#40dc91";
+
+regMsg.innerText=
+"Hesab yaradıldı.";
 
 setTimeout(showLogin,1000);
 
@@ -442,10 +549,14 @@ setTimeout(showLogin,1000);
 
 async function login(){
 
-const emailValue=loginEmail.value.trim();
-const passwordValue=loginPassword.value;
+const emailValue=
+loginEmail.value.trim();
 
-const {data,error}=await supabaseClient.auth.signInWithPassword({
+const passwordValue=
+loginPassword.value;
+
+const {data,error}=
+await supabaseClient.auth.signInWithPassword({
 
 email:emailValue,
 password:passwordValue
@@ -454,7 +565,9 @@ password:passwordValue
 
 if(error){
 
-loginMsg.innerText="Email və ya şifrə yanlışdır.";
+loginMsg.innerText=
+"Email və ya şifrə yanlışdır.";
+
 return;
 
 }
@@ -465,7 +578,8 @@ await openApp(data.user);
 
 async function loadProfile(){
 
-const {data,error}=await supabaseClient
+const {data,error}=
+await supabaseClient
 .from("profiles")
 .select("*")
 .eq("id",user.id)
@@ -474,6 +588,7 @@ const {data,error}=await supabaseClient
 if(error){
 
 console.error(error);
+
 return;
 
 }
@@ -490,9 +605,13 @@ loginPage.classList.add("hidden");
 registerPage.classList.add("hidden");
 app.classList.remove("hidden");
 
-email.innerText=user.email;
+email.innerText=
+user.email;
 
-if(user.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()){
+if(
+user.email.toLowerCase()===
+ADMIN_EMAIL.toLowerCase()
+){
 
 adminBtn.classList.remove("hidden");
 
@@ -508,7 +627,8 @@ await loadWithdrawals();
 
 async function loadEarnings(){
 
-const {data}=await supabaseClient
+const {data}=
+await supabaseClient
 .from("earnings")
 .select("*")
 .eq("user_id",user.id)
@@ -518,20 +638,28 @@ let sum=0;
 
 (data||[]).forEach(x=>{
 
-sum+=Number(x.amount||0);
+sum+=
+Number(x.amount||0);
 
 });
 
-balance.innerText=sum.toFixed(2)+" $";
-total.innerText=sum.toFixed(2)+" $";
+balance.innerText=
+sum.toFixed(2)+" $";
 
-history.innerHTML=(data&&data.length)
+total.innerText=
+sum.toFixed(2)+" $";
+
+history.innerHTML=
+(data&&data.length)
 ?
+
 data.map(x=>`
 
 <div class="row">
 
-<span>${x.description||"Qazanc"}</span>
+<span>
+${x.description||"Qazanc"}
+</span>
 
 <b class="green">
 +${Number(x.amount).toFixed(2)} $
@@ -540,7 +668,9 @@ data.map(x=>`
 </div>
 
 `).join("")
+
 :
+
 "<p class='muted'>Hələ qazanc yoxdur.</p>";
 
 }
@@ -549,23 +679,30 @@ async function loadReferral(){
 
 if(!profile)return;
 
-const myCode=profile.referral_code;
+const myCode=
+profile.referral_code;
 
-referralCode.innerText=myCode;
-accountRef.innerText=myCode;
+referralCode.innerText=
+myCode;
 
-const {data:refs}=await supabaseClient
+accountRef.innerText=
+myCode;
+
+const {data:refs}=
+await supabaseClient
 .from("profiles")
 .select("id")
 .eq("referred_by",myCode);
 
-const ids=(refs||[]).map(x=>x.id);
+const ids=
+(refs||[]).map(x=>x.id);
 
 let qualified=0;
 
 if(ids.length){
 
-const {data:investments}=await supabaseClient
+const {data:investments}=
+await supabaseClient
 .from("investments")
 .select("user_id,amount")
 .in("user_id",ids)
@@ -575,15 +712,21 @@ const totals={};
 
 (investments||[]).forEach(x=>{
 
-totals[x.user_id]=(totals[x.user_id]||0)+Number(x.amount||0);
+totals[x.user_id]=
+(totals[x.user_id]||0)+
+Number(x.amount||0);
 
 });
 
-qualified=Object.values(totals).filter(x=>x>0).length;
+qualified=
+Object.values(totals)
+.filter(x=>x>0)
+.length;
 
 }
 
-refCount.innerText=qualified;
+refCount.innerText=
+qualified;
 
 await checkRankAutomatically();
 
@@ -593,41 +736,54 @@ renderRanks(qualified);
 
 async function getApprovedInvestment(){
 
-const {data}=await supabaseClient
+const {data}=
+await supabaseClient
 .from("investments")
 .select("amount")
 .eq("user_id",user.id)
 .eq("status","approved");
 
 return Math.max(
-...(data||[]).map(x=>Number(x.amount)||0),
+
+...(data||[])
+.map(x=>Number(x.amount)||0),
+
 0
+
 );
 
 }
 
 async function checkRankAutomatically(){
 
-if(!profile.selected_rank||profile.active_rank)return;
+if(
+!profile.selected_rank||
+profile.active_rank
+)return;
 
-const rank=RANKS[profile.selected_rank];
+const rank=
+RANKS[profile.selected_rank];
 
 if(!rank)return;
 
-const ownInvestment=await getApprovedInvestment();
+const ownInvestment=
+await getApprovedInvestment();
 
-const {data:refs}=await supabaseClient
+const {data:refs}=
+await supabaseClient
 .from("profiles")
 .select("id")
 .eq("referred_by",profile.referral_code);
 
-const ids=(refs||[]).map(x=>x.id);
+const ids=
+(refs||[]).map(x=>x.id);
 
 let qualified=0;
 
 if(ids.length){
 
-const {data:investments}=await supabaseClient
+const {data:investments}=
+await supabaseClient
 .from("investments")
 .select("user_id,amount")
 .in("user_id",ids)
@@ -637,26 +793,42 @@ const totals={};
 
 (investments||[]).forEach(x=>{
 
-totals[x.user_id]=(totals[x.user_id]||0)+Number(x.amount||0);
+totals[x.user_id]=
+(totals[x.user_id]||0)+
+Number(x.amount||0);
 
 });
 
-qualified=Object.values(totals)
+qualified=
+Object.values(totals)
 .filter(x=>x>=rank.refInvestment)
 .length;
 
 }
 
-if(ownInvestment>=rank.investment&&qualified>=rank.referrals){
+if(
+ownInvestment>=rank.investment&&
+qualified>=rank.referrals
+){
 
 await supabaseClient
 .from("profiles")
-.update({active_rank:profile.selected_rank})
+.update({
+
+active_rank:
+profile.selected_rank
+
+})
 .eq("id",user.id);
 
-profile.active_rank=profile.selected_rank;
+profile.active_rank=
+profile.selected_rank;
 
-alert("Təbriklər! "+rank.name+" statusunuz avtomatik aktivləşdirildi.");
+alert(
+"Təbriklər! "+
+rank.name+
+" statusunuz avtomatik aktivləşdirildi."
+);
 
 }
 
@@ -664,19 +836,31 @@ alert("Təbriklər! "+rank.name+" statusunuz avtomatik aktivləşdirildi.");
 
 function renderRanks(){
 
-const selected=profile.selected_rank;
-const active=profile.active_rank;
+const selected=
+profile.selected_rank;
+
+const active=
+profile.active_rank;
 
 let html=`
+
 <div class="rank-box">
+
 <h2>🏆 Rəhbərlik səviyyələri</h2>
+
 `;
 
-Object.entries(RANKS).forEach(([key,rank])=>{
+Object.entries(RANKS)
+.forEach(([key,rank])=>{
 
-const isLocked=rank.locked;
-const isSelected=selected===key;
-const isActive=active===key;
+const isLocked=
+rank.locked;
+
+const isSelected=
+selected===key;
+
+const isActive=
+active===key;
 
 html+=`
 
@@ -685,41 +869,91 @@ ${isActive?"active":""}
 ${isSelected&&!isActive?"selected":""}
 ${isLocked?"locked":""}">
 
-<div class="rank-title">${rank.name}</div>
-
-<div class="rank-line">
-<span class="muted">Öz yatırımınız</span>
-<b>${rank.investment} $</b>
+<div class="rank-title">
+${rank.name}
 </div>
 
 <div class="rank-line">
-<span class="muted">Gətirilən aktiv referal</span>
-<b>${rank.referrals} nəfər</b>
+
+<span class="muted">
+Öz yatırımınız
+</span>
+
+<b>
+${rank.investment} $
+</b>
+
 </div>
 
 <div class="rank-line">
-<span class="muted">Referal üçün yatırım</span>
-<b>${rank.refInvestment} $</b>
+
+<span class="muted">
+Gətirilən aktiv referal
+</span>
+
+<b>
+${rank.referrals} nəfər
+</b>
+
 </div>
 
 <div class="rank-line">
-<span class="muted">Rəhbər qazancı</span>
-<b class="green">${rank.leaderEarning} $</b>
+
+<span class="muted">
+Referal üçün yatırım
+</span>
+
+<b>
+${rank.refInvestment} $
+</b>
+
 </div>
 
 <div class="rank-line">
-<span class="muted">Referal qazancı</span>
-<b class="yellow">${rank.refEarning} $</b>
+
+<span class="muted">
+Rəhbər qazancı
+</span>
+
+<b class="green">
+${rank.leaderEarning} $
+</b>
+
 </div>
+
+<div class="rank-line">
+
+<span class="muted">
+Referal qazancı
+</span>
+
+<b class="yellow">
+${rank.refEarning} $
+</b>
+
+</div>
+
 `;
 
 if(isActive){
 
-html+=`<div class="info green">🎉 Bu status artıq aktivdir.</div>`;
+html+=`
+
+<div class="info green">
+🎉 Bu status artıq aktivdir.
+</div>
+
+`;
 
 }else if(isLocked){
 
-html+=`<div class="lock">🔒 Bu səviyyə gələcəkdə aktiv olacaq.</div>`;
+html+=`
+
+<div class="lock">
+🔒 Bu səviyyə gələcəkdə aktiv olacaq.
+</div>
+
+`;
 
 }else if(isSelected){
 
@@ -739,36 +973,61 @@ Sistem bu səviyyənin şərtlərini avtomatik izləyir.
 
 html+=`
 
-<button class="rank-btn" onclick="selectRank('${key}')">
+<button
+class="rank-btn"
+onclick="selectRank('${key}')"
+>
+
 ${rank.name} ÜÇÜN QOŞUL
+
 </button>
 
 `;
 
 }
 
-html+=`</div>`;
+html+=`
+
+</div>
+
+`;
 
 });
 
-html+=`</div>`;
+html+=`
 
-rankArea.innerHTML=html;
+</div>
+
+`;
+
+rankArea.innerHTML=
+html;
 
 if(active){
 
-status.innerText=RANKS[active].name;
-accountStatus.innerText=RANKS[active].name;
+status.innerText=
+RANKS[active].name;
+
+accountStatus.innerText=
+RANKS[active].name;
 
 }else if(selected){
 
-status.innerText=RANKS[selected].name+" üçün hazırlıq";
-accountStatus.innerText=RANKS[selected].name+" üçün hazırlıq";
+status.innerText=
+RANKS[selected].name+
+" üçün hazırlıq";
+
+accountStatus.innerText=
+RANKS[selected].name+
+" üçün hazırlıq";
 
 }else{
 
-status.innerText="Yeni istifadəçi";
-accountStatus.innerText="Yeni istifadəçi";
+status.innerText=
+"Yeni istifadəçi";
+
+accountStatus.innerText=
+"Yeni istifadəçi";
 
 }
 
@@ -776,24 +1035,36 @@ accountStatus.innerText="Yeni istifadəçi";
 
 async function selectRank(key){
 
-const rank=RANKS[key];
+const rank=
+RANKS[key];
 
 if(rank.locked){
 
-alert("Bu səviyyə hələ kilidlidir.");
+alert(
+"Bu səviyyə hələ kilidlidir."
+);
+
 return;
 
 }
 
 if(profile.selected_rank){
 
-const old=RANKS[profile.selected_rank];
+const old=
+RANKS[profile.selected_rank];
 
-if(!confirm("Artıq "+old.name+" seçmisiniz. Yeni səviyyəyə keçmək istəyirsiniz?"))return;
+if(
+!confirm(
+"Artıq "+
+old.name+
+" seçmisiniz. Yeni səviyyəyə keçmək istəyirsiniz?"
+)
+)return;
 
 }
 
-const {error}=await supabaseClient
+const {error}=
+await supabaseClient
 .from("profiles")
 .update({
 
@@ -806,14 +1077,21 @@ active_rank:null
 if(error){
 
 alert(error.message);
+
 return;
 
 }
 
-profile.selected_rank=key;
-profile.active_rank=null;
+profile.selected_rank=
+key;
 
-alert(rank.name+" seçildi. Sistem şərtləri avtomatik izləyəcək.");
+profile.active_rank=
+null;
+
+alert(
+rank.name+
+" seçildi. Sistem şərtləri avtomatik izləyəcək."
+);
 
 await loadReferral();
 
@@ -821,13 +1099,16 @@ await loadReferral();
 
 async function loadInvestment(){
 
-const {data}=await supabaseClient
+const {data}=
+await supabaseClient
 .from("investments")
 .select("*")
 .eq("user_id",user.id)
 .order("created_at",{ascending:false});
 
-const approved=(data||[]).some(x=>x.status==="approved");
+const approved=
+(data||[])
+.some(x=>x.status==="approved");
 
 if(approved){
 
@@ -835,9 +1116,13 @@ taskArea.innerHTML=`
 
 <div class="task">
 
-<span>30 saniyəlik fəaliyyət</span>
+<span>
+30 saniyəlik fəaliyyət
+</span>
 
-<button onclick="startTask()">Başla</button>
+<button onclick="startTask()">
+Başla
+</button>
 
 </div>
 
@@ -853,8 +1138,13 @@ Yatırım təsdiqlənmədən fəaliyyətə başlamaq mümkün deyil.
 
 <br><br>
 
-<button class="main" onclick="page('invest')">
+<button
+class="main"
+onclick="page('invest')"
+>
+
 YATIRIM ET
+
 </button>
 
 </div>
@@ -863,63 +1153,106 @@ YATIRIM ET
 
 }
 
-investHistory.innerHTML=(data&&data.length)
+investHistory.innerHTML=
+(data&&data.length)
 ?
+
 data.map(x=>`
 
 <div class="row">
 
-<span>${Number(x.amount).toFixed(2)} $</span>
+<span>
+${Number(x.amount).toFixed(2)} $
+</span>
 
-<b class="${x.status==="approved"?"green":"yellow"}">
-${x.status}
+<b class="${
+x.status==="approved"
+?"green"
+:x.status==="rejected"
+?"rejected"
+:"yellow"
+}">
+
+${
+x.status==="approved"
+?"✅ Təsdiqləndi"
+:x.status==="rejected"
+?"❌ İmtina edildi"
+:"⏳ Gözləyir"
+}
+
 </b>
 
 </div>
 
 `).join("")
+
 :
+
 "<p class='muted'>Yatırım tarixçəsi yoxdur.</p>";
 
 }
 
 async function startTask(){
 
-const today=new Date();
+const today=
+new Date();
+
 today.setHours(0,0,0,0);
 
-const {data}=await supabaseClient
+const {data}=
+await supabaseClient
 .from("earnings")
 .select("id")
 .eq("user_id",user.id)
-.eq("description","NOVENTRA 30 saniyəlik fəaliyyət")
-.gte("created_at",today.toISOString());
+.eq(
+"description",
+"NOVENTRA 30 saniyəlik fəaliyyət"
+)
+.gte(
+"created_at",
+today.toISOString()
+);
 
 if(data&&data.length){
 
-alert("Bu gün artıq fəaliyyət etmisiniz.");
+alert(
+"Bu gün artıq fəaliyyət etmisiniz."
+);
+
 return;
 
 }
 
 adModal.classList.remove("hidden");
-finishBtn.disabled=true;
+
+finishBtn.disabled=
+true;
 
 let sec=30;
-timer.innerText=sec;
+
+timer.innerText=
+sec;
 
 clearInterval(timerInterval);
 
-timerInterval=setInterval(()=>{
+timerInterval=
+setInterval(()=>{
 
 sec--;
-timer.innerText=sec;
+
+timer.innerText=
+sec;
 
 if(sec<=0){
 
 clearInterval(timerInterval);
-finishBtn.disabled=false;
-finishBtn.innerText="Qazancı götür";
+
+finishBtn.disabled=
+false;
+
+finishBtn.innerText=
+"Qazancı götür";
 
 }
 
@@ -929,22 +1262,41 @@ finishBtn.innerText="Qazancı götür";
 
 async function finishTask(){
 
-const rank=profile.active_rank?RANKS[profile.active_rank]:null;
-const earning=rank?rank.leaderEarning:1;
+const rank=
+profile.active_rank
+?
+RANKS[profile.active_rank]
+:
+null;
 
-const {error}=await supabaseClient
+const earning=
+rank
+?
+rank.leaderEarning
+:
+1;
+
+const {error}=
+await supabaseClient
 .from("earnings")
 .insert({
 
 user_id:user.id,
 amount:earning,
-description:"NOVENTRA "+(rank?rank.name:"fəaliyyət")
+description:
+"NOVENTRA "+
+(rank
+?
+rank.name
+:
+"fəaliyyət")
 
 });
 
 if(error){
 
 alert(error.message);
+
 return;
 
 }
@@ -953,68 +1305,98 @@ adModal.classList.add("hidden");
 
 await loadEarnings();
 
-alert(earning+" $ qazanc əlavə edildi.");
+alert(
+earning+
+" $ qazanc əlavə edildi."
+);
 
 }
 
 async function invest(){
 
-const amount=Number(investAmount.value);
-const file=receipt.files[0];
+const amount=
+Number(investAmount.value);
+
+const file=
+receipt.files[0];
 
 if(!amount||amount<=0){
 
-investMsg.innerText="Məbləği yazın.";
+investMsg.innerText=
+"Məbləği yazın.";
+
 return;
 
 }
 
 if(!file){
 
-investMsg.innerText="Çek şəklini seçin.";
+investMsg.innerText=
+"Çek şəklini seçin.";
+
 return;
 
 }
 
-investMsg.innerText="Yüklənir...";
+investMsg.innerText=
+"Yüklənir...";
 
-const name=user.id+"-"+Date.now()+"-"+file.name;
+const name=
+user.id+
+"-"+
+Date.now()+
+"-"+
+file.name;
 
-const {error:uploadError}=await supabaseClient.storage
+const {error:uploadError}=
+await supabaseClient.storage
 .from("receipts")
-.upload(name,file);
+.upload(
+name,
+file
+);
 
 if(uploadError){
 
-investMsg.innerText=uploadError.message;
+investMsg.innerText=
+uploadError.message;
+
 return;
 
 }
 
-const {data:urlData}=supabaseClient.storage
+const {data:urlData}=
+supabaseClient.storage
 .from("receipts")
 .getPublicUrl(name);
 
-const {error}=await supabaseClient
+const {error}=
+await supabaseClient
 .from("investments")
 .insert({
 
 user_id:user.id,
 amount,
-receipt_url:urlData.publicUrl,
+receipt_url:
+urlData.publicUrl,
 status:"pending"
 
 });
 
 if(error){
 
-investMsg.innerText=error.message;
+investMsg.innerText=
+error.message;
+
 return;
 
 }
 
-investMsg.style.color="#40dc91";
-investMsg.innerText="Yatırım sorğusu göndərildi.";
+investMsg.style.color=
+"#40dc91";
+
+investMsg.innerText=
+"Yatırım sorğusu göndərildi.";
 
 await loadInvestment();
 
@@ -1022,19 +1404,23 @@ await loadInvestment();
 
 function changeWithdrawMethod(){
 
-const method=withdrawMethod.value;
+const method=
+withdrawMethod.value;
 
 if(method==="card"){
 
-withdrawAddress.placeholder="Bank kartı nömrəsi";
+withdrawAddress.placeholder=
+"Bank kartı nömrəsi";
 
 }else if(method==="binance"){
 
-withdrawAddress.placeholder="Binance UID";
+withdrawAddress.placeholder=
+"Binance UID";
 
 }else{
 
-withdrawAddress.placeholder="Kart nömrəsi və ya Binance UID";
+withdrawAddress.placeholder=
+"Kart nömrəsi və ya Binance UID";
 
 }
 
@@ -1042,61 +1428,93 @@ withdrawAddress.placeholder="Kart nömrəsi və ya Binance UID";
 
 async function requestWithdraw(){
 
-const amount=Number(withdrawAmount.value);
-const method=withdrawMethod.value;
-const address=withdrawAddress.value.trim();
+const amount=
+Number(withdrawAmount.value);
+
+const method=
+withdrawMethod.value;
+
+const address=
+withdrawAddress.value.trim();
 
 if(amount<4){
 
-withdrawMsg.innerText="Minimum çıxarış məbləği 4 $-dır.";
+withdrawMsg.innerText=
+"Minimum çıxarış məbləği 4 $-dır.";
+
 return;
 
 }
 
 if(!method){
 
-withdrawMsg.innerText="Ödəniş üsulunu seçin.";
+withdrawMsg.innerText=
+"Ödəniş üsulunu seçin.";
+
 return;
 
 }
 
 if(!address){
 
-withdrawMsg.innerText="Kart nömrəsi və ya Binance UID daxil edin.";
+withdrawMsg.innerText=
+"Kart nömrəsi və ya Binance UID daxil edin.";
+
 return;
 
 }
 
-const {data:earnings}=await supabaseClient
+const {data:earnings}=
+await supabaseClient
 .from("earnings")
 .select("amount")
 .eq("user_id",user.id);
 
-const totalEarned=(earnings||[])
-.reduce((a,b)=>a+Number(b.amount||0),0);
+const totalEarned=
+(earnings||[])
+.reduce(
+(a,b)=>
+a+
+Number(b.amount||0),
+0
+);
 
-const {data:withdrawals}=await supabaseClient
+const {data:withdrawals}=
+await supabaseClient
 .from("withdrawals")
 .select("amount")
 .eq("user_id",user.id)
-.in("status",["pending","paid"]);
+.in(
+"status",
+["pending","paid"]
+);
 
-const totalWithdrawn=(withdrawals||[])
-.reduce((a,b)=>a+Number(b.amount||0),0);
+const totalWithdrawn=
+(withdrawals||[])
+.reduce(
+(a,b)=>
+a+
+Number(b.amount||0),
+0
+);
 
-const available=totalEarned-totalWithdrawn;
+const available=
+totalEarned-
+totalWithdrawn;
 
 if(amount>available){
 
 withdrawMsg.innerText=
 "Balansınızda kifayət qədər vəsait yoxdur. Mövcud balans: "+
-available.toFixed(2)+" $";
+available.toFixed(2)+
+" $";
 
 return;
 
 }
 
-const {error}=await supabaseClient
+const {error}=
+await supabaseClient
 .from("withdrawals")
 .insert({
 
@@ -1110,17 +1528,27 @@ status:"pending"
 
 if(error){
 
-withdrawMsg.innerText=error.message;
+withdrawMsg.innerText=
+error.message;
+
 return;
 
 }
 
-withdrawMsg.style.color="#40dc91";
-withdrawMsg.innerText="Çıxarış sorğusu göndərildi.";
+withdrawMsg.style.color=
+"#40dc91";
 
-withdrawAmount.value="";
-withdrawMethod.value="";
-withdrawAddress.value="";
+withdrawMsg.innerText=
+"Çıxarış sorğusu göndərildi.";
+
+withdrawAmount.value=
+"";
+
+withdrawMethod.value=
+"";
+
+withdrawAddress.value=
+"";
 
 await loadWithdrawals();
 
@@ -1128,11 +1556,15 @@ await loadWithdrawals();
 
 async function loadWithdrawals(){
 
-const {data,error}=await supabaseClient
+const {data,error}=
+await supabaseClient
 .from("withdrawals")
 .select("*")
 .eq("user_id",user.id)
-.order("created_at",{ascending:false});
+.order(
+"created_at",
+{ascending:false}
+);
 
 if(error){
 
@@ -1143,49 +1575,107 @@ return;
 
 }
 
-withdrawHistory.innerHTML=(data&&data.length)
+withdrawHistory.innerHTML=
+(data&&data.length)
 ?
+
 data.map(x=>`
 
 <div class="row">
 
 <div>
-<b>${Number(x.amount).toFixed(2)} $</b>
+
+<b>
+${Number(x.amount).toFixed(2)} $
+</b>
+
 <br>
+
 <span class="muted">
-${x.method==="card"?"💳 Bank kartı":"🟡 Binance"}
+
+${
+x.method==="card"
+?
+"💳 Bank kartı"
+:
+"🟡 Binance"
+}
+
 </span>
+
 </div>
 
-<span class="${x.status==="paid"?"paid":"pending"}">
+<span class="${
+x.status==="paid"
+?
+"paid"
+:
+x.status==="rejected"
+?
+"rejected"
+:
+"pending"
+}">
 
-${x.status==="paid"?"✅ Ödənildi":"⏳ Gözləyir"}
+${
+x.status==="paid"
+?
+"✅ Ödənildi"
+:
+x.status==="rejected"
+?
+"❌ İmtina edildi"
+:
+"⏳ Gözləyir"
+}
 
 </span>
 
 </div>
 
 `).join("")
+
 :
+
 "<p class='muted'>Hələ çıxarış yoxdur.</p>";
 
 }
 
 function page(name){
 
-const pages=["home","earn","invest","account","admin"];
+const pages=
+[
+"home",
+"earn",
+"invest",
+"account",
+"admin"
+];
 
 pages.forEach(x=>{
 
-document.getElementById(x+"Page").classList.add("hidden");
+document
+.getElementById(
+x+
+"Page"
+)
+.classList
+.add("hidden");
 
 });
 
-document.getElementById(name+"Page").classList.remove("hidden");
+document
+.getElementById(
+name+
+"Page"
+)
+.classList
+.remove("hidden");
 
 if(name==="admin"){
 
 loadAdmin();
+
 loadAdminWithdrawals();
 
 }
@@ -1194,47 +1684,202 @@ loadAdminWithdrawals();
 
 async function logout(){
 
-await supabaseClient.auth.signOut();
+await supabaseClient
+.auth
+.signOut();
+
 location.reload();
 
 }
 
 async function loadAdmin(){
 
-const {data}=await supabaseClient
+const {data,error}=
+await supabaseClient
 .from("investments")
 .select("*")
-.order("created_at",{ascending:false});
+.order(
+"created_at",
+{ascending:false}
+);
 
-adminInvest.innerHTML=(data||[])
+if(error){
+
+adminInvest.innerHTML=
+"<p class='msg'>Sorğular yüklənmədi: "+
+error.message+
+"</p>";
+
+return;
+
+}
+
+adminInvest.innerHTML=
+(data||[])
 .map(x=>`
 
 <div class="admin-item">
 
-<b>${Number(x.amount).toFixed(2)} $</b>
+<b>
+${Number(x.amount).toFixed(2)} $
+</b>
 
-<p>Status: ${x.status}</p>
+<p>
 
-${x.receipt_url?`<img src="${x.receipt_url}">`:""}
+Status:
+
+<span class="${
+x.status==="approved"
+?
+"paid"
+:
+x.status==="rejected"
+?
+"rejected"
+:
+"pending"
+}">
+
+${
+x.status==="approved"
+?
+"✅ Təsdiqləndi"
+:
+x.status==="rejected"
+?
+"❌ İmtina edildi"
+:
+"⏳ Gözləyir"
+}
+
+</span>
+
+</p>
+
+${
+x.receipt_url
+?
+`<img src="${x.receipt_url}">`
+:
+""
+}
 
 <br>
 
-<button onclick="approve('${x.id}')">
-Təsdiqlə
+${
+x.status==="pending"
+?
+
+`
+
+<button
+class="approve-btn"
+onclick="approve('${x.id}')"
+>
+
+✅ TƏSDİQLƏ
+
 </button>
+
+<button
+class="reject-btn"
+onclick="rejectInvestment('${x.id}')"
+>
+
+❌ İMTİNA ET
+
+</button>
+
+`
+
+:
+
+""
+
+}
 
 </div>
 
-`).join("");
+`)
+.join("");
 
 }
 
 async function approve(id){
 
+if(
+!confirm(
+"Bu yatırım sorğusunu təsdiqləmək istəyirsiniz?"
+)
+)return;
+
+const {error}=
 await supabaseClient
 .from("investments")
-.update({status:"approved"})
-.eq("id",id);
+.update({
+
+status:"approved"
+
+})
+.eq(
+"id",
+id
+);
+
+if(error){
+
+alert(
+"Xəta baş verdi: "+
+error.message
+);
+
+return;
+
+}
+
+alert(
+"Yatırım təsdiqləndi."
+);
+
+await loadAdmin();
+
+}
+
+async function rejectInvestment(id){
+
+if(
+!confirm(
+"Bu yatırım sorğusunu imtina etmək istəyirsiniz?"
+)
+)return;
+
+const {error}=
+await supabaseClient
+.from("investments")
+.update({
+
+status:"rejected"
+
+})
+.eq(
+"id",
+id
+);
+
+if(error){
+
+alert(
+"Xəta baş verdi: "+
+error.message
+);
+
+return;
+
+}
+
+alert(
+"Yatırım sorğusundan imtina edildi."
+);
 
 await loadAdmin();
 
@@ -1242,51 +1887,133 @@ await loadAdmin();
 
 async function loadAdminWithdrawals(){
 
-const {data}=await supabaseClient
+const {data,error}=
+await supabaseClient
 .from("withdrawals")
 .select("*")
-.order("created_at",{ascending:false});
+.order(
+"created_at",
+{ascending:false}
+);
 
-adminWithdraw.innerHTML=(data||[])
+if(error){
+
+adminWithdraw.innerHTML=
+"<p class='msg'>Çıxarış sorğuları yüklənmədi.</p>";
+
+return;
+
+}
+
+adminWithdraw.innerHTML=
+(data||[])
 .map(x=>`
 
 <div class="admin-item">
 
-<b>${Number(x.amount).toFixed(2)} $</b>
+<b>
+${Number(x.amount).toFixed(2)} $
+</b>
 
 <p>
-İstifadəçi ID:<br>
-${x.user_id}
-</p>
 
-<p>
-Ödəniş üsulu:
-${x.method==="card"?"💳 Bank kartı":"🟡 Binance"}
-</p>
+İstifadəçi ID:
 
-<p>
-Məlumat:
 <br>
-<b>${x.address}</b>
+
+${x.user_id}
+
 </p>
 
 <p>
+
+Ödəniş üsulu:
+
+${
+x.method==="card"
+?
+"💳 Bank kartı"
+:
+"🟡 Binance"
+}
+
+</p>
+
+<p>
+
+Məlumat:
+
+<br>
+
+<b>
+${x.address}
+</b>
+
+</p>
+
+<p>
+
 Status:
-<span class="${x.status==="paid"?"paid":"pending"}">
-${x.status==="paid"?"✅ Ödənildi":"⏳ Gözləyir"}
+
+<span class="${
+x.status==="paid"
+?
+"paid"
+:
+x.status==="rejected"
+?
+"rejected"
+:
+"pending"
+}">
+
+${
+x.status==="paid"
+?
+"✅ Ödənildi"
+:
+x.status==="rejected"
+?
+"❌ İmtina edildi"
+:
+"⏳ Gözləyir"
+}
+
 </span>
+
 </p>
 
 ${
-x.status!=="paid"
+x.status==="pending"
+
 ?
+
 `
-<button onclick="markWithdrawPaid('${x.id}')">
+
+<button
+class="approve-btn"
+onclick="markWithdrawPaid('${x.id}')"
+>
+
 ✅ ÖDƏNİLDİ
+
 </button>
+
+<button
+class="reject-btn"
+onclick="rejectWithdraw('${x.id}')"
+>
+
+❌ İMTİNA ET
+
+</button>
+
 `
+
 :
+
 ""
+
 }
 
 </div>
@@ -1298,38 +2025,97 @@ x.status!=="paid"
 
 async function markWithdrawPaid(id){
 
-if(!confirm("Bu çıxarışın ödənişini etdiniz?"))return;
+if(
+!confirm(
+"Bu çıxarışın ödənişini etdiniz?"
+)
+)return;
 
-const {error}=await supabaseClient
+const {error}=
+await supabaseClient
 .from("withdrawals")
 .update({
 
 status:"paid",
-paid_at:new Date().toISOString()
+paid_at:
+new Date()
+.toISOString()
 
 })
-.eq("id",id);
+.eq(
+"id",
+id
+);
 
 if(error){
 
-alert(error.message);
+alert(
+"Xəta baş verdi: "+
+error.message
+);
+
 return;
 
 }
 
-alert("Çıxarış statusu ÖDƏNİLDİ olaraq dəyişdirildi.");
+alert(
+"Çıxarış statusu ÖDƏNİLDİ olaraq dəyişdirildi."
+);
 
 await loadAdminWithdrawals();
 
 }
 
-supabaseClient.auth
+async function rejectWithdraw(id){
+
+if(
+!confirm(
+"Bu çıxarış sorğusundan imtina etmək istəyirsiniz?"
+)
+)return;
+
+const {error}=
+await supabaseClient
+.from("withdrawals")
+.update({
+
+status:"rejected"
+
+})
+.eq(
+"id",
+id
+);
+
+if(error){
+
+alert(
+"Xəta baş verdi: "+
+error.message
+);
+
+return;
+
+}
+
+alert(
+"Çıxarış sorğusundan imtina edildi."
+);
+
+await loadAdminWithdrawals();
+
+}
+
+supabaseClient
+.auth
 .getSession()
 .then(x=>{
 
 if(x.data.session){
 
-openApp(x.data.session.user);
+openApp(
+x.data.session.user
+);
 
 }
 
@@ -1338,4 +2124,4 @@ openApp(x.data.session.user);
 </script>
 
 </body>
-  </html>
+</html>
