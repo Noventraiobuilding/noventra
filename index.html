@@ -171,7 +171,7 @@ const ADMIN_EMAIL="Ayazdiana666@gmail.com";
 let user=null;
 let profile=null;
 let investmentChannel=null;
-let investmentPollInterval=null;
+let refreshInterval=null;
 
 function generateCode(){
   return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
@@ -181,7 +181,6 @@ function showRegister(){
   document.getElementById("loginPage").classList.add("hidden");
   document.getElementById("registerPage").classList.remove("hidden");
 }
-
 function showLogin(){
   document.getElementById("registerPage").classList.add("hidden");
   document.getElementById("loginPage").classList.remove("hidden");
@@ -189,39 +188,33 @@ function showLogin(){
 
 function page(name){
   ["homePage","earnPage","investPage","accountPage","adminPage"].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el) el.classList.add("hidden");
+    document.getElementById(id)?.classList.add("hidden");
   });
   const map={home:"homePage",earn:"earnPage",invest:"investPage",account:"accountPage",admin:"adminPage"};
-  const target=document.getElementById(map[name]||"homePage");
-  if(target) target.classList.remove("hidden");
+  document.getElementById(map[name]||"homePage")?.classList.remove("hidden");
   if(name==="admin") loadAdminInvestments();
 }
 
 async function register(){
-  const emailValue=document.getElementById("regEmail").value.trim();
-  const passwordValue=document.getElementById("regPassword").value;
+  const email=document.getElementById("regEmail").value.trim();
+  const password=document.getElementById("regPassword").value;
   const referral=document.getElementById("regReferral").value.trim().toUpperCase();
   const msg=document.getElementById("regMsg");
 
-  if(!emailValue||!passwordValue){
-    msg.innerText="Email və şifrəni doldurun.";
-    return;
-  }
+  if(!email || !password){ msg.innerText="Email və şifrəni doldurun."; return; }
 
   msg.innerText="Hesab yaradılır...";
-
-  const {data,error}=await supabaseClient.auth.signUp({email:emailValue,password:passwordValue});
+  const {data,error}=await supabaseClient.auth.signUp({email,password});
   if(error){ msg.innerText=error.message; return; }
 
   if(data.user){
-    const {error:profileError}=await supabaseClient.from("profiles").insert({
+    const {error:pe}=await supabaseClient.from("profiles").insert({
       id:data.user.id,
-      email:emailValue,
+      email,
       referral_code:generateCode(),
       referred_by:referral||null
     });
-    if(profileError){ msg.innerText="Profil xətası: "+profileError.message; return; }
+    if(pe){ msg.innerText="Profil xətası: "+pe.message; return; }
   }
 
   msg.style.color="#40dc91";
@@ -230,9 +223,9 @@ async function register(){
 }
 
 async function login(){
-  const emailValue=document.getElementById("loginEmail").value.trim();
-  const passwordValue=document.getElementById("loginPassword").value;
-  const {data,error}=await supabaseClient.auth.signInWithPassword({email:emailValue,password:passwordValue});
+  const email=document.getElementById("loginEmail").value.trim();
+  const password=document.getElementById("loginPassword").value;
+  const {data,error}=await supabaseClient.auth.signInWithPassword({email,password});
   if(error){ document.getElementById("loginMsg").innerText="Email və ya şifrə yanlışdır."; return; }
   await openApp(data.user);
 }
@@ -243,27 +236,44 @@ async function loadProfile(){
   profile=data;
 }
 
-function subscribeToInvestmentChanges(){
+function motivationalHTML(){
+  const tips=[
+    "🎯 Məqsədinə fokuslan: hər gün kiçik addım at.",
+    "🔥 Davamlılıq intizamdan doğur.",
+    "💡 Bu gün etdiyin iş sabahkı nəticəndir."
+  ];
+  return `
+    <div class="info green">✅ Yatırım təsdiqlənib. Fəaliyyət aktivdir.</div>
+    <div class="card" style="margin-top:12px">
+      <h3 style="margin-top:0">Motivasiya</h3>
+      <div class="row"><span>${tips[0]}</span></div>
+      <div class="row"><span>${tips[1]}</span></div>
+      <div class="row"><span>${tips[2]}</span></div>
+    </div>
+  `;
+}
+
+function subscribeInvestments(){
   if(investmentChannel){
     supabaseClient.removeChannel(investmentChannel);
     investmentChannel=null;
   }
-
-  investmentChannel=supabaseClient.channel("investment-status-"+user.id).on("postgres_changes",{
-    event:"*",
-    schema:"public",
-    table:"investments",
-    filter:"user_id=eq."+user.id
-  },async()=>{
-    await loadInvestment();
-  }).subscribe();
+  investmentChannel=supabaseClient
+    .channel("investments-"+user.id)
+    .on("postgres_changes",{
+      event:"*",
+      schema:"public",
+      table:"investments",
+      filter:"user_id=eq."+user.id
+    },async()=>{ await loadInvestment(); })
+    .subscribe();
 }
 
-function startInvestmentPolling(){
-  if(investmentPollInterval) clearInterval(investmentPollInterval);
-  investmentPollInterval=setInterval(async()=>{
+function startAutoRefresh(){
+  if(refreshInterval) clearInterval(refreshInterval);
+  refreshInterval=setInterval(async()=>{
     if(user) await loadInvestment();
-  },5000);
+  },3000);
 }
 
 async function openApp(u){
@@ -282,8 +292,8 @@ async function openApp(u){
   await loadReferral();
   await loadInvestment();
 
-  subscribeToInvestmentChanges();
-  startInvestmentPolling();
+  subscribeInvestments();
+  startAutoRefresh();
   page("home");
 }
 
@@ -309,25 +319,26 @@ async function loadEarnings(){
 async function loadReferral(){
   if(!profile) return;
 
-  const myCode=profile.referral_code||"—";
-  document.getElementById("referralCode").innerText=myCode;
-  document.getElementById("accountRef").innerText=myCode;
+  const code=profile.referral_code||"—";
+  document.getElementById("referralCode").innerText=code;
+  document.getElementById("accountRef").innerText=code;
 
-  const {data:refs}=await supabaseClient.from("profiles").select("id").eq("referred_by",profile.referral_code);
-  document.getElementById("refCount").innerText=(refs||[]).length;
+  const {data}=await supabaseClient
+    .from("profiles")
+    .select("id")
+    .eq("referred_by",code);
+
+  document.getElementById("refCount").innerText=(data||[]).length;
 }
 
 async function loadInvestment(){
   const {data,error}=await supabaseClient
     .from("investments")
-    .select("id,amount,status,created_at")
+    .select("id,user_id,amount,status,created_at")
     .eq("user_id",user.id)
     .order("created_at",{ascending:false});
 
-  if(error){
-    console.error("loadInvestment error:",error);
-    return;
-  }
+  if(error){ console.error("loadInvestment:",error); return; }
 
   const list=data||[];
   const approved=list.some(x=>String(x.status||"").toLowerCase().trim()==="approved");
@@ -335,7 +346,7 @@ async function loadInvestment(){
   const taskArea=document.getElementById("taskArea");
 
   if(approved){
-    taskArea.innerHTML='<div class="info green">✅ Yatırım təsdiqlənib. Fəaliyyət aktivdir.</div>';
+    taskArea.innerHTML=motivationalHTML();
     document.getElementById("status").innerText="Aktiv";
     document.getElementById("accountStatus").innerText="Aktiv";
   }else if(list.length){
@@ -350,10 +361,10 @@ async function loadInvestment(){
 
   document.getElementById("investHistory").innerHTML=list.length
     ? list.map(x=>{
-      const st=String(x.status||"pending").toLowerCase().trim();
-      const cls=st==="approved"?"paid":(st==="rejected"?"rejected":"pending");
-      return `<div class="row"><span>${new Date(x.created_at).toLocaleString()}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ - ${x.status||"pending"}</b></div>`;
-    }).join("")
+        const st=String(x.status||"pending").toLowerCase().trim();
+        const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
+        return `<div class="row"><span>${new Date(x.created_at).toLocaleString()}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ - ${st}</b></div>`;
+      }).join("")
     : "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
 }
 
@@ -405,37 +416,32 @@ async function loadAdminInvestments(){
 }
 
 async function approveInvestment(investmentId){
-  const { error } = await supabaseClient
+  const {error}=await supabaseClient
     .from("investments")
-    .update({ status: "approved" })
-    .eq("id", investmentId);
+    .update({status:"approved"})
+    .eq("id",investmentId);
 
-  if(error){
-    console.error("Approve error:", error);
-    alert("Təsdiq alınmadı: " + error.message);
-    return;
-  }
+  if(error){ alert("Təsdiq alınmadı: "+error.message); return; }
 
   await loadAdminInvestments();
   alert("Yatırım təsdiqləndi ✅");
 }
 
 async function rejectInvestment(investmentId){
-  const { error } = await supabaseClient
+  const {error}=await supabaseClient
     .from("investments")
-    .update({ status: "rejected" })
-    .eq("id", investmentId);
+    .update({status:"rejected"})
+    .eq("id",investmentId);
 
-  if(error){
-    alert("Rədd edilmədi: " + error.message);
-    return;
-  }
+  if(error){ alert("Rədd edilmədi: "+error.message); return; }
 
   await loadAdminInvestments();
   alert("Yatırım rədd edildi");
 }
 
 async function logout(){
+  if(investmentChannel) supabaseClient.removeChannel(investmentChannel);
+  if(refreshInterval) clearInterval(refreshInterval);
   await supabaseClient.auth.signOut();
   location.reload();
 }
@@ -445,5 +451,6 @@ async function logout(){
   if(data?.user) await openApp(data.user);
 })();
 </script>
+
 </body>
-</html>
+  </html>
