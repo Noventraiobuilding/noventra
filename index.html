@@ -3,7 +3,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noventra</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>  <style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
     *{box-sizing:border-box}
     body{margin:0;background:#080b14;color:#fff;font-family:Arial,sans-serif}
     .hidden{display:none!important}
@@ -67,9 +68,7 @@
         inset 0 1px 0 rgba(255,255,255,.55);
       filter:saturate(1.05);
     }
-    .level-btn:active{
-      transform:translateY(0);
-    }
+    .level-btn:active{ transform:translateY(0); }
     .level-btn:focus{
       outline:none;
       box-shadow:
@@ -80,7 +79,10 @@
     @media(max-width:700px){
       .grid,.two{grid-template-columns:1fr}
     }
-  </style></head><body><section id="loginPage" class="auth">
+  </style>
+</head>
+<body>
+<section id="loginPage" class="auth">
   <div class="box">
     <div class="logo">NOVENTRA</div>
     <input id="loginEmail" type="email" placeholder="Email" />
@@ -89,7 +91,9 @@
     <div class="switch" onclick="showRegister()">Hesab yarat</div>
     <div id="loginMsg" class="msg"></div>
   </div>
-</section><section id="registerPage" class="auth hidden">
+</section>
+
+<section id="registerPage" class="auth hidden">
   <div class="box">
     <div class="logo">NOVENTRA</div>
     <input id="regEmail" type="email" placeholder="Email" />
@@ -99,151 +103,148 @@
     <div class="switch" onclick="showLogin()">Girişə qayıt</div>
     <div id="regMsg" class="msg"></div>
   </div>
-</section><section id="app" class="hidden">  <div class="header">
+</section>
+
+<section id="app" class="hidden">
+  <div class="header">
     <div class="logo">NOVENTRA</div>
-  </div>  <nav class="nav">
+  </div>
+
+  <nav class="nav">
     <button onclick="page('home')">Ana səhifə</button>
     <button onclick="page('earn')">Qazanc</button>
     <button onclick="page('invest')">Yatırım</button>
     <button onclick="page('account')">Hesabım</button>
     <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
-  </nav>  <div id="homePage"><h1>Xoş gəlmisiniz</h1>
-<p class="muted">Hesabınızın ümumi vəziyyəti</p>
+  </nav>
 
-<div class="grid">
+  <div id="homePage">
+    <h1>Xoş gəlmisiniz</h1>
+    <p class="muted">Hesabınızın ümumi vəziyyəti</p>
 
-  <div class="card">
-    <div class="muted">Aktiv balans</div>
-    <div id="balance" class="value">0.00 $</div>
-  </div>
+    <div class="grid">
+      <div class="card">
+        <div class="muted">Aktiv balans</div>
+        <div id="balance" class="value">0.00 $</div>
+      </div>
 
-  <div class="card">
-    <div class="muted">Ümumi qazanc</div>
-    <div id="total" class="value green">0.00 $</div>
-  </div>
+      <div class="card">
+        <div class="muted">Ümumi qazanc</div>
+        <div id="total" class="value green">0.00 $</div>
+      </div>
 
-  <div class="card">
-    <div class="muted">Rəhbərlik statusu</div>
-    <div id="status" class="value purple">Yeni istifadəçi</div>
-  </div>
+      <div class="card">
+        <div class="muted">Rəhbərlik statusu</div>
+        <div id="status" class="value purple">Yeni istifadəçi</div>
+      </div>
+    </div>
 
-</div>
+    <div class="two">
+      <div class="card">
+        <h2>Fəaliyyət</h2>
+        <p class="muted">Yatırım admin tərəfindən təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.</p>
+        <div id="taskArea"></div>
+      </div>
 
-<div class="two">
+      <div class="card">
+        <h2>Referal sistemi</h2>
+        <p class="muted">Sənin dəvət kodun:</p>
+        <div id="referralCode" class="refcode">Yüklənir...</div>
+        <div class="row">
+          <span class="muted">Aktiv referallar</span>
+          <b id="refCount">0</b>
+        </div>
+      </div>
+    </div>
 
-  <div class="card">
-    <h2>Fəaliyyət</h2>
-    <p class="muted">Yatırım admin tərəfindən təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.</p>
-    <div id="taskArea"></div>
-  </div>
-
-  <div class="card">
-    <h2>Referal sistemi</h2>
-    <p class="muted">Sənin dəvət kodun:</p>
-
-    <div id="referralCode" class="refcode">Yüklənir...</div>
-
-    <div class="row">
-      <span class="muted">Aktiv referallar</span>
-      <b id="refCount">0</b>
+    <div class="card level-card">
+      <h2>🏆 Rəhbərlik səviyyələri</h2>
+      <div id="levelsArea"></div>
     </div>
   </div>
 
-</div>
-
-<div class="card level-card">
-  <h2>🏆 Rəhbərlik səviyyələri</h2>
-  <div id="levelsArea"></div>
-</div>
-
-  </div>  <div id="earnPage" class="hidden">
-    <h1>Qazanc</h1><div class="card">
-  <h2>Qazanc tarixçəsi</h2>
-  <div id="history"></div>
-</div>
-
-  </div>  <div id="investPage" class="hidden"><h1>Yatırım</h1>
-
-<div class="card">
-
-  <div class="info">
-
-    <b>Yatırım üçün məlumat</b><br><br>
-
-    💰 <b>Minimum yatırım ilk həftə üçün: 20 $</b><br>
-    📈 <b>Gündəlik qazanc: 1 $</b><br><br>
-
-    Yatırım etdikdən sonra ödəniş çekini yükləyin.<br><br>
-
-    <b>Yatırım üçün kart:</b><br><br>
-
-    5243754439761469
-
+  <div id="earnPage" class="hidden">
+    <h1>Qazanc</h1>
+    <div class="card">
+      <h2>Qazanc tarixçəsi</h2>
+      <div id="history"></div>
+    </div>
   </div>
 
-  <input id="investAmount" type="number" placeholder="Məbləğ ($)" />
+  <div id="investPage" class="hidden">
+    <h1>Yatırım</h1>
 
-  <input id="receipt" type="file" accept="image/*,.pdf" />
+    <div class="card">
+      <div class="info">
+        <b>Yatırım üçün məlumat</b><br><br>
+        💰 <b>Minimum yatırım ilk həftə üçün: 20 $</b><br>
+        📈 <b>Gündəlik qazanc: 1 $</b><br><br>
+        Yatırım etdikdən sonra ödəniş çekini yükləyin.<br><br>
+        <b>Yatırım üçün kart:</b><br><br>
+        5243754439761469
+      </div>
 
-  <button class="main" onclick="invest()">Ödəniş etdim</button>
+      <input id="investAmount" type="number" placeholder="Məbləğ ($)" />
+      <input id="receipt" type="file" accept="image/*,.pdf" />
+      <button class="main" onclick="invest()">Ödəniş etdim</button>
+      <div id="investMsg" class="msg"></div>
+    </div>
 
-  <div id="investMsg" class="msg"></div>
-
-</div>
-
-<div class="card">
-
-  <h2>Yatırım tarixçəsi</h2>
-
-  <div id="investHistory"></div>
-
-</div>
-
-  </div>  <div id="accountPage" class="hidden"><h1>Hesabım</h1>
-
-<div class="card">
-
-  <div class="row">
-    <span class="muted">E-poçt</span>
-    <b id="email"></b>
+    <div class="card">
+      <h2>Yatırım tarixçəsi</h2>
+      <div id="investHistory"></div>
+    </div>
   </div>
 
-  <div class="row">
-    <span class="muted">Hesab statusu</span>
-    <b id="accountStatus" class="green"></b>
+  <div id="accountPage" class="hidden">
+    <h1>Hesabım</h1>
+
+    <div class="card">
+      <div class="row">
+        <span class="muted">E-poçt</span>
+        <b id="email"></b>
+      </div>
+
+      <div class="row">
+        <span class="muted">Hesab statusu</span>
+        <b id="accountStatus" class="green"></b>
+      </div>
+
+      <div class="row">
+        <span class="muted">Referal kodun</span>
+        <b id="accountRef" class="yellow">—</b>
+      </div>
+
+      <div class="row">
+        <span class="muted">Hədəf səviyyə</span>
+        <b id="targetLevel" class="yellow">Seçilməyib</b>
+      </div>
+
+      <div class="row">
+        <span class="muted">Cari səviyyə</span>
+        <b id="currentLevelView" class="green">Yeni istifadəçi</b>
+      </div>
+    </div>
+
+    <div class="card">
+      <button class="logout" onclick="logout()">Hesabdan çıx</button>
+    </div>
   </div>
 
-  <div class="row">
-    <span class="muted">Referal kodun</span>
-    <b id="accountRef" class="yellow">—</b>
+  <div id="adminPage" class="hidden">
+    <h1>Admin Panel</h1>
+    <div class="card admin">
+      <h2>Yatırım sorğuları</h2>
+      <div id="adminInvest"></div>
+    </div>
   </div>
+</section>
 
-</div>
-
-<div class="card">
-  <button class="logout" onclick="logout()">Hesabdan çıx</button>
-</div>
-
-  </div>  <div id="adminPage" class="hidden"><h1>Admin Panel</h1>
-
-<div class="card admin">
-
-  <h2>Yatırım sorğuları</h2>
-
-  <div id="adminInvest"></div>
-
-</div>
-
-  </div></section><script>
-
+<script>
 const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
 
-const supabaseClient = supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const ADMIN_EMAIL = "Ayazdiana666@gmail.com";
 
@@ -261,969 +262,444 @@ let approvedInvestmentGlobal = 0;
 let activeReferralsGlobal = 0;
 
 const LEVELS = [
-
-  {
-    name:"🏆 PREMİUM RƏHBƏR",
-    own:50,
-    referrals:10,
-    referralInvestment:23,
-    leader:1.80,
-    referral:1,
-    locked:false
-  },
-
-  {
-    name:"👑 SUPREME RƏHBƏR",
-    own:90,
-    referrals:20,
-    referralInvestment:35,
-    leader:2.50,
-    referral:1.70,
-    locked:false
-  },
-
-  {
-    name:"💠 ELİT KOMANDİR",
-    own:150,
-    referrals:35,
-    referralInvestment:60,
-    leader:4,
-    referral:2.80,
-    locked:false
-  },
-
-  {
-    name:"💎 PLATİN RƏHBƏR",
-    own:320,
-    referrals:55,
-    referralInvestment:87,
-    leader:6.80,
-    referral:3.60,
-    locked:false
-  },
-
-  {
-    name:"🌐 BAŞ STRATEJİ RƏHBƏR",
-    own:500,
-    referrals:80,
-    referralInvestment:120,
-    leader:10,
-    referral:5,
-    locked:true
-  },
-
-  {
-    name:"🔱 İMPERATOR RƏHBƏR",
-    own:1000,
-    referrals:150,
-    referralInvestment:250,
-    leader:20,
-    referral:10,
-    locked:true
-  }
-
+  { name:"🏆 PREMİUM RƏHBƏR", own:50, referrals:10, referralInvestment:23, leader:1.80, referral:1, locked:false },
+  { name:"👑 SUPREME RƏHBƏR", own:90, referrals:20, referralInvestment:35, leader:2.50, referral:1.70, locked:false },
+  { name:"💠 ELİT KOMANDİR", own:150, referrals:35, referralInvestment:60, leader:4, referral:2.80, locked:false },
+  { name:"💎 PLATİN RƏHBƏR", own:320, referrals:55, referralInvestment:87, leader:6.80, referral:3.60, locked:false },
+  { name:"🌐 BAŞ STRATEJİ RƏHBƏR", own:500, referrals:80, referralInvestment:120, leader:10, referral:5, locked:true },
+  { name:"🔱 İMPERATOR RƏHBƏR", own:1000, referrals:150, referralInvestment:250, leader:20, referral:10, locked:true }
 ];
 
 function escapeHtml(s){
-
   return String(s || "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
     .replace(/"/g,"&quot;")
     .replace(/'/g,"&#39;");
-
 }
 
 function generateCode(){
-
-  return "NV" +
-    Math.random()
-    .toString(36)
-    .substring(2,8)
-    .toUpperCase();
-
+  return "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
 }
 
 function showRegister(){
-
   document.getElementById("loginPage").classList.add("hidden");
-
-  document
-    .getElementById("registerPage")
-    .classList.remove("hidden");
-
+  document.getElementById("registerPage").classList.remove("hidden");
 }
 
 function showLogin(){
-
-  document
-    .getElementById("registerPage")
-    .classList.add("hidden");
-
-  document
-    .getElementById("loginPage")
-    .classList.remove("hidden");
-
+  document.getElementById("registerPage").classList.add("hidden");
+  document.getElementById("loginPage").classList.remove("hidden");
 }
 
 function page(name){
-
-  [
-    "homePage",
-    "earnPage",
-    "investPage",
-    "accountPage",
-    "adminPage"
-  ].forEach(id=>{
-
-    document
-      .getElementById(id)
-      ?.classList.add("hidden");
-
+  ["homePage","earnPage","investPage","accountPage","adminPage"].forEach(id=>{
+    document.getElementById(id)?.classList.add("hidden");
   });
 
-  const map = {
-
-    home:"homePage",
-    earn:"earnPage",
-    invest:"investPage",
-    account:"accountPage",
-    admin:"adminPage"
-
-  };
-
-  document
-    .getElementById(map[name] || "homePage")
-    ?.classList.remove("hidden");
+  const map = { home:"homePage", earn:"earnPage", invest:"investPage", account:"accountPage", admin:"adminPage" };
+  document.getElementById(map[name] || "homePage")?.classList.remove("hidden");
 
   if(name === "admin"){
-
     loadAdminInvestments();
-
   }
-
 }
 
 async function register(){
-
-  const email =
-    document
-      .getElementById("regEmail")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("regPassword")
-      .value;
-
-  const referral =
-    document
-      .getElementById("regReferral")
-      .value
-      .trim()
-      .toUpperCase();
-
-  const msg =
-    document
-      .getElementById("regMsg");
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value;
+  const referral = document.getElementById("regReferral").value.trim().toUpperCase();
+  const msg = document.getElementById("regMsg");
 
   if(!email || !password){
-
-    msg.innerText =
-      "Email və şifrəni doldurun.";
-
+    msg.innerText = "Email və şifrəni doldurun.";
     return;
-
   }
 
-  msg.innerText =
-    "Hesab yaradılır...";
+  msg.innerText = "Hesab yaradılır...";
 
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.signUp({
-
-      email,
-      password
-
-    });
+  const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
   if(error){
-
-    msg.innerText =
-      error.message;
-
+    msg.innerText = error.message;
     return;
-
   }
 
   if(data.user){
-
-    const {
-      error: profileError
-    } =
-    await supabaseClient
-      .from("profiles")
-      .insert({
-
-        id:data.user.id,
-        email,
-        referral_code:generateCode(),
-        referred_by:referral || null
-
-      });
+    const { error: profileError } = await supabaseClient.from("profiles").insert({
+      id:data.user.id,
+      email,
+      referral_code:generateCode(),
+      referred_by:referral || null
+    });
 
     if(profileError){
-
-      msg.innerText =
-        "Profil xətası: " +
-        profileError.message;
-
+      msg.innerText = "Profil xətası: " + profileError.message;
       return;
-
     }
-
   }
 
-  msg.style.color =
-    "#40dc91";
-
-  msg.innerText =
-    "Hesab yaradıldı.";
-
-  setTimeout(
-    showLogin,
-    1000
-  );
-
+  msg.style.color = "#40dc91";
+  msg.innerText = "Hesab yaradıldı.";
+  setTimeout(showLogin,1000);
 }
 
 async function login(){
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
 
-  const email =
-    document
-      .getElementById("loginEmail")
-      .value
-      .trim();
-
-  const password =
-    document
-      .getElementById("loginPassword")
-      .value;
-
-  const {
-    data,
-    error
-  } =
-    await supabaseClient.auth.signInWithPassword({
-
-      email,
-      password
-
-    });
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
   if(error){
-
-    document
-      .getElementById("loginMsg")
-      .innerText =
-      "Email və ya şifrə yanlışdır.";
-
+    document.getElementById("loginMsg").innerText = "Email və ya şifrə yanlışdır.";
     return;
-
   }
 
   await openApp(data.user);
-
 }
 
 async function loadProfile(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("profiles")
     .select("*")
     .eq("id",user.id)
     .maybeSingle();
 
   if(error){
-
-    console.error(
-      "loadProfile:",
-      error
-    );
-
+    console.error("loadProfile:", error);
     return;
-
   }
 
-  profile =
-    data;
-
+  profile = data;
 }
 
 function getCurrentLevel(){
-
-  let current =
-    null;
+  let current = null;
 
   for(const level of LEVELS){
-
-    if(level.locked){
-
-      continue;
-
-    }
+    if(level.locked) continue;
 
     if(
       approvedInvestmentGlobal >= level.own &&
       activeReferralsGlobal >= level.referrals
     ){
-
-      current =
-        level;
-
+      current = level;
     }
-
   }
 
   return current;
-
 }
 
 function renderLevels(){
+  const box = document.getElementById("levelsArea");
+  if(!box) return;
 
-  const box =
-    document
-      .getElementById("levelsArea");
+  box.innerHTML = LEVELS.map(level=>{
+    const locked = level.locked;
+    const achieved =
+      !locked &&
+      approvedInvestmentGlobal >= level.own &&
+      activeReferralsGlobal >= level.referrals;
 
-  if(!box){
+    const levelKey = escapeHtml(level.name);
 
-    return;
+    return `
+      <div class="info">
+        <h3 class="${locked ? "locked" : achieved ? "green" : "yellow"}">
+          ${level.name}
+          ${locked ? " 🔒" : achieved ? " ✅" : ""}
+        </h3>
 
-  }
+        <div>Öz yatırımınız: <b>${level.own} $</b></div>
+        <div>Aktiv referal: <b>${level.referrals} nəfər</b></div>
+        <div>Referal üçün yatırım: <b>${level.referralInvestment} $</b></div>
+        <div>Rəhbər qazancı: <b>${level.leader} $</b></div>
+        <div>Referal qazancı: <b>${level.referral} $</b></div>
 
-  box.innerHTML =
-    LEVELS.map(level=>{
-
-      const locked =
-        level.locked;
-
-      const achieved =
-        !locked &&
-        approvedInvestmentGlobal >= level.own &&
-        activeReferralsGlobal >= level.referrals;
-
-      const levelKey =
-        escapeHtml(level.name);
-
-      return `
-
-        <div class="info">
-
-          <h3 class="${locked ? "locked" : achieved ? "green" : "yellow"}">
-
-            ${level.name}
-            ${locked ? " 🔒" : achieved ? " ✅" : ""}
-
-          </h3>
-
-          <div>Öz yatırımınız: <b>${level.own} $</b></div>
-
-          <div>Aktiv referal: <b>${level.referrals} nəfər</b></div>
-
-          <div>Referal üçün yatırım: <b>${level.referralInvestment} $</b></div>
-
-          <div>Rəhbər qazancı: <b>${level.leader} $</b></div>
-
-          <div>Referal qazancı: <b>${level.referral} $</b></div>
-
-          ${
-            locked
-            ?
-            `<div class="locked">🔒 Bu səviyyə kilidlidir.</div>`
-            :
-            achieved
-            ?
-            `<div class="green">✅ Səviyyə aktivdir.</div>`
-            :
-            `<button class="level-btn" onclick="chooseLevel('${levelKey}')">${level.name} ol</button>`
-          }
-
-        </div>
-
-      `;
-
-    }).join("");
-
+        ${
+          locked
+          ? `<div class="locked">🔒 Bu səviyyə kilidlidir.</div>`
+          : achieved
+          ? `<div class="green">✅ Səviyyə aktivdir.</div>`
+          : `<button class="level-btn" onclick="chooseLevel('${levelKey}')">${level.name} ol</button>`
+        }
+      </div>
+    `;
+  }).join("");
 }
 
-function chooseLevel(levelName){
+async function chooseLevel(levelName){
+  if(!user) return;
 
-  const refCode =
-    profile?.referral_code ||
-    "—";
+  const { error } = await supabaseClient
+    .from("profiles")
+    .update({ target_level: levelName })
+    .eq("id", user.id);
 
-  alert(
-    "Seçilən səviyyə: " + levelName + "\n\n" +
-    "Bu səviyyəyə çatmaq üçün referal kodunu paylaş:\n" +
-    refCode
-  );
+  if(error){
+    alert("Səviyyə seçimi yazılmadı: " + error.message);
+    return;
+  }
 
+  await loadProfile();
+  updateStatusDisplay();
+
+  alert("Seçildi: " + levelName);
 }
 
 function updateStatusDisplay(){
-
-  const current =
-    getCurrentLevel();
+  const current = getCurrentLevel();
 
   const label =
     current
-    ?
-    current.name
-    :
-    approvedInvestmentGlobal > 0
-    ?
-    "Aktiv istifadəçi"
-    :
-    "Yeni istifadəçi";
+    ? current.name
+    : approvedInvestmentGlobal > 0
+    ? "Aktiv istifadəçi"
+    : "Yeni istifadəçi";
 
-  const status =
-    document
-      .getElementById("status");
-
-  const accountStatus =
-    document
-      .getElementById("accountStatus");
+  const status = document.getElementById("status");
+  const accountStatus = document.getElementById("accountStatus");
 
   if(status){
-
-    status.innerText =
-      label;
-
-    status.className =
-      "value " +
-      (
-        current
-        ?
-        "yellow"
-        :
-        "green"
-      );
-
+    status.innerText = label;
+    status.className = "value " + (current ? "yellow" : "green");
   }
 
   if(accountStatus){
-
-    accountStatus.innerText =
-      label;
-
-    accountStatus.className =
-      current
-      ?
-      "yellow"
-      :
-      "green";
-
+    accountStatus.innerText = label;
+    accountStatus.className = current ? "yellow" : "green";
   }
 
-  renderLevels();
+  const newCurrent = current ? current.name : null;
 
+  if(profile && profile.current_level !== newCurrent){
+    supabaseClient
+      .from("profiles")
+      .update({ current_level: newCurrent })
+      .eq("id", user.id)
+      .then(async()=>{ await loadProfile(); fillLevelAccountInfo(); })
+      .catch(()=>{});
+  }
+
+  fillLevelAccountInfo();
+  renderLevels();
+}
+
+function fillLevelAccountInfo(){
+  const targetEl = document.getElementById("targetLevel");
+  const currentEl = document.getElementById("currentLevelView");
+
+  if(targetEl){
+    targetEl.innerText = profile?.target_level || "Seçilməyib";
+  }
+  if(currentEl){
+    currentEl.innerText = profile?.current_level || "Yeni istifadəçi";
+  }
 }
 
 async function loadReferral(){
+  if(!profile) return;
 
-  if(!profile){
+  const code = profile.referral_code || "—";
 
-    return;
+  document.getElementById("referralCode").innerText = code;
+  document.getElementById("accountRef").innerText = code;
 
-  }
-
-  const code =
-    profile.referral_code ||
-    "—";
-
-  document
-    .getElementById("referralCode")
-    .innerText =
-    code;
-
-  document
-    .getElementById("accountRef")
-    .innerText =
-    code;
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("profiles")
     .select("id")
     .eq("referred_by",code);
 
   if(error){
-
-    console.error(
-      "loadReferral:",
-      error
-    );
-
+    console.error("loadReferral:", error);
     return;
-
   }
 
-  activeReferralsGlobal =
-    (data || []).length;
-
-  document
-    .getElementById("refCount")
-    .innerText =
-    activeReferralsGlobal;
+  activeReferralsGlobal = (data || []).length;
+  document.getElementById("refCount").innerText = activeReferralsGlobal;
 
   updateStatusDisplay();
-
 }
 
 async function loadEarnings(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("earnings")
     .select("*")
     .eq("user_id",user.id)
-    .order("created_at",{
-
-      ascending:false
-
-    });
+    .order("created_at",{ ascending:false });
 
   if(error){
-
-    console.error(
-      "loadEarnings:",
-      error
-    );
-
+    console.error("loadEarnings:", error);
     return;
-
   }
 
-  let sum =
-    0;
+  let sum = 0;
+  (data || []).forEach(x=>{ sum += Number(x.amount || 0); });
 
-  (data || []).forEach(x=>{
+  totalEarningsGlobal = sum;
 
-    sum +=
-      Number(x.amount || 0);
+  document.getElementById("balance").innerText = sum.toFixed(2) + " $";
+  document.getElementById("total").innerText = sum.toFixed(2) + " $";
 
-  });
-
-  totalEarningsGlobal =
-    sum;
-
-  document
-    .getElementById("balance")
-    .innerText =
-    sum.toFixed(2) +
-    " $";
-
-  document
-    .getElementById("total")
-    .innerText =
-    sum.toFixed(2) +
-    " $";
-
-  document
-    .getElementById("history")
-    .innerHTML =
+  document.getElementById("history").innerHTML =
     data && data.length
-    ?
-
-    data.map(x=>`
-
+    ? data.map(x=>`
       <div class="row">
-
-        <span>
-          ${escapeHtml(
-            x.description ||
-            "Qazanc"
-          )}
-        </span>
-
-        <b class="green">
-
-          +${Number(
-            x.amount || 0
-          ).toFixed(2)} $
-
-        </b>
-
+        <span>${escapeHtml(x.description || "Qazanc")}</span>
+        <b class="green">+${Number(x.amount || 0).toFixed(2)} $</b>
       </div>
-
     `).join("")
-
-    :
-
-    "<p class='muted'>Hələ qazanc yoxdur.</p>";
+    : "<p class='muted'>Hələ qazanc yoxdur.</p>";
 
   updateStatusDisplay();
-
 }
 
 function renderTaskLocked(){
-
-  document
-    .getElementById("taskArea")
-    .innerHTML =
-
-    `
-
-      <div class="info yellow">
-
-        ⏳ Yatırım sorğusu təsdiq gözləyir.
-
-      </div>
-
-    `;
-
+  document.getElementById("taskArea").innerHTML = `
+    <div class="info yellow">
+      ⏳ Yatırım sorğusu təsdiq gözləyir.
+    </div>
+  `;
 }
 
 function renderTaskReady(){
+  document.getElementById("taskArea").innerHTML = `
+    <div class="info green">
+      ✅ Yatırım təsdiqlənib.
+      Fəaliyyət açıqdır.
+    </div>
 
-  document
-    .getElementById("taskArea")
-    .innerHTML =
+    <button id="startTaskBtn" class="main" onclick="startTask()">
+      Fəaliyyətə Başla
+    </button>
 
-    `
+    <div id="countdownBox" class="info hidden" style="margin-top:10px">
+      ⏱ Qaldı: <b id="countdown">30</b> saniyə
+    </div>
 
-      <div class="info green">
-
-        ✅ Yatırım təsdiqlənib.
-        Fəaliyyət açıqdır.
-
-      </div>
-
-      <button
-        id="startTaskBtn"
-        class="main"
-        onclick="startTask()">
-
-        Fəaliyyətə Başla
-
-      </button>
-
-      <div
-        id="countdownBox"
-        class="info hidden"
-        style="margin-top:10px">
-
-        ⏱ Qaldı:
-        <b id="countdown">30</b>
-        saniyə
-
-      </div>
-
-      <div
-        id="taskMsg"
-        class="msg"
-        style="color:#40dc91">
-
-      </div>
-
-    `;
-
+    <div id="taskMsg" class="msg" style="color:#40dc91"></div>
+  `;
 }
 
 function sameDayUTC(a,b){
+  const d1 = new Date(a);
+  const d2 = new Date(b);
 
-  const d1 =
-    new Date(a);
-
-  const d2 =
-    new Date(b);
-
-  return
-
-    d1.getUTCFullYear() ===
-    d2.getUTCFullYear()
-
-    &&
-
-    d1.getUTCMonth() ===
-    d2.getUTCMonth()
-
-    &&
-
-    d1.getUTCDate() ===
-    d2.getUTCDate();
-
+  return d1.getUTCFullYear() === d2.getUTCFullYear()
+    && d1.getUTCMonth() === d2.getUTCMonth()
+    && d1.getUTCDate() === d2.getUTCDate();
 }
 
 async function startTask(){
+  if(countdownTimer) return;
 
-  if(countdownTimer){
-    return;
-  }
+  const btn = document.getElementById("startTaskBtn");
+  const box = document.getElementById("countdownBox");
+  const cd = document.getElementById("countdown");
+  const msg = document.getElementById("taskMsg");
 
-  const btn =
-    document
-      .getElementById("startTaskBtn");
+  if(!btn || !box || !cd || !msg) return;
 
-  const box =
-    document
-      .getElementById("countdownBox");
+  msg.innerText = "";
 
-  const cd =
-    document
-      .getElementById("countdown");
-
-  const msg =
-    document
-      .getElementById("taskMsg");
-
-  if(!btn || !box || !cd || !msg){
-
-    return;
-
-  }
-
-  msg.innerText =
-    "";
-
-  const {
-    data:prof,
-    error
-  } =
-  await supabaseClient
+  const { data:prof, error } = await supabaseClient
     .from("profiles")
     .select("last_task_at")
     .eq("id",user.id)
     .maybeSingle();
 
   if(error){
-
-    msg.style.color =
-      "#ff7777";
-
-    msg.innerText =
-      "Profil oxunmadı: " +
-      error.message;
-
+    msg.style.color = "#ff7777";
+    msg.innerText = "Profil oxunmadı: " + error.message;
     return;
-
   }
 
-  if(
-    prof &&
-    prof.last_task_at &&
-    sameDayUTC(
-      prof.last_task_at,
-      new Date().toISOString()
-    )
-  ){
-
-    msg.style.color =
-      "#ffd166";
-
-    msg.innerText =
-      "Bu gün artıq fəaliyyət etmisən. Sabah yenidən et.";
-
+  if(prof && prof.last_task_at && sameDayUTC(prof.last_task_at,new Date().toISOString())){
+    msg.style.color = "#ffd166";
+    msg.innerText = "Bu gün artıq fəaliyyət etmisən. Sabah yenidən et.";
     return;
-
   }
 
-  btn.disabled =
-    true;
+  btn.disabled = true;
+  box.classList.remove("hidden");
 
-  box.classList.remove(
-    "hidden"
-  );
-
-  countdownLeft =
-    30;
-
-  cd.innerText =
-    "30";
+  countdownLeft = 30;
+  cd.innerText = "30";
 
   if(countdownTimer){
-
-    clearInterval(
-      countdownTimer
-    );
-
+    clearInterval(countdownTimer);
   }
 
-  countdownTimer =
-    setInterval(
-      async()=>{
+  countdownTimer = setInterval(async()=>{
+    countdownLeft--;
+    cd.innerText = String(countdownLeft);
 
-        countdownLeft--;
+    if(countdownLeft <= 0){
+      clearInterval(countdownTimer);
+      countdownTimer = null;
 
-        cd.innerText =
-          String(countdownLeft);
+      const { error:e1 } = await supabaseClient
+        .from("earnings")
+        .insert({
+          user_id:user.id,
+          amount:1,
+          description:"30 saniyəlik fəaliyyət tapşırığı"
+        });
 
-        if(countdownLeft <= 0){
+      if(e1){
+        msg.style.color = "#ff7777";
+        msg.innerText = "Qazanc yazılmadı: " + e1.message;
+        btn.disabled = false;
+        return;
+      }
 
-          clearInterval(
-            countdownTimer
-          );
+      const { error:e2 } = await supabaseClient
+        .from("profiles")
+        .update({ last_task_at:new Date().toISOString() })
+        .eq("id",user.id);
 
-          countdownTimer =
-            null;
+      if(e2){
+        msg.style.color = "#ff7777";
+        msg.innerText = "Tarix yenilənmədi: " + e2.message;
+        btn.disabled = false;
+        return;
+      }
 
-          const {
-            error:e1
-          } =
-          await supabaseClient
-            .from("earnings")
-            .insert({
+      msg.style.color = "#40dc91";
+      msg.innerText = "✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
 
-              user_id:user.id,
-              amount:1,
-              description:
-                "30 saniyəlik fəaliyyət tapşırığı"
-
-            });
-
-          if(e1){
-
-            msg.style.color =
-              "#ff7777";
-
-            msg.innerText =
-              "Qazanc yazılmadı: " +
-              e1.message;
-
-            btn.disabled =
-              false;
-
-            return;
-
-          }
-
-          const {
-            error:e2
-          } =
-          await supabaseClient
-            .from("profiles")
-            .update({
-
-              last_task_at:
-                new Date().toISOString()
-
-            })
-            .eq("id",user.id);
-
-          if(e2){
-
-            msg.style.color =
-              "#ff7777";
-
-            msg.innerText =
-              "Tarix yenilənmədi: " +
-              e2.message;
-
-            btn.disabled =
-              false;
-
-            return;
-
-          }
-
-          msg.style.color =
-            "#40dc91";
-
-          msg.innerText =
-            "✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
-
-          await loadEarnings();
-
-        }
-
-      },
-      1000
-    );
-
+      await loadEarnings();
+    }
+  },1000);
 }
 
 async function loadInvestment(){
-
-  const {
-    data,
-    error
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("investments")
-    .select(
-      "id,amount,status,created_at"
-    )
+    .select("id,amount,status,created_at")
     .eq("user_id",user.id)
-    .order(
-      "created_at",
-      {
-        ascending:false
-      }
-    );
+    .order("created_at",{ ascending:false });
 
   if(error){
-
-    console.error(
-      "loadInvestment:",
-      error
-    );
-
+    console.error("loadInvestment:", error);
     return;
-
   }
 
-  const list =
-    data || [];
+  const list = data || [];
 
-  const approved =
-    list.filter(x=>
+  const approved = list.filter(x=>
+    String(x.status || "").toLowerCase().trim() === "approved"
+  );
 
-      String(
-        x.status || ""
-      )
-      .toLowerCase()
-      .trim()
-      ===
-      "approved"
+  approvedInvestmentGlobal = approved.reduce(
+    (sum,x)=> sum + Number(x.amount || 0), 0
+  );
 
-    );
-
-  approvedInvestmentGlobal =
-    approved.reduce(
-
-      (sum,x)=>
-        sum +
-        Number(
-          x.amount || 0
-        ),
-
-      0
-
-    );
-
-  const hasApproved =
-    approved.length > 0;
+  const hasApproved = approved.length > 0;
 
   if(hasApproved){
-
-    const countdownBoxEl =
-      document.getElementById("countdownBox");
-
+    const countdownBoxEl = document.getElementById("countdownBox");
     const isCountingDown =
       !!countdownTimer &&
       countdownBoxEl &&
@@ -1232,485 +708,181 @@ async function loadInvestment(){
     if(!isCountingDown){
       renderTaskReady();
     }
-
-  }
-
-  else if(list.length){
-
+  } else if(list.length){
     renderTaskLocked();
-
-  }
-
-  else{
-
-    document
-      .getElementById("taskArea")
-      .innerHTML =
-
-      `
-
-        <div class="info">
-
-          Yatırım etdikdən sonra fəaliyyət açılacaq.
-
-        </div>
-
-      `;
-
+  } else {
+    document.getElementById("taskArea").innerHTML = `
+      <div class="info">
+        Yatırım etdikdən sonra fəaliyyət açılacaq.
+      </div>
+    `;
   }
 
   updateStatusDisplay();
 
-  document
-    .getElementById("investHistory")
-    .innerHTML =
-
+  document.getElementById("investHistory").innerHTML =
     list.length
-
-    ?
-
-    list.map(x=>{
-
-      const st =
-        String(
-          x.status ||
-          "pending"
-        )
-        .toLowerCase()
-        .trim();
-
-      const cls =
-        st === "approved"
-        ?
-        "paid"
-        :
-        st === "rejected"
-        ?
-        "rejected"
-        :
-        "pending";
-
-      const label =
-        st === "approved"
-        ?
-        "təsdiqləndi"
-        :
-        st === "rejected"
-        ?
-        "rədd edildi"
-        :
-        "gözlənilir";
+    ? list.map(x=>{
+      const st = String(x.status || "pending").toLowerCase().trim();
+      const cls = st === "approved" ? "paid" : st === "rejected" ? "rejected" : "pending";
+      const label = st === "approved" ? "təsdiqləndi" : st === "rejected" ? "rədd edildi" : "gözlənilir";
 
       return `
-
         <div class="row">
-
-          <span>
-
-            ${new Date(
-              x.created_at
-            ).toLocaleString(
-              "az-AZ"
-            )}
-
-          </span>
-
+          <span>${new Date(x.created_at).toLocaleString("az-AZ")}</span>
           <b class="${cls}">
-
-            ${Number(
-              x.amount || 0
-            ).toFixed(2)}
-            $ —
-            ${label}
-
+            ${Number(x.amount || 0).toFixed(2)} $ — ${label}
           </b>
-
         </div>
-
       `;
-
     }).join("")
-
-    :
-
-    "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
-
+    : "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
 }
 
 async function invest(){
-
-  const amount =
-    Number(
-      document
-        .getElementById("investAmount")
-        .value || 0
-    );
-
-  const fileInput =
-    document
-      .getElementById("receipt");
-
-  const file =
-    fileInput.files[0];
-
-  const msg =
-    document
-      .getElementById("investMsg");
+  const amount = Number(document.getElementById("investAmount").value || 0);
+  const fileInput = document.getElementById("receipt");
+  const file = fileInput.files[0];
+  const msg = document.getElementById("investMsg");
 
   if(amount < 20){
-
-    msg.style.color =
-      "#ff7777";
-
-    msg.innerText =
-      "Minimum 20$ olmalıdır.";
-
+    msg.style.color = "#ff7777";
+    msg.innerText = "Minimum 20$ olmalıdır.";
     return;
-
   }
 
-  msg.style.color =
-    "#ffd166";
+  msg.style.color = "#ffd166";
+  msg.innerText = "Göndərilir...";
 
-  msg.innerText =
-    "Göndərilir...";
-
-  let receipt_url =
-    null;
+  let receipt_url = null;
 
   if(file){
+    const ALLOWED_EXT = ["jpg","jpeg","png","gif","webp","pdf"];
+    const ALLOWED_MIME = ["image/jpeg","image/png","image/gif","image/webp","application/pdf"];
 
-    const ALLOWED_EXT =
-      [
-        "jpg",
-        "jpeg",
-        "png",
-        "gif",
-        "webp",
-        "pdf"
-      ];
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
 
-    const ALLOWED_MIME =
-      [
-        "image/jpeg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-        "application/pdf"
-      ];
-
-    const ext =
-      (
-        file.name
-        .split(".")
-        .pop() ||
-        ""
-      )
-      .toLowerCase();
-
-    if(
-
-      !ALLOWED_EXT.includes(
-        ext
-      )
-
-      ||
-
-      !ALLOWED_MIME.includes(
-        file.type
-      )
-
-    ){
-
-      msg.style.color =
-        "#ff7777";
-
-      msg.innerText =
-        "Yalnız jpg, png, gif, webp və pdf faylları qəbul edilir.";
-
+    if(!ALLOWED_EXT.includes(ext) || !ALLOWED_MIME.includes(file.type)){
+      msg.style.color = "#ff7777";
+      msg.innerText = "Yalnız jpg, png, gif, webp və pdf faylları qəbul edilir.";
       return;
-
     }
 
     const uid =
-      typeof crypto !==
-      "undefined"
+      typeof crypto !== "undefined" && crypto.randomUUID
+      ? crypto.randomUUID()
+      : Date.now() + "-" + Math.random().toString(36).substring(2);
 
-      &&
+    const fileName = user.id + "/" + uid + "." + ext;
 
-      crypto.randomUUID
-
-      ?
-
-      crypto.randomUUID()
-
-      :
-
-      Date.now() +
-      "-" +
-      Math.random()
-        .toString(36)
-        .substring(2);
-
-    const fileName =
-      user.id +
-      "/" +
-      uid +
-      "." +
-      ext;
-
-    const {
-      error:uploadError
-    } =
-    await supabaseClient
+    const { error:uploadError } = await supabaseClient
       .storage
       .from("receipts")
-      .upload(
-        fileName,
-        file,
-        {
-          upsert:false
-        }
-      );
+      .upload(fileName,file,{ upsert:false });
 
     if(uploadError){
-
-      msg.style.color =
-        "#ff7777";
-
-      msg.innerText =
-        "Çek yüklənmədi: " +
-        uploadError.message;
-
+      msg.style.color = "#ff7777";
+      msg.innerText = "Çek yüklənmədi: " + uploadError.message;
       return;
-
     }
 
-    const {
-      data:urlData
-    } =
-    supabaseClient
+    const { data:urlData } = supabaseClient
       .storage
       .from("receipts")
-      .getPublicUrl(
-        fileName
-      );
+      .getPublicUrl(fileName);
 
-    receipt_url =
-      urlData?.publicUrl ||
-      null;
-
+    receipt_url = urlData?.publicUrl || null;
   }
 
-  const {
-    error
-  } =
-  await supabaseClient
+  const { error } = await supabaseClient
     .from("investments")
     .insert({
-
       user_id:user.id,
       amount:amount,
       status:"pending",
       receipt_url:receipt_url
-
     });
 
   if(error){
-
-    msg.style.color =
-      "#ff7777";
-
-    msg.innerText =
-      "Xəta: " +
-      error.message;
-
+    msg.style.color = "#ff7777";
+    msg.innerText = "Xəta: " + error.message;
     return;
-
   }
 
-  msg.style.color =
-    "#40dc91";
+  msg.style.color = "#40dc91";
+  msg.innerText = "Sorğu göndərildi. Admin təsdiqi gözlənilir.";
 
-  msg.innerText =
-    "Sorğu göndərildi. Admin təsdiqi gözlənilir.";
-
-  document
-    .getElementById("investAmount")
-    .value =
-    "";
-
-  fileInput.value =
-    "";
+  document.getElementById("investAmount").value = "";
+  fileInput.value = "";
 
   await loadInvestment();
-
 }
 
 function subscribeInvestments(){
-
   if(investmentChannel){
-
-    supabaseClient
-      .removeChannel(
-        investmentChannel
-      );
-
+    supabaseClient.removeChannel(investmentChannel);
   }
 
-  investmentChannel =
-    supabaseClient
-      .channel(
-        "investment-status-" +
-        user.id +
-        "-" +
-        Date.now()
-      )
-      .on(
-
-        "postgres_changes",
-
-        {
-
-          event:"*",
-          schema:"public",
-          table:"investments",
-          filter:
-            "user_id=eq." +
-            user.id
-
-        },
-
-        async()=>{
-
-          await loadInvestment();
-
-        }
-
-      )
-      .subscribe();
-
+  investmentChannel = supabaseClient
+    .channel("investment-status-" + user.id + "-" + Date.now())
+    .on("postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"investments",
+        filter:"user_id=eq." + user.id
+      },
+      async()=>{ await loadInvestment(); }
+    )
+    .subscribe();
 }
 
 function subscribeProfile(){
-
   if(profileChannel){
-
-    supabaseClient
-      .removeChannel(
-        profileChannel
-      );
-
+    supabaseClient.removeChannel(profileChannel);
   }
 
-  profileChannel =
-    supabaseClient
-      .channel(
-        "profile-status-" +
-        user.id +
-        "-" +
-        Date.now()
-      )
-      .on(
-
-        "postgres_changes",
-
-        {
-
-          event:"*",
-          schema:"public",
-          table:"profiles",
-          filter:
-            "id=eq." +
-            user.id
-
-        },
-
-        async()=>{
-
-          await loadProfile();
-          await loadReferral();
-          await loadInvestment();
-
-        }
-
-      )
-      .subscribe();
-
+  profileChannel = supabaseClient
+    .channel("profile-status-" + user.id + "-" + Date.now())
+    .on("postgres_changes",
+      {
+        event:"*",
+        schema:"public",
+        table:"profiles",
+        filter:"id=eq." + user.id
+      },
+      async()=>{
+        await loadProfile();
+        await loadReferral();
+        await loadInvestment();
+      }
+    )
+    .subscribe();
 }
 
 function startAutoRefresh(){
-
   if(refreshInterval){
-
-    clearInterval(
-      refreshInterval
-    );
-
+    clearInterval(refreshInterval);
   }
 
-  refreshInterval =
-    setInterval(
-
-      async()=>{
-
-        if(!user){
-
-          return;
-
-        }
-
-        await loadInvestment();
-        await loadReferral();
-
-      },
-
-      3000
-
-    );
-
+  refreshInterval = setInterval(async()=>{
+    if(!user) return;
+    await loadInvestment();
+    await loadReferral();
+  },3000);
 }
 
 async function openApp(u){
+  user = u;
 
-  user =
-    u;
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("registerPage").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
 
-  document
-    .getElementById("loginPage")
-    .classList
-    .add("hidden");
+  document.getElementById("email").innerText = user.email;
 
-  document
-    .getElementById("registerPage")
-    .classList
-    .add("hidden");
-
-  document
-    .getElementById("app")
-    .classList
-    .remove("hidden");
-
-  document
-    .getElementById("email")
-    .innerText =
-    user.email;
-
-  if(
-
-    user.email
-      .toLowerCase()
-      ===
-    ADMIN_EMAIL
-      .toLowerCase()
-
-  ){
-
-    document
-      .getElementById("adminBtn")
-      .classList
-      .remove("hidden");
-
+  if(user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
+    document.getElementById("adminBtn").classList.remove("hidden");
   }
 
   await loadProfile();
@@ -1723,361 +895,143 @@ async function openApp(u){
   startAutoRefresh();
 
   page("home");
-
 }
 
 async function loadAdminInvestments(){
-
-  if(
-
-    !user ||
-
-    user.email
-      .toLowerCase()
-      !==
-    ADMIN_EMAIL
-      .toLowerCase()
-
-  ){
-
+  if(!user || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()){
     return;
-
   }
 
-  const {
-
-    data,
-    error
-
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("investments")
-    .select(
-      "id,user_id,amount,status,created_at,receipt_url"
-    )
-    .order(
-      "created_at",
-      {
-        ascending:false
-      }
-    );
+    .select("id,user_id,amount,status,created_at,receipt_url")
+    .order("created_at",{ ascending:false });
 
-  const box =
-    document
-      .getElementById("adminInvest");
+  const box = document.getElementById("adminInvest");
 
   if(error){
-
-    box.innerHTML =
-      `<p class="msg">${escapeHtml(error.message)}</p>`;
-
+    box.innerHTML = `<p class="msg">${escapeHtml(error.message)}</p>`;
     return;
-
   }
 
-  const list =
-    (data || [])
-    .filter(x=>
-
-      String(
-        x.status || ""
-      )
-      .toLowerCase()
-      .trim()
-      ===
-      "pending"
-
-    );
+  const list = (data || []).filter(x=>
+    String(x.status || "").toLowerCase().trim() === "pending"
+  );
 
   box.innerHTML =
     list.length
-
-    ?
-
-    list.map(x=>{
-
-      const safeId =
-        escapeHtml(
-          x.id
-        );
-
-      const safeUserId =
-        escapeHtml(
-          x.user_id
-        );
-
-      const safeAmount =
-        Number(
-          x.amount || 0
-        )
-        .toFixed(2);
-
-      const safeDate =
-        new Date(
-          x.created_at
-        )
-        .toLocaleString(
-          "az-AZ"
-        );
+    ? list.map(x=>{
+      const safeId = escapeHtml(x.id);
+      const safeUserId = escapeHtml(x.user_id);
+      const safeAmount = Number(x.amount || 0).toFixed(2);
+      const safeDate = new Date(x.created_at).toLocaleString("az-AZ");
 
       const receiptHtml =
         x.receipt_url
-
-        ?
-
-        `
-
+        ? `
           <div class="row">
-
             <span>Çek</span>
-
-            <a
-              href="${escapeHtml(x.receipt_url)}"
-              target="_blank"
-              rel="noopener noreferrer"
-              style="color:#9d87ff">
-
+            <a href="${escapeHtml(x.receipt_url)}" target="_blank" rel="noopener noreferrer" style="color:#9d87ff">
               Çekə bax 🔗
-
             </a>
-
           </div>
-
         `
-
-        :
-
-        "";
+        : "";
 
       return `
-
-        <div
-          class="admin-item"
-          id="inv-${safeId}">
-
+        <div class="admin-item" id="inv-${safeId}">
           <div class="row">
-
             <span>İstifadəçi</span>
-
-            <b
-              style="word-break:break-all;font-size:12px">
-
-              ${safeUserId}
-
-            </b>
-
+            <b style="word-break:break-all;font-size:12px">${safeUserId}</b>
           </div>
 
           <div class="row">
-
             <span>Məbləğ</span>
-
-            <b>
-
-              ${safeAmount} $
-
-            </b>
-
+            <b>${safeAmount} $</b>
           </div>
 
           ${receiptHtml}
 
           <div class="row">
-
             <span>Tarix</span>
-
-            <b>
-
-              ${safeDate}
-
-            </b>
-
+            <b>${safeDate}</b>
           </div>
 
-          <button
-            class="approve-btn"
-            onclick="approveInvestment('${safeId}')">
-
-            Təsdiqlə ✅
-
-          </button>
-
-          <button
-            class="reject-btn"
-            onclick="rejectInvestment('${safeId}')">
-
-            Rədd et ❌
-
-          </button>
-
+          <button class="approve-btn" onclick="approveInvestment('${safeId}')">Təsdiqlə ✅</button>
+          <button class="reject-btn" onclick="rejectInvestment('${safeId}')">Rədd et ❌</button>
         </div>
-
       `;
-
     }).join("")
-
-    :
-
-    "<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
-
+    : "<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
 }
 
 async function approveInvestment(investmentId){
-
-  const {
-
-    data,
-    error
-
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("investments")
-    .update({
-
-      status:"approved"
-
-    })
-    .eq(
-      "id",
-      investmentId
-    )
+    .update({ status:"approved" })
+    .eq("id",investmentId)
     .select();
 
   if(error){
-
-    alert(
-      "Təsdiq alınmadı: " +
-      error.message
-    );
-
+    alert("Təsdiq alınmadı: " + error.message);
     return;
-
   }
 
   if(!data || !data.length){
-
-    alert(
-      "Təsdiq yazılmadı. Supabase RLS siyasətini yoxlamaq lazımdır."
-    );
-
+    alert("Təsdiq yazılmadı. Supabase RLS siyasətini yoxlamaq lazımdır.");
     return;
-
   }
 
   await loadAdminInvestments();
-
 }
 
 async function rejectInvestment(investmentId){
-
-  const {
-
-    data,
-    error
-
-  } =
-  await supabaseClient
+  const { data, error } = await supabaseClient
     .from("investments")
-    .update({
-
-      status:"rejected"
-
-    })
-    .eq(
-      "id",
-      investmentId
-    )
+    .update({ status:"rejected" })
+    .eq("id",investmentId)
     .select();
 
   if(error){
-
-    alert(
-      "Rədd edilmədi: " +
-      error.message
-    );
-
+    alert("Rədd edilmədi: " + error.message);
     return;
-
   }
 
   if(!data || !data.length){
-
-    alert(
-      "Rədd əməliyyatı yazılmadı. Supabase RLS siyasətini yoxlamaq lazımdır."
-    );
-
+    alert("Rədd əməliyyatı yazılmadı. Supabase RLS siyasətini yoxlamaq lazımdır.");
     return;
-
   }
 
   await loadAdminInvestments();
-
 }
 
 async function logout(){
-
   if(investmentChannel){
-
-    supabaseClient
-      .removeChannel(
-        investmentChannel
-      );
-
+    supabaseClient.removeChannel(investmentChannel);
   }
 
   if(profileChannel){
-
-    supabaseClient
-      .removeChannel(
-        profileChannel
-      );
-
+    supabaseClient.removeChannel(profileChannel);
   }
 
   if(refreshInterval){
-
-    clearInterval(
-      refreshInterval
-    );
-
+    clearInterval(refreshInterval);
   }
 
   if(countdownTimer){
-
-    clearInterval(
-      countdownTimer
-    );
-
+    clearInterval(countdownTimer);
   }
 
-  await supabaseClient
-    .auth
-    .signOut();
-
+  await supabaseClient.auth.signOut();
   location.reload();
-
 }
 
 (async function init(){
-
-  const {
-
-    data
-
-  } =
-  await supabaseClient
-    .auth
-    .getUser();
-
+  const { data } = await supabaseClient.auth.getUser();
   if(data?.user){
-
-    await openApp(
-      data.user
-    );
-
+    await openApp(data.user);
   }
-
 })();
-
-</script></body>
+</script>
+</body>
 </html>
