@@ -430,7 +430,6 @@ async function loadAdminInvestments(){
   const box=document.getElementById("adminInvest");
   if(error){ box.innerHTML=`<p class='msg'>${error.message}</p>`; return; }
 
-  // YALNIZ pending sorğular görünsün (approve/reject olanda siyahıdan düşsün)
   const list=(data||[]).filter(x=>String(x.status||"").toLowerCase()==="pending");
 
   box.innerHTML=list.length
