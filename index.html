@@ -923,6 +923,10 @@ function sameDayUTC(a,b){
 
 async function startTask(){
 
+  if(countdownTimer){
+    return;
+  }
+
   const btn =
     document
       .getElementById("startTaskBtn");
@@ -1168,7 +1172,17 @@ async function loadInvestment(){
 
   if(hasApproved){
 
-    renderTaskReady();
+    const countdownBoxEl =
+      document.getElementById("countdownBox");
+
+    const isCountingDown =
+      !!countdownTimer &&
+      countdownBoxEl &&
+      !countdownBoxEl.classList.contains("hidden");
+
+    if(!isCountingDown){
+      renderTaskReady();
+    }
 
   }
 
