@@ -32,6 +32,41 @@ FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'authenticated');
 CREATE POLICY "Allow insert investments" ON investments
 FOR INSERT WITH CHECK (auth.role() = 'authenticated');
 
--- 7. Tasks cədvəli üçün RLS Policies (hamı oxuya bilsin)
+-- 7. Admin investments-i yeniləyə bilsin (approve/reject üçün)
+CREATE POLICY "Allow admin update investments" ON investments
+FOR UPDATE USING (
+  lower((auth.jwt() ->> 'email')::text) = lower('Ayazdiana666@gmail.com')
+) WITH CHECK (
+  lower((auth.jwt() ->> 'email')::text) = lower('Ayazdiana666@gmail.com')
+);
+
+-- 8. Tasks cədvəli üçün RLS Policies (hamı oxuya bilsin)
 CREATE POLICY "Allow read tasks" ON tasks
 FOR SELECT USING (true);
+
+-- 9. receipt_url sütununu nullable et (mövcud NOT NULL constraint varsa)
+ALTER TABLE investments ALTER COLUMN receipt_url DROP NOT NULL;
+
+-- 10. Əgər receipt_url sütunu yoxdursa əlavə et (idempotent – xəta verməz)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_name = 'investments' AND column_name = 'receipt_url'
+  ) THEN
+    ALTER TABLE investments ADD COLUMN receipt_url TEXT;
+  END IF;
+END $$;
+
+-- 11. Receipts storage bucket yarat (çek şəkillərini saxlamaq üçün)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('receipts', 'receipts', true)
+ON CONFLICT (id) DO UPDATE SET public = true;
+
+-- 12. Storage bucket üçün RLS Policies
+CREATE POLICY "Allow authenticated upload receipts" ON storage.objects
+FOR INSERT WITH CHECK (bucket_id = 'receipts' AND auth.role() = 'authenticated');
+
+CREATE POLICY "Allow public read receipts" ON storage.objects
+FOR SELECT USING (bucket_id = 'receipts');
+
