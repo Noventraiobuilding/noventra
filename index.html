@@ -174,6 +174,35 @@ let investmentChannel=null;
 let refreshInterval=null;
 let countdownTimer=null;
 let countdownLeft=30;
+let totalEarningsGlobal=0;
+let hasApprovedGlobal=false;
+
+function computeStatus(earnings,approved){
+  if(!approved&&earnings===0) return{label:"Yeni istifadəçi",cls:"purple"};
+  if(earnings>=1000) return{label:"Rəhbər",cls:"yellow"};
+  if(earnings>=300)  return{label:"Platin",cls:"purple"};
+  if(earnings>=100)  return{label:"Qızıl",cls:"yellow"};
+  if(earnings>=30)   return{label:"Gümüş",cls:"muted"};
+  return{label:"Aktiv",cls:"green"};
+}
+function updateStatusDisplay(){
+  const s=computeStatus(totalEarningsGlobal,hasApprovedGlobal);
+  const sEl=document.getElementById("status");
+  const aEl=document.getElementById("accountStatus");
+  if(sEl){sEl.innerText=s.label;sEl.className="value "+s.cls;}
+  if(aEl){aEl.innerText=s.label;aEl.className=s.cls;}
+}
+function escapeHtml(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function isSafeUrl(url){
+  try{
+    const u=new URL(url);
+    if(u.protocol!=="https:") return false;
+    const h=u.hostname;
+    return /^[a-z0-9-]+\.supabase\.(co|in)$/.test(h)||/^[a-z0-9-]+\.[a-z0-9-]+\.supabase\.(co|in)$/.test(h);
+  }catch{return false;}
+}
 
 function generateCode(){
   return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
@@ -270,15 +299,17 @@ async function openApp(u){
 
 async function loadEarnings(){
   const {data,error}=await supabaseClient.from("earnings").select("*").eq("user_id",user.id).order("created_at",{ascending:false});
-  if(error){ console.error(error); return; }
+  if(error){ console.error("loadEarnings:",error); return; }
 
   let sum=0;
   (data||[]).forEach(x=>sum+=Number(x.amount||0));
+  totalEarningsGlobal=sum;
   document.getElementById("balance").innerText=sum.toFixed(2)+" $";
   document.getElementById("total").innerText=sum.toFixed(2)+" $";
   document.getElementById("history").innerHTML=(data&&data.length)
-    ? data.map(x=>`<div class="row"><span>${x.description||"Qazanc"}</span><b class="green">+${Number(x.amount||0).toFixed(2)} $</b></div>`).join("")
+    ? data.map(x=>`<div class="row"><span>${escapeHtml(x.description||"Qazanc")}</span><b class="green">+${Number(x.amount||0).toFixed(2)} $</b></div>`).join("")
     : "<p class='muted'>Hələ qazanc yoxdur.</p>";
+  updateStatusDisplay();
 }
 
 async function loadReferral(){
@@ -292,8 +323,7 @@ async function loadReferral(){
 
 function renderTaskLocked(){
   document.getElementById("taskArea").innerHTML='<div class="info yellow">⏳ Yatırım sorğusu gözləmədədir.</div>';
-  document.getElementById("status").innerText="Yeni istifadəçi";
-  document.getElementById("accountStatus").innerText="Yeni istifadəçi";
+  updateStatusDisplay();
 }
 function renderTaskReady(){
   document.getElementById("taskArea").innerHTML=`
@@ -302,8 +332,7 @@ function renderTaskReady(){
     <div id="countdownBox" class="info hidden" style="margin-top:10px">⏱ Qaldı: <b id="countdown">30</b> saniyə</div>
     <div id="taskMsg" class="msg" style="color:#40dc91"></div>
   `;
-  document.getElementById("status").innerText="Aktiv";
-  document.getElementById("accountStatus").innerText="Aktiv";
+  updateStatusDisplay();
 }
 function sameDayUTC(a,b){
   const d1=new Date(a), d2=new Date(b);
@@ -385,36 +414,66 @@ async function loadInvestment(){
 
   const list=data||[];
   const approved=list.some(x=>String(x.status||"").toLowerCase().trim()==="approved");
+  hasApprovedGlobal=approved;
 
   if(approved) renderTaskReady();
   else if(list.length) renderTaskLocked();
   else{
     document.getElementById("taskArea").innerHTML='<div class="info">Yatırım etdikdən sonra fəaliyyət açılacaq.</div>';
-    document.getElementById("status").innerText="Yeni istifadəçi";
-    document.getElementById("accountStatus").innerText="Yeni istifadəçi";
+    updateStatusDisplay();
   }
 
   document.getElementById("investHistory").innerHTML=list.length
     ? list.map(x=>{
       const st=String(x.status||"pending").toLowerCase().trim();
       const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
-      return `<div class="row"><span>${new Date(x.created_at).toLocaleString()}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ - ${st}</b></div>`;
+      const label=st==="approved"?"təsdiqləndi":st==="rejected"?"rədd edildi":"gözlənilir";
+      return `<div class="row"><span>${new Date(x.created_at).toLocaleString("az-AZ")}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ — ${label}</b></div>`;
     }).join("")
     : "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
 }
 
 async function invest(){
   const amount=Number(document.getElementById("investAmount").value||0);
+  const fileInput=document.getElementById("receipt");
+  const file=fileInput.files[0];
   const msg=document.getElementById("investMsg");
-  if(amount<20){ msg.innerText="Minimum 20$ olmalıdır."; return; }
+  if(amount<20){ msg.style.color="#ff7777"; msg.innerText="Minimum 20$ olmalıdır."; return; }
+
+  msg.style.color="#ffd166";
+  msg.innerText="Göndərilir...";
+
+  let receipt_url=null;
+  if(file){
+    const ALLOWED_EXT=["jpg","jpeg","png","gif","webp","pdf"];
+    const ALLOWED_MIME=["image/jpeg","image/png","image/gif","image/webp","application/pdf"];
+    const ext=(file.name.split(".").pop()||"").toLowerCase();
+    if(!ALLOWED_EXT.includes(ext)||!ALLOWED_MIME.includes(file.type)){
+      msg.style.color="#ff7777";
+      msg.innerText="Yalnız şəkil faylları qəbul edilir (jpg, png, pdf).";
+      return;
+    }
+    const uid=(typeof crypto!=="undefined"&&crypto.randomUUID)?crypto.randomUUID():Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b=>b.toString(16).padStart(2,"0")).join("");
+    const fileName=user.id+"/"+uid+"."+ext;
+    const {error:upErr}=await supabaseClient.storage.from("receipts").upload(fileName,file);
+    if(upErr){
+      msg.style.color="#ff7777";
+      msg.innerText="Çek yüklənmədi: "+upErr.message;
+      return;
+    }
+    const {data:urlData}=supabaseClient.storage.from("receipts").getPublicUrl(fileName);
+    receipt_url=urlData?.publicUrl||null;
+  }
 
   const {error}=await supabaseClient.from("investments").insert({
-    user_id:user.id, amount, status:"pending"
+    user_id:user.id, amount, status:"pending", receipt_url
   });
-  if(error){ msg.innerText="Xəta: "+error.message; return; }
+  if(error){ msg.style.color="#ff7777"; msg.innerText="Xəta: "+error.message; return; }
 
   msg.style.color="#40dc91";
   msg.innerText="Sorğu göndərildi, admin təsdiqi gözlənilir.";
+  document.getElementById("investAmount").value="";
+  fileInput.value="";
   await loadInvestment();
   if(user.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()) await loadAdminInvestments();
 }
@@ -424,39 +483,53 @@ async function loadAdminInvestments(){
 
   const {data,error}=await supabaseClient
     .from("investments")
-    .select("id,user_id,amount,status,created_at")
+    .select("id,user_id,amount,status,created_at,receipt_url")
     .order("created_at",{ascending:false});
 
   const box=document.getElementById("adminInvest");
   if(error){ box.innerHTML=`<p class='msg'>${error.message}</p>`; return; }
 
-  const list=(data||[]).filter(x=>String(x.status||"").toLowerCase()==="pending");
+  const list=(data||[]).filter(x=>String(x.status||"").toLowerCase().trim()==="pending");
 
   box.innerHTML=list.length
-    ? list.map(x=>`
-      <div class="admin-item">
-        <div class="row"><span>İstifadəçi</span><b>${x.user_id}</b></div>
-        <div class="row"><span>Məbləğ</span><b>${Number(x.amount||0).toFixed(2)} $</b></div>
-        <div class="row"><span>Status</span><b class="pending">${x.status||"pending"}</b></div>
-        <button class="approve-btn" onclick="approveInvestment('${x.id}')">Təsdiqlə</button>
-        <button class="reject-btn" onclick="rejectInvestment('${x.id}')">Rədd et</button>
+    ? list.map(x=>{
+      const safeUserId=escapeHtml(x.user_id);
+      const safeAmount=Number(x.amount||0).toFixed(2);
+      const safeDate=new Date(x.created_at).toLocaleString("az-AZ");
+      const receiptHtml=x.receipt_url&&isSafeUrl(x.receipt_url)
+        ?`<div class="row"><span>Çek</span><a href="${escapeHtml(x.receipt_url)}" target="_blank" rel="noopener noreferrer" style="color:#9d87ff">Çekə bax 🔗</a></div>`
+        :"";
+      return`
+      <div class="admin-item" id="inv-${escapeHtml(x.id)}">
+        <div class="row"><span>İstifadəçi</span><b style="word-break:break-all;font-size:12px">${safeUserId}</b></div>
+        <div class="row"><span>Məbləğ</span><b>${safeAmount} $</b></div>
+        ${receiptHtml}
+        <div class="row"><span>Tarix</span><b>${safeDate}</b></div>
+        <button class="approve-btn" onclick="approveInvestment('${escapeHtml(x.id)}')">Təsdiqlə ✅</button>
+        <button class="reject-btn" onclick="rejectInvestment('${escapeHtml(x.id)}')">Rədd et ❌</button>
       </div>
-    `).join("")
+    `;}).join("")
     : "<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
 }
 
 async function approveInvestment(investmentId){
   const {error}=await supabaseClient.from("investments").update({status:"approved"}).eq("id",investmentId);
   if(error){ alert("Təsdiq alınmadı: "+error.message); return; }
+  const el=document.getElementById("inv-"+investmentId);
+  if(el) el.remove();
+  const box=document.getElementById("adminInvest");
+  if(box&&!box.querySelector(".admin-item")) box.innerHTML="<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
   await loadAdminInvestments();
-  alert("Yatırım təsdiqləndi ✅");
 }
 
 async function rejectInvestment(investmentId){
   const {error}=await supabaseClient.from("investments").update({status:"rejected"}).eq("id",investmentId);
   if(error){ alert("Rədd edilmədi: "+error.message); return; }
+  const el=document.getElementById("inv-"+investmentId);
+  if(el) el.remove();
+  const box=document.getElementById("adminInvest");
+  if(box&&!box.querySelector(".admin-item")) box.innerHTML="<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
   await loadAdminInvestments();
-  alert("Yatırım rədd edildi");
 }
 
 async function logout(){
