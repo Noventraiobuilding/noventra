@@ -172,11 +172,12 @@ let user=null;
 let profile=null;
 let investmentChannel=null;
 let refreshInterval=null;
+let countdownTimer=null;
+let countdownLeft=30;
 
 function generateCode(){
   return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
 }
-
 function showRegister(){
   document.getElementById("loginPage").classList.add("hidden");
   document.getElementById("registerPage").classList.remove("hidden");
@@ -185,11 +186,8 @@ function showLogin(){
   document.getElementById("registerPage").classList.add("hidden");
   document.getElementById("loginPage").classList.remove("hidden");
 }
-
 function page(name){
-  ["homePage","earnPage","investPage","accountPage","adminPage"].forEach(id=>{
-    document.getElementById(id)?.classList.add("hidden");
-  });
+  ["homePage","earnPage","investPage","accountPage","adminPage"].forEach(id=>document.getElementById(id)?.classList.add("hidden"));
   const map={home:"homePage",earn:"earnPage",invest:"investPage",account:"accountPage",admin:"adminPage"};
   document.getElementById(map[name]||"homePage")?.classList.remove("hidden");
   if(name==="admin") loadAdminInvestments();
@@ -200,8 +198,7 @@ async function register(){
   const password=document.getElementById("regPassword").value;
   const referral=document.getElementById("regReferral").value.trim().toUpperCase();
   const msg=document.getElementById("regMsg");
-
-  if(!email || !password){ msg.innerText="Email və şifrəni doldurun."; return; }
+  if(!email||!password){ msg.innerText="Email və şifrəni doldurun."; return; }
 
   msg.innerText="Hesab yaradılır...";
   const {data,error}=await supabaseClient.auth.signUp({email,password});
@@ -209,10 +206,7 @@ async function register(){
 
   if(data.user){
     const {error:pe}=await supabaseClient.from("profiles").insert({
-      id:data.user.id,
-      email,
-      referral_code:generateCode(),
-      referred_by:referral||null
+      id:data.user.id, email, referral_code:generateCode(), referred_by:referral||null
     });
     if(pe){ msg.innerText="Profil xətası: "+pe.message; return; }
   }
@@ -236,44 +230,21 @@ async function loadProfile(){
   profile=data;
 }
 
-function motivationalHTML(){
-  const tips=[
-    "🎯 Məqsədinə fokuslan: hər gün kiçik addım at.",
-    "🔥 Davamlılıq intizamdan doğur.",
-    "💡 Bu gün etdiyin iş sabahkı nəticəndir."
-  ];
-  return `
-    <div class="info green">✅ Yatırım təsdiqlənib. Fəaliyyət aktivdir.</div>
-    <div class="card" style="margin-top:12px">
-      <h3 style="margin-top:0">Motivasiya</h3>
-      <div class="row"><span>${tips[0]}</span></div>
-      <div class="row"><span>${tips[1]}</span></div>
-      <div class="row"><span>${tips[2]}</span></div>
-    </div>
-  `;
-}
-
 function subscribeInvestments(){
   if(investmentChannel){
     supabaseClient.removeChannel(investmentChannel);
     investmentChannel=null;
   }
-  investmentChannel=supabaseClient
-    .channel("investments-"+user.id)
-    .on("postgres_changes",{
-      event:"*",
-      schema:"public",
-      table:"investments",
-      filter:"user_id=eq."+user.id
-    },async()=>{ await loadInvestment(); })
-    .subscribe();
+  investmentChannel=supabaseClient.channel("investments-"+user.id).on("postgres_changes",{
+    event:"*",
+    schema:"public",
+    table:"investments",
+    filter:"user_id=eq."+user.id
+  }, async ()=>{ await loadInvestment(); }).subscribe();
 }
-
 function startAutoRefresh(){
   if(refreshInterval) clearInterval(refreshInterval);
-  refreshInterval=setInterval(async()=>{
-    if(user) await loadInvestment();
-  },3000);
+  refreshInterval=setInterval(async()=>{ if(user) await loadInvestment(); },5000);
 }
 
 async function openApp(u){
@@ -298,19 +269,13 @@ async function openApp(u){
 }
 
 async function loadEarnings(){
-  const {data,error}=await supabaseClient
-    .from("earnings")
-    .select("*")
-    .eq("user_id",user.id)
-    .order("created_at",{ascending:false});
-
+  const {data,error}=await supabaseClient.from("earnings").select("*").eq("user_id",user.id).order("created_at",{ascending:false});
   if(error){ console.error(error); return; }
 
   let sum=0;
   (data||[]).forEach(x=>sum+=Number(x.amount||0));
   document.getElementById("balance").innerText=sum.toFixed(2)+" $";
   document.getElementById("total").innerText=sum.toFixed(2)+" $";
-
   document.getElementById("history").innerHTML=(data&&data.length)
     ? data.map(x=>`<div class="row"><span>${x.description||"Qazanc"}</span><b class="green">+${Number(x.amount||0).toFixed(2)} $</b></div>`).join("")
     : "<p class='muted'>Hələ qazanc yoxdur.</p>";
@@ -318,23 +283,101 @@ async function loadEarnings(){
 
 async function loadReferral(){
   if(!profile) return;
-
   const code=profile.referral_code||"—";
   document.getElementById("referralCode").innerText=code;
   document.getElementById("accountRef").innerText=code;
-
-  const {data}=await supabaseClient
-    .from("profiles")
-    .select("id")
-    .eq("referred_by",code);
-
+  const {data}=await supabaseClient.from("profiles").select("id").eq("referred_by",code);
   document.getElementById("refCount").innerText=(data||[]).length;
+}
+
+function renderTaskLocked(){
+  document.getElementById("taskArea").innerHTML='<div class="info yellow">⏳ Yatırım sorğusu gözləmədədir.</div>';
+  document.getElementById("status").innerText="Yeni istifadəçi";
+  document.getElementById("accountStatus").innerText="Yeni istifadəçi";
+}
+function renderTaskReady(){
+  document.getElementById("taskArea").innerHTML=`
+    <div class="info green">✅ Yatırım təsdiqlənib. Fəaliyyət açıqdır.</div>
+    <button id="startTaskBtn" class="main" onclick="startTask()">Fəaliyyətə Başla</button>
+    <div id="countdownBox" class="info hidden" style="margin-top:10px">⏱ Qaldı: <b id="countdown">30</b> saniyə</div>
+    <div id="taskMsg" class="msg" style="color:#40dc91"></div>
+  `;
+  document.getElementById("status").innerText="Aktiv";
+  document.getElementById("accountStatus").innerText="Aktiv";
+}
+function sameDayUTC(a,b){
+  const d1=new Date(a), d2=new Date(b);
+  return d1.getUTCFullYear()===d2.getUTCFullYear() &&
+         d1.getUTCMonth()===d2.getUTCMonth() &&
+         d1.getUTCDate()===d2.getUTCDate();
+}
+
+async function startTask(){
+  const btn=document.getElementById("startTaskBtn");
+  const box=document.getElementById("countdownBox");
+  const cd=document.getElementById("countdown");
+  const msg=document.getElementById("taskMsg");
+  if(!btn||!box||!cd||!msg) return;
+
+  msg.innerText="";
+
+  const {data:prof,error:pe}=await supabaseClient.from("profiles").select("last_task_at").eq("id",user.id).maybeSingle();
+  if(pe){ msg.style.color="#ff7777"; msg.innerText="Profil oxunmadı: "+pe.message; return; }
+
+  if(prof?.last_task_at && sameDayUTC(prof.last_task_at,new Date().toISOString())){
+    msg.style.color="#ffd166";
+    msg.innerText="Bu gün artıq fəaliyyət etmisən. Sabah yenidən et.";
+    return;
+  }
+
+  btn.disabled=true;
+  box.classList.remove("hidden");
+  countdownLeft=30;
+  cd.innerText=String(countdownLeft);
+
+  if(countdownTimer) clearInterval(countdownTimer);
+  countdownTimer=setInterval(async ()=>{
+    countdownLeft--;
+    cd.innerText=String(countdownLeft);
+
+    if(countdownLeft<=0){
+      clearInterval(countdownTimer);
+      countdownTimer=null;
+
+      const {error:e1}=await supabaseClient.from("earnings").insert({
+        user_id:user.id,
+        amount:1,
+        description:"30 saniyəlik fəaliyyət tapşırığı"
+      });
+      if(e1){
+        msg.style.color="#ff7777";
+        msg.innerText="Qazanc yazılmadı: "+e1.message;
+        btn.disabled=false;
+        return;
+      }
+
+      const {error:e2}=await supabaseClient.from("profiles").update({
+        last_task_at:new Date().toISOString()
+      }).eq("id",user.id);
+      if(e2){
+        msg.style.color="#ff7777";
+        msg.innerText="Tarix yenilənmədi: "+e2.message;
+        btn.disabled=false;
+        return;
+      }
+
+      msg.style.color="#40dc91";
+      msg.innerText="✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
+      btn.disabled=true;
+      await loadEarnings();
+    }
+  },1000);
 }
 
 async function loadInvestment(){
   const {data,error}=await supabaseClient
     .from("investments")
-    .select("id,user_id,amount,status,created_at")
+    .select("id,amount,status,created_at")
     .eq("user_id",user.id)
     .order("created_at",{ascending:false});
 
@@ -343,49 +386,36 @@ async function loadInvestment(){
   const list=data||[];
   const approved=list.some(x=>String(x.status||"").toLowerCase().trim()==="approved");
 
-  const taskArea=document.getElementById("taskArea");
-
-  if(approved){
-    taskArea.innerHTML=motivationalHTML();
-    document.getElementById("status").innerText="Aktiv";
-    document.getElementById("accountStatus").innerText="Aktiv";
-  }else if(list.length){
-    taskArea.innerHTML='<div class="info yellow">⏳ Yatırım sorğusu gözləmədədir.</div>';
-    document.getElementById("status").innerText="Yeni istifadəçi";
-    document.getElementById("accountStatus").innerText="Yeni istifadəçi";
-  }else{
-    taskArea.innerHTML='<div class="info">Yatırım etdikdən sonra fəaliyyət açılacaq.</div>';
+  if(approved) renderTaskReady();
+  else if(list.length) renderTaskLocked();
+  else{
+    document.getElementById("taskArea").innerHTML='<div class="info">Yatırım etdikdən sonra fəaliyyət açılacaq.</div>';
     document.getElementById("status").innerText="Yeni istifadəçi";
     document.getElementById("accountStatus").innerText="Yeni istifadəçi";
   }
 
   document.getElementById("investHistory").innerHTML=list.length
     ? list.map(x=>{
-        const st=String(x.status||"pending").toLowerCase().trim();
-        const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
-        return `<div class="row"><span>${new Date(x.created_at).toLocaleString()}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ - ${st}</b></div>`;
-      }).join("")
+      const st=String(x.status||"pending").toLowerCase().trim();
+      const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
+      return `<div class="row"><span>${new Date(x.created_at).toLocaleString()}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ - ${st}</b></div>`;
+    }).join("")
     : "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
 }
 
 async function invest(){
   const amount=Number(document.getElementById("investAmount").value||0);
   const msg=document.getElementById("investMsg");
-
   if(amount<20){ msg.innerText="Minimum 20$ olmalıdır."; return; }
 
   const {error}=await supabaseClient.from("investments").insert({
-    user_id:user.id,
-    amount,
-    status:"pending"
+    user_id:user.id, amount, status:"pending"
   });
-
   if(error){ msg.innerText="Xəta: "+error.message; return; }
 
   msg.style.color="#40dc91";
   msg.innerText="Sorğu göndərildi, admin təsdiqi gözlənilir.";
   await loadInvestment();
-
   if(user.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()) await loadAdminInvestments();
 }
 
@@ -400,7 +430,8 @@ async function loadAdminInvestments(){
   const box=document.getElementById("adminInvest");
   if(error){ box.innerHTML=`<p class='msg'>${error.message}</p>`; return; }
 
-  const list=(data||[]).filter(x=>String(x.status||"").toLowerCase()!=="approved");
+  // YALNIZ pending sorğular görünsün (approve/reject olanda siyahıdan düşsün)
+  const list=(data||[]).filter(x=>String(x.status||"").toLowerCase()==="pending");
 
   box.innerHTML=list.length
     ? list.map(x=>`
@@ -416,25 +447,15 @@ async function loadAdminInvestments(){
 }
 
 async function approveInvestment(investmentId){
-  const {error}=await supabaseClient
-    .from("investments")
-    .update({status:"approved"})
-    .eq("id",investmentId);
-
+  const {error}=await supabaseClient.from("investments").update({status:"approved"}).eq("id",investmentId);
   if(error){ alert("Təsdiq alınmadı: "+error.message); return; }
-
   await loadAdminInvestments();
   alert("Yatırım təsdiqləndi ✅");
 }
 
 async function rejectInvestment(investmentId){
-  const {error}=await supabaseClient
-    .from("investments")
-    .update({status:"rejected"})
-    .eq("id",investmentId);
-
+  const {error}=await supabaseClient.from("investments").update({status:"rejected"}).eq("id",investmentId);
   if(error){ alert("Rədd edilmədi: "+error.message); return; }
-
   await loadAdminInvestments();
   alert("Yatırım rədd edildi");
 }
@@ -442,6 +463,7 @@ async function rejectInvestment(investmentId){
 async function logout(){
   if(investmentChannel) supabaseClient.removeChannel(investmentChannel);
   if(refreshInterval) clearInterval(refreshInterval);
+  if(countdownTimer) clearInterval(countdownTimer);
   await supabaseClient.auth.signOut();
   location.reload();
 }
@@ -453,4 +475,4 @@ async function logout(){
 </script>
 
 </body>
-  </html>
+</html>
