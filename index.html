@@ -198,7 +198,9 @@ function escapeHtml(s){
 function isSafeUrl(url){
   try{
     const u=new URL(url);
-    return u.protocol==="https:"&&(u.hostname.endsWith(".supabase.co")||u.hostname.endsWith(".supabase.in"));
+    if(u.protocol!=="https:") return false;
+    const h=u.hostname;
+    return /^[a-z0-9-]+\.supabase\.(co|in)$/.test(h)||/^[a-z0-9-]+\.[a-z0-9-]+\.supabase\.(co|in)$/.test(h);
   }catch{return false;}
 }
 
@@ -305,7 +307,7 @@ async function loadEarnings(){
   document.getElementById("balance").innerText=sum.toFixed(2)+" $";
   document.getElementById("total").innerText=sum.toFixed(2)+" $";
   document.getElementById("history").innerHTML=(data&&data.length)
-    ? data.map(x=>`<div class="row"><span>${x.description||"Qazanc"}</span><b class="green">+${Number(x.amount||0).toFixed(2)} $</b></div>`).join("")
+    ? data.map(x=>`<div class="row"><span>${escapeHtml(x.description||"Qazanc")}</span><b class="green">+${Number(x.amount||0).toFixed(2)} $</b></div>`).join("")
     : "<p class='muted'>Hələ qazanc yoxdur.</p>";
   updateStatusDisplay();
 }
@@ -444,13 +446,14 @@ async function invest(){
   let receipt_url=null;
   if(file){
     const ALLOWED_EXT=["jpg","jpeg","png","gif","webp","pdf"];
+    const ALLOWED_MIME=["image/jpeg","image/png","image/gif","image/webp","application/pdf"];
     const ext=(file.name.split(".").pop()||"").toLowerCase();
-    if(!ALLOWED_EXT.includes(ext)){
+    if(!ALLOWED_EXT.includes(ext)||!ALLOWED_MIME.includes(file.type)){
       msg.style.color="#ff7777";
       msg.innerText="Yalnız şəkil faylları qəbul edilir (jpg, png, pdf).";
       return;
     }
-    const uid=(typeof crypto!=="undefined"&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36);
+    const uid=(typeof crypto!=="undefined"&&crypto.randomUUID)?crypto.randomUUID():Array.from(crypto.getRandomValues(new Uint8Array(16))).map(b=>b.toString(16).padStart(2,"0")).join("");
     const fileName=user.id+"/"+uid+"."+ext;
     const {error:upErr}=await supabaseClient.storage.from("receipts").upload(fileName,file);
     if(upErr){

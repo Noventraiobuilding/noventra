@@ -55,12 +55,8 @@ BEGIN
   END IF;
 END $$;
 
--- 10. receipt_url sütununu nullable et (mövcud NOT NULL constraint varsa)
-DO $$
-BEGIN
-  ALTER TABLE investments ALTER COLUMN receipt_url DROP NOT NULL;
-EXCEPTION WHEN others THEN NULL;
-END $$;
+-- 10. receipt_url sütununu nullable et (sütun artıq yuxarıda yaradılıb)
+ALTER TABLE investments ALTER COLUMN receipt_url DROP NOT NULL;
 
 -- 11. Receipts storage bucket yarat (çek şəkillərini saxlamaq üçün)
 INSERT INTO storage.buckets (id, name, public)
