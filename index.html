@@ -173,12 +173,19 @@ let profile=null;
 let investmentChannel=null;
 let refreshInterval=null;
 let countdownTimer=null;
-let visibilityHandler=null;
+let countdownLeft=30;
 
-function generateCode(){ return "NV"+Math.random().toString(36).substring(2,8).toUpperCase(); }
-function showRegister(){ document.getElementById("loginPage").classList.add("hidden"); document.getElementById("registerPage").classList.remove("hidden"); }
-function showLogin(){ document.getElementById("registerPage").classList.add("hidden"); document.getElementById("loginPage").classList.remove("hidden"); }
-
+function generateCode(){
+  return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
+}
+function showRegister(){
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("registerPage").classList.remove("hidden");
+}
+function showLogin(){
+  document.getElementById("registerPage").classList.add("hidden");
+  document.getElementById("loginPage").classList.remove("hidden");
+}
 function page(name){
   ["homePage","earnPage","investPage","accountPage","adminPage"].forEach(id=>document.getElementById(id)?.classList.add("hidden"));
   const map={home:"homePage",earn:"earnPage",invest:"investPage",account:"accountPage",admin:"adminPage"};
@@ -224,7 +231,10 @@ async function loadProfile(){
 }
 
 function subscribeInvestments(){
-  if(investmentChannel){ supabaseClient.removeChannel(investmentChannel); investmentChannel=null; }
+  if(investmentChannel){
+    supabaseClient.removeChannel(investmentChannel);
+    investmentChannel=null;
+  }
   investmentChannel=supabaseClient.channel("investments-"+user.id).on("postgres_changes",{
     event:"*",
     schema:"public",
@@ -302,24 +312,6 @@ function sameDayUTC(a,b){
          d1.getUTCDate()===d2.getUTCDate();
 }
 
-async function completeTaskReward(msg,btn){
-  const {error:e1}=await supabaseClient.from("earnings").insert({
-    user_id:user.id, amount:1, description:"30 saniyəlik fəaliyyət tapşırığı"
-  });
-  if(e1){ msg.style.color="#ff7777"; msg.innerText="Qazanc yazılmadı: "+e1.message; btn.disabled=false; return false; }
-
-  const {error:e2}=await supabaseClient.from("profiles").update({
-    last_task_at:new Date().toISOString()
-  }).eq("id",user.id);
-  if(e2){ msg.style.color="#ff7777"; msg.innerText="Tarix yenilənmədi: "+e2.message; btn.disabled=false; return false; }
-
-  msg.style.color="#40dc91";
-  msg.innerText="✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
-  btn.disabled=true;
-  await loadEarnings();
-  return true;
-}
-
 async function startTask(){
   const btn=document.getElementById("startTaskBtn");
   const box=document.getElementById("countdownBox");
@@ -328,6 +320,7 @@ async function startTask(){
   if(!btn||!box||!cd||!msg) return;
 
   msg.innerText="";
+
   const {data:prof,error:pe}=await supabaseClient.from("profiles").select("last_task_at").eq("id",user.id).maybeSingle();
   if(pe){ msg.style.color="#ff7777"; msg.innerText="Profil oxunmadı: "+pe.message; return; }
 
@@ -339,30 +332,46 @@ async function startTask(){
 
   btn.disabled=true;
   box.classList.remove("hidden");
-
-  const endAt=Date.now()+30000;
-  let finished=false;
+  countdownLeft=30;
+  cd.innerText=String(countdownLeft);
 
   if(countdownTimer) clearInterval(countdownTimer);
-  if(visibilityHandler) document.removeEventListener("visibilitychange", visibilityHandler);
+  countdownTimer=setInterval(async ()=>{
+    countdownLeft--;
+    cd.innerText=String(countdownLeft);
 
-  const tick=async()=>{
-    const leftMs=endAt-Date.now();
-    const leftSec=Math.max(0,Math.ceil(leftMs/1000));
-    cd.innerText=String(leftSec);
+    if(countdownLeft<=0){
+      clearInterval(countdownTimer);
+      countdownTimer=null;
 
-    if(leftMs<=0 && !finished){
-      finished=true;
-      if(countdownTimer){ clearInterval(countdownTimer); countdownTimer=null; }
-      if(visibilityHandler){ document.removeEventListener("visibilitychange", visibilityHandler); visibilityHandler=null; }
-      await completeTaskReward(msg,btn);
+      const {error:e1}=await supabaseClient.from("earnings").insert({
+        user_id:user.id,
+        amount:1,
+        description:"30 saniyəlik fəaliyyət tapşırığı"
+      });
+      if(e1){
+        msg.style.color="#ff7777";
+        msg.innerText="Qazanc yazılmadı: "+e1.message;
+        btn.disabled=false;
+        return;
+      }
+
+      const {error:e2}=await supabaseClient.from("profiles").update({
+        last_task_at:new Date().toISOString()
+      }).eq("id",user.id);
+      if(e2){
+        msg.style.color="#ff7777";
+        msg.innerText="Tarix yenilənmədi: "+e2.message;
+        btn.disabled=false;
+        return;
+      }
+
+      msg.style.color="#40dc91";
+      msg.innerText="✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
+      btn.disabled=true;
+      await loadEarnings();
     }
-  };
-
-  countdownTimer=setInterval(tick,250);
-  visibilityHandler=async()=>{ if(document.visibilityState==="visible" && !finished){ await tick(); } };
-  document.addEventListener("visibilitychange", visibilityHandler);
-  await tick();
+  },1000);
 }
 
 async function loadInvestment(){
@@ -399,7 +408,9 @@ async function invest(){
   const msg=document.getElementById("investMsg");
   if(amount<20){ msg.innerText="Minimum 20$ olmalıdır."; return; }
 
-  const {error}=await supabaseClient.from("investments").insert({ user_id:user.id, amount, status:"pending" });
+  const {error}=await supabaseClient.from("investments").insert({
+    user_id:user.id, amount, status:"pending"
+  });
   if(error){ msg.innerText="Xəta: "+error.message; return; }
 
   msg.style.color="#40dc91";
@@ -414,19 +425,19 @@ async function loadAdminInvestments(){
   const {data,error}=await supabaseClient
     .from("investments")
     .select("id,user_id,amount,status,created_at")
-    .eq("status","pending")
     .order("created_at",{ascending:false});
 
   const box=document.getElementById("adminInvest");
   if(error){ box.innerHTML=`<p class='msg'>${error.message}</p>`; return; }
 
-  const list=data||[];
+  const list=(data||[]).filter(x=>String(x.status||"").toLowerCase()==="pending");
+
   box.innerHTML=list.length
     ? list.map(x=>`
       <div class="admin-item">
         <div class="row"><span>İstifadəçi</span><b>${x.user_id}</b></div>
         <div class="row"><span>Məbləğ</span><b>${Number(x.amount||0).toFixed(2)} $</b></div>
-        <div class="row"><span>Status</span><b class="pending">${x.status}</b></div>
+        <div class="row"><span>Status</span><b class="pending">${x.status||"pending"}</b></div>
         <button class="approve-btn" onclick="approveInvestment('${x.id}')">Təsdiqlə</button>
         <button class="reject-btn" onclick="rejectInvestment('${x.id}')">Rədd et</button>
       </div>
@@ -440,6 +451,7 @@ async function approveInvestment(investmentId){
   await loadAdminInvestments();
   alert("Yatırım təsdiqləndi ✅");
 }
+
 async function rejectInvestment(investmentId){
   const {error}=await supabaseClient.from("investments").update({status:"rejected"}).eq("id",investmentId);
   if(error){ alert("Rədd edilmədi: "+error.message); return; }
@@ -451,7 +463,6 @@ async function logout(){
   if(investmentChannel) supabaseClient.removeChannel(investmentChannel);
   if(refreshInterval) clearInterval(refreshInterval);
   if(countdownTimer) clearInterval(countdownTimer);
-  if(visibilityHandler) document.removeEventListener("visibilitychange", visibilityHandler);
   await supabaseClient.auth.signOut();
   location.reload();
 }
@@ -461,5 +472,6 @@ async function logout(){
   if(data?.user) await openApp(data.user);
 })();
 </script>
+
 </body>
 </html>
