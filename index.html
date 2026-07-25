@@ -173,7 +173,7 @@ let profile=null;
 let investmentChannel=null;
 let refreshInterval=null;
 let countdownTimer=null;
-let countdownLeft=30;
+let visibilityHandler=null;
 
 function generateCode(){
   return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
@@ -312,6 +312,37 @@ function sameDayUTC(a,b){
          d1.getUTCDate()===d2.getUTCDate();
 }
 
+async function completeTaskReward(msg,btn){
+  const {error:e1}=await supabaseClient.from("earnings").insert({
+    user_id:user.id,
+    amount:1,
+    description:"30 saniyəlik fəaliyyət tapşırığı"
+  });
+  if(e1){
+    msg.style.color="#ff7777";
+    msg.innerText="Qazanc yazılmadı: "+e1.message;
+    btn.disabled=false;
+    return false;
+  }
+
+  const {error:e2}=await supabaseClient.from("profiles").update({
+    last_task_at:new Date().toISOString()
+  }).eq("id",user.id);
+
+  if(e2){
+    msg.style.color="#ff7777";
+    msg.innerText="Tarix yenilənmədi: "+e2.message;
+    btn.disabled=false;
+    return false;
+  }
+
+  msg.style.color="#40dc91";
+  msg.innerText="✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
+  btn.disabled=true;
+  await loadEarnings();
+  return true;
+}
+
 async function startTask(){
   const btn=document.getElementById("startTaskBtn");
   const box=document.getElementById("countdownBox");
@@ -322,7 +353,11 @@ async function startTask(){
   msg.innerText="";
 
   const {data:prof,error:pe}=await supabaseClient.from("profiles").select("last_task_at").eq("id",user.id).maybeSingle();
-  if(pe){ msg.style.color="#ff7777"; msg.innerText="Profil oxunmadı: "+pe.message; return; }
+  if(pe){
+    msg.style.color="#ff7777";
+    msg.innerText="Profil oxunmadı: "+pe.message;
+    return;
+  }
 
   if(prof?.last_task_at && sameDayUTC(prof.last_task_at,new Date().toISOString())){
     msg.style.color="#ffd166";
@@ -332,46 +367,36 @@ async function startTask(){
 
   btn.disabled=true;
   box.classList.remove("hidden");
-  countdownLeft=30;
-  cd.innerText=String(countdownLeft);
+
+  const endAt=Date.now()+30000;
+  let finished=false;
 
   if(countdownTimer) clearInterval(countdownTimer);
-  countdownTimer=setInterval(async ()=>{
-    countdownLeft--;
-    cd.innerText=String(countdownLeft);
+  if(visibilityHandler) document.removeEventListener("visibilitychange", visibilityHandler);
 
-    if(countdownLeft<=0){
-      clearInterval(countdownTimer);
-      countdownTimer=null;
+  const tick=async()=>{
+    const leftMs=endAt-Date.now();
+    const leftSec=Math.max(0,Math.ceil(leftMs/1000));
+    cd.innerText=String(leftSec);
 
-      const {error:e1}=await supabaseClient.from("earnings").insert({
-        user_id:user.id,
-        amount:1,
-        description:"30 saniyəlik fəaliyyət tapşırığı"
-      });
-      if(e1){
-        msg.style.color="#ff7777";
-        msg.innerText="Qazanc yazılmadı: "+e1.message;
-        btn.disabled=false;
-        return;
-      }
-
-      const {error:e2}=await supabaseClient.from("profiles").update({
-        last_task_at:new Date().toISOString()
-      }).eq("id",user.id);
-      if(e2){
-        msg.style.color="#ff7777";
-        msg.innerText="Tarix yenilənmədi: "+e2.message;
-        btn.disabled=false;
-        return;
-      }
-
-      msg.style.color="#40dc91";
-      msg.innerText="✅ Tapşırıq tamamlandı. Balansına +1$ əlavə olundu.";
-      btn.disabled=true;
-      await loadEarnings();
+    if(leftMs<=0 && !finished){
+      finished=true;
+      if(countdownTimer){ clearInterval(countdownTimer); countdownTimer=null; }
+      if(visibilityHandler){ document.removeEventListener("visibilitychange", visibilityHandler); visibilityHandler=null; }
+      await completeTaskReward(msg,btn);
     }
-  },1000);
+  };
+
+  countdownTimer=setInterval(tick,250);
+
+  visibilityHandler=async()=>{
+    if(document.visibilityState==="visible" && !finished){
+      await tick();
+    }
+  };
+  document.addEventListener("visibilitychange", visibilityHandler);
+
+  await tick();
 }
 
 async function loadInvestment(){
@@ -463,6 +488,7 @@ async function logout(){
   if(investmentChannel) supabaseClient.removeChannel(investmentChannel);
   if(refreshInterval) clearInterval(refreshInterval);
   if(countdownTimer) clearInterval(countdownTimer);
+  if(visibilityHandler) document.removeEventListener("visibilitychange", visibilityHandler);
   await supabaseClient.auth.signOut();
   location.reload();
 }
