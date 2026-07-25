@@ -44,10 +44,7 @@ FOR UPDATE USING (
 CREATE POLICY "Allow read tasks" ON tasks
 FOR SELECT USING (true);
 
--- 9. receipt_url sütununu nullable et (mövcud NOT NULL constraint varsa)
-ALTER TABLE investments ALTER COLUMN receipt_url DROP NOT NULL;
-
--- 10. Əgər receipt_url sütunu yoxdursa əlavə et (idempotent – xəta verməz)
+-- 9. Əgər receipt_url sütunu yoxdursa əlavə et (idempotent – xəta verməz)
 DO $$
 BEGIN
   IF NOT EXISTS (
@@ -56,6 +53,13 @@ BEGIN
   ) THEN
     ALTER TABLE investments ADD COLUMN receipt_url TEXT;
   END IF;
+END $$;
+
+-- 10. receipt_url sütununu nullable et (mövcud NOT NULL constraint varsa)
+DO $$
+BEGIN
+  ALTER TABLE investments ALTER COLUMN receipt_url DROP NOT NULL;
+EXCEPTION WHEN others THEN NULL;
 END $$;
 
 -- 11. Receipts storage bucket yarat (çek şəkillərini saxlamaq üçün)

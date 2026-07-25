@@ -192,6 +192,15 @@ function updateStatusDisplay(){
   if(sEl){sEl.innerText=s.label;sEl.className="value "+s.cls;}
   if(aEl){aEl.innerText=s.label;aEl.className=s.cls;}
 }
+function escapeHtml(s){
+  return String(s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
+function isSafeUrl(url){
+  try{
+    const u=new URL(url);
+    return u.protocol==="https:"&&(u.hostname.endsWith(".supabase.co")||u.hostname.endsWith(".supabase.in"));
+  }catch{return false;}
+}
 
 function generateCode(){
   return "NV"+Math.random().toString(36).substring(2,8).toUpperCase();
@@ -417,7 +426,7 @@ async function loadInvestment(){
       const st=String(x.status||"pending").toLowerCase().trim();
       const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
       const label=st==="approved"?"təsdiqləndi":st==="rejected"?"rədd edildi":"gözlənilir";
-      return `<div class="row"><span>${new Date(x.created_at).toLocaleString()}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ — ${label}</b></div>`;
+      return `<div class="row"><span>${new Date(x.created_at).toLocaleString("az-AZ")}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ — ${label}</b></div>`;
     }).join("")
     : "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
 }
@@ -434,9 +443,16 @@ async function invest(){
 
   let receipt_url=null;
   if(file){
-    const ext=file.name.split(".").pop();
-    const fileName=user.id+"/"+Date.now()+"."+ext;
-    const {error:upErr}=await supabaseClient.storage.from("receipts").upload(fileName,file,{upsert:true});
+    const ALLOWED_EXT=["jpg","jpeg","png","gif","webp","pdf"];
+    const ext=(file.name.split(".").pop()||"").toLowerCase();
+    if(!ALLOWED_EXT.includes(ext)){
+      msg.style.color="#ff7777";
+      msg.innerText="Yalnız şəkil faylları qəbul edilir (jpg, png, pdf).";
+      return;
+    }
+    const uid=(typeof crypto!=="undefined"&&crypto.randomUUID)?crypto.randomUUID():Date.now().toString(36);
+    const fileName=user.id+"/"+uid+"."+ext;
+    const {error:upErr}=await supabaseClient.storage.from("receipts").upload(fileName,file);
     if(upErr){
       msg.style.color="#ff7777";
       msg.innerText="Çek yüklənmədi: "+upErr.message;
@@ -473,16 +489,23 @@ async function loadAdminInvestments(){
   const list=(data||[]).filter(x=>String(x.status||"").toLowerCase().trim()==="pending");
 
   box.innerHTML=list.length
-    ? list.map(x=>`
-      <div class="admin-item" id="inv-${x.id}">
-        <div class="row"><span>İstifadəçi</span><b style="word-break:break-all;font-size:12px">${x.user_id}</b></div>
-        <div class="row"><span>Məbləğ</span><b>${Number(x.amount||0).toFixed(2)} $</b></div>
-        ${x.receipt_url?`<div class="row"><span>Çek</span><a href="${x.receipt_url}" target="_blank" style="color:#9d87ff">Çekə bax 🔗</a></div>`:""}
-        <div class="row"><span>Tarix</span><b>${new Date(x.created_at).toLocaleString()}</b></div>
-        <button class="approve-btn" onclick="approveInvestment('${x.id}')">Təsdiqlə ✅</button>
-        <button class="reject-btn" onclick="rejectInvestment('${x.id}')">Rədd et ❌</button>
+    ? list.map(x=>{
+      const safeUserId=escapeHtml(x.user_id);
+      const safeAmount=Number(x.amount||0).toFixed(2);
+      const safeDate=new Date(x.created_at).toLocaleString("az-AZ");
+      const receiptHtml=x.receipt_url&&isSafeUrl(x.receipt_url)
+        ?`<div class="row"><span>Çek</span><a href="${escapeHtml(x.receipt_url)}" target="_blank" rel="noopener noreferrer" style="color:#9d87ff">Çekə bax 🔗</a></div>`
+        :"";
+      return`
+      <div class="admin-item" id="inv-${escapeHtml(x.id)}">
+        <div class="row"><span>İstifadəçi</span><b style="word-break:break-all;font-size:12px">${safeUserId}</b></div>
+        <div class="row"><span>Məbləğ</span><b>${safeAmount} $</b></div>
+        ${receiptHtml}
+        <div class="row"><span>Tarix</span><b>${safeDate}</b></div>
+        <button class="approve-btn" onclick="approveInvestment('${escapeHtml(x.id)}')">Təsdiqlə ✅</button>
+        <button class="reject-btn" onclick="rejectInvestment('${escapeHtml(x.id)}')">Rədd et ❌</button>
       </div>
-    `).join("")
+    `;}).join("")
     : "<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
 }
 
