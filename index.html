@@ -42,6 +42,41 @@
     .locked{color:#888}
     .level-card{margin-top:15px}
     .level-card h3{margin-top:0}
+
+    /* Premium level button */
+    .level-btn{
+      width:100%;
+      margin-top:12px;
+      border:1px solid #f6d365;
+      border-radius:12px;
+      padding:12px 14px;
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.3px;
+      color:#2a1a00;
+      background:linear-gradient(135deg,#f6d365 0%,#fda085 45%,#ffd166 100%);
+      box-shadow:
+        0 8px 20px rgba(253,160,133,.25),
+        inset 0 1px 0 rgba(255,255,255,.45);
+      transition:transform .15s ease, box-shadow .2s ease, filter .2s ease;
+    }
+    .level-btn:hover{
+      transform:translateY(-1px);
+      box-shadow:
+        0 12px 24px rgba(253,160,133,.35),
+        inset 0 1px 0 rgba(255,255,255,.55);
+      filter:saturate(1.05);
+    }
+    .level-btn:active{
+      transform:translateY(0);
+    }
+    .level-btn:focus{
+      outline:none;
+      box-shadow:
+        0 0 0 3px rgba(255,209,102,.35),
+        0 10px 22px rgba(253,160,133,.35);
+    }
+
     @media(max-width:700px){
       .grid,.two{grid-template-columns:1fr}
     }
@@ -575,9 +610,6 @@ function renderLevels(){
 
   }
 
-  const current =
-    getCurrentLevel();
-
   box.innerHTML =
     LEVELS.map(level=>{
 
@@ -588,6 +620,9 @@ function renderLevels(){
         !locked &&
         approvedInvestmentGlobal >= level.own &&
         activeReferralsGlobal >= level.referrals;
+
+      const levelKey =
+        escapeHtml(level.name);
 
       return `
 
@@ -619,7 +654,7 @@ function renderLevels(){
             ?
             `<div class="green">✅ Səviyyə aktivdir.</div>`
             :
-            `<div class="muted">Şərtlər tamamlanmayıb.</div>`
+            `<button class="level-btn" onclick="chooseLevel('${levelKey}')">${level.name} ol</button>`
           }
 
         </div>
@@ -627,6 +662,20 @@ function renderLevels(){
       `;
 
     }).join("");
+
+}
+
+function chooseLevel(levelName){
+
+  const refCode =
+    profile?.referral_code ||
+    "—";
+
+  alert(
+    "Seçilən səviyyə: " + levelName + "\n\n" +
+    "Bu səviyyəyə çatmaq üçün referal kodunu paylaş:\n" +
+    refCode
+  );
 
 }
 
