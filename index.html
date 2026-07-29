@@ -2,1075 +2,983 @@
 <html lang="az">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Noventra - İnvestisiya Platforması</title>
 
-<title>Noventra</title>
-
+<!-- Supabase JS Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{
- box-sizing:border-box;
+:root {
+  --bg-dark: #070b16;
+  --card-bg: rgba(17, 24, 39, 0.75);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --accent-gold: #f6d365;
+  --accent-coral: #fda085;
+  --green: #10b981;
+  --red: #ef4444;
+  --purple: #8b5cf6;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
 }
 
-body{
- margin:0;
- background:#070b16;
- color:#fff;
- font-family:Arial,sans-serif;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.hidden{
- display:none!important;
+body {
+  background: var(--bg-dark);
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(246, 211, 101, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(253, 160, 133, 0.08) 0px, transparent 50%);
+  background-attachment: fixed;
+  color: var(--text-main);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  min-height: 100vh;
+  padding-bottom: 80px;
 }
 
-.auth{
- min-height:100vh;
- display:flex;
- justify-content:center;
- align-items:center;
- padding:20px;
+.hidden { display: none !important; }
+
+/* Glassmorphism Containers */
+.box, .card {
+  background: var(--card-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.box,
-.card{
- background:#111827;
- border:1px solid #263247;
- border-radius:22px;
- padding:25px;
+.card:hover {
+  border-color: rgba(246, 211, 101, 0.25);
 }
 
-.box{
- width:100%;
- max-width:430px;
+/* Authentication Screen */
+.auth {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
-.logo{
- text-align:center;
- font-size:32px;
- font-weight:900;
- letter-spacing:5px;
- color:#f6d365;
- margin-bottom:25px;
+.auth .box {
+  width: 100%;
+  max-width: 400px;
+  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-input,
-select,
-textarea{
- width:100%;
- padding:14px;
- margin:7px 0;
- border-radius:12px;
- border:1px solid #334155;
- background:#0b111d;
- color:white;
+.logo {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 24px;
 }
 
-button{
- width:100%;
- padding:14px;
- border:none;
- border-radius:12px;
- cursor:pointer;
- font-weight:bold;
+/* Form Controls */
+input, select, textarea {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 8px 0;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(11, 17, 29, 0.7);
+  color: #fff;
+  font-size: 15px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.main{
- background:linear-gradient(135deg,#f6d365,#fda085);
- color:#111;
- margin-top:10px;
+input:focus, select:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px rgba(246, 211, 101, 0.15);
 }
 
-.switch{
- text-align:center;
- margin-top:15px;
- color:#f6d365;
- cursor:pointer;
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  transition: all 0.2s ease;
 }
 
-.msg{
- text-align:center;
- margin-top:12px;
- color:#ff7777;
+button:active {
+  transform: scale(0.98);
 }
 
-#app{
- max-width:1100px;
- margin:auto;
- padding:20px;
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
-.header{
- text-align:center;
+.btn-main {
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
+  color: #000;
+  box-shadow: 0 4px 15px rgba(246, 211, 101, 0.25);
 }
 
-.nav{
- display:flex;
- gap:5px;
- overflow:auto;
- margin:25px 0;
- border-bottom:1px solid #263247;
+.btn-green { background: var(--green); color: #fff; }
+.btn-red { background: var(--red); color: #fff; }
+
+.switch {
+  text-align: center;
+  margin-top: 18px;
+  color: var(--accent-gold);
+  font-size: 14px;
+  cursor: pointer;
+  font-weight: 600;
 }
 
-.nav button{
- background:none;
- color:#aaa;
- white-space:nowrap;
+.msg {
+  text-align: center;
+  margin-top: 12px;
+  font-size: 14px;
+  color: var(--red);
 }
 
-.grid{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:15px;
+/* App Header & Layout */
+#app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  animation: fadeIn 0.3s ease;
 }
 
-.two{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:15px;
- margin-top:15px;
+/* Navigation Bar */
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px 0;
+  background: rgba(17, 24, 39, 0.6);
+  padding: 6px;
+  border-radius: 16px;
+  border: 1px solid var(--card-border);
 }
 
-.value{
- font-size:26px;
- font-weight:bold;
- margin-top:10px;
+.nav button {
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-weight: 600;
+  font-size: 14px;
+  width: auto;
+  flex: 1;
 }
 
-.green{
- color:#40dc91;
+.nav button.active {
+  background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
+  color: #000;
+  box-shadow: 0 2px 10px rgba(246, 211, 101, 0.2);
 }
 
-.yellow{
- color:#ffd166;
+/* Grids & Cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
 }
 
-.purple{
- color:#9d87ff;
+.value {
+  font-size: 28px;
+  font-weight: 800;
+  margin-top: 8px;
+  letter-spacing: -0.5px;
 }
 
-.muted{
- color:#8995aa;
+.gold { color: var(--accent-gold); }
+.green { color: var(--green); }
+.purple { color: var(--purple); }
+.muted { color: var(--text-muted); font-size: 14px; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.row{
- display:flex;
- justify-content:space-between;
- padding:14px 0;
- border-bottom:1px solid #263247;
- gap:10px;
+.row:last-child { border-bottom: none; }
+
+.info {
+  background: rgba(11, 17, 29, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 14px;
+  margin-top: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #cbd5e1;
 }
 
-.info{
- background:#0b111d;
- border:1px solid #263247;
- border-radius:14px;
- padding:15px;
- margin-top:15px;
- line-height:1.6;
+/* VIP Cards */
+.vip-card {
+  border: 1px solid rgba(246, 211, 101, 0.3);
+  position: relative;
+  overflow: hidden;
 }
 
-.vip-card{
- margin-top:15px;
- border:1px solid #f6d365;
- background:#111827;
+.vip-card.locked {
+  border-color: rgba(255, 255, 255, 0.08);
+  opacity: 0.6;
 }
 
-.vip-title{
- font-size:22px;
- color:#f6d365;
- font-weight:bold;
+.vip-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--accent-gold);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.locked{
- color:#777;
+/* Task Item */
+.task-item {
+  border: 1px solid var(--card-border);
+  padding: 16px;
+  border-radius: 14px;
+  margin-bottom: 12px;
+  background: rgba(11, 17, 29, 0.4);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-@media(max-width:700px){
- .grid,
- .two{
-  grid-template-columns:1fr;
- }
+/* Admin Table */
+.admin-table-wrapper {
+  overflow-x: auto;
+  margin-top: 12px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-table th, .admin-table td {
+  border: 1px solid var(--card-border);
+  padding: 10px;
+  text-align: left;
+}
+
+.admin-table th {
+  background: rgba(11, 17, 29, 0.8);
+  color: var(--accent-gold);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+  body { padding-bottom: 90px; }
+  .nav {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    z-index: 1000;
+    margin: 0;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  }
+  .nav button { padding: 8px 10px; font-size: 12px; }
+  .task-item { flex-direction: column; gap: 12px; align-items: stretch; }
 }
 </style>
 </head>
 
 <body>
 
+<!-- Auth Page: Login -->
 <section id="loginPage" class="auth">
-
-<div class="box">
-
-<div class="logo">
-NOVENTRA
-</div>
-
-<input id="loginEmail" type="email" placeholder="Email">
-
-<input id="loginPassword" type="password" placeholder="Şifrə">
-
-<button class="main" onclick="login()">
-Daxil ol
-</button>
-
-<div class="switch" onclick="showRegister()">
-Hesab yarat
-</div>
-
-<div id="loginMsg" class="msg"></div>
-
-</div>
-
+  <div class="box">
+    <div class="logo">NOVENTRA</div>
+    <input id="loginEmail" type="email" placeholder="Email ünvanı">
+    <input id="loginPassword" type="password" placeholder="Şifrə">
+    <button class="btn-main" onclick="login()">Daxil Ol</button>
+    <div class="switch" onclick="showRegister()">Hesabınız yoxdur? Qeydiyyatdan keçin</div>
+    <div id="loginMsg" class="msg"></div>
+  </div>
 </section>
 
-
+<!-- Auth Page: Register -->
 <section id="registerPage" class="auth hidden">
-
-<div class="box">
-
-<div class="logo">
-NOVENTRA
-</div>
-
-<input id="regEmail" type="email" placeholder="Email">
-
-<input id="regPassword" type="password" placeholder="Şifrə">
-
-<input id="regReferral" placeholder="Dəvət kodu">
-
-<button class="main" onclick="register()">
-Qeydiyyatdan keç
-</button>
-
-<div class="switch" onclick="showLogin()">
-Girişə qayıt
-</div>
-
-<div id="regMsg" class="msg"></div>
-
-</div>
-
+  <div class="box">
+    <div class="logo">NOVENTRA</div>
+    <input id="regEmail" type="email" placeholder="Email ünvanı">
+    <input id="regPassword" type="password" placeholder="Şifrə (min. 6 simvol)">
+    <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)">
+    <button class="btn-main" onclick="register()">Qeydiyyatı Tamamla</button>
+    <div class="switch" onclick="showLogin()">Hesabınız var? Giriş edin</div>
+    <div id="regMsg" class="msg"></div>
+  </div>
 </section>
 
-
+<!-- Main App Section -->
 <section id="app" class="hidden">
-
-<div class="header">
-
-<div class="logo">
-NOVENTRA
-</div>
-
-</div>
-
-<nav class="nav">
-
-<button onclick="page('home')">
-Ana səhifə
-</button>
-
-<button onclick="page('vip')">
-VIP
-</button>
-
-<button onclick="page('account')">
-Hesabım
-</button>
-
-<button id="adminBtn" class="hidden" onclick="page('admin')">
-Admin
-</button>
-
-</nav>
-
-
-<div id="homePage">
-
-<h1>Xoş gəlmisiniz</h1>
-
-<div class="grid">
-
-<div class="card">
-<div class="muted">Balans</div>
-<div id="balance" class="value">
-0.00 AZN
-</div>
-</div>
-
-
-<div class="card">
-<div class="muted">Bonuslar</div>
-<div id="bonus" class="value green">
-0.00 AZN
-</div>
-</div>
-
-
-<div class="card">
-<div class="muted">Status</div>
-<div id="status" class="value yellow">
-Yeni istifadəçi
-</div>
-</div>
-
-</div>
-
-</div>
-<!--
-
-<div id="vipPage" class="hidden">
-
-<h1>💎 VIP Paketlər</h1>
-
-<div id="vipArea"></div>
-
-</div>
-
-
-<div id="accountPage" class="hidden">
-
-<h1>👤 Hesabım</h1>
-
-<div class="card">
-
-<div class="row">
-<span class="muted">Email</span>
-<b id="email"></b>
-</div>
-
-<div class="row">
-<span class="muted">Referal kod</span>
-<b id="refCode" class="yellow"></b>
-</div>
-
-<div class="row">
-<span class="muted">VIP status</span>
-<b id="vipStatus" class="green">
-Yoxdur
-</b>
-</div>
-
-</div>
-
-
-<div class="card">
-
-<h2>Referal sistemi</h2>
-
-<div class="info">
-
-Sənin dəvət kodun:
-
-<div id="shareCode" class="yellow"></div>
-
-</div>
-
-<button class="main" onclick="copyReferral()">
-Linki kopyala
-</button>
-
-</div>
-
-
-<div class="card">
-
-<h2>Çıxarış</h2>
-
-
-<input id="withdrawAmount"
-type="number"
-placeholder="Məbləğ (minimum 8 AZN)">
-
-
-<select id="withdrawMethod">
-
-<option value="card">
-Bank kartı
-</option>
-
-<option value="crypto">
-Kripto hesab
-</option>
-
-</select>
-
-
-<input id="withdrawInfo"
-placeholder="Kart və ya hesab məlumatı">
-
-
-<button class="main"
-onclick="withdrawRequest()">
-
-Çıxarış göndər
-
-</button>
-
-
-<div id="withdrawMsg"
-class="msg">
-
-</div>
-
-
-</div>
-
-
-</div>
-
-
-
-<div id="adminPage" class="hidden">
-
-
-<h1>Admin Panel</h1>
-
-
-<div class="card">
-
-<h2>Yatırım sorğuları</h2>
-
-<div id="adminInvestments"></div>
-
-</div>
-
-
-
-<div class="card">
-
-<h2>Çıxarış sorğuları</h2>
-
-<div id="adminWithdraw"></div>
-
-</div>
-
-
-</div>
-
-
+  <div class="logo" style="margin-bottom: 10px;">NOVENTRA</div>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <button id="nav-home" onclick="page('home')">Ana Səhifə</button>
+    <button id="nav-vip" onclick="page('vip')">VIP</button>
+    <button id="nav-tasks" onclick="page('tasks')">Tapşırıqlar</button>
+    <button id="nav-account" onclick="page('account')">Hesabım</button>
+    <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
+  </nav>
+
+  <!-- Dashboard Page -->
+  <div id="homePage">
+    <div class="grid">
+      <div class="card">
+        <div class="muted">Ümumi Balans</div>
+        <div id="balance" class="value gold">0.00 AZN</div>
+      </div>
+      <div class="card">
+        <div class="muted">Qazanılan Bonuslar</div>
+        <div id="bonus" class="value green">0.00 AZN</div>
+      </div>
+      <div class="card">
+        <div class="muted">Mövcud VIP Status</div>
+        <div id="status" class="value gold">Yeni istifadəçi</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px;">
+      <h3 style="margin-bottom: 12px; color: var(--accent-gold);">Liderlik Statusu</h3>
+      <div class="row">
+        <span class="muted">Mövcud Səviyyə:</span>
+        <b id="leadershipLevel" class="purple">Səviyyə 0</b>
+      </div>
+      <div class="row">
+        <span class="muted">Aktiv Referallar:</span>
+        <b id="activeRefCount" class="gold">0 nəfər</b>
+      </div>
+      <div class="info">
+        Liderlik statusu dəvət etdiyiniz aktiv VIP istifadəçilərin sayına əsasən avtomatik yüksəlir.
+      </div>
+    </div>
+  </div>
+
+  <!-- VIP Packages Page -->
+  <div id="vipPage" class="hidden">
+    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">💎 VIP İnvestisiya Paketləri</h2>
+    <div id="vipArea" class="grid"></div>
+  </div>
+
+  <!-- Daily Tasks Page -->
+  <div id="tasksPage" class="hidden">
+    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">📋 Gündəlik Tapşırıqlar</h2>
+    <div class="card">
+      <p class="muted" style="margin-bottom: 16px;">Gündəlik tapşırıqları icra edərək balansınıza əlavə gəlir əldə edin.</p>
+      <div id="tasksList"></div>
+    </div>
+  </div>
+
+  <!-- Account Page -->
+  <div id="accountPage" class="hidden">
+    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">👤 Şəxsi Kabinet</h2>
+    
+    <div class="card">
+      <div class="row">
+        <span class="muted">Email</span>
+        <b id="email"></b>
+      </div>
+      <div class="row">
+        <span class="muted">Dəvət Kodunuz</span>
+        <b id="refCode" class="gold">-</b>
+      </div>
+      <div class="row">
+        <span class="muted">Aktiv VIP</span>
+        <b id="vipStatus" class="green">Yoxdur</b>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>Referal Keçidi</h3>
+      <div class="info">
+        Sizin şəxsi dəvət kodunuz:
+        <div id="shareCode" class="gold" style="font-size: 22px; font-weight: bold; margin-top: 6px;">-</div>
+      </div>
+      <button class="btn-main" style="margin-top: 12px;" onclick="copyReferral()">Kodu Kopyala</button>
+    </div>
+
+    <div class="card" style="margin-top: 16px;">
+      <h3>Məbləğ Çıxarışı</h3>
+      <input id="withdrawAmount" type="number" placeholder="Çıxarış Məbləği (min. 8 AZN)" min="8">
+      <select id="withdrawMethod">
+        <option value="card">Bank Kartı</option>
+        <option value="crypto">Kripto Pul Qabı (USDT / TRC20)</option>
+      </select>
+      <input id="withdrawInfo" placeholder="Kart nömrəsi və ya Rekvizitlər">
+      <button class="btn-main" style="margin-top: 8px;" onclick="withdrawRequest()">Çıxarış Sorğusu Göndər</button>
+      <div id="withdrawMsg" class="msg"></div>
+    </div>
+
+    <button class="btn-red" style="margin-top: 20px;" onclick="logout()">Hesabdan Çıx</button>
+  </div>
+
+  <!-- Admin Panel Page -->
+  <div id="adminPage" class="hidden">
+    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">⚙️ İdarəetmə Paneli</h2>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <h3>Gözləyən Yatırım Sorğuları</h3>
+      <div id="adminInvestments" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="card" style="margin-bottom: 16px;">
+      <h3>Gözləyən Çıxarış Sorğuları</h3>
+      <div id="adminWithdraw" style="margin-top: 10px;"></div>
+    </div>
+
+    <div class="card">
+      <h3>İstifadəçi Siyahısı</h3>
+      <div id="adminUsers" class="admin-table-wrapper"></div>
+    </div>
+  </div>
+</section>
 
 <script>
+// Supabase Configuration
+const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
+const SUPABASE_KEY = "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+let user = null;
+let profile = null;
 
-const SUPABASE_URL =
-"https://yafncpfkjmealuwmvcgc.supabase.co";
+const REFERRAL_BONUS_PERCENTAGE = 0.05;
 
-
-const SUPABASE_KEY =
-"sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
-
-
-const supabaseClient =
-supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
-);
-
-
-
-const ADMIN_EMAIL =
-"Ayazdiana666@gmail.com";
-
-
-let user=null;
-
-let profile=null;
-
-
-
-const VIP_LIST=[
-
-
-{
-name:"VIP 1",
-price:25,
-days:45,
-reward:1.50,
-locked:false
-},
-
-
-{
-name:"VIP 2",
-price:35,
-days:50,
-reward:2.30,
-locked:false
-},
-
-
-{
-name:"VIP 3",
-price:50,
-days:60,
-reward:3.58,
-locked:false
-},
-
-
-{
-name:"VIP 4",
-price:150,
-days:70,
-reward:8,
-locked:false
-},
-
-
-{
-name:"VIP 5",
-price:300,
-days:80,
-reward:22,
-referrals:7,
-locked:false
-},
-
-
-{
-name:"VIP 6",
-price:500,
-days:90,
-reward:36,
-referrals:8,
-locked:false
-},
-
-
-{
-name:"VIP 7",
-price:1000,
-days:100,
-reward:68,
-referrals:9,
-locked:false
-},
-
-
-{
-name:"VIP 8",
-price:2000,
-days:120,
-reward:116.50,
-referrals:10,
-locked:false
-},
-
-
-{
-name:"VIP 9",
-reward:259,
-locked:true
-},
-
-
-{
-name:"VIP 10",
-reward:710,
-locked:true
-},
-
-
-{
-name:"VIP 11",
-reward:1870,
-locked:true
-}
-
+const VIP_LIST = [
+  { id: 1, name: "VIP 1", price: 25, days: 45, reward: 1.50, locked: false },
+  { id: 2, name: "VIP 2", price: 35, days: 50, reward: 2.30, locked: false },
+  { id: 3, name: "VIP 3", price: 50, days: 60, reward: 3.58, locked: false },
+  { id: 4, name: "VIP 4", price: 150, days: 70, reward: 8.00, locked: false },
+  { id: 5, name: "VIP 5", price: 300, days: 80, reward: 22.00, referrals: 7, locked: false },
+  { id: 6, name: "VIP 6", price: 500, days: 90, reward: 36.00, referrals: 8, locked: false },
+  { id: 7, name: "VIP 7", price: 1000, days: 100, reward: 68.00, referrals: 9, locked: false },
+  { id: 8, name: "VIP 8", price: 2000, days: 120, reward: 116.50, referrals: 10, locked: false },
+  { id: 9, name: "VIP 9", price: 0, days: 0, reward: 259.00, locked: true },
+  { id: 10, name: "VIP 10", price: 0, days: 0, reward: 710.00, locked: true },
+  { id: 11, name: "VIP 11", price: 0, days: 0, reward: 1870.00, locked: true }
 ];
 
+const DAILY_TASKS = [
+  { id: 1, title: "Səhifəyə Günlük Giriş", reward: 0.20, desc: "Sistemə daxil olaraq gündəlik bonusunuzu qazanın." },
+  { id: 2, title: "VIP Məlumatlandırma", reward: 0.30, desc: "Yenilənmiş VIP paketləri nəzərdən keçirin." }
+];
 
+const LEADERSHIP_LEVELS = [
+  { level: 1, minRefs: 3, title: "Bronz Lider" },
+  { level: 2, minRefs: 10, title: "Gümüş Lider" },
+  { level: 3, minRefs: 25, title: "Qızıl Lider" },
+  { level: 4, minRefs: 50, title: "Platin Lider" }
+];
 
-function page(name){
+// Navigation Manager
+function page(name) {
+  const pages = ["homePage", "vipPage", "tasksPage", "accountPage", "adminPage"];
+  pages.forEach(p => {
+    const el = document.getElementById(p);
+    if(el) el.classList.add("hidden");
+  });
 
+  document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
 
-[
-"homePage",
-"vipPage",
-"accountPage",
-"adminPage"
+  const targetId = name + "Page";
+  const target = document.getElementById(targetId);
+  if(target) target.classList.remove("hidden");
 
-].forEach(x=>{
+  const navBtn = document.getElementById("nav-" + name);
+  if(navBtn) navBtn.classList.add("active");
 
-document.getElementById(x)
-?.classList.add("hidden");
+  if(name === "vip") renderVip();
+  if(name === "tasks") renderTasks();
+  if(name === "admin" && profile && profile.role === "admin") {
+    loadAdminData();
+  }
+}
 
+function showRegister() {
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("registerPage").classList.remove("hidden");
+}
+
+function showLogin() {
+  document.getElementById("registerPage").classList.add("hidden");
+  document.getElementById("loginPage").classList.remove("hidden");
+}
+
+function renderVip() {
+  const box = document.getElementById("vipArea");
+  if(!box) return;
+
+  box.innerHTML = VIP_LIST.map(v => `
+    <div class="card vip-card ${v.locked ? 'locked' : ''}">
+      <div class="vip-title">
+        <span>${v.name}</span>
+        ${v.locked ? '🔒' : ''}
+      </div>
+      <div class="info">
+        Qiymət: <b>${v.locked ? "Bağlı" : v.price + " AZN"}</b><br>
+        Müddət: <b>${v.days ? v.days + " gün" : "-"}</b><br>
+        Gündəlik qazanc: <b>${v.reward} AZN</b><br>
+        ${v.referrals ? "Tələb edilən referal: " + v.referrals + " nəfər<br>" : ""}
+      </div>
+      ${!v.locked ? `<button class="btn-main" style="margin-top:14px;" onclick="buyVip(${v.id}, ${v.price})">Yatırım Et (${v.price} AZN)</button>` : ''}
+    </div>
+  `).join("");
+}
+
+function renderTasks() {
+  const box = document.getElementById("tasksList");
+  if(!box) return;
+
+  const today = new Date().toISOString().split('T')[0];
+  const isDone = profile.last_task_date === today;
+
+  box.innerHTML = DAILY_TASKS.map(t => `
+    <div class="task-item">
+      <div>
+        <h4 style="color: var(--accent-gold);">${t.title} (+${t.reward} AZN)</h4>
+        <p class="muted">${t.desc}</p>
+      </div>
+      <button class="btn-main" style="width: auto; padding: 10px 20px;" ${isDone ? 'disabled' : ''} onclick="claimTask(${t.reward})">
+        ${isDone ? 'Tamamlandı' : 'Tamamla'}
+      </button>
+    </div>
+  `).join("");
+}
+
+async function claimTask(reward) {
+  const today = new Date().toISOString().split('T')[0];
+  if(profile.last_task_date === today) {
+    alert("Bu gün üçün olan tapşırıqları artıq tamamlamısınız.");
+    return;
+  }
+
+  const newBalance = (profile.balance || 0) + reward;
+  const { error } = await supabaseClient
+    .from("profiles")
+    .update({ balance: newBalance, last_task_date: today })
+    .eq("id", user.id);
+
+  if(error) {
+    alert("Xəta baş verdi: " + error.message);
+  } else {
+    alert(`Təbrik edirik! ${reward} AZN balansınıza əlavə olundu.`);
+    await loadProfile();
+    renderTasks();
+  }
+}
+
+async function register() {
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value;
+  const referral = document.getElementById("regReferral").value.trim();
+  const msg = document.getElementById("regMsg");
+
+  if(!email || !password || password.length < 6) {
+    msg.innerText = "Düzgün email və şifrə (min. 6 simvol) daxil edin.";
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
+  if(error) {
+    msg.innerText = error.message;
+    return;
+  }
+
+  if(data.user) {
+    const refCodeGenerated = "NV" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    await supabaseClient.from("profiles").insert({
+      id: data.user.id,
+      email: email,
+      balance: 0,
+      bonus: 0,
+      current_vip: "Yeni istifadəçi",
+      referral_code: refCodeGenerated,
+      referred_by: referral || null,
+      role: "user"
+    });
+  }
+
+  msg.style.color = "#10b981";
+  msg.innerText = "Qeydiyyat uğurla tamamlandı. Daxil olunur...";
+  setTimeout(() => { if(data.user) openApp(data.user); }, 1200);
+}
+
+async function login() {
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  const msg = document.getElementById("loginMsg");
+
+  if(!email || !password) {
+    msg.innerText = "Məlumatları tam daxil edin";
+    return;
+  }
+
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+  if(error) {
+    msg.innerText = "Email və ya şifrə yanlışdır";
+    return;
+  }
+
+  openApp(data.user);
+}
+
+async function openApp(u) {
+  user = u;
+  document.getElementById("loginPage").classList.add("hidden");
+  document.getElementById("registerPage").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+
+  document.getElementById("email").innerText = user.email;
+
+  await loadProfile();
+  await updateLeadershipAndStats();
+  await processDailyProfits();
+
+  const adminBtn = document.getElementById("adminBtn");
+  if(profile && profile.role === "admin") {
+    adminBtn.classList.remove("hidden");
+  } else {
+    adminBtn.classList.add("hidden");
+  }
+
+  page("home");
+}
+
+async function loadProfile() {
+  const { data } = await supabaseClient
+    .from("profiles")
+    .select("*")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  profile = data || {};
+
+  document.getElementById("balance").innerText = (profile.balance || 0).toFixed(2) + " AZN";
+  document.getElementById("bonus").innerText = (profile.bonus || 0).toFixed(2) + " AZN";
+  document.getElementById("status").innerText = profile.current_vip || "Yeni istifadəçi";
+
+  document.getElementById("refCode").innerText = profile.referral_code || "-";
+  document.getElementById("shareCode").innerText = profile.referral_code || "-";
+  document.getElementById("vipStatus").innerText = profile.current_vip || "Yoxdur";
+}
+
+async function updateLeadershipAndStats() {
+  if(!profile || !profile.referral_code) return;
+
+  const { data: refs } = await supabaseClient
+    .from("profiles")
+    .select("id, current_vip")
+    .eq("referred_by", profile.referral_code);
+
+  const activeRefsCount = refs ? refs.filter(r => r.current_vip && r.current_vip !== "Yeni istifadəçi" && r.current_vip !== "Yoxdur").length : 0;
+  document.getElementById("activeRefCount").innerText = activeRefsCount + " nəfər";
+
+  let currentTitle = "Səviyyə 0";
+  for(let l of LEADERSHIP_LEVELS) {
+    if(activeRefsCount >= l.minRefs) currentTitle = l.title;
+  }
+
+  document.getElementById("leadershipLevel").innerText = currentTitle;
+}
+
+async function copyReferral() {
+  const code = document.getElementById("refCode").innerText;
+  if(!code || code === "-") return;
+  await navigator.clipboard.writeText(code);
+  alert("Dəvət kodunuz kopyalandı: " + code);
+}
+
+async function withdrawRequest() {
+  const amount = Number(document.getElementById("withdrawAmount").value || 0);
+  const method = document.getElementById("withdrawMethod").value;
+  const info = document.getElementById("withdrawInfo").value.trim();
+  const msg = document.getElementById("withdrawMsg");
+
+  if(amount < 8) {
+    msg.innerText = "Minimum çıxarış məbləği 8 AZN-dir.";
+    return;
+  }
+
+  if((profile.balance || 0) < amount) {
+    msg.innerText = "Balansınızda kifayət qədər məbləğ yoxdur.";
+    return;
+  }
+
+  if(!info) {
+    msg.innerText = "Rekvizit məlumatlarını daxil edin.";
+    return;
+  }
+
+  const newBal = profile.balance - amount;
+  const { error: balErr } = await supabaseClient
+    .from("profiles")
+    .update({ balance: newBal })
+    .eq("id", user.id);
+
+  if(balErr) {
+    msg.innerText = "Xəta baş verdi: " + balErr.message;
+    return;
+  }
+
+  const { error } = await supabaseClient.from("withdraw_requests").insert({
+    user_id: user.id,
+    amount: amount,
+    method: method,
+    account_info: info,
+    status: "pending"
+  });
+
+  if(error) {
+    await supabaseClient.from("profiles").update({ balance: profile.balance }).eq("id", user.id);
+    msg.innerText = error.message;
+    return;
+  }
+
+  msg.style.color = "#10b981";
+  msg.innerText = "Çıxarış sorğusu uğurla yaradıldı.";
+  document.getElementById("withdrawAmount").value = "";
+  document.getElementById("withdrawInfo").value = "";
+  await loadProfile();
+}
+
+async function buyVip(vipId, price) {
+  await loadProfile();
+
+  if((profile.balance || 0) < price) {
+    alert(`Kifayət qədər balans yoxdur! Tələb olunan: ${price} AZN, Sizin balansınız: ${(profile.balance || 0).toFixed(2)} AZN`);
+    return;
+  }
+
+  const newBalance = profile.balance - price;
+  const { error: balanceError } = await supabaseClient
+    .from("profiles")
+    .update({ balance: newBalance })
+    .eq("id", user.id);
+
+  if(balanceError) {
+    alert("Balans yenilənərkən xəta: " + balanceError.message);
+    return;
+  }
+
+  const { error: investError } = await supabaseClient.from("investments").insert({
+    user_id: user.id,
+    vip_id: vipId,
+    amount: price,
+    status: "pending"
+  });
+
+  if(investError) {
+    await supabaseClient.from("profiles").update({ balance: profile.balance }).eq("id", user.id);
+    alert("Yatırım xətası: " + investError.message);
+  } else {
+    alert(`Sorğu göndərildi. ${price} AZN balansınızdan çıxıldı və admin təsdiqinə göndərildi.`);
+    await loadProfile();
+  }
+}
+
+async function processDailyProfits() {
+  if(!user) return;
+
+  const { data: investments } = await supabaseClient
+    .from("investments")
+    .select("*")
+    .eq("user_id", user.id)
+    .eq("status", "approved");
+
+  if(!investments || investments.length === 0) return;
+
+  const now = new Date();
+  let totalAddedEarnings = 0;
+
+  for(let inv of investments) {
+    const vip = VIP_LIST.find(v => v.id === inv.vip_id);
+    if(!vip) continue;
+
+    const baseDateStr = inv.approved_at || inv.created_at;
+    const approvalDate = baseDateStr ? new Date(baseDateStr) : now;
+    const expireDate = new Date(approvalDate.getTime() + (vip.days * 24 * 60 * 60 * 1000));
+
+    if(now > expireDate) {
+      await supabaseClient.from("investments").update({ status: "expired" }).eq("id", inv.id);
+      continue;
+    }
+
+    const lastCalcStr = inv.last_profit_calc || baseDateStr;
+    const lastCalc = lastCalcStr ? new Date(lastCalcStr) : now;
+    const diffHours = (now - lastCalc) / (1000 * 60 * 60);
+
+    if(diffHours >= 24) {
+      const daysEarned = Math.floor(diffHours / 24);
+      const earnedAmount = daysEarned * vip.reward;
+      totalAddedEarnings += earnedAmount;
+
+      const newLastCalc = new Date(lastCalc.getTime() + (daysEarned * 24 * 60 * 60 * 1000));
+      await supabaseClient.from("investments").update({ last_profit_calc: newLastCalc.toISOString() }).eq("id", inv.id);
+    }
+  }
+
+  if(totalAddedEarnings > 0) {
+    const newBalance = (profile.balance || 0) + totalAddedEarnings;
+    await supabaseClient.from("profiles").update({ balance: newBalance }).eq("id", user.id);
+    await loadProfile();
+  }
+}
+
+async function loadAdminData() {
+  const investBox = document.getElementById("adminInvestments");
+  const withdrawBox = document.getElementById("adminWithdraw");
+  const usersBox = document.getElementById("adminUsers");
+
+  const { data: investments } = await supabaseClient.from("investments").select("*").eq("status", "pending");
+  const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*").eq("status", "pending");
+  const { data: allUsers } = await supabaseClient.from("profiles").select("*");
+
+  investBox.innerHTML = (investments && investments.length) ? investments.map(i => `
+    <div class="row">
+      <span>ID: ${i.user_id.substring(0,8)}... | VIP ${i.vip_id} (${i.amount} AZN)</span>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-green" onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id}, ${i.amount})" style="width:auto; padding:6px 12px;">Təsdiqlə</button>
+        <button class="btn-red" onclick="rejectInvestment('${i.id}', '${i.user_id}', ${i.amount})" style="width:auto; padding:6px 12px;">Rədd et</button>
+      </div>
+    </div>
+  `).join("") : "<p class='muted'>Gözləyən yatırım yoxdur</p>";
+
+  withdrawBox.innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
+    <div class="row">
+      <span>${w.account_info} - ${w.amount} AZN (${w.method})</span>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-green" onclick="approveWithdrawal('${w.id}')" style="width:auto; padding:6px 12px;">Təsdiqlə</button>
+        <button class="btn-red" onclick="rejectWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:6px 12px;">Rədd et</button>
+      </div>
+    </div>
+  `).join("") : "<p class='muted'>Gözləyən çıxarış yoxdur</p>";
+
+  usersBox.innerHTML = (allUsers && allUsers.length) ? `
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Balans</th>
+          <th>Bonus</th>
+          <th>VIP</th>
+          <th>Rol</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${allUsers.map(u => `
+          <tr>
+            <td>${u.email}</td>
+            <td>${(u.balance || 0).toFixed(2)} AZN</td>
+            <td>${(u.bonus || 0).toFixed(2)} AZN</td>
+            <td>${u.current_vip || 'Yoxdur'}</td>
+            <td>${u.role || 'user'}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  ` : "<p class='muted'>İstifadəçi tapılmadı</p>";
+}
+
+async function approveInvestment(id, userId, vipId, amount) {
+  const nowIso = new Date().toISOString();
+
+  await supabaseClient.from("investments").update({
+    status: "approved",
+    approved_at: nowIso,
+    last_profit_calc: nowIso
+  }).eq("id", id);
+
+  await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
+
+  const { data: buyerProfile } = await supabaseClient.from("profiles").select("referred_by").eq("id", userId).maybeSingle();
+
+  if(buyerProfile && buyerProfile.referred_by) {
+    const { data: referrer } = await supabaseClient.from("profiles").select("id, bonus").eq("referral_code", buyerProfile.referred_by).maybeSingle();
+    if(referrer) {
+      const bonusAmount = amount * REFERRAL_BONUS_PERCENTAGE;
+      await supabaseClient.from("profiles").update({ bonus: (referrer.bonus || 0) + bonusAmount }).eq("id", referrer.id);
+    }
+  }
+
+  alert("Yatırım təsdiqləndi.");
+  loadAdminData();
+}
+
+async function rejectInvestment(id, userId, amount) {
+  await supabaseClient.from("investments").update({ status: "rejected" }).eq("id", id);
+  const { data: targetUser } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
+
+  if(targetUser) {
+    await supabaseClient.from("profiles").update({ balance: (targetUser.balance || 0) + amount }).eq("id", userId);
+  }
+
+  alert("Yatırım rədd edildi və məbləğ istifadəçiyə qaytarıldı.");
+  loadAdminData();
+}
+
+async function approveWithdrawal(id) {
+  await supabaseClient.from("withdraw_requests").update({ status: "approved" }).eq("id", id);
+  alert("Çıxarış təsdiqləndi.");
+  loadAdminData();
+}
+
+async function rejectWithdrawal(id, userId, amount) {
+  await supabaseClient.from("withdraw_requests").update({ status: "rejected" }).eq("id", id);
+  const { data: targetUser } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
+
+  if(targetUser) {
+    await supabaseClient.from("profiles").update({ balance: (targetUser.balance || 0) + amount }).eq("id", userId);
+  }
+
+  alert("Çıxarış rədd edildi və balans bərpa olundu.");
+  loadAdminData();
+}
+
+async function logout() {
+  await supabaseClient.auth.signOut();
+  location.reload();
+}
+
+// Session State Listener
+supabaseClient.auth.onAuthStateChange((event, session) => {
+  if (session?.user) {
+    openApp(session.user);
+  } else {
+    document.getElementById("app").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+  }
 });
-
-
-let id={
-home:"homePage",
-vip:"vipPage",
-account:"accountPage",
-admin:"adminPage"
-
-}[name];
-
-
-document.getElementById(id)
-?.classList.remove("hidden");
-
-
-if(name==="vip")
-renderVip();
-
-
-}
-
-
-
-function showRegister(){
-
-loginPage.classList.add("hidden");
-
-registerPage.classList.remove("hidden");
-
-}
-
-
-function showLogin(){
-
-registerPage.classList.add("hidden");
-
-loginPage.classList.remove("hidden");
-
-}
-
-
-
-function renderVip(){
-
-const box=document.getElementById("vipArea");
-
-
-box.innerHTML=
-
-VIP_LIST.map(v=>{
-
-
-return `
-
-<div class="card vip-card">
-
-
-<div class="vip-title">
-
-${v.name}
-${v.locked?" 🔒":""}
-
-</div>
-
-
-<div class="info">
-
-
-Qiymət:
-<b>${v.price||"Kilidli"} AZN</b>
-
-
-<br>
-
-
-Müddət:
-<b>${v.days||"-"} gün</b>
-
-
-<br>
-
-
-Status:
-<b>
-${v.locked?"Bağlı":"Aktiv"}
-</b>
-
-
-<br>
-
-
-${v.referrals?
-"Referal tələb olunur: "+v.referrals+" nəfər"
-:""
-}
-
-
-</div>
-
-
-</div>
-
-`;
-
-
-}).join("");
-
-}
-
-
-
-async function copyReferral(){
-
-const code=document.getElementById("refCode").innerText;
-
-
-await navigator.clipboard.writeText(code);
-
-
-alert("Kopyalandı");
-
-}
-
-
-
-async function withdrawRequest(){
-
-
-const amount=
-Number(document.getElementById("withdrawAmount").value||0);
-
-
-const msg=
-document.getElementById("withdrawMsg");
-
-
-
-if(amount<8){
-
-msg.innerText=
-"Minimum çıxarış 8 AZN-dir";
-
-return;
-
-}
-
-
-msg.innerText=
-"Sorğu göndərilir...";
-<!-- 
-async function register(){
-
-const email =
-document.getElementById("regEmail").value.trim();
-
-const password =
-document.getElementById("regPassword").value;
-
-const referral =
-document.getElementById("regReferral").value.trim();
-
-
-
-if(!email || !password){
-
-document.getElementById("regMsg").innerText =
-"Email və şifrə daxil edin";
-
-return;
-
-}
-
-
-
-const {data,error} =
-await supabaseClient.auth.signUp({
-email,
-password
-});
-
-
-if(error){
-
-document.getElementById("regMsg").innerText =
-error.message;
-
-return;
-
-}
-
-
-
-if(data.user){
-
-
-await supabaseClient
-.from("profiles")
-.insert({
-
-id:data.user.id,
-
-email:email,
-
-referral_code:
-"NV"+Math.random()
-.toString(36)
-.substring(2,8)
-.toUpperCase(),
-
-referred_by:
-referral || null
-
-});
-
-
-}
-
-
-
-document.getElementById("regMsg").innerText =
-"Hesab yaradıldı";
-
-
-setTimeout(showLogin,1000);
-
-
-}
-
-
-
-
-async function login(){
-
-
-const email =
-document.getElementById("loginEmail").value;
-
-
-const password =
-document.getElementById("loginPassword").value;
-
-
-
-const {data,error} =
-await supabaseClient.auth.signInWithPassword({
-
-email,
-
-password
-
-});
-
-
-
-if(error){
-
-document.getElementById("loginMsg").innerText =
-"Email və ya şifrə səhvdir";
-
-return;
-
-}
-
-
-
-openApp(data.user);
-
-
-}
-
-
-
-
-async function openApp(u){
-
-user=u;
-
-
-loginPage.classList.add("hidden");
-
-registerPage.classList.add("hidden");
-
-app.classList.remove("hidden");
-
-
-
-document.getElementById("email")
-.innerText=user.email;
-
-
-
-if(user.email.toLowerCase()
-===ADMIN_EMAIL.toLowerCase()){
-
-
-adminBtn.classList.remove("hidden");
-
-
-}
-
-
-
-await loadProfile();
-
-
-page("home");
-
-
-}
-
-
-
-
-async function loadProfile(){
-
-
-const {data}=
-await supabaseClient
-.from("profiles")
-.select("*")
-.eq("id",user.id)
-.maybeSingle();
-
-
-
-profile=data || {};
-
-
-
-document.getElementById("refCode")
-.innerText=
-profile.referral_code || "-";
-
-
-document.getElementById("shareCode")
-.innerText=
-profile.referral_code || "-";
-
-
-
-document.getElementById("vipStatus")
-.innerText=
-profile.current_vip || "Yoxdur";
-
-
-}
-
-
-
-
-async function withdrawRequest(){
-
-
-const amount =
-Number(
-document.getElementById("withdrawAmount").value || 0
-);
-
-
-
-const method =
-document.getElementById("withdrawMethod").value;
-
-
-
-const info =
-document.getElementById("withdrawInfo").value.trim();
-
-
-
-const msg =
-document.getElementById("withdrawMsg");
-
-
-
-if(amount < 8){
-
-msg.innerText =
-"Minimum çıxarış 8 AZN olmalıdır";
-
-return;
-
-}
-
-
-
-if(!info){
-
-msg.innerText =
-"Məlumat daxil edin";
-
-return;
-
-}
-
-
-
-const {error} =
-await supabaseClient
-.from("withdraw_requests")
-.insert({
-
-user_id:user.id,
-
-amount,
-
-method,
-
-account_info:info,
-
-status:"pending"
-
-});
-
-
-
-if(error){
-
-msg.innerText =
-error.message;
-
-return;
-
-}
-
-
-
-msg.innerText =
-"Çıxarış sorğusu göndərildi";
-
-
-}
-
-
-
-
-async function logout(){
-
-
-await supabaseClient.auth.signOut();
-
-location.reload();
-
-
-}
-
-
-
-
-async function checkSession(){
-
-
-const {data} =
-await supabaseClient.auth.getUser();
-
-
-
-if(data?.user){
-
-openApp(data.user);
-
-}
-
-
-}
-
-
-
-checkSession();
-
-
-
 </script>
 
 </body>
-
 </html>
-}
