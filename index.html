@@ -111,8 +111,8 @@
   <div class="box">
     <div class="logo">NOVENTRA</div>
     <form onsubmit="event.preventDefault(); login()">
-      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" />
-      <input id="loginPassword" type="password" placeholder="Şifrə" autocomplete="current-password" />
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" aria-label="Giriş emaili" />
+      <input id="loginPassword" type="password" placeholder="Şifrə" autocomplete="current-password" aria-label="Giriş şifrəsi" />
       <button type="submit" class="main">Daxil ol</button>
     </form>
     <div class="switch" onclick="showRegister()">Hesab yarat</div>
@@ -124,9 +124,9 @@
   <div class="box">
     <div class="logo">NOVENTRA</div>
     <form onsubmit="event.preventDefault(); register()">
-      <input id="regEmail" type="email" placeholder="Email" autocomplete="email" />
-      <input id="regPassword" type="password" placeholder="Şifrə" autocomplete="new-password" />
-      <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)" />
+      <input id="regEmail" type="email" placeholder="Email" autocomplete="email" aria-label="Qeydiyyat emaili" />
+      <input id="regPassword" type="password" placeholder="Şifrə" autocomplete="new-password" aria-label="Qeydiyyat şifrəsi" />
+      <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)" aria-label="Dəvət kodu" />
       <button type="submit" class="main">Qeydiyyatdan keç</button>
     </form>
     <div class="switch" onclick="showLogin()">Girişə qayıt</div>
@@ -561,10 +561,12 @@ const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const ADMIN_EMAIL = "Ayazdiana666@gmail.com";
-const MIN_WITHDRAW = 8;
-const RECEIPT_BUCKET = "receipts";
-const MISSION_SECONDS = 60;
-const ONLINE_WINDOW_MS = 5 * 60 * 1000;
+const APP_CONFIG = {
+  minWithdraw: 8,
+  receiptBucket: "receipts",
+  missionSeconds: 60,
+  onlineWindowMs: 5 * 60 * 1000
+};
 
 const VIP_PACKAGES = [
   { level:1, name:"VIP 1", price:25, days_valid:45, daily_earnings:1.5, locked:false },
@@ -608,7 +610,7 @@ let selectedLeadershipLevel = null;
 let refreshInterval = null;
 let presenceInterval = null;
 let missionTimer = null;
-let missionCountdown = MISSION_SECONDS;
+let missionCountdown = APP_CONFIG.missionSeconds;
 let adminData = {
   presence: [],
   vipRequests: [],
@@ -639,6 +641,18 @@ function showLogin(){
 }
 function generateCode(){
   return "NV" + Math.random().toString(36).slice(2,8).toUpperCase();
+}
+function generateUniqueId(){
+  return (typeof crypto !== "undefined" && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+async function generateUniqueReferralCode(){
+  for(let attempt = 0; attempt < 8; attempt += 1){
+    const code = generateCode();
+    const { data, error } = await supabaseClient.from("profiles").select("id").eq("referral_code", code).maybeSingle();
+    if(error) throw error;
+    if(!data) return code;
+  }
+  return `NV${generateUniqueId().replace(/-/g,"").slice(0,8).toUpperCase()}`;
 }
 function buildRegisterLink(code){
   const base = window.location.origin + window.location.pathname;
@@ -750,12 +764,16 @@ async function copyRefLink(){
 async function safeInsertAudit(userId, action, details){
   try{
     await supabaseClient.from("audit_logs").insert({ user_id:userId, action, details });
-  }catch{}
+  }catch(error){
+    console.error("audit log xətası:", error);
+  }
 }
 async function safeInsertNotification(targetUserId, type, message){
   try{
     await supabaseClient.from("notifications").insert({ user_id:targetUserId, type, message, read:false });
-  }catch{}
+  }catch(error){
+    console.error("bildiriş xətası:", error);
+  }
 }
 async function heartbeatPresence(){
   if(!user) return;
@@ -1083,7 +1101,7 @@ function renderMissionPage(){
         <div>Bu gün 60 saniyəlik aktivliyi tamamla.</div>
         <div>Qazanc: <b>${formatCurrency(vipInfo?.daily_earnings || 0)}</b> VIP gəliri + <b>1.00 AZN</b> bonus</div>
       </div>
-      <div class="countdown">${missionTimer ? missionCountdown : MISSION_SECONDS}</div>
+      <div class="countdown">${missionTimer ? missionCountdown : APP_CONFIG.missionSeconds}</div>
       <div class="action-row">
         <button class="main" ${canStart ? "" : "disabled"} onclick="startMission()">${missionTimer ? "Missiya davam edir" : missionState.completedToday ? "Bu gün tamamlanıb" : "Missiyanı başlat"}</button>
       </div>
@@ -1162,7 +1180,7 @@ async function adminGetReferralCount(targetUserId){
 }
 function renderAdminPage(){
   if(!isAdmin()) return;
-  const onlineUsers = adminData.presence.filter(item => new Date(item.last_seen || 0).getTime() >= Date.now() - ONLINE_WINDOW_MS).length;
+  const onlineUsers = adminData.presence.filter(item => new Date(item.last_seen || 0).getTime() >= Date.now() - APP_CONFIG.onlineWindowMs).length;
   const todayStart = startOfToday().getTime();
   const todaysVipActivations = adminData.vipRequests.filter(item => String(item.status).toLowerCase() === "active" && new Date(item.purchased_at || item.created_at || 0).getTime() >= todayStart);
   const todaysVipSales = todaysVipActivations.reduce((sum,item)=>sum + Number(getVipByLevel(item.vip_level)?.price || 0),0);
@@ -1286,11 +1304,11 @@ async function uploadReceipt(file){
   if(!allowedExt.includes(ext) || (file.type && !allowedMime.includes(file.type))){
     throw new Error("Yalnız jpg, png, gif, webp və pdf faylları qəbul edilir.");
   }
-  const uid = (typeof crypto !== "undefined" && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const uid = generateUniqueId();
   const fileName = `${user.id}/${uid}.${ext}`;
-  const { error } = await supabaseClient.storage.from(RECEIPT_BUCKET).upload(fileName, file, { upsert:false });
+  const { error } = await supabaseClient.storage.from(APP_CONFIG.receiptBucket).upload(fileName, file, { upsert:false });
   if(error) throw error;
-  const { data } = supabaseClient.storage.from(RECEIPT_BUCKET).getPublicUrl(fileName);
+  const { data } = supabaseClient.storage.from(APP_CONFIG.receiptBucket).getPublicUrl(fileName);
   return data?.publicUrl || null;
 }
 async function submitVipRequest(){
@@ -1375,7 +1393,7 @@ async function startMission(){
   if(missionState.finished) return alert("Bütün missiyalar artıq tamamlanıb.");
   if(missionState.completedToday) return alert("Bu günün missiyası artıq tamamlanıb.");
   if(missionTimer) return;
-  missionCountdown = MISSION_SECONDS;
+  missionCountdown = APP_CONFIG.missionSeconds;
   renderMissionPage();
   missionTimer = setInterval(async()=>{
     missionCountdown -= 1;
@@ -1419,7 +1437,7 @@ async function requestWithdraw(){
   const method = document.getElementById("withdrawMethod").value;
   const accountInfo = (document.getElementById("withdrawAccountInfo").value || "").trim();
   try{
-    if(amount < MIN_WITHDRAW) throw new Error(`Minimum çıxarış ${MIN_WITHDRAW} AZN olmalıdır.`);
+    if(amount < APP_CONFIG.minWithdraw) throw new Error(`Minimum çıxarış ${APP_CONFIG.minWithdraw} AZN olmalıdır.`);
     if(amount > getActiveBalance()) throw new Error("Balansda kifayət qədər vəsait yoxdur.");
     if(!["bank_card","binance_id"].includes(method)) throw new Error("Yalnız Bank kartı və Binance ID icazəlidir.");
     if(!accountInfo) throw new Error("Kart nömrəsi və ya Binance ID daxil edin.");
@@ -1522,7 +1540,8 @@ async function register(){
     if(!email || !password) throw new Error("Email və şifrəni doldurun.");
     const { data, error } = await supabaseClient.auth.signUp({ email, password });
     if(error) throw error;
-    const { error: profileError } = await supabaseClient.from("profiles").insert({ id:data.user.id, email, referral_code:generateCode(), referred_by:referral || null });
+    const referralCode = await generateUniqueReferralCode();
+    const { error: profileError } = await supabaseClient.from("profiles").insert({ id:data.user.id, email, referral_code:referralCode, referred_by:referral || null });
     if(profileError) throw profileError;
     if(referral){
       const { data: owner } = await supabaseClient.from("profiles").select("id,email").eq("referral_code", referral).maybeSingle();

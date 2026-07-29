@@ -50,6 +50,22 @@ FOR UPDATE USING (
   lower((auth.jwt() ->> 'email')::text) = lower('Ayazdiana666@gmail.com')
 );
 
+DROP POLICY IF EXISTS "Allow read withdraw requests" ON withdraw_requests;
+CREATE POLICY "Allow read withdraw requests" ON withdraw_requests
+FOR SELECT USING (auth.uid() = user_id OR auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Allow insert withdraw requests" ON withdraw_requests;
+CREATE POLICY "Allow insert withdraw requests" ON withdraw_requests
+FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Allow admin update withdraw requests" ON withdraw_requests;
+CREATE POLICY "Allow admin update withdraw requests" ON withdraw_requests
+FOR UPDATE USING (
+  lower((auth.jwt() ->> 'email')::text) = lower('Ayazdiana666@gmail.com')
+) WITH CHECK (
+  lower((auth.jwt() ->> 'email')::text) = lower('Ayazdiana666@gmail.com')
+);
+
 DROP POLICY IF EXISTS "Allow read tasks" ON tasks;
 CREATE POLICY "Allow read tasks" ON tasks
 FOR SELECT USING (true);
@@ -76,6 +92,61 @@ BEGIN
     ALTER TABLE investments ALTER COLUMN receipt_url DROP NOT NULL;
   END IF;
 END $$;
+
+CREATE OR REPLACE FUNCTION validate_withdraw_request()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+AS $$
+DECLARE
+  total_earnings NUMERIC := 0;
+  approved_withdrawals NUMERIC := 0;
+  available_balance NUMERIC := 0;
+  caller_email TEXT := lower(COALESCE((auth.jwt() ->> 'email')::text, ''));
+BEGIN
+  IF auth.uid() IS DISTINCT FROM NEW.user_id
+     AND caller_email <> lower('Ayazdiana666@gmail.com') THEN
+    RAISE EXCEPTION 'Yalnız öz hesabın üçün çıxarış sorğusu yarada bilərsən.';
+  END IF;
+
+  IF NEW.amount IS NULL OR NEW.amount < 8 THEN
+    RAISE EXCEPTION 'Minimum çıxarış 8 AZN olmalıdır.';
+  END IF;
+
+  IF NEW.method NOT IN ('bank_card', 'binance_id') THEN
+    RAISE EXCEPTION 'Çıxarış üsulu yalnız bank kartı və ya Binance ID ola bilər.';
+  END IF;
+
+  IF NEW.account_info IS NULL OR btrim(NEW.account_info) = '' THEN
+    RAISE EXCEPTION 'Kart nömrəsi və ya Binance ID daxil edilməlidir.';
+  END IF;
+
+  SELECT COALESCE(SUM(amount), 0)
+  INTO total_earnings
+  FROM earnings
+  WHERE user_id = NEW.user_id;
+
+  SELECT COALESCE(SUM(amount), 0)
+  INTO approved_withdrawals
+  FROM withdraw_requests
+  WHERE user_id = NEW.user_id
+    AND status = 'approved'
+    AND (TG_OP <> 'UPDATE' OR id <> NEW.id);
+
+  available_balance := total_earnings - approved_withdrawals;
+
+  IF NEW.amount > available_balance THEN
+    RAISE EXCEPTION 'Balansda kifayət qədər vəsait yoxdur.';
+  END IF;
+
+  RETURN NEW;
+END;
+$$;
+
+DROP TRIGGER IF EXISTS trg_validate_withdraw_request ON withdraw_requests;
+CREATE TRIGGER trg_validate_withdraw_request
+BEFORE INSERT OR UPDATE ON withdraw_requests
+FOR EACH ROW
+EXECUTE FUNCTION validate_withdraw_request();
 
 INSERT INTO storage.buckets (id, name, public)
 VALUES ('receipts', 'receipts', true)
