@@ -3,81 +3,118 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Noventra</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *{box-sizing:border-box}
-    body{margin:0;background:#080b14;color:#fff;font-family:Arial,sans-serif}
+    :root{
+      --bg:#080b14;
+      --panel:#111827;
+      --panel-soft:#0b111d;
+      --line:#263247;
+      --line-strong:#354764;
+      --text:#fff;
+      --muted:#8995aa;
+      --purple:#7357ff;
+      --purple-soft:#9d87ff;
+      --green:#40dc91;
+      --yellow:#ffd166;
+      --red:#ff6b6b;
+      --gold:#f6d365;
+      --shadow:0 18px 40px rgba(0,0,0,.28);
+    }
+    *::-webkit-scrollbar{height:9px;width:9px}
+    *::-webkit-scrollbar-thumb{background:#2b364e;border-radius:999px}
+    body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,sans-serif}
+    a{color:var(--purple-soft)}
     .hidden{display:none!important}
     .auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
-    .box,.card{background:#111827;border:1px solid #263247;border-radius:20px;padding:25px}
-    .box{width:100%;max-width:420px}
-    .logo{text-align:center;font-size:28px;font-weight:bold;letter-spacing:4px;margin-bottom:25px}
-    input,select,textarea{width:100%;padding:14px;margin:7px 0;border-radius:10px;border:1px solid #334155;background:#0b111d;color:#fff}
-    button{border:0;border-radius:10px;padding:13px;cursor:pointer;font-weight:bold}
-    button:disabled{opacity:.6;cursor:not-allowed}
-    .main{width:100%;background:#7357ff;color:#fff;margin-top:10px}
-    .switch{text-align:center;color:#9d87ff;margin-top:18px;cursor:pointer}
-    .msg{text-align:center;margin-top:15px;color:#ff7777}
-    #app{padding:20px;max-width:1100px;margin:auto}
-    .header{text-align:center}
-    .nav{display:flex;gap:5px;overflow:auto;margin:25px 0;border-bottom:1px solid #263247}
-    .nav button{background:none;color:#9aa5b5;white-space:nowrap}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}
-    .two{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-top:15px}
-    .value{font-size:25px;font-weight:bold;margin-top:10px}
-    .muted{color:#8995aa}
-    .green{color:#40dc91}
-    .yellow{color:#ffd166}
-    .purple{color:#9d87ff}
-    .row{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #263247;gap:10px}
-    .admin-item{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin-top:12px}
-    .info{background:#0b111d;border:1px solid #263247;padding:15px;border-radius:12px;margin:15px 0;line-height:1.6}
-    .logout{background:#252e40;color:white;margin-top:20px}
-    .admin{border-color:#7357ff}
-    .approve-btn{background:#40dc91;color:#07110c}
-    .reject-btn{background:#ff5555;color:#fff;margin-left:8px}
-    .refcode{font-size:25px;font-weight:bold;color:#ffd166;letter-spacing:3px;margin:12px 0;word-break:break-all;padding:10px;background:#0b111d;border-radius:8px}
-    .paid{color:#40dc91;font-weight:bold}
-    .pending{color:#ffd166;font-weight:bold}
-    .rejected{color:#ff5555;font-weight:bold}
-    .locked{color:#888}
-    .level-card{margin-top:15px}
-    .level-card h3{margin-top:0}
-    .level-btn{
-      width:100%;
-      margin-top:12px;
-      border:1px solid #f6d365;
-      border-radius:12px;
-      padding:12px 14px;
-      cursor:pointer;
-      font-weight:800;
-      letter-spacing:.3px;
-      color:#2a1a00;
-      background:linear-gradient(135deg,#f6d365 0%,#fda085 45%,#ffd166 100%);
-      box-shadow:0 8px 20px rgba(253,160,133,.25), inset 0 1px 0 rgba(255,255,255,.45);
-    }
-    .level-btn:hover{transform:translateY(-1px)}
-    .modal-backdrop{
-      position:fixed;inset:0;background:rgba(0,0,0,.55);
-      display:none;align-items:center;justify-content:center;z-index:9999;padding:16px;
-    }
-    .modal{
-      width:100%;max-width:560px;background:#111827;border:1px solid #2d3b56;border-radius:16px;padding:18px;
-    }
+    .box,.card,.stat{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:24px;box-shadow:var(--shadow)}
+    .box{width:100%;max-width:430px}
+    .logo{text-align:center;font-size:28px;font-weight:900;letter-spacing:4px;margin-bottom:24px}
+    input,select,textarea{width:100%;padding:14px;margin:7px 0;border-radius:12px;border:1px solid #334155;background:var(--panel-soft);color:var(--text);font:inherit}
+    button{border:0;border-radius:12px;padding:13px 16px;cursor:pointer;font-weight:800;font:inherit;transition:.18s ease}
+    button:hover:not(:disabled){transform:translateY(-1px)}
+    button:disabled{opacity:.58;cursor:not-allowed;transform:none}
+    .main{background:var(--purple);color:#fff;width:100%;margin-top:10px}
+    .secondary{background:#252e40;color:#fff}
+    .success{background:var(--green);color:#07110c}
+    .danger{background:var(--red);color:#fff}
+    .outline{background:transparent;border:1px solid var(--line-strong);color:#d8dff0}
+    .switch{text-align:center;color:var(--purple-soft);margin-top:18px;cursor:pointer}
+    .msg{text-align:center;margin-top:15px;color:var(--red)}
+    #app{padding:20px;max-width:1240px;margin:auto}
+    .header{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+    .header .summary{color:var(--muted);font-size:14px}
+    .nav{display:flex;gap:8px;overflow:auto;margin:24px 0;padding-bottom:10px;border-bottom:1px solid var(--line)}
+    .nav button{background:#0f1726;color:#aab3c2;white-space:nowrap}
+    .nav button.active{background:rgba(115,87,255,.18);color:#fff;border:1px solid rgba(157,135,255,.4)}
+    .page-title{margin:0 0 8px 0}
+    .page-subtitle{color:var(--muted);margin:0 0 22px 0}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:16px}
+    .three{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+    .value{font-size:28px;font-weight:900;margin-top:10px;line-height:1.15}
+    .muted{color:var(--muted)}
+    .green{color:var(--green)}
+    .yellow{color:var(--yellow)}
+    .purple{color:var(--purple-soft)}
+    .red{color:var(--red)}
+    .row{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-bottom:1px solid var(--line);align-items:flex-start}
+    .row:last-child{border-bottom:none;padding-bottom:0}
+    .row:first-child{padding-top:0}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;border:1px solid var(--line-strong);background:#0f1726;font-size:12px;font-weight:800}
+    .tag.green{color:var(--green);border-color:rgba(64,220,145,.35)}
+    .tag.yellow{color:var(--yellow);border-color:rgba(255,209,102,.35)}
+    .tag.red{color:var(--red);border-color:rgba(255,107,107,.35)}
+    .tag.purple{color:var(--purple-soft);border-color:rgba(157,135,255,.35)}
+    .info{background:var(--panel-soft);border:1px solid var(--line);padding:16px;border-radius:16px;line-height:1.65}
+    .stats-list,.timeline,.list{display:flex;flex-direction:column;gap:12px}
+    .list-item,.admin-item,.timeline-item{background:var(--panel-soft);border:1px solid var(--line);padding:16px;border-radius:16px}
+    .timeline-item small,.list-item small,.admin-item small{display:block;color:var(--muted);margin-top:6px}
+    .vip-grid,.lead-grid,.mission-grid{display:grid;gap:16px}
+    .vip-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .lead-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .mission-grid{grid-template-columns:repeat(6,minmax(0,1fr))}
+    .vip-card,.lead-card,.mission-slot{background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:20px;position:relative;overflow:hidden}
+    .vip-card.open::before,.lead-card.ready::before,.stat::before{content:"";position:absolute;inset:auto -40px -40px auto;width:110px;height:110px;border-radius:50%;background:rgba(157,135,255,.11)}
+    .vip-card.locked{opacity:.76;border-color:#454c5a;background:linear-gradient(180deg,#111827 0%,#171d27 100%)}
+    .vip-card.active{border-color:rgba(64,220,145,.45)}
+    .vip-card.pending{border-color:rgba(255,209,102,.45)}
+    .vip-card h3,.lead-card h3{margin:0 0 8px 0}
+    .vip-meta,.lead-meta{display:flex;flex-direction:column;gap:8px;color:#d5dceb;font-size:14px}
+    .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .refcode{font-size:22px;font-weight:900;color:var(--yellow);letter-spacing:2px;margin:10px 0;word-break:break-all;padding:12px;background:var(--panel-soft);border-radius:12px;border:1px solid var(--line)}
+    .inline-badge{font-size:13px;font-weight:800;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);display:inline-flex;align-items:center;gap:6px}
+    .section-spacer{margin-top:16px}
+    .admin-section{margin-top:18px}
+    .admin-section h2{margin-bottom:14px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:18px;z-index:9999}
+    .modal{width:100%;max-width:560px;background:var(--panel);border:1px solid var(--line-strong);border-radius:22px;padding:20px;box-shadow:var(--shadow)}
     .modal h3{margin:0 0 10px 0}
-    .modal .actions{display:flex;gap:10px;margin-top:14px}
-    .ghost{background:#2b364e;color:#fff}
-    .ok{background:#40dc91;color:#07110c}
-    @media(max-width:700px){ .grid,.two{grid-template-columns:1fr} }
+    .modal .actions{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+    .mission-slot{padding:16px;text-align:center}
+    .mission-slot.completed{border-color:rgba(64,220,145,.38);background:rgba(64,220,145,.07)}
+    .mission-slot.current{border-color:rgba(255,209,102,.38);background:rgba(255,209,102,.06)}
+    .mission-slot.locked{opacity:.6}
+    .mission-day{font-size:24px;font-weight:900;margin-bottom:6px}
+    .countdown{font-size:34px;font-weight:900;letter-spacing:1px;margin:10px 0}
+    .empty{padding:18px;border:1px dashed var(--line-strong);border-radius:16px;color:var(--muted);background:rgba(255,255,255,.02)}
+    .receipt-preview{display:inline-flex;align-items:center;gap:6px;font-size:14px}
+    .mini-note{color:var(--muted);font-size:13px;line-height:1.55}
+    .unread-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--green);margin-left:8px}
+    @media(max-width:1080px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.vip-grid,.mission-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:820px){.two,.three,.lead-grid{grid-template-columns:1fr}}
+    @media(max-width:640px){#app{padding:16px}.grid,.vip-grid,.mission-grid{grid-template-columns:1fr}.header{align-items:flex-start}.value{font-size:24px}}
   </style>
 </head>
 <body>
 <section id="loginPage" class="auth">
   <div class="box">
     <div class="logo">NOVENTRA</div>
-    <input id="loginEmail" type="email" placeholder="Email" />
-    <input id="loginPassword" type="password" placeholder="Şifrə" />
-    <button class="main" onclick="login()">Daxil ol</button>
+    <form onsubmit="event.preventDefault(); login()">
+      <input id="loginEmail" type="email" placeholder="Email" autocomplete="email" />
+      <input id="loginPassword" type="password" placeholder="Şifrə" autocomplete="current-password" />
+      <button type="submit" class="main">Daxil ol</button>
+    </form>
     <div class="switch" onclick="showRegister()">Hesab yarat</div>
     <div id="loginMsg" class="msg"></div>
   </div>
@@ -86,10 +123,12 @@
 <section id="registerPage" class="auth hidden">
   <div class="box">
     <div class="logo">NOVENTRA</div>
-    <input id="regEmail" type="email" placeholder="Email" />
-    <input id="regPassword" type="password" placeholder="Şifrə" />
-    <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)" />
-    <button class="main" onclick="register()">Qeydiyyatdan keç</button>
+    <form onsubmit="event.preventDefault(); register()">
+      <input id="regEmail" type="email" placeholder="Email" autocomplete="email" />
+      <input id="regPassword" type="password" placeholder="Şifrə" autocomplete="new-password" />
+      <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)" />
+      <button type="submit" class="main">Qeydiyyatdan keç</button>
+    </form>
     <div class="switch" onclick="showLogin()">Girişə qayıt</div>
     <div id="regMsg" class="msg"></div>
   </div>
@@ -97,257 +136,499 @@
 
 <section id="app" class="hidden">
   <div class="header">
-    <div class="logo">NOVENTRA</div>
+    <div>
+      <div class="logo" style="text-align:left;margin-bottom:6px">NOVENTRA</div>
+      <div class="summary">Rəqəmsal aktivlik platforması • VIP, missiya, rəhbərlik və komanda idarəsi</div>
+    </div>
+    <div class="tag purple" id="headerQuickStatus">Məlumatlar yenilənir...</div>
   </div>
 
   <nav class="nav">
-    <button onclick="page('home')">Ana səhifə</button>
-    <button onclick="page('earn')">Qazanc</button>
-    <button onclick="page('invest')">Yatırım</button>
-    <button onclick="page('account')">Hesabım</button>
-    <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
+    <button data-page="home" onclick="page('home')">Ana səhifə</button>
+    <button data-page="vip" onclick="page('vip')">VIP Mərkəzi</button>
+    <button data-page="leadership" onclick="page('leadership')">Rəhbərlik Mərkəzi</button>
+    <button data-page="missions" onclick="page('missions')">Missiyalar</button>
+    <button data-page="notifications" onclick="page('notifications')">Bildirişlər</button>
+    <button data-page="account" onclick="page('account')">Hesabım</button>
+    <button id="adminBtn" data-page="admin" class="hidden" onclick="page('admin')">Admin</button>
   </nav>
 
   <div id="homePage">
-    <h1>Xoş gəlmisiniz</h1>
-    <p class="muted">Hesabınızın ümumi vəziyyəti</p>
+    <h1 class="page-title">Ana səhifə</h1>
+    <p class="page-subtitle">Balans, VIP durumu, rəhbərlik statusu, missiya gedişatı və komanda xülasəsi.</p>
 
-    <div class="grid">
+    <div class="grid" id="dashboardStats"></div>
+
+    <div class="two">
       <div class="card">
-        <div class="muted">Aktiv balans</div>
-        <div id="balance" class="value">0.00 $</div>
+        <h2>🎯 Missiya və komanda</h2>
+        <div id="dashboardMission"></div>
       </div>
-
       <div class="card">
-        <div class="muted">Ümumi qazanc</div>
-        <div id="total" class="value green">0.00 $</div>
-      </div>
-
-      <div class="card">
-        <div class="muted">Rəhbərlik statusu</div>
-        <div id="status" class="value purple">Yeni istifadəçi</div>
+        <h2>📋 Son əməliyyatlar</h2>
+        <div id="dashboardActivity"></div>
       </div>
     </div>
 
     <div class="two">
       <div class="card">
-        <h2>Fəaliyyət</h2>
-        <p class="muted">Yatırım admin tərəfindən təsdiqləndikdən sonra gündəlik fəaliyyət aktiv olacaq.</p>
-        <div id="taskArea"></div>
+        <h2>🔔 Son bildirişlər</h2>
+        <div id="dashboardNotifications"></div>
       </div>
-
       <div class="card">
-        <h2>Referal sistemi</h2>
-        <p class="muted">Sənin dəvət kodun:</p>
-        <div id="referralCode" class="refcode">Yüklənir...</div>
+        <h2>📊 Komanda statistikası</h2>
+        <div id="dashboardTeamStats"></div>
+      </div>
+    </div>
+  </div>
 
-        <div class="muted" style="margin-top:8px">Qeydiyyat linkin:</div>
-        <div id="refLink" class="refcode" style="font-size:14px;letter-spacing:0;word-break:break-all">Yüklənir...</div>
-        <button class="main" style="margin-top:8px" onclick="copyRefLink()">Linki kopyala</button>
+  <div id="vipPage" class="hidden">
+    <h1 class="page-title">VIP Mərkəzi</h1>
+    <p class="page-subtitle">Açıq paketlər üçün çek yüklə, sorğunu göndər və admin təsdiqindən sonra VIP-ni aktivləşdir.</p>
 
-        <div class="row">
-          <span class="muted">Aktiv referallar</span>
-          <b id="refCount">0</b>
+    <div class="two">
+      <div class="card">
+        <h2>💎 Aktiv VIP məlumatı</h2>
+        <div id="vipSummary"></div>
+      </div>
+      <div class="card">
+        <h2>💳 Ödəniş və aktivləşdirmə</h2>
+        <div class="info">
+          <div><b>Ödəniş kartı:</b> 5243 7544 3976 1469</div>
+          <div><b>Tələb olunan addımlar:</b> VIP seç → ödəniş et → çeki yüklə → admin təsdiqləsin.</div>
+          <div><b>Qeyd:</b> VIP 9-11 yalnız şərtlər açıldıqdan sonra istifadəyə verilir və hazırda kilidlidir.</div>
         </div>
+        <div id="vipRequestStatus" class="section-spacer"></div>
       </div>
     </div>
 
-    <div class="card level-card">
-      <h2>🏆 Rəhbərlik səviyyələri</h2>
-      <div id="levelsArea"></div>
+    <div class="card section-spacer">
+      <h2>📦 VIP paketləri</h2>
+      <div id="vipPackages" class="vip-grid"></div>
     </div>
   </div>
 
-  <div id="earnPage" class="hidden">
-    <h1>Qazanc</h1>
-    <div class="card">
-      <h2>Qazanc tarixçəsi</h2>
-      <div id="history"></div>
-    </div>
-  </div>
+  <div id="leadershipPage" class="hidden">
+    <h1 class="page-title">Rəhbərlik Mərkəzi</h1>
+    <p class="page-subtitle">VIP səviyyən və aktiv referal sayın uyğun olduqda rəhbərlik sorğusu göndərə bilərsən.</p>
 
-  <div id="investPage" class="hidden">
-    <h1>Yatırım</h1>
-
-    <div class="card">
-      <div class="info">
-        <b>Yatırım üçün məlumat</b><br><br>
-        💰 <b>Minimum yatırım ilk həftə üçün: 20 $</b><br>
-        📈 <b>Gündəlik qazanc: 1 $</b><br><br>
-        Yatırım etdikdən sonra ödəniş çekini yükləyin.<br><br>
-        <b>Yatırım üçün kart:</b><br><br>
-        5243754439761469
+    <div class="two">
+      <div class="card">
+        <h2>🏆 Mövcud rəhbərlik vəziyyəti</h2>
+        <div id="leadershipSummary"></div>
       </div>
-
-      <input id="investAmount" type="number" placeholder="Məbləğ ($)" />
-      <input id="receipt" type="file" accept="image/*,.pdf" />
-      <button class="main" onclick="invest()">Ödəniş etdim</button>
-      <div id="investMsg" class="msg"></div>
+      <div class="card">
+        <h2>👥 Aktiv referal hesabı</h2>
+        <div id="leadershipReferralInfo"></div>
+      </div>
     </div>
 
+    <div class="card section-spacer">
+      <h2>🎖 Rəhbərlik səviyyələri</h2>
+      <div id="leadershipLevels" class="lead-grid"></div>
+    </div>
+  </div>
+
+  <div id="missionsPage" class="hidden">
+    <h1 class="page-title">Missiyalar</h1>
+    <p class="page-subtitle">22 günlük təqvimdə hər gün 60 saniyəlik aktivliyi tamamla, VIP qazancına əlavə olaraq +1 AZN qazan.</p>
+
+    <div class="two">
+      <div class="card">
+        <h2>🗓 Missiya gedişatı</h2>
+        <div id="missionOverview"></div>
+      </div>
+      <div class="card">
+        <h2>⏱ Bugünkü missiya</h2>
+        <div id="missionCurrent"></div>
+      </div>
+    </div>
+
+    <div class="card section-spacer">
+      <h2>📅 22 günlük təqvim</h2>
+      <div id="missionCalendar" class="mission-grid"></div>
+    </div>
+  </div>
+
+  <div id="notificationsPage" class="hidden">
+    <h1 class="page-title">Bildirişlər</h1>
+    <p class="page-subtitle">VIP aktivləşməsi, rəhbərlik təsdiqi, çıxarış yenilənməsi və yeni referal bildirişləri.</p>
+
     <div class="card">
-      <h2>Yatırım tarixçəsi</h2>
-      <div id="investHistory"></div>
+      <div class="action-row" style="margin-top:0;margin-bottom:14px">
+        <button class="secondary" onclick="markAllNotificationsRead()">Hamısını oxunmuş et</button>
+      </div>
+      <div id="notificationsList"></div>
     </div>
   </div>
 
   <div id="accountPage" class="hidden">
-    <h1>Hesabım</h1>
+    <h1 class="page-title">Hesabım</h1>
+    <p class="page-subtitle">Email, balans, VIP məlumatı, rəhbərlik səviyyəsi və pul çıxarışı idarəsi.</p>
 
-    <div class="card">
-      <div class="row"><span class="muted">E-poçt</span><b id="email"></b></div>
-      <div class="row"><span class="muted">Hesab statusu</span><b id="accountStatus" class="green"></b></div>
-      <div class="row"><span class="muted">Referal kodun</span><b id="accountRef" class="yellow">—</b></div>
-      <div class="row"><span class="muted">Hədəf səviyyə</span><b id="targetLevel" class="yellow">Seçilməyib</b></div>
-      <div class="row"><span class="muted">Cari səviyyə</span><b id="currentLevelView" class="green">Yeni istifadəçi</b></div>
+    <div class="two">
+      <div class="card">
+        <div class="row"><span class="muted">Email</span><b id="accountEmail">—</b></div>
+        <div class="row"><span class="muted">Aktiv balans</span><b id="accountBalance">0.00 AZN</b></div>
+        <div class="row"><span class="muted">VIP statusu</span><b id="accountVipStatus">VIP yoxdur</b></div>
+        <div class="row"><span class="muted">Aktiv VIP</span><b id="accountActiveVip">—</b></div>
+        <div class="row"><span class="muted">Rəhbərlik səviyyəsi</span><b id="accountLeader">Rəhbərlik yoxdur</b></div>
+        <div class="row"><span class="muted">Dəvət kodu</span><b id="accountReferralCode" class="yellow">—</b></div>
+        <div class="row"><span class="muted">Dəvət linki</span><b id="accountReferralLink" style="word-break:break-all">—</b></div>
+        <div class="action-row">
+          <button class="secondary" onclick="copyRefLink()">Linki kopyala</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>💸 Pul çıxarışı</h2>
+        <input id="withdrawAmount" type="number" min="8" step="0.01" placeholder="Məbləğ (AZN) - minimum 8 AZN" />
+        <select id="withdrawMethod">
+          <option value="bank_card">Bank kartı</option>
+          <option value="binance_id">Binance ID</option>
+        </select>
+        <input id="withdrawAccountInfo" placeholder="Kart nömrəsi və ya Binance ID" />
+        <button class="main" onclick="requestWithdraw()">Çıxarış sorğusu göndər</button>
+        <div id="withdrawMsg" class="msg"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Çıxarış</h2>
-      <input id="withdrawAmount" type="number" min="4" step="0.01" placeholder="Məbləğ ($) - minimum 4$" />
-      <select id="withdrawMethod">
-        <option value="bank_card">Bank kartı</option>
-        <option value="binance_id">Binance ID</option>
-      </select>
-      <input id="withdrawAccountInfo" placeholder="Kart nömrəsi və ya Binance ID" />
-      <button class="main" onclick="requestWithdraw()">Çıxarış sorğusu göndər</button>
-      <div id="withdrawMsg" class="msg"></div>
+    <div class="two section-spacer">
+      <div class="card">
+        <h2>💼 VIP tarixçəsi</h2>
+        <div id="vipHistory"></div>
+      </div>
+      <div class="card">
+        <h2>📈 Qazanc tarixçəsi</h2>
+        <div id="earningsHistory"></div>
+      </div>
     </div>
 
-    <div class="card">
-      <h2>Çıxarış tarixçəsi</h2>
-      <div id="withdrawHistory"></div>
-    </div>
-
-    <div class="card">
-      <button class="logout" onclick="logout()">Hesabdan çıx</button>
+    <div class="two section-spacer">
+      <div class="card">
+        <h2>🏦 Çıxarış tarixçəsi</h2>
+        <div id="withdrawHistory"></div>
+      </div>
+      <div class="card">
+        <h2>🚪 Sessiya</h2>
+        <div class="info">Hesabından çıxdıqda aktiv sessiya bağlanır, amma VIP və missiya məlumatların saxlanılır.</div>
+        <div class="action-row"><button class="secondary" onclick="logout()">Hesabdan çıx</button></div>
+      </div>
     </div>
   </div>
 
   <div id="adminPage" class="hidden">
-    <h1>Admin Panel</h1>
+    <h1 class="page-title">Admin Paneli</h1>
+    <p class="page-subtitle">Canlı statistika, VIP sorğuları, rəhbərlik təsdiqləri, çıxarış sorğuları və audit jurnalı.</p>
 
-    <div class="card admin">
-      <h2>Yatırım sorğuları</h2>
-      <div id="adminInvest"></div>
+    <div class="grid" id="adminStats"></div>
+
+    <div class="admin-section card">
+      <h2>💎 VIP sorğuları</h2>
+      <div id="adminVipRequests"></div>
     </div>
 
-    <div class="card admin">
-      <h2>Çıxarış sorğuları</h2>
-      <div id="adminWithdraw"></div>
+    <div class="admin-section card">
+      <h2>🏆 Rəhbərlik sorğuları</h2>
+      <div id="adminLeadershipRequests"></div>
     </div>
 
-    <div class="card admin">
-      <h2>Rəhbərlik sorğuları</h2>
-      <div id="adminLeaders"></div>
+    <div class="admin-section card">
+      <h2>💸 Pul çıxarışı sorğuları</h2>
+      <div id="adminWithdrawRequests"></div>
+    </div>
+
+    <div class="admin-section card">
+      <h2>🧾 Audit jurnalı</h2>
+      <div id="adminAuditLogs"></div>
     </div>
   </div>
 </section>
 
-<div id="leaderModalBackdrop" class="modal-backdrop">
+<div id="vipModalBackdrop" class="modal-backdrop">
   <div class="modal">
-    <h3 id="leaderModalTitle">Rəhbərlik sorğusu</h3>
-    <div id="leaderModalBody" class="info"></div>
-    <textarea id="leaderRequestNote" rows="3" placeholder="Qeyd (istəyə bağlı)"></textarea>
+    <h3 id="vipModalTitle">VIP aktivləşdir</h3>
+    <div id="vipModalBody" class="info"></div>
+    <input id="vipReceiptInput" type="file" accept="image/*,.pdf" />
+    <textarea id="vipRequestNote" rows="3" placeholder="Qeyd (istəyə bağlı)"></textarea>
+    <div id="vipModalMsg" class="msg"></div>
     <div class="actions">
-      <button class="ghost" onclick="closeLeaderModal()">Bağla</button>
-      <button class="ok" id="sendLeaderBtn" onclick="submitLeaderRequest()">Sorğu göndər</button>
+      <button class="outline" onclick="closeVipModal()">Bağla</button>
+      <button class="main" id="vipModalAction" onclick="submitVipRequest()">Sorğu göndər</button>
     </div>
   </div>
 </div>
+
+<div id="leadershipModalBackdrop" class="modal-backdrop">
+  <div class="modal">
+    <h3 id="leadershipModalTitle">Rəhbərlik sorğusu</h3>
+    <div id="leadershipModalBody" class="info"></div>
+    <textarea id="leadershipRequestNote" rows="3" placeholder="Qeyd (istəyə bağlı)"></textarea>
+    <div id="leadershipModalMsg" class="msg"></div>
+    <div class="actions">
+      <button class="outline" onclick="closeLeadershipModal()">Bağla</button>
+      <button class="main" id="leadershipModalAction" onclick="submitLeadershipRequest()">Sorğu göndər</button>
+    </div>
+  </div>
+</div>
+
+<script>
+if(!window.supabase){
+  window.supabase = {
+    createClient(baseUrl, publishableKey){
+      const storageKey = `noventra-supabase-session:${baseUrl}`;
+      const readSession = () => {
+        try{ return JSON.parse(localStorage.getItem(storageKey) || "null"); }catch{ return null; }
+      };
+      const writeSession = (session) => {
+        if(session) localStorage.setItem(storageKey, JSON.stringify(session));
+        else localStorage.removeItem(storageKey);
+      };
+      const authHeaders = (token) => {
+        const headers = { apikey: publishableKey };
+        if(token) headers.Authorization = "Bearer " + token;
+        return headers;
+      };
+      const parseResponse = async(response) => {
+        const text = await response.text();
+        const body = text ? (()=>{ try{return JSON.parse(text);}catch{return text;} })() : null;
+        if(response.ok) return { data: body, error: null };
+        return { data: null, error: { message: body?.message || body?.error_description || body?.error || response.statusText || "Sorğu xətası" } };
+      };
+      class QueryBuilder{
+        constructor(table){
+          this.table = table;
+          this.mode = "select";
+          this.payload = null;
+          this.headers = {};
+          this.query = new URLSearchParams();
+          this.acceptObject = false;
+          this.onConflict = null;
+        }
+        select(columns){
+          this.mode = "select";
+          this.query.set("select", columns || "*");
+          return this;
+        }
+        insert(payload){
+          this.mode = "insert";
+          this.payload = payload;
+          return this;
+        }
+        update(payload){
+          this.mode = "update";
+          this.payload = payload;
+          return this;
+        }
+        upsert(payload, options = {}){
+          this.mode = "upsert";
+          this.payload = payload;
+          this.onConflict = options.onConflict || null;
+          return this;
+        }
+        eq(column, value){
+          this.query.set(column, `eq.${value}`);
+          return this;
+        }
+        lt(column, value){
+          this.query.set(column, `lt.${value}`);
+          return this;
+        }
+        in(column, values){
+          this.query.set(column, `in.(${(values || []).join(",")})`);
+          return this;
+        }
+        order(column, options = {}){
+          this.query.set("order", `${column}.${options.ascending === false ? "desc" : "asc"}`);
+          return this;
+        }
+        limit(count){
+          this.query.set("limit", String(count));
+          return this;
+        }
+        maybeSingle(){
+          this.acceptObject = true;
+          return this;
+        }
+        async execute(){
+          const session = readSession();
+          const token = session?.access_token;
+          const url = `${baseUrl}/rest/v1/${this.table}${this.query.toString() ? `?${this.query.toString()}` : ""}`;
+          const headers = { ...authHeaders(token), ...this.headers };
+          let method = "GET";
+          let body;
+          if(this.mode === "insert"){
+            method = "POST";
+            headers["Content-Type"] = "application/json";
+            headers.Prefer = "return=representation";
+            body = JSON.stringify(this.payload);
+          }else if(this.mode === "update"){
+            method = "PATCH";
+            headers["Content-Type"] = "application/json";
+            headers.Prefer = "return=representation";
+            body = JSON.stringify(this.payload);
+          }else if(this.mode === "upsert"){
+            method = "POST";
+            headers["Content-Type"] = "application/json";
+            headers.Prefer = "resolution=merge-duplicates,return=representation";
+            body = JSON.stringify(this.payload);
+            if(this.onConflict) this.query.set("on_conflict", this.onConflict);
+          }
+          if(this.acceptObject) headers.Accept = "application/vnd.pgrst.object+json";
+          const response = await fetch(this.mode === "upsert" ? `${baseUrl}/rest/v1/${this.table}${this.query.toString() ? `?${this.query.toString()}` : ""}` : url, { method, headers, body });
+          const parsed = await parseResponse(response);
+          if(this.acceptObject && parsed.error && /0 rows/i.test(parsed.error.message || "")) return { data: null, error: null };
+          return parsed;
+        }
+        then(resolve, reject){
+          return this.execute().then(resolve, reject);
+        }
+      }
+      return {
+        auth: {
+          async signUp({ email, password }){
+            const response = await fetch(`${baseUrl}/auth/v1/signup`, {
+              method: "POST",
+              headers: { ...authHeaders(), "Content-Type":"application/json" },
+              body: JSON.stringify({ email, password })
+            });
+            const parsed = await parseResponse(response);
+            if(parsed.data?.access_token) writeSession(parsed.data);
+            return { data: parsed.data ? { user: parsed.data.user || parsed.data, session: parsed.data } : null, error: parsed.error };
+          },
+          async signInWithPassword({ email, password }){
+            const response = await fetch(`${baseUrl}/auth/v1/token?grant_type=password`, {
+              method: "POST",
+              headers: { ...authHeaders(), "Content-Type":"application/json" },
+              body: JSON.stringify({ email, password })
+            });
+            const parsed = await parseResponse(response);
+            if(parsed.data?.access_token) writeSession(parsed.data);
+            return { data: parsed.data ? { user: parsed.data.user, session: parsed.data } : null, error: parsed.error };
+          },
+          async signOut(){
+            const session = readSession();
+            if(session?.access_token){
+              try{
+                await fetch(`${baseUrl}/auth/v1/logout`, { method:"POST", headers: authHeaders(session.access_token) });
+              }catch{}
+            }
+            writeSession(null);
+            return { error: null };
+          },
+          async getUser(){
+            const session = readSession();
+            if(!session?.access_token) return { data: { user: null }, error: null };
+            const response = await fetch(`${baseUrl}/auth/v1/user`, { headers: authHeaders(session.access_token) });
+            const parsed = await parseResponse(response);
+            if(parsed.error) return { data: { user: null }, error: parsed.error };
+            return { data: { user: parsed.data }, error: null };
+          }
+        },
+        from(table){
+          return new QueryBuilder(table);
+        },
+        storage: {
+          from(bucket){
+            return {
+              async upload(path, file, options = {}){
+                const session = readSession();
+                const response = await fetch(`${baseUrl}/storage/v1/object/${bucket}/${path}`, {
+                  method: "POST",
+                  headers: {
+                    ...authHeaders(session?.access_token),
+                    "x-upsert": options.upsert ? "true" : "false",
+                    "Content-Type": file.type || "application/octet-stream"
+                  },
+                  body: file
+                });
+                return parseResponse(response);
+              },
+              getPublicUrl(path){
+                return { data: { publicUrl: `${baseUrl}/storage/v1/object/public/${bucket}/${path}` } };
+              }
+            };
+          }
+        }
+      };
+    }
+  };
+}
+</script>
 
 <script>
 const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
 const SUPABASE_KEY = "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const ADMIN_EMAIL = "Ayazdiana666@gmail.com";
+const MIN_WITHDRAW = 8;
+const RECEIPT_BUCKET = "receipts";
+const MISSION_SECONDS = 60;
+const ONLINE_WINDOW_MS = 5 * 60 * 1000;
+
+const VIP_PACKAGES = [
+  { level:1, name:"VIP 1", price:25, days_valid:45, daily_earnings:1.5, locked:false },
+  { level:2, name:"VIP 2", price:35, days_valid:50, daily_earnings:2.3, locked:false },
+  { level:3, name:"VIP 3", price:50, days_valid:60, daily_earnings:3.58, locked:false },
+  { level:4, name:"VIP 4", price:150, days_valid:70, daily_earnings:12, locked:false },
+  { level:5, name:"VIP 5", price:420, days_valid:80, daily_earnings:22, locked:false },
+  { level:6, name:"VIP 6", price:740, days_valid:90, daily_earnings:31.5, locked:false },
+  { level:7, name:"VIP 7", price:1380, days_valid:100, daily_earnings:68, locked:false },
+  { level:8, name:"VIP 8", price:2550, days_valid:120, daily_earnings:116.5, locked:false },
+  { level:9, name:"VIP 9", price:4760, days_valid:150, daily_earnings:259, locked:true },
+  { level:10, name:"VIP 10", price:8250, days_valid:180, daily_earnings:710, locked:true },
+  { level:11, name:"VIP 11", price:12800, days_valid:200, daily_earnings:1870, locked:true }
+];
+
+const LEADERSHIP_LEVELS = [
+  { level:1, icon:"🥇", name:"Elit Rəhbər", requiredVipLevel:3, requiredReferrals:6, dailyBonus:5, referralBonus:1 },
+  { level:2, icon:"💎", name:"Brilyant Rəhbər", requiredVipLevel:4, requiredReferrals:9, dailyBonus:12, referralBonus:2 },
+  { level:3, icon:"👑", name:"Platin Rəhbər", requiredVipLevel:5, requiredReferrals:7, dailyBonus:22, referralBonus:5 },
+  { level:4, icon:"🏛", name:"İmperial Direktor", requiredVipLevel:6, requiredReferrals:8, dailyBonus:36, referralBonus:25 },
+  { level:5, icon:"🌐", name:"Baş Strateq", requiredVipLevel:7, requiredReferrals:9, dailyBonus:70, referralBonus:60 },
+  { level:6, icon:"🔱", name:"Ali İmperator", requiredVipLevel:8, requiredReferrals:10, dailyBonus:130, referralBonus:85 }
+];
 
 let user = null;
 let profile = null;
-
-let investmentChannel = null;
-let profileChannel = null;
+let vipCatalog = [...VIP_PACKAGES];
+let userVips = [];
+let activeVip = null;
+let leadershipRequests = [];
+let activeLeadership = null;
+let earnings = [];
+let withdrawRequests = [];
+let missions = [];
+let notifications = [];
+let auditEntries = [];
+let referredProfiles = [];
+let activeReferralCount = 0;
+let selectedVipPackage = null;
+let selectedLeadershipLevel = null;
 let refreshInterval = null;
-let countdownTimer = null;
+let presenceInterval = null;
+let missionTimer = null;
+let missionCountdown = MISSION_SECONDS;
+let adminData = {
+  presence: [],
+  vipRequests: [],
+  leadershipRequests: [],
+  withdrawRequests: [],
+  auditLogs: [],
+  profiles: []
+};
 
-let countdownLeft = 30;
-let totalEarningsGlobal = 0;
-let approvedInvestmentGlobal = 0;
-let activeReferralsGlobal = 0;
-
-let selectedLeaderLevel = null;
-
-const LEVELS = [
-  {name:"🏆 PREMİUM RƏHBƏR",own:50,referrals:10,referralInvestment:23,leader:1.80,referral:1,locked:false},
-  {name:"👑 SUPREME RƏHBƏR",own:90,referrals:20,referralInvestment:35,leader:2.50,referral:1.70,locked:false},
-  {name:"💠 ELİT KOMANDİR",own:150,referrals:35,referralInvestment:60,leader:4,referral:2.80,locked:false},
-  {name:"💎 PLATİN RƏHBƏR",own:320,referrals:55,referralInvestment:87,leader:6.80,referral:3.60,locked:false},
-  {name:"🌐 BAŞ STRATEJİ RƏHBƏR",own:500,referrals:80,referralInvestment:120,leader:10,referral:5,locked:true},
-  {name:"🔱 İMPERATOR RƏHBƏR",own:1000,referrals:150,referralInvestment:250,leader:20,referral:10,locked:true}
-];
-
-function getLevelByName(levelName){
-  if(!levelName) return null;
-  return LEVELS.find(l => l.name === levelName) || null;
+function isAdmin(){
+  return !!user && String(user.email || "").toLowerCase() === ADMIN_EMAIL.toLowerCase();
 }
-async function getUserDailyAmount(userId){
-  let daily = 1;
-  const { data: p, error } = await supabaseClient
-    .from("profiles")
-    .select("current_level")
-    .eq("id", userId)
-    .maybeSingle();
-
-  if(!error && p?.current_level){
-    const lv = getLevelByName(p.current_level);
-    if(lv) daily = Number(lv.leader || 1);
-  }
-  return daily;
-}
-
-function escapeHtml(s){
-  return String(s || "")
+function escapeHtml(value){
+  return String(value ?? "")
     .replace(/&/g,"&amp;")
     .replace(/</g,"&lt;")
     .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
+    .replace(/\"/g,"&quot;")
     .replace(/'/g,"&#39;");
 }
-function generateCode(){ return "NV" + Math.random().toString(36).substring(2,8).toUpperCase(); }
-
-function buildRegisterLink(code){
-  const base = window.location.origin + window.location.pathname;
-  return `${base}?ref=${encodeURIComponent(code || "")}`;
-}
-async function copyRefLink(){
-  const el = document.getElementById("refLink");
-  if(!el) return;
-  try{ await navigator.clipboard.writeText(el.innerText || ""); alert("Qeydiyyat linki kopyalandı ✅"); }
-  catch{ alert("Kopyalama alınmadı. Linki əl ilə kopyalayın."); }
-}
-(function prefillReferralFromUrl(){
-  const ref = (new URLSearchParams(window.location.search).get("ref") || "").trim();
-  if(ref){
-    const input = document.getElementById("regReferral");
-    if(input) input.value = ref.toUpperCase();
-  }
-})();
-
-function canSendLeaderRequest(level){
-  if(!level || level.locked) return false;
-  const ownOk = approvedInvestmentGlobal >= level.own;
-  const refOk = activeReferralsGlobal >= level.referrals;
-  return ownOk && refOk;
-}
-function refreshLeaderModalState(){
-  if(!selectedLeaderLevel) return;
-  const sendBtn = document.getElementById("sendLeaderBtn");
-  if(!sendBtn) return;
-  const allowed = canSendLeaderRequest(selectedLeaderLevel);
-  sendBtn.disabled = !allowed;
-  sendBtn.innerText = allowed ? "Sorğu göndər" : "Şərtləri tamamla";
-}
-
 function showRegister(){
   document.getElementById("loginPage").classList.add("hidden");
   document.getElementById("registerPage").classList.remove("hidden");
@@ -356,665 +637,949 @@ function showLogin(){
   document.getElementById("registerPage").classList.add("hidden");
   document.getElementById("loginPage").classList.remove("hidden");
 }
-function page(name){
-  ["homePage","earnPage","investPage","accountPage","adminPage"].forEach(id=>{
-    document.getElementById(id)?.classList.add("hidden");
-  });
-  const map = {home:"homePage",earn:"earnPage",invest:"investPage",account:"accountPage",admin:"adminPage"};
-  document.getElementById(map[name] || "homePage")?.classList.remove("hidden");
-
-  if(name === "admin"){
-    loadAdminInvestments();
-    loadAdminWithdrawRequests();
-    loadAdminLeaderRequests();
-  }
+function generateCode(){
+  return "NV" + Math.random().toString(36).slice(2,8).toUpperCase();
 }
-
-async function register(){
-  const email = document.getElementById("regEmail").value.trim();
-  const password = document.getElementById("regPassword").value;
-  const referral = document.getElementById("regReferral").value.trim().toUpperCase();
-  const msg = document.getElementById("regMsg");
-
-  if(!email || !password){ msg.innerText = "Email və şifrəni doldurun."; return; }
-  msg.innerText = "Hesab yaradılır...";
-
-  const {data,error} = await supabaseClient.auth.signUp({email,password});
-  if(error){ msg.innerText = error.message; return; }
-
-  if(data.user){
-    const {error:profileError} = await supabaseClient.from("profiles").insert({
-      id:data.user.id, email, referral_code:generateCode(), referred_by:referral || null
-    });
-    if(profileError){ msg.innerText = "Profil xətası: " + profileError.message; return; }
-  }
-
-  msg.style.color = "#40dc91";
-  msg.innerText = "Hesab yaradıldı.";
-  setTimeout(showLogin,1000);
+function buildRegisterLink(code){
+  const base = window.location.origin + window.location.pathname;
+  return `${base}?ref=${encodeURIComponent(code || "")}`;
 }
-
-async function login(){
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-  const {data,error} = await supabaseClient.auth.signInWithPassword({email,password});
-
-  if(error){
-    document.getElementById("loginMsg").innerText = "Email və ya şifrə yanlışdır.";
-    return;
-  }
-  await openApp(data.user);
+function formatCurrency(value){
+  const amount = Number(value || 0);
+  return `${amount.toLocaleString("az-AZ",{minimumFractionDigits:2,maximumFractionDigits:2})} AZN`;
 }
-
-async function loadProfile(){
-  const {data,error} = await supabaseClient.from("profiles").select("*").eq("id",user.id).maybeSingle();
-  if(error){ console.error("loadProfile:", error); return; }
-  profile = data;
+function formatDate(value){
+  if(!value) return "—";
+  const date = new Date(value);
+  if(Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleDateString("az-AZ");
 }
-
-function getCurrentLevel(){
-  let current = null;
-  for(const level of LEVELS){
-    if(level.locked) continue;
-    if(approvedInvestmentGlobal >= level.own && activeReferralsGlobal >= level.referrals){
-      current = level;
+function formatDateTime(value){
+  if(!value) return "—";
+  const date = new Date(value);
+  if(Number.isNaN(date.getTime())) return "—";
+  return date.toLocaleString("az-AZ");
+}
+function startOfToday(){
+  const now = new Date();
+  now.setHours(0,0,0,0);
+  return now;
+}
+function isSameLocalDay(a,b){
+  const d1 = new Date(a);
+  const d2 = new Date(b);
+  return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+}
+function addDays(dateString, days){
+  const base = new Date(dateString || Date.now());
+  base.setDate(base.getDate() + days);
+  return base.toISOString();
+}
+function daysRemaining(expiresAt){
+  if(!expiresAt) return 0;
+  const diff = new Date(expiresAt).getTime() - Date.now();
+  return Math.max(0, Math.ceil(diff / 86400000));
+}
+function getVipByLevel(level){
+  return vipCatalog.find(item => Number(item.level) === Number(level)) || VIP_PACKAGES.find(item => Number(item.level) === Number(level)) || null;
+}
+function getLeadershipByLevel(level){
+  return LEADERSHIP_LEVELS.find(item => Number(item.level) === Number(level)) || null;
+}
+function getUnreadCount(){
+  return notifications.filter(item => !item.read).length;
+}
+function getMissionState(){
+  const doneDays = new Set((missions || []).map(item => Number(item.day)));
+  let currentDay = 23;
+  for(let day = 1; day <= 22; day += 1){
+    if(!doneDays.has(day)){
+      currentDay = day;
+      break;
     }
   }
-  return current;
+  const lastMission = missions.length ? missions.slice().sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at))[0] : null;
+  const completedToday = !!(lastMission && isSameLocalDay(lastMission.completed_at, new Date()));
+  return { currentDay, completedToday, completedCount: doneDays.size, finished: currentDay === 23 };
 }
+function getApprovedWithdrawTotal(){
+  return withdrawRequests.filter(item => String(item.status).toLowerCase() === "approved").reduce((sum,item)=>sum + Number(item.amount || 0),0);
+}
+function getTotalEarnings(){
+  return earnings.reduce((sum,item)=>sum + Number(item.amount || 0),0);
+}
+function getActiveBalance(){
+  return getTotalEarnings() - getApprovedWithdrawTotal();
+}
+function getTodaysEarnings(){
+  const today = startOfToday().getTime();
+  return earnings.filter(item => new Date(item.created_at || 0).getTime() >= today).reduce((sum,item)=>sum + Number(item.amount || 0),0);
+}
+function getPendingVipRequest(){
+  return userVips.find(item => String(item.status).toLowerCase() === "pending") || null;
+}
+function getStatusTag(status){
+  const normalized = String(status || "").toLowerCase();
+  if(normalized === "active" || normalized === "approved") return '<span class="tag green">Təsdiqləndi</span>';
+  if(normalized === "rejected") return '<span class="tag red">Rədd edildi</span>';
+  if(normalized === "expired") return '<span class="tag yellow">Bitib</span>';
+  return '<span class="tag yellow">Gözləyir</span>';
+}
+function setMessage(id, text, color){
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.style.color = color || "var(--red)";
+  el.innerText = text || "";
+}
+function prefillReferralFromUrl(){
+  const ref = (new URLSearchParams(window.location.search).get("ref") || "").trim().toUpperCase();
+  if(ref){
+    const input = document.getElementById("regReferral");
+    if(input) input.value = ref;
+  }
+}
+async function copyRefLink(){
+  const value = buildRegisterLink(profile?.referral_code || "");
+  try{
+    await navigator.clipboard.writeText(value);
+    alert("Dəvət linki kopyalandı ✅");
+  }catch{
+    alert("Kopyalama alınmadı. Linki əl ilə kopyalayın.");
+  }
+}
+async function safeInsertAudit(userId, action, details){
+  try{
+    await supabaseClient.from("audit_logs").insert({ user_id:userId, action, details });
+  }catch{}
+}
+async function safeInsertNotification(targetUserId, type, message){
+  try{
+    await supabaseClient.from("notifications").insert({ user_id:targetUserId, type, message, read:false });
+  }catch{}
+}
+async function heartbeatPresence(){
+  if(!user) return;
+  await supabaseClient.from("user_presence").upsert({ user_id:user.id, email:user.email, last_seen:new Date().toISOString() }, { onConflict:"user_id" });
+}
+async function syncVipStatuses(){
+  if(isAdmin()){
+    await supabaseClient.from("user_vips").update({ status:"expired" }).eq("status","active").lt("expires_at", new Date().toISOString());
+  }
+}
+async function loadVipCatalog(){
+  const { data, error } = await supabaseClient.from("vip_packages").select("level,name,price,days_valid,daily_earnings").order("level",{ascending:true});
+  if(!error && data && data.length){
+    vipCatalog = VIP_PACKAGES.map(pkg => {
+      const db = data.find(item => Number(item.level) === Number(pkg.level));
+      return db ? { ...pkg, ...db, locked: pkg.locked } : pkg;
+    });
+  } else {
+    vipCatalog = [...VIP_PACKAGES];
+  }
+}
+async function loadProfile(){
+  const { data, error } = await supabaseClient.from("profiles").select("*").eq("id", user.id).maybeSingle();
+  if(error){ throw error; }
+  profile = data || { id:user.id, email:user.email };
+}
+async function loadUserVips(){
+  const { data, error } = await supabaseClient.from("user_vips").select("*").eq("user_id", user.id).order("created_at", { ascending:false });
+  if(error){ throw error; }
+  userVips = data || [];
+  activeVip = userVips.find(item => String(item.status).toLowerCase() === "active" && (!item.expires_at || new Date(item.expires_at).getTime() > Date.now())) || null;
+}
+async function loadLeadership(){
+  const { data, error } = await supabaseClient.from("leadership_requests").select("*").eq("user_id", user.id).order("created_at",{ascending:false});
+  if(error){ throw error; }
+  leadershipRequests = data || [];
+  const approved = leadershipRequests.filter(item => String(item.status).toLowerCase() === "approved");
+  activeLeadership = approved.sort((a,b)=>Number(b.level)-Number(a.level))[0] || null;
+}
+async function loadMissions(){
+  const { data, error } = await supabaseClient.from("missions").select("*").eq("user_id", user.id).order("day", { ascending:true });
+  if(error){ throw error; }
+  missions = data || [];
+}
+async function loadNotifications(){
+  const { data, error } = await supabaseClient.from("notifications").select("*").eq("user_id", user.id).order("created_at", { ascending:false }).limit(100);
+  if(error){ throw error; }
+  notifications = data || [];
+}
+async function loadFinance(){
+  const [earningsRes, withdrawsRes] = await Promise.all([
+    supabaseClient.from("earnings").select("*").eq("user_id", user.id).order("created_at", { ascending:false }),
+    supabaseClient.from("withdraw_requests").select("*").eq("user_id", user.id).order("created_at", { ascending:false })
+  ]);
+  if(earningsRes.error) throw earningsRes.error;
+  if(withdrawsRes.error) throw withdrawsRes.error;
+  earnings = earningsRes.data || [];
+  withdrawRequests = withdrawsRes.data || [];
+}
+async function loadAuditEntries(){
+  const { data } = await supabaseClient.from("audit_logs").select("*").eq("user_id", user.id).order("created_at", { ascending:false }).limit(20);
+  auditEntries = data || [];
+}
+async function loadReferralState(){
+  if(!profile?.referral_code){
+    referredProfiles = [];
+    activeReferralCount = 0;
+    return;
+  }
+  const { data, error } = await supabaseClient.from("profiles").select("id,email,referred_by").eq("referred_by", profile.referral_code);
+  if(error){ throw error; }
+  referredProfiles = data || [];
+  const ids = referredProfiles.map(item => item.id);
+  if(!ids.length){
+    activeReferralCount = 0;
+    return;
+  }
+  const { data: vipRows, error: vipError } = await supabaseClient.from("user_vips").select("user_id,status,expires_at").in("user_id", ids).eq("status","active");
+  if(vipError){ throw vipError; }
+  const activeIds = new Set((vipRows || []).filter(item => !item.expires_at || new Date(item.expires_at).getTime() > Date.now()).map(item => item.user_id));
+  activeReferralCount = activeIds.size;
+}
+async function loadAdminData(){
+  if(!isAdmin()) return;
+  const [presenceRes, vipRes, leaderRes, withdrawRes, auditRes, profilesRes] = await Promise.all([
+    supabaseClient.from("user_presence").select("*").order("last_seen", { ascending:false }).limit(300),
+    supabaseClient.from("user_vips").select("*").order("created_at", { ascending:false }).limit(200),
+    supabaseClient.from("leadership_requests").select("*").order("created_at", { ascending:false }).limit(200),
+    supabaseClient.from("withdraw_requests").select("*").order("created_at", { ascending:false }).limit(200),
+    supabaseClient.from("audit_logs").select("*").order("created_at", { ascending:false }).limit(120),
+    supabaseClient.from("profiles").select("*").limit(500)
+  ]);
+  adminData = {
+    presence: presenceRes.data || [],
+    vipRequests: vipRes.data || [],
+    leadershipRequests: leaderRes.data || [],
+    withdrawRequests: withdrawRes.data || [],
+    auditLogs: auditRes.data || [],
+    profiles: profilesRes.data || []
+  };
+}
+async function refreshAppData(){
+  await loadProfile();
+  await syncVipStatuses();
+  await loadVipCatalog();
+  await Promise.all([loadUserVips(), loadLeadership(), loadMissions(), loadNotifications(), loadFinance(), loadAuditEntries()]);
+  await loadReferralState();
+  if(isAdmin()) await loadAdminData();
+  renderAll();
+}
+function page(name){
+  const pages = {
+    home:"homePage",
+    vip:"vipPage",
+    leadership:"leadershipPage",
+    missions:"missionsPage",
+    notifications:"notificationsPage",
+    account:"accountPage",
+    admin:"adminPage"
+  };
+  Object.values(pages).forEach(id => document.getElementById(id)?.classList.add("hidden"));
+  document.getElementById(pages[name] || "homePage")?.classList.remove("hidden");
+  document.querySelectorAll(".nav button").forEach(btn => btn.classList.toggle("active", btn.dataset.page === name));
+}
+function renderHeader(){
+  const unread = getUnreadCount();
+  const vipLabel = activeVip ? `${activeVip.name || `VIP ${activeVip.vip_level}`} • ${daysRemaining(activeVip.expires_at)} gün` : "Aktiv VIP yoxdur";
+  const status = document.getElementById("headerQuickStatus");
+  if(status){
+    status.className = `tag ${activeVip ? "green" : "purple"}`;
+    status.innerHTML = `${escapeHtml(vipLabel)}${unread ? `<span class="unread-dot"></span>${unread} yeni` : ""}`;
+  }
+}
+function renderDashboard(){
+  const missionState = getMissionState();
+  const currentLeader = activeLeadership ? getLeadershipByLevel(activeLeadership.level) : null;
+  const dashboardStats = [
+    { label:"💰 Aktiv balans", value:formatCurrency(getActiveBalance()), tone:"green", note:"Qazanc - təsdiqlənən çıxarışlar" },
+    { label:"📈 Bugünkü qazanc", value:formatCurrency(getTodaysEarnings()), tone:"yellow", note:"VIP və missiya bonusları" },
+    { label:"💎 Aktiv VIP", value:activeVip ? `${activeVip.name || `VIP ${activeVip.vip_level}`}` : "VIP yoxdur", tone:"purple", note:activeVip ? `${daysRemaining(activeVip.expires_at)} gün qalıb` : "VIP aktivləşdirilməyib" },
+    { label:"🏆 Rəhbərlik statusu", value:currentLeader ? `${currentLeader.icon} ${currentLeader.name}` : "Rəhbərlik yoxdur", tone:"yellow", note:currentLeader ? `${formatCurrency(currentLeader.dailyBonus)}/gün` : "Şərtlər tamamlananda açılır" },
+    { label:"🎯 Bugünkü missiya", value:missionState.finished ? "22/22 tamam" : `${missionState.currentDay}. gün`, tone:"green", note:missionState.completedToday ? "Bugünkü missiya tamamlanıb" : "60 saniyəlik aktivlik gözləyir" },
+    { label:"📊 Komanda", value:`${activeReferralCount} aktiv referal`, tone:"purple", note:`Ümumi referal: ${referredProfiles.length}` },
+    { label:"🔔 Oxunmamış", value:`${getUnreadCount()} bildiriş`, tone:"yellow", note:"VIP, rəhbərlik və çıxarış yenilikləri" },
+    { label:"🧾 VIP sorğusu", value:getPendingVipRequest() ? "Təsdiq gözləyir" : "Aktiv sorğu yoxdur", tone:"purple", note:getPendingVipRequest() ? `VIP ${getPendingVipRequest().vip_level} • admin baxışı gözlənilir` : "Yeni sorğu göndərə bilərsən" }
+  ];
+  document.getElementById("dashboardStats").innerHTML = dashboardStats.map(item => `
+    <div class="stat">
+      <div class="muted">${item.label}</div>
+      <div class="value ${item.tone}">${escapeHtml(item.value)}</div>
+      <div class="mini-note">${escapeHtml(item.note)}</div>
+    </div>
+  `).join("");
 
-function renderLevels(){
-  const box = document.getElementById("levelsArea");
-  if(!box) return;
+  document.getElementById("dashboardMission").innerHTML = `
+    <div class="info">
+      <div><b>Hazırkı missiya:</b> ${missionState.finished ? "Bütün missiyalar tamamlanıb" : `${missionState.currentDay}. gün missiyası`}</div>
+      <div><b>Tələb:</b> 60 saniyə aktiv qal</div>
+      <div><b>Mükafat:</b> +1 AZN bonus${activeVip ? ` və ${formatCurrency(getVipByLevel(activeVip.vip_level)?.daily_earnings || 0)} VIP qazancı` : ""}</div>
+      <div><b>Aylıq gedişat:</b> ${missionState.completedCount}/22 gün</div>
+    </div>
+    <div class="stats-list section-spacer">
+      <div class="list-item">👥 Aktiv referal: <b>${activeReferralCount}</b><small>Yalnız aktiv VIP-li referallar sayılır.</small></div>
+      <div class="list-item">💼 Gözləyən VIP sorğuları: <b>${userVips.filter(item => String(item.status).toLowerCase() === "pending").length}</b><small>Çek yüklənmiş sorğular burada izlənir.</small></div>
+      <div class="list-item">🏆 Gözləyən rəhbərlik sorğuları: <b>${leadershipRequests.filter(item => String(item.status).toLowerCase() === "pending").length}</b><small>Admin təsdiqi ilə aktiv olur.</small></div>
+    </div>
+  `;
 
-  box.innerHTML = LEVELS.map(level=>{
-    const locked = level.locked;
-    const achieved = !locked && approvedInvestmentGlobal >= level.own && activeReferralsGlobal >= level.referrals;
+  document.getElementById("dashboardActivity").innerHTML = auditEntries.length
+    ? auditEntries.slice(0,6).map(item => `
+      <div class="timeline-item">
+        <div><b>${escapeHtml(item.action)}</b></div>
+        <small>${formatDateTime(item.created_at)}</small>
+      </div>
+    `).join("")
+    : '<div class="empty">Hələ əməliyyat qeydi yoxdur.</div>';
 
-    return `
+  document.getElementById("dashboardNotifications").innerHTML = notifications.length
+    ? notifications.slice(0,5).map(item => `
+      <div class="list-item">
+        <div><b>${escapeHtml(item.message)}</b>${item.read ? "" : '<span class="unread-dot"></span>'}</div>
+        <small>${formatDateTime(item.created_at)}</small>
+      </div>
+    `).join("")
+    : '<div class="empty">Hələ bildiriş yoxdur.</div>';
+
+  document.getElementById("dashboardTeamStats").innerHTML = `
+    <div class="row"><span class="muted">Ümumi referal</span><b>${referredProfiles.length}</b></div>
+    <div class="row"><span class="muted">Aktiv referal</span><b>${activeReferralCount}</b></div>
+    <div class="row"><span class="muted">Aktiv VIP-li komanda</span><b>${activeReferralCount}</b></div>
+    <div class="row"><span class="muted">Təsdiqlənmiş rəhbərlik</span><b>${activeLeadership ? escapeHtml(getLeadershipByLevel(activeLeadership.level)?.name || "Var") : "Yoxdur"}</b></div>
+  `;
+}
+function renderVipPage(){
+  const pending = getPendingVipRequest();
+  document.getElementById("vipSummary").innerHTML = activeVip
+    ? `
       <div class="info">
-        <h3 class="${locked ? "locked" : achieved ? "green" : "yellow"}">
-          ${level.name}${locked ? " 🔒" : achieved ? " ✅" : ""}
-        </h3>
+        <div><b>${escapeHtml(activeVip.name || `VIP ${activeVip.vip_level}`)}</b> hazırda aktivdir.</div>
+        <div>Qalan müddət: <b>${daysRemaining(activeVip.expires_at)} gün</b></div>
+        <div>Gündəlik VIP qazancı: <b>${formatCurrency(getVipByLevel(activeVip.vip_level)?.daily_earnings || 0)}</b></div>
+        <div>Bitmə tarixi: <b>${formatDate(activeVip.expires_at)}</b></div>
+      </div>
+    `
+    : '<div class="empty">Hazırda aktiv VIP yoxdur. Aşağıdan paket seçərək sorğu göndər.</div>';
 
-        <div>Öz yatırımınız: <b>${level.own} $</b></div>
-        <div>Aktiv referal: <b>${level.referrals} nəfər</b></div>
-        <div>Referal üçün yatırım: <b>${level.referralInvestment} $</b></div>
-        <div>Rəhbər qazancı: <b>${level.leader} $</b></div>
-        <div>Referal qazancı: <b>${level.referral} $</b></div>
+  document.getElementById("vipRequestStatus").innerHTML = pending
+    ? `<div class="info yellow">⏳ VIP ${pending.vip_level} sorğun təsdiq gözləyir. Admin çeki yoxladıqdan sonra VIP avtomatik aktiv olacaq.</div>`
+    : '<div class="mini-note">Açıq VIP paketlərindən birini seç və ödəniş çekini yüklə.</div>';
 
-        ${
-          locked
-          ? `<div class="locked">🔒 Bu səviyyə kilidlidir.</div>`
-          : achieved
-          ? `<div class="green">✅ Şərtlər tamamdır. Sorğu göndərə bilərsən.</div>
-             <button class="level-btn" onclick="openLeaderModal('${escapeHtml(level.name)}')">Rəhbər ol</button>`
-          : `<button class="level-btn" onclick="openLeaderModal('${escapeHtml(level.name)}')">Rəhbər ol</button>`
-        }
+  document.getElementById("vipPackages").innerHTML = vipCatalog.map(pkg => {
+    const isActive = activeVip && Number(activeVip.vip_level) === Number(pkg.level);
+    const isPending = userVips.some(item => Number(item.vip_level) === Number(pkg.level) && String(item.status).toLowerCase() === "pending");
+    const statusHtml = isActive
+      ? '<span class="tag green">Aktiv VIP</span>'
+      : isPending
+      ? '<span class="tag yellow">Sorğu gözləyir</span>'
+      : pkg.locked
+      ? '<span class="tag red">Kilidlidir</span>'
+      : '<span class="tag purple">Açıq paket</span>';
+    const cardClass = `vip-card ${pkg.locked ? "locked" : "open"} ${isActive ? "active" : ""} ${isPending ? "pending" : ""}`;
+    return `
+      <div class="${cardClass}">
+        <div class="action-row" style="justify-content:space-between;margin-top:0">
+          <h3>${escapeHtml(pkg.name)}</h3>
+          ${statusHtml}
+        </div>
+        <div class="vip-meta">
+          <div>💰 Qiymət: <b>${formatCurrency(pkg.price)}</b></div>
+          <div>📅 Müddət: <b>${pkg.days_valid} gün</b></div>
+          <div>📈 Gündəlik qazanc: <b>${formatCurrency(pkg.daily_earnings)}</b></div>
+          <div>${pkg.locked ? "🔒 Bu plan hazırda bağlıdır." : "🟢 Çek yükləyərək satın alma sorğusu göndər."}</div>
+        </div>
+        <div class="action-row">
+          <button class="${pkg.locked ? "outline" : "main"}" ${pkg.locked ? "disabled" : ""} onclick="openVipModal(${pkg.level})">${pkg.locked ? "Plan kilidlidir" : "İndi aktivləşdir"}</button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  document.getElementById("vipHistory").innerHTML = userVips.length
+    ? userVips.map(item => {
+      const pkg = getVipByLevel(item.vip_level);
+      return `
+        <div class="list-item">
+          <div class="action-row" style="justify-content:space-between;margin-top:0">
+            <b>${escapeHtml(pkg?.name || `VIP ${item.vip_level}`)}</b>
+            ${getStatusTag(item.status)}
+          </div>
+          <small>Göndərilib: ${formatDateTime(item.created_at)}${item.expires_at ? ` • Bitir: ${formatDate(item.expires_at)}` : ""}</small>
+        </div>
+      `;
+    }).join("")
+    : '<div class="empty">VIP tarixçəsi boşdur.</div>';
+}
+function getEligibility(level){
+  const vipLevel = Number(activeVip?.vip_level || 0);
+  const vipOk = vipLevel >= level.requiredVipLevel;
+  const referralsOk = activeReferralCount >= level.requiredReferrals;
+  const pending = leadershipRequests.some(item => Number(item.level) === Number(level.level) && String(item.status).toLowerCase() === "pending");
+  const approved = activeLeadership && Number(activeLeadership.level) >= Number(level.level);
+  return { vipOk, referralsOk, pending, approved, ready: vipOk && referralsOk && !pending && !approved };
+}
+function renderLeadershipPage(){
+  const currentLeader = activeLeadership ? getLeadershipByLevel(activeLeadership.level) : null;
+  document.getElementById("leadershipSummary").innerHTML = currentLeader
+    ? `
+      <div class="info">
+        <div><b>${currentLeader.icon} ${escapeHtml(currentLeader.name)}</b> səviyyəsindəsən.</div>
+        <div>Gündəlik rəhbərlik qazancı: <b>${formatCurrency(currentLeader.dailyBonus)}</b></div>
+        <div>Hər yeni referal bonusu: <b>${formatCurrency(currentLeader.referralBonus)}</b></div>
+      </div>
+    `
+    : '<div class="empty">Hələ təsdiqlənmiş rəhbərlik səviyyən yoxdur.</div>';
+
+  document.getElementById("leadershipReferralInfo").innerHTML = `
+    <div class="row"><span class="muted">Aktiv VIP səviyyən</span><b>${activeVip ? escapeHtml(activeVip.name || `VIP ${activeVip.vip_level}`) : "VIP yoxdur"}</b></div>
+    <div class="row"><span class="muted">Aktiv referal sayı</span><b>${activeReferralCount}</b></div>
+    <div class="row"><span class="muted">Ümumi referal</span><b>${referredProfiles.length}</b></div>
+    <div class="row"><span class="muted">Gözləyən sorğular</span><b>${leadershipRequests.filter(item => String(item.status).toLowerCase() === "pending").length}</b></div>
+  `;
+
+  document.getElementById("leadershipLevels").innerHTML = LEADERSHIP_LEVELS.map(level => {
+    const eligibility = getEligibility(level);
+    return `
+      <div class="lead-card ${eligibility.ready ? "ready" : ""}">
+        <h3>${level.icon} ${escapeHtml(level.name)}</h3>
+        <div class="lead-meta">
+          <div>Şərt: <b>VIP ${level.requiredVipLevel}</b> + <b>${level.requiredReferrals} aktiv referal</b></div>
+          <div>Gündəlik qazanc: <b>${formatCurrency(level.dailyBonus)}</b></div>
+          <div>Hər yeni referal: <b>${formatCurrency(level.referralBonus)}</b></div>
+          <div>${eligibility.vipOk ? "✅ VIP şərti tamamdır" : `⏳ VIP ${level.requiredVipLevel} tələb olunur`}</div>
+          <div>${eligibility.referralsOk ? "✅ Referal şərti tamamdır" : `⏳ ${level.requiredReferrals - activeReferralCount} aktiv referal çatmır`}</div>
+        </div>
+        <div class="action-row">
+          ${eligibility.approved
+            ? '<button class="success" disabled>Təsdiqlənib</button>'
+            : eligibility.pending
+            ? '<button class="secondary" disabled>Sorğu gözləyir</button>'
+            : `<button class="${eligibility.ready ? "main" : "outline"}" onclick="openLeadershipModal(${level.level})">${eligibility.ready ? "Rəhbər ol" : "Şərtləri yoxla"}</button>`}
+        </div>
       </div>
     `;
   }).join("");
 }
-
-function openLeaderModal(levelName){
-  const level = LEVELS.find(x => x.name === levelName);
-  if(!level) return;
-
-  selectedLeaderLevel = level;
-
-  const needRef = Math.max(0, level.referrals - activeReferralsGlobal);
-
-  const referralInvestReadyText = activeReferralsGlobal >= level.referrals
-    ? `✅ Referal sayı şərti tamamdır (${activeReferralsGlobal}/${level.referrals})`
-    : `⏳ Referal sayı: ${activeReferralsGlobal}/${level.referrals} (çatışmır: ${needRef})`;
-
-  const ownInvestReadyText = approvedInvestmentGlobal >= level.own
-    ? `✅ Öz yatırım şərti tamamdır`
-    : `⏳ Öz yatırım şərti tamamlanmayıb`;
-
-  document.getElementById("leaderModalTitle").innerText = `${level.name} üçün sorğu`;
-  document.getElementById("leaderModalBody").innerHTML = `
-    <div><b>Şərtlər:</b></div>
-    <div>• Öz yatırım: ${level.own} $</div>
-    <div>• Aktiv referal: ${level.referrals} nəfər</div>
-    <div>• Hər referalın yatırımı: ${level.referralInvestment} $</div>
-    <hr style="border-color:#263247;opacity:.4">
-    <div>${ownInvestReadyText}</div>
-    <div>${referralInvestReadyText}</div>
-    <div style="margin-top:8px" class="muted">Tamam olduqda sorğunu göndər, admin təsdiqləsin.</div>
+function renderMissionPage(){
+  const missionState = getMissionState();
+  const vipInfo = activeVip ? getVipByLevel(activeVip.vip_level) : null;
+  document.getElementById("missionOverview").innerHTML = `
+    <div class="row"><span class="muted">Tamamlanan günlər</span><b>${missionState.completedCount}/22</b></div>
+    <div class="row"><span class="muted">Cari gün</span><b>${missionState.finished ? "Tamamlandı" : `${missionState.currentDay}. gün`}</b></div>
+    <div class="row"><span class="muted">Aktiv VIP</span><b>${activeVip ? escapeHtml(activeVip.name || `VIP ${activeVip.vip_level}`) : "VIP yoxdur"}</b></div>
+    <div class="row"><span class="muted">Bugünkü bonus</span><b>${formatCurrency(1 + Number(vipInfo?.daily_earnings || 0))}</b></div>
+    <div class="mini-note section-spacer">Missiya yalnız aktiv VIP sahibləri üçündür. 22-ci gün tamamlandıqda xüsusi mükafat bildirişi göndərilir.</div>
   `;
 
-  document.getElementById("leaderRequestNote").value = "";
-  document.getElementById("leaderModalBackdrop").style.display = "flex";
-  refreshLeaderModalState();
+  const canStart = !!activeVip && !missionState.finished && !missionState.completedToday && !missionTimer;
+  document.getElementById("missionCurrent").innerHTML = !activeVip
+    ? '<div class="empty">Missiyaları başlamaq üçün əvvəlcə aktiv VIP lazımdır.</div>'
+    : missionState.finished
+    ? '<div class="info green">🎉 22 günlük missiya tam bitib. Xüsusi mükafat bildirişi hesabında qeyd edildi.</div>'
+    : `
+      <div class="info">
+        <div><b>${missionState.currentDay}. gün missiyası</b></div>
+        <div>Bu gün 60 saniyəlik aktivliyi tamamla.</div>
+        <div>Qazanc: <b>${formatCurrency(vipInfo?.daily_earnings || 0)}</b> VIP gəliri + <b>1.00 AZN</b> bonus</div>
+      </div>
+      <div class="countdown">${missionTimer ? missionCountdown : MISSION_SECONDS}</div>
+      <div class="action-row">
+        <button class="main" ${canStart ? "" : "disabled"} onclick="startMission()">${missionTimer ? "Missiya davam edir" : missionState.completedToday ? "Bu gün tamamlanıb" : "Missiyanı başlat"}</button>
+      </div>
+    `;
+
+  document.getElementById("missionCalendar").innerHTML = Array.from({length:22},(_,index)=>index+1).map(day => {
+    const completed = missions.some(item => Number(item.day) === day);
+    const current = day === missionState.currentDay && !missionState.finished;
+    const status = completed ? "Tamamlandı" : current ? "Bugün" : "Gözləyir";
+    const className = `mission-slot ${completed ? "completed" : current ? "current" : "locked"}`;
+    return `
+      <div class="${className}">
+        <div class="mission-day">${day}</div>
+        <div>${status}</div>
+        <small class="muted">${day === 22 ? "Xüsusi mükafat" : "+1 AZN bonus"}</small>
+      </div>
+    `;
+  }).join("");
 }
-
-function closeLeaderModal(){
-  document.getElementById("leaderModalBackdrop").style.display = "none";
-  selectedLeaderLevel = null;
-}
-
-async function submitLeaderRequest(){
-  if(!selectedLeaderLevel || !user) return;
-  if(!canSendLeaderRequest(selectedLeaderLevel)){
-    alert("Şərtlər tamamlanmayıb.");
-    return;
-  }
-
-  const note = (document.getElementById("leaderRequestNote").value || "").trim();
-  const btn = document.getElementById("sendLeaderBtn");
-  btn.disabled = true;
-
-  const {error} = await supabaseClient.from("leader_requests").insert({
-    user_id: user.id,
-    level_name: selectedLeaderLevel.name,
-    status: "pending",
-    note: note || null
-  });
-
-  btn.disabled = false;
-
-  if(error){
-    alert("Sorğu göndərilmədi: " + error.message);
-    refreshLeaderModalState();
-    return;
-  }
-
-  alert("Sorğu göndərildi ✅ Admin yoxlayıb təsdiqləyəcək.");
-  closeLeaderModal();
-}
-
-async function loadAdminLeaderRequests(){
-  if(!user || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return;
-  const box = document.getElementById("adminLeaders");
-  if(!box) return;
-
-  const {data,error} = await supabaseClient
-    .from("leader_requests")
-    .select("id,user_id,level_name,status,note,created_at")
-    .order("created_at",{ascending:false});
-
-  if(error){
-    box.innerHTML = `<p class="msg">${escapeHtml(error.message)}</p>`;
-    return;
-  }
-
-  const list = (data || []).filter(x => String(x.status||"").toLowerCase() === "pending");
-
-  box.innerHTML =
-    list.length
-    ? list.map(x=>`
-      <div class="admin-item">
-        <div class="row"><span>İstifadəçi</span><b style="word-break:break-all;font-size:12px">${escapeHtml(x.user_id)}</b></div>
-        <div class="row"><span>Səviyyə</span><b>${escapeHtml(x.level_name)}</b></div>
-        <div class="row"><span>Qeyd</span><b>${escapeHtml(x.note || "—")}</b></div>
-        <div class="row"><span>Tarix</span><b>${new Date(x.created_at).toLocaleString("az-AZ")}</b></div>
-        <button class="approve-btn" onclick="approveLeaderRequest('${escapeHtml(x.id)}','${escapeHtml(x.user_id)}','${escapeHtml(x.level_name)}')">Təsdiqlə ✅</button>
-        <button class="reject-btn" onclick="rejectLeaderRequest('${escapeHtml(x.id)}')">Rədd et ❌</button>
+function renderNotificationsPage(){
+  document.getElementById("notificationsList").innerHTML = notifications.length
+    ? notifications.map(item => `
+      <div class="list-item">
+        <div><b>${escapeHtml(item.message)}</b>${item.read ? "" : '<span class="unread-dot"></span>'}</div>
+        <small>${formatDateTime(item.created_at)} • ${escapeHtml(item.type || "bildiriş")}</small>
       </div>
     `).join("")
-    : "<p class='muted'>Gözləyən rəhbərlik sorğusu yoxdur.</p>";
+    : '<div class="empty">Hələ bildiriş yoxdur.</div>';
 }
+function renderAccountPage(){
+  document.getElementById("accountEmail").innerText = user?.email || "—";
+  document.getElementById("accountBalance").innerText = formatCurrency(getActiveBalance());
+  document.getElementById("accountVipStatus").innerText = activeVip ? "Aktiv VIP var" : "VIP yoxdur";
+  document.getElementById("accountActiveVip").innerText = activeVip ? `${activeVip.name || `VIP ${activeVip.vip_level}`} • ${daysRemaining(activeVip.expires_at)} gün` : "—";
+  document.getElementById("accountLeader").innerText = activeLeadership ? `${getLeadershipByLevel(activeLeadership.level)?.icon || "🏆"} ${getLeadershipByLevel(activeLeadership.level)?.name || "Rəhbərlik"}` : "Rəhbərlik yoxdur";
+  document.getElementById("accountReferralCode").innerText = profile?.referral_code || "—";
+  document.getElementById("accountReferralLink").innerText = buildRegisterLink(profile?.referral_code || "");
 
-async function approveLeaderRequest(requestId, targetUserId, levelName){
-  const {error:e1} = await supabaseClient.from("leader_requests").update({status:"approved"}).eq("id",requestId);
-  if(e1){ alert("Sorğu təsdiqlənmədi: " + e1.message); return; }
+  document.getElementById("earningsHistory").innerHTML = earnings.length
+    ? earnings.slice(0,20).map(item => `
+      <div class="list-item">
+        <div class="action-row" style="justify-content:space-between;margin-top:0">
+          <b>${escapeHtml(item.description || "Qazanc")}</b>
+          <span class="green">+${formatCurrency(item.amount)}</span>
+        </div>
+        <small>${formatDateTime(item.created_at)}</small>
+      </div>
+    `).join("")
+    : '<div class="empty">Hələ qazanc yazılmayıb.</div>';
 
-  const {error:e2} = await supabaseClient
-    .from("profiles")
-    .update({current_level: levelName, target_level: levelName})
-    .eq("id",targetUserId);
-
-  if(e2){ alert("Profil yenilənmədi: " + e2.message); return; }
-
-  await loadAdminLeaderRequests();
+  document.getElementById("withdrawHistory").innerHTML = withdrawRequests.length
+    ? withdrawRequests.map(item => `
+      <div class="list-item">
+        <div class="action-row" style="justify-content:space-between;margin-top:0">
+          <b>${formatCurrency(item.amount)}</b>
+          ${getStatusTag(item.status)}
+        </div>
+        <small>${formatDateTime(item.created_at)} • ${escapeHtml(item.method === "bank_card" ? "Bank kartı" : "Binance ID")}</small>
+      </div>
+    `).join("")
+    : '<div class="empty">Çıxarış tarixçəsi boşdur.</div>';
 }
-
-async function rejectLeaderRequest(requestId){
-  const {error} = await supabaseClient.from("leader_requests").update({status:"rejected"}).eq("id",requestId);
-  if(error){ alert("Rədd alınmadı: " + error.message); return; }
-  await loadAdminLeaderRequests();
+function getProfileEmail(userId){
+  if(userId === user?.id) return user?.email || profile?.email || "—";
+  const match = adminData.profiles.find(item => item.id === userId);
+  return match?.email || userId || "—";
 }
-
-function fillLevelAccountInfo(){
-  const targetEl = document.getElementById("targetLevel");
-  const currentEl = document.getElementById("currentLevelView");
-
-  if(targetEl) targetEl.innerText = profile?.target_level || "Seçilməyib";
-  if(currentEl) currentEl.innerText = profile?.current_level || "Yeni istifadəçi";
+async function adminGetReferralCount(targetUserId){
+  const targetProfile = adminData.profiles.find(item => item.id === targetUserId);
+  if(!targetProfile?.referral_code) return 0;
+  const { data: referrals } = await supabaseClient.from("profiles").select("id").eq("referred_by", targetProfile.referral_code);
+  const ids = (referrals || []).map(item => item.id);
+  if(!ids.length) return 0;
+  const { data: vipRows } = await supabaseClient.from("user_vips").select("user_id,status,expires_at").in("user_id", ids).eq("status","active");
+  return new Set((vipRows || []).filter(item => !item.expires_at || new Date(item.expires_at).getTime() > Date.now()).map(item => item.user_id)).size;
 }
+function renderAdminPage(){
+  if(!isAdmin()) return;
+  const onlineUsers = adminData.presence.filter(item => new Date(item.last_seen || 0).getTime() >= Date.now() - ONLINE_WINDOW_MS).length;
+  const todayStart = startOfToday().getTime();
+  const todaysVipActivations = adminData.vipRequests.filter(item => String(item.status).toLowerCase() === "active" && new Date(item.purchased_at || item.created_at || 0).getTime() >= todayStart);
+  const todaysVipSales = todaysVipActivations.reduce((sum,item)=>sum + Number(getVipByLevel(item.vip_level)?.price || 0),0);
+  const todaysNewUsers = adminData.profiles.filter(item => item.created_at && new Date(item.created_at).getTime() >= todayStart).length;
+  document.getElementById("adminStats").innerHTML = [
+    { label:"🟢 Hazırda onlayn istifadəçilər", value:String(onlineUsers), note:"Son 5 dəqiqədə aktiv görünən istifadəçilər" },
+    { label:"💰 Bugünkü ümumi VIP satışları", value:formatCurrency(todaysVipSales), note:"Bu gün aktivləşdirilən VIP paketləri" },
+    { label:"🏆 Bugünkü aktivləşdirilən VIP-lər", value:String(todaysVipActivations.length), note:"Təsdiqlənmiş VIP aktivləşdirmələri" },
+    { label:"👥 Bugünkü yeni istifadəçilər", value:String(todaysNewUsers), note:"Profil yaradılan hesablar" }
+  ].map(item => `
+    <div class="stat">
+      <div class="muted">${item.label}</div>
+      <div class="value yellow">${escapeHtml(item.value)}</div>
+      <div class="mini-note">${escapeHtml(item.note)}</div>
+    </div>
+  `).join("");
 
-function updateStatusDisplay(){
-  const current = getCurrentLevel();
-
-  const label =
-    current
-    ? current.name
-    : approvedInvestmentGlobal > 0
-    ? "Aktiv istifadəçi"
-    : "Yeni istifadəçi";
-
-  const status = document.getElementById("status");
-  const accountStatus = document.getElementById("accountStatus");
-
-  if(status){
-    status.innerText = label;
-    status.className = "value " + (current ? "yellow" : "green");
-  }
-
-  if(accountStatus){
-    accountStatus.innerText = label;
-    accountStatus.className = current ? "yellow" : "green";
-  }
-
-  const newCurrent = current ? current.name : null;
-
-  if(profile && profile.current_level !== newCurrent){
-    supabaseClient
-      .from("profiles")
-      .update({ current_level: newCurrent })
-      .eq("id", user.id)
-      .then(async()=>{
-        await loadProfile();
-        fillLevelAccountInfo();
-      })
-      .catch(()=>{});
-  }
-
-  fillLevelAccountInfo();
-  renderLevels();
-  refreshLeaderModalState();
-}
-
-async function loadReferral(){
-  if(!profile) return;
-
-  const code = profile.referral_code || "—";
-  document.getElementById("referralCode").innerText = code;
-  document.getElementById("accountRef").innerText = code;
-
-  const refLinkEl = document.getElementById("refLink");
-  if(refLinkEl) refLinkEl.innerText = buildRegisterLink(code);
-
-  const {data,error} = await supabaseClient.from("profiles").select("id").eq("referred_by",code);
-  if(error){ console.error("loadReferral:", error); return; }
-
-  activeReferralsGlobal = (data || []).length;
-  document.getElementById("refCount").innerText = activeReferralsGlobal;
-
-  updateStatusDisplay();
-}
-
-async function loadEarnings(){
-  const {data,error} = await supabaseClient.from("earnings").select("*").eq("user_id",user.id).order("created_at",{ascending:false});
-  if(error){ console.error("loadEarnings:", error); return; }
-
-  let sum = 0;
-  (data || []).forEach(x=>{ sum += Number(x.amount || 0); });
-  totalEarningsGlobal = sum;
-
-  document.getElementById("balance").innerText = sum.toFixed(2) + " $";
-  document.getElementById("total").innerText = sum.toFixed(2) + " $";
-
-  document.getElementById("history").innerHTML =
-    data && data.length
-    ? data.map(x=>`<div class="row"><span>${escapeHtml(x.description || "Qazanc")}</span><b class="green">+${Number(x.amount || 0).toFixed(2)} $</b></div>`).join("")
-    : "<p class='muted'>Hələ qazanc yoxdur.</p>";
-
-  updateStatusDisplay();
-}
-
-function renderTaskLocked(){
-  document.getElementById("taskArea").innerHTML = `<div class="info yellow">⏳ Yatırım sorğusu təsdiq gözləyir.</div>`;
-}
-function renderTaskReady(){
-  document.getElementById("taskArea").innerHTML = `
-    <div class="info green">✅ Yatırım təsdiqlənib. Fəaliyyət açıqdır.</div>
-    <button id="startTaskBtn" class="main" onclick="startTask()">Fəaliyyətə Başla</button>
-    <div id="countdownBox" class="info hidden" style="margin-top:10px">⏱ Qaldı: <b id="countdown">30</b> saniyə</div>
-    <div id="taskMsg" class="msg" style="color:#40dc91"></div>
-  `;
-}
-function sameDayUTC(a,b){
-  const d1=new Date(a), d2=new Date(b);
-  return d1.getUTCFullYear()===d2.getUTCFullYear() && d1.getUTCMonth()===d2.getUTCMonth() && d1.getUTCDate()===d2.getUTCDate();
-}
-async function startTask(){
-  if(countdownTimer) return;
-
-  const btn=document.getElementById("startTaskBtn");
-  const box=document.getElementById("countdownBox");
-  const cd=document.getElementById("countdown");
-  const msg=document.getElementById("taskMsg");
-  if(!btn || !box || !cd || !msg) return;
-
-  msg.innerText="";
-  const {data:prof,error}=await supabaseClient.from("profiles").select("last_task_at").eq("id",user.id).maybeSingle();
-  if(error){ msg.style.color="#ff7777"; msg.innerText="Profil oxunmadı: " + error.message; return; }
-
-  if(prof?.last_task_at && sameDayUTC(prof.last_task_at,new Date().toISOString())){
-    msg.style.color="#ffd166"; msg.innerText="Bu gün artıq fəaliyyət etmisən. Sabah yenidən et."; return;
-  }
-
-  btn.disabled=true;
-  box.classList.remove("hidden");
-  countdownLeft=30;
-  cd.innerText="30";
-
-  if(countdownTimer) clearInterval(countdownTimer);
-
-  countdownTimer=setInterval(async()=>{
-    countdownLeft--;
-    cd.innerText=String(countdownLeft);
-
-    if(countdownLeft<=0){
-      clearInterval(countdownTimer);
-      countdownTimer=null;
-
-      const dailyAmount = await getUserDailyAmount(user.id);
-
-      const {error:e1}=await supabaseClient.from("earnings").insert({
-        user_id:user.id,
-        amount: dailyAmount,
-        description:"30 saniyəlik fəaliyyət tapşırığı"
-      });
-      if(e1){ msg.style.color="#ff7777"; msg.innerText="Qazanc yazılmadı: " + e1.message; btn.disabled=false; return; }
-
-      const {error:e2}=await supabaseClient.from("profiles").update({last_task_at:new Date().toISOString()}).eq("id",user.id);
-      if(e2){ msg.style.color="#ff7777"; msg.innerText="Tarix yenilənmədi: " + e2.message; btn.disabled=false; return; }
-
-      msg.style.color="#40dc91";
-      msg.innerText=`✅ Tapşırıq tamamlandı. Balansına +${Number(dailyAmount).toFixed(2)}$ əlavə olundu.`;
-      await loadEarnings();
-    }
-  },1000);
-}
-
-async function loadInvestment(){
-  const {data,error}=await supabaseClient.from("investments").select("id,amount,status,created_at").eq("user_id",user.id).order("created_at",{ascending:false});
-  if(error){ console.error("loadInvestment:", error); return; }
-
-  const list=data || [];
-  const approved=list.filter(x=>String(x.status||"").toLowerCase().trim()==="approved");
-  approvedInvestmentGlobal=approved.reduce((sum,x)=>sum + Number(x.amount||0),0);
-
-  const hasApproved=approved.length>0;
-  if(hasApproved){
-    const countdownBoxEl=document.getElementById("countdownBox");
-    const isCountingDown=!!countdownTimer && countdownBoxEl && !countdownBoxEl.classList.contains("hidden");
-    if(!isCountingDown) renderTaskReady();
-  } else if(list.length){
-    renderTaskLocked();
-  } else {
-    document.getElementById("taskArea").innerHTML=`<div class="info">Yatırım etdikdən sonra fəaliyyət açılacaq.</div>`;
-  }
-
-  updateStatusDisplay();
-
-  document.getElementById("investHistory").innerHTML =
-    list.length
-    ? list.map(x=>{
-      const st=String(x.status||"pending").toLowerCase().trim();
-      const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
-      const label=st==="approved"?"təsdiqləndi":st==="rejected"?"rədd edildi":"gözlənilir";
-      return `<div class="row"><span>${new Date(x.created_at).toLocaleString("az-AZ")}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ — ${label}</b></div>`;
-    }).join("")
-    : "<p class='muted'>Yatırım tarixçəsi boşdur.</p>";
-}
-
-async function invest(){
-  const amount=Number(document.getElementById("investAmount").value || 0);
-  const fileInput=document.getElementById("receipt");
-  const file=fileInput.files[0];
-  const msg=document.getElementById("investMsg");
-
-  if(amount<20){ msg.style.color="#ff7777"; msg.innerText="Minimum 20$ olmalıdır."; return; }
-
-  msg.style.color="#ffd166";
-  msg.innerText="Göndərilir...";
-  let receipt_url=null;
-
-  if(file){
-    const ALLOWED_EXT=["jpg","jpeg","png","gif","webp","pdf"];
-    const ALLOWED_MIME=["image/jpeg","image/png","image/gif","image/webp","application/pdf"];
-    const ext=(file.name.split(".").pop() || "").toLowerCase();
-
-    if(!ALLOWED_EXT.includes(ext) || !ALLOWED_MIME.includes(file.type)){
-      msg.style.color="#ff7777";
-      msg.innerText="Yalnız jpg, png, gif, webp və pdf faylları qəbul edilir.";
-      return;
-    }
-
-    const uid=(typeof crypto!=="undefined" && crypto.randomUUID) ? crypto.randomUUID() : Date.now()+"-"+Math.random().toString(36).substring(2);
-    const fileName=user.id + "/" + uid + "." + ext;
-
-    const {error:uploadError}=await supabaseClient.storage.from("receipts").upload(fileName,file,{upsert:false});
-    if(uploadError){ msg.style.color="#ff7777"; msg.innerText="Çek yüklənmədi: " + uploadError.message; return; }
-
-    const {data:urlData}=supabaseClient.storage.from("receipts").getPublicUrl(fileName);
-    receipt_url=urlData?.publicUrl || null;
-  }
-
-  const {error}=await supabaseClient.from("investments").insert({user_id:user.id,amount,status:"pending",receipt_url});
-  if(error){ msg.style.color="#ff7777"; msg.innerText="Xəta: " + error.message; return; }
-
-  msg.style.color="#40dc91";
-  msg.innerText="Sorğu göndərildi. Admin təsdiqi gözlənilir.";
-
-  document.getElementById("investAmount").value="";
-  fileInput.value="";
-  await loadInvestment();
-}
-
-/* WITHDRAW */
-async function requestWithdraw(){
-  const amount=Number(document.getElementById("withdrawAmount").value || 0);
-  const method=document.getElementById("withdrawMethod").value;
-  const accountInfo=(document.getElementById("withdrawAccountInfo").value || "").trim();
-  const msg=document.getElementById("withdrawMsg");
-
-  if(amount<4){ msg.style.color="#ff7777"; msg.innerText="Minimum çıxarış 4$ olmalıdır."; return; }
-  if(amount>totalEarningsGlobal){ msg.style.color="#ff7777"; msg.innerText="Balansda kifayət qədər vəsait yoxdur."; return; }
-  if(!["bank_card","binance_id"].includes(method)){ msg.style.color="#ff7777"; msg.innerText="Yalnız Bank kartı və Binance ID icazəlidir."; return; }
-  if(!accountInfo){ msg.style.color="#ff7777"; msg.innerText="Kart nömrəsi və ya Binance ID daxil edin."; return; }
-
-  msg.style.color="#ffd166";
-  msg.innerText="Sorğu göndərilir...";
-
-  const {error}=await supabaseClient.from("withdraw_requests").insert({
-    user_id:user.id, amount, method, account_info:accountInfo, status:"pending"
-  });
-
-  if(error){ msg.style.color="#ff7777"; msg.innerText="Xəta: " + error.message; return; }
-
-  msg.style.color="#40dc91";
-  msg.innerText="Çıxarış sorğunuz göndərildi.";
-
-  document.getElementById("withdrawAmount").value="";
-  document.getElementById("withdrawAccountInfo").value="";
-  await loadWithdrawHistory();
-}
-
-async function loadWithdrawHistory(){
-  const box=document.getElementById("withdrawHistory");
-  if(!box || !user) return;
-
-  const {data,error}=await supabaseClient.from("withdraw_requests").select("id,amount,method,account_info,status,created_at").eq("user_id",user.id).order("created_at",{ascending:false});
-  if(error){ box.innerHTML=`<p class="msg">${escapeHtml(error.message)}</p>`; return; }
-
-  const list=data || [];
-  box.innerHTML =
-    list.length
-    ? list.map(x=>{
-      const st=String(x.status||"pending").toLowerCase().trim();
-      const cls=st==="approved"?"paid":st==="rejected"?"rejected":"pending";
-      const label=st==="approved"?"təsdiqləndi":st==="rejected"?"rədd edildi":"gözlənilir";
-      const methodLabel=x.method==="bank_card"?"Bank kartı":"Binance ID";
-      return `<div class="row"><span>${new Date(x.created_at).toLocaleString("az-AZ")} • ${methodLabel}</span><b class="${cls}">${Number(x.amount||0).toFixed(2)} $ — ${label}</b></div>`;
-    }).join("")
-    : "<p class='muted'>Çıxarış tarixçəsi boşdur.</p>";
-}
-
-async function loadAdminWithdrawRequests(){
-  if(!user || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return;
-  const box=document.getElementById("adminWithdraw");
-  if(!box) return;
-
-  const {data,error}=await supabaseClient.from("withdraw_requests").select("id,user_id,amount,method,account_info,status,created_at").order("created_at",{ascending:false});
-  if(error){ box.innerHTML=`<p class="msg">${escapeHtml(error.message)}</p>`; return; }
-
-  const list=(data || []).filter(x=>String(x.status||"").toLowerCase().trim()==="pending");
-  box.innerHTML =
-    list.length
-    ? list.map(x=>{
-      const safeId=escapeHtml(x.id);
-      const safeUserId=escapeHtml(x.user_id);
-      const safeAmount=Number(x.amount||0).toFixed(2);
-      const safeDate=new Date(x.created_at).toLocaleString("az-AZ");
-      const methodLabel=x.method==="bank_card"?"Bank kartı":"Binance ID";
+  const pendingVip = adminData.vipRequests.filter(item => String(item.status).toLowerCase() === "pending");
+  document.getElementById("adminVipRequests").innerHTML = pendingVip.length
+    ? pendingVip.map(item => {
+      const pkg = getVipByLevel(item.vip_level);
       return `
         <div class="admin-item">
-          <div class="row"><span>İstifadəçi</span><b style="word-break:break-all;font-size:12px">${safeUserId}</b></div>
-          <div class="row"><span>Məbləğ</span><b>${safeAmount} $</b></div>
-          <div class="row"><span>Üsul</span><b>${methodLabel}</b></div>
-          <div class="row"><span>Rekvizit</span><b style="word-break:break-all">${escapeHtml(x.account_info)}</b></div>
-          <div class="row"><span>Tarix</span><b>${safeDate}</b></div>
-          <button class="approve-btn" onclick="approveWithdraw('${safeId}')">Təsdiqlə ✅</button>
-          <button class="reject-btn" onclick="rejectWithdraw('${safeId}')">Rədd et ❌</button>
+          <div class="row"><span>İstifadəçi</span><b style="word-break:break-all">${escapeHtml(getProfileEmail(item.user_id))}</b></div>
+          <div class="row"><span>VIP</span><b>${escapeHtml(pkg?.name || `VIP ${item.vip_level}`)}</b></div>
+          <div class="row"><span>Məbləğ</span><b>${formatCurrency(pkg?.price || 0)}</b></div>
+          <div class="row"><span>Göndərilmə tarixi</span><b>${formatDateTime(item.created_at)}</b></div>
+          <div class="row"><span>Çek</span><b>${item.receipt_url ? `<a href="${escapeHtml(item.receipt_url)}" target="_blank" rel="noopener noreferrer">Çekə bax</a>` : "Yoxdur"}</b></div>
+          <div class="action-row">
+            <button class="success" onclick="approveVipRequest('${escapeHtml(item.id)}')">Təsdiqlə</button>
+            <button class="danger" onclick="rejectVipRequest('${escapeHtml(item.id)}')">Rədd et</button>
+          </div>
         </div>
       `;
     }).join("")
-    : "<p class='muted'>Gözləyən çıxarış sorğusu yoxdur.</p>";
-}
+    : '<div class="empty">Gözləyən VIP sorğusu yoxdur.</div>';
 
+  const pendingLeadership = adminData.leadershipRequests.filter(item => String(item.status).toLowerCase() === "pending");
+  document.getElementById("adminLeadershipRequests").innerHTML = pendingLeadership.length
+    ? pendingLeadership.map(item => {
+      const level = getLeadershipByLevel(item.level);
+      return `
+        <div class="admin-item">
+          <div class="row"><span>İstifadəçi</span><b style="word-break:break-all">${escapeHtml(getProfileEmail(item.user_id))}</b></div>
+          <div class="row"><span>Səviyyə</span><b>${level ? `${level.icon} ${escapeHtml(level.name)}` : `Səviyyə ${item.level}`}</b></div>
+          <div class="row"><span>Qeyd</span><b>${escapeHtml(item.note || "—")}</b></div>
+          <div class="row"><span>Tarix</span><b>${formatDateTime(item.created_at)}</b></div>
+          <div class="action-row">
+            <button class="success" onclick="approveLeadershipRequest('${escapeHtml(item.id)}')">Təsdiqlə</button>
+            <button class="danger" onclick="rejectLeadershipRequest('${escapeHtml(item.id)}')">Rədd et</button>
+          </div>
+        </div>
+      `;
+    }).join("")
+    : '<div class="empty">Gözləyən rəhbərlik sorğusu yoxdur.</div>';
+
+  const pendingWithdraws = adminData.withdrawRequests.filter(item => String(item.status).toLowerCase() === "pending");
+  document.getElementById("adminWithdrawRequests").innerHTML = pendingWithdraws.length
+    ? pendingWithdraws.map(item => `
+      <div class="admin-item">
+        <div class="row"><span>İstifadəçi</span><b style="word-break:break-all">${escapeHtml(getProfileEmail(item.user_id))}</b></div>
+        <div class="row"><span>Məbləğ</span><b>${formatCurrency(item.amount)}</b></div>
+        <div class="row"><span>Üsul</span><b>${escapeHtml(item.method === "bank_card" ? "Bank kartı" : "Binance ID")}</b></div>
+        <div class="row"><span>Rekvizit</span><b style="word-break:break-all">${escapeHtml(item.account_info || "—")}</b></div>
+        <div class="row"><span>Tarix</span><b>${formatDateTime(item.created_at)}</b></div>
+        <div class="action-row">
+          <button class="success" onclick="approveWithdraw('${escapeHtml(item.id)}')">Təsdiqlə</button>
+          <button class="danger" onclick="rejectWithdraw('${escapeHtml(item.id)}')">Rədd et</button>
+        </div>
+      </div>
+    `).join("")
+    : '<div class="empty">Gözləyən çıxarış sorğusu yoxdur.</div>';
+
+  document.getElementById("adminAuditLogs").innerHTML = adminData.auditLogs.length
+    ? adminData.auditLogs.map(item => {
+      const amount = item.details?.amount ? ` • Məbləğ: ${formatCurrency(item.details.amount)}` : "";
+      return `
+        <div class="list-item">
+          <div><b>${escapeHtml(item.action)}</b> • ${escapeHtml(getProfileEmail(item.user_id))}${amount}</div>
+          <small>${formatDateTime(item.created_at)}</small>
+        </div>
+      `;
+    }).join("")
+    : '<div class="empty">Audit jurnalı boşdur.</div>';
+}
+function renderAll(){
+  renderHeader();
+  renderDashboard();
+  renderVipPage();
+  renderLeadershipPage();
+  renderMissionPage();
+  renderNotificationsPage();
+  renderAccountPage();
+  renderAdminPage();
+}
+function openVipModal(level){
+  const pkg = getVipByLevel(level);
+  if(!pkg || pkg.locked) return;
+  selectedVipPackage = pkg;
+  setMessage("vipModalMsg", "", "var(--green)");
+  document.getElementById("vipReceiptInput").value = "";
+  document.getElementById("vipRequestNote").value = "";
+  document.getElementById("vipModalTitle").innerText = `${pkg.name} aktivləşdir`;
+  document.getElementById("vipModalBody").innerHTML = `
+    <div><b>Qiymət:</b> ${formatCurrency(pkg.price)}</div>
+    <div><b>Müddət:</b> ${pkg.days_valid} gün</div>
+    <div><b>Gündəlik qazanc:</b> ${formatCurrency(pkg.daily_earnings)}</div>
+    <div class="mini-note" style="margin-top:8px">Çeki yüklədikdən sonra sorğu adminə düşəcək və təsdiqdən sonra VIP avtomatik aktivləşəcək.</div>
+  `;
+  document.getElementById("vipModalBackdrop").style.display = "flex";
+}
+function closeVipModal(){
+  document.getElementById("vipModalBackdrop").style.display = "none";
+  selectedVipPackage = null;
+}
+async function uploadReceipt(file){
+  const allowedExt = ["jpg","jpeg","png","gif","webp","pdf"];
+  const allowedMime = ["image/jpeg","image/png","image/gif","image/webp","application/pdf"];
+  if(!file) throw new Error("Çek faylı seçilməyib.");
+  const ext = (file.name.split(".").pop() || "").toLowerCase();
+  if(!allowedExt.includes(ext) || (file.type && !allowedMime.includes(file.type))){
+    throw new Error("Yalnız jpg, png, gif, webp və pdf faylları qəbul edilir.");
+  }
+  const uid = (typeof crypto !== "undefined" && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const fileName = `${user.id}/${uid}.${ext}`;
+  const { error } = await supabaseClient.storage.from(RECEIPT_BUCKET).upload(fileName, file, { upsert:false });
+  if(error) throw error;
+  const { data } = supabaseClient.storage.from(RECEIPT_BUCKET).getPublicUrl(fileName);
+  return data?.publicUrl || null;
+}
+async function submitVipRequest(){
+  if(!selectedVipPackage) return;
+  const file = document.getElementById("vipReceiptInput").files[0];
+  const note = (document.getElementById("vipRequestNote").value || "").trim();
+  const btn = document.getElementById("vipModalAction");
+  btn.disabled = true;
+  try{
+    if(getPendingVipRequest()) throw new Error("Hazırda gözləyən VIP sorğun var.");
+    const receiptUrl = await uploadReceipt(file);
+    const { error } = await supabaseClient.from("user_vips").insert({
+      user_id:user.id,
+      vip_level:selectedVipPackage.level,
+      purchased_at:new Date().toISOString(),
+      status:"pending",
+      receipt_url:receiptUrl
+    });
+    if(error) throw error;
+    await safeInsertAudit(user.id, "vip_sorgusu_gonderildi", { level:selectedVipPackage.level, amount:selectedVipPackage.price, note, receipt_url:receiptUrl });
+    await safeInsertNotification(user.id, "vip_request", `${selectedVipPackage.name} sorğun qəbul edildi və admin baxışına göndərildi.`);
+    closeVipModal();
+    await refreshAppData();
+  }catch(error){
+    setMessage("vipModalMsg", error.message || "VIP sorğusu göndərilmədi.", "var(--red)");
+  }finally{
+    btn.disabled = false;
+  }
+}
+function openLeadershipModal(levelNumber){
+  const level = getLeadershipByLevel(levelNumber);
+  if(!level) return;
+  selectedLeadershipLevel = level;
+  const eligibility = getEligibility(level);
+  document.getElementById("leadershipRequestNote").value = "";
+  setMessage("leadershipModalMsg", "", "var(--green)");
+  document.getElementById("leadershipModalTitle").innerText = `${level.icon} ${level.name}`;
+  document.getElementById("leadershipModalBody").innerHTML = `
+    <div><b>Şərt:</b> VIP ${level.requiredVipLevel} və ${level.requiredReferrals} aktiv referal</div>
+    <div><b>VIP durumu:</b> ${eligibility.vipOk ? "✅ tamamdır" : `⏳ VIP ${level.requiredVipLevel} tələb olunur`}</div>
+    <div><b>Referal durumu:</b> ${eligibility.referralsOk ? "✅ tamamdır" : `⏳ ${level.requiredReferrals - activeReferralCount} aktiv referal çatmır`}</div>
+    <div><b>Gündəlik qazanc:</b> ${formatCurrency(level.dailyBonus)}</div>
+    <div><b>Hər yeni referal bonusu:</b> ${formatCurrency(level.referralBonus)}</div>
+  `;
+  const btn = document.getElementById("leadershipModalAction");
+  btn.disabled = !eligibility.ready;
+  btn.innerText = eligibility.ready ? "Sorğu göndər" : "Şərtlər tamamlanmayıb";
+  document.getElementById("leadershipModalBackdrop").style.display = "flex";
+}
+function closeLeadershipModal(){
+  document.getElementById("leadershipModalBackdrop").style.display = "none";
+  selectedLeadershipLevel = null;
+}
+async function submitLeadershipRequest(){
+  if(!selectedLeadershipLevel) return;
+  const btn = document.getElementById("leadershipModalAction");
+  btn.disabled = true;
+  try{
+    if(!getEligibility(selectedLeadershipLevel).ready) throw new Error("Şərtlər tamamlanmayıb.");
+    const pending = leadershipRequests.find(item => String(item.status).toLowerCase() === "pending");
+    if(pending) throw new Error("Hazırda gözləyən rəhbərlik sorğun var.");
+    const note = (document.getElementById("leadershipRequestNote").value || "").trim();
+    const { error } = await supabaseClient.from("leadership_requests").insert({
+      user_id:user.id,
+      level:selectedLeadershipLevel.level,
+      status:"pending",
+      note:note || null
+    });
+    if(error) throw error;
+    await safeInsertAudit(user.id, "rehberlik_sorgusu_gonderildi", { level:selectedLeadershipLevel.level, note });
+    closeLeadershipModal();
+    await refreshAppData();
+  }catch(error){
+    setMessage("leadershipModalMsg", error.message || "Sorğu göndərilmədi.", "var(--red)");
+  }finally{
+    btn.disabled = false;
+  }
+}
+async function startMission(){
+  const missionState = getMissionState();
+  if(!activeVip) return alert("Missiya üçün aktiv VIP lazımdır.");
+  if(missionState.finished) return alert("Bütün missiyalar artıq tamamlanıb.");
+  if(missionState.completedToday) return alert("Bu günün missiyası artıq tamamlanıb.");
+  if(missionTimer) return;
+  missionCountdown = MISSION_SECONDS;
+  renderMissionPage();
+  missionTimer = setInterval(async()=>{
+    missionCountdown -= 1;
+    renderMissionPage();
+    if(missionCountdown <= 0){
+      clearInterval(missionTimer);
+      missionTimer = null;
+      try{
+        const vipPkg = getVipByLevel(activeVip.vip_level);
+        const missionDay = getMissionState().currentDay;
+        const now = new Date().toISOString();
+        const { error: missionError } = await supabaseClient.from("missions").insert({
+          user_id:user.id,
+          day:missionDay,
+          completed_at:now,
+          reward_claimed:true
+        });
+        if(missionError) throw missionError;
+
+        const entries = [
+          { user_id:user.id, amount:Number(vipPkg?.daily_earnings || 0), description:`${vipPkg?.name || `VIP ${activeVip.vip_level}`} gündəlik qazancı • ${missionDay}. gün` },
+          { user_id:user.id, amount:1, description:`${missionDay}. gün missiya bonusu` }
+        ];
+        const { error: earningsError } = await supabaseClient.from("earnings").insert(entries);
+        if(earningsError) throw earningsError;
+
+        await safeInsertAudit(user.id, "missiya_tamamlandi", { day:missionDay, amount:Number(vipPkg?.daily_earnings || 0) + 1 });
+        if(missionDay === 22){
+          await safeInsertNotification(user.id, "special_reward", "22 günlük missiya tamamlandı. Xüsusi mükafatın hesabında qeyd edildi.");
+          await safeInsertAudit(user.id, "xususi_mukafat_verildi", { day:22, amount:0 });
+        }
+        await refreshAppData();
+      }catch(error){
+        alert(error.message || "Missiya tamamlanmadı.");
+      }
+    }
+  }, 1000);
+}
+async function requestWithdraw(){
+  const amount = Number(document.getElementById("withdrawAmount").value || 0);
+  const method = document.getElementById("withdrawMethod").value;
+  const accountInfo = (document.getElementById("withdrawAccountInfo").value || "").trim();
+  try{
+    if(amount < MIN_WITHDRAW) throw new Error(`Minimum çıxarış ${MIN_WITHDRAW} AZN olmalıdır.`);
+    if(amount > getActiveBalance()) throw new Error("Balansda kifayət qədər vəsait yoxdur.");
+    if(!["bank_card","binance_id"].includes(method)) throw new Error("Yalnız Bank kartı və Binance ID icazəlidir.");
+    if(!accountInfo) throw new Error("Kart nömrəsi və ya Binance ID daxil edin.");
+    const { error } = await supabaseClient.from("withdraw_requests").insert({ user_id:user.id, amount, method, account_info:accountInfo, status:"pending" });
+    if(error) throw error;
+    await safeInsertAudit(user.id, "cixaris_sorgusu_gonderildi", { amount, method });
+    setMessage("withdrawMsg", "Çıxarış sorğunuz göndərildi.", "var(--green)");
+    document.getElementById("withdrawAmount").value = "";
+    document.getElementById("withdrawAccountInfo").value = "";
+    await refreshAppData();
+  }catch(error){
+    setMessage("withdrawMsg", error.message || "Çıxarış sorğusu alınmadı.", "var(--red)");
+  }
+}
+async function markAllNotificationsRead(){
+  if(!notifications.some(item => !item.read)) return;
+  const ids = notifications.filter(item => !item.read).map(item => item.id);
+  const { error } = await supabaseClient.from("notifications").update({ read:true }).in("id", ids);
+  if(error){ alert(error.message); return; }
+  await refreshAppData();
+}
+async function approveVipRequest(requestId){
+  const request = adminData.vipRequests.find(item => item.id === requestId);
+  if(!request) return;
+  const pkg = getVipByLevel(request.vip_level);
+  const now = new Date().toISOString();
+  const expiresAt = addDays(now, Number(pkg?.days_valid || 0));
+  const { error: expireError } = await supabaseClient.from("user_vips").update({ status:"expired" }).eq("user_id", request.user_id).eq("status","active");
+  if(expireError){ alert(expireError.message); return; }
+  const { error } = await supabaseClient.from("user_vips").update({ status:"active", purchased_at:now, expires_at:expiresAt }).eq("id", requestId);
+  if(error){ alert(error.message); return; }
+  await safeInsertNotification(request.user_id, "vip_active", `${pkg?.name || `VIP ${request.vip_level}`} aktivləşdirildi. Qalan müddət: ${pkg?.days_valid || 0} gün.`);
+  await safeInsertAudit(request.user_id, "vip_aktivlesdirildi", { level:request.vip_level, amount:pkg?.price || 0, expires_at:expiresAt });
+  await refreshAppData();
+}
+async function rejectVipRequest(requestId){
+  const request = adminData.vipRequests.find(item => item.id === requestId);
+  const { error } = await supabaseClient.from("user_vips").update({ status:"rejected" }).eq("id", requestId);
+  if(error){ alert(error.message); return; }
+  if(request){
+    await safeInsertNotification(request.user_id, "vip_rejected", `VIP ${request.vip_level} sorğun rədd edildi. Yeni çek ilə yenidən müraciət edə bilərsən.`);
+    await safeInsertAudit(request.user_id, "vip_sorgusu_redd_edildi", { level:request.vip_level, amount:getVipByLevel(request.vip_level)?.price || 0 });
+  }
+  await refreshAppData();
+}
+async function approveLeadershipRequest(requestId){
+  const request = adminData.leadershipRequests.find(item => item.id === requestId);
+  if(!request) return;
+  const level = getLeadershipByLevel(request.level);
+  const userVip = adminData.vipRequests.filter(item => item.user_id === request.user_id && String(item.status).toLowerCase() === "active").sort((a,b)=>Number(b.vip_level)-Number(a.vip_level))[0];
+  const activeRefs = await adminGetReferralCount(request.user_id);
+  if(Number(userVip?.vip_level || 0) < Number(level?.requiredVipLevel || 99) || activeRefs < Number(level?.requiredReferrals || 999)){
+    alert("İstifadəçi rəhbərlik şərtlərini tam ödəmir.");
+    return;
+  }
+  const { error } = await supabaseClient.from("leadership_requests").update({ status:"approved" }).eq("id", requestId);
+  if(error){ alert(error.message); return; }
+  await safeInsertNotification(request.user_id, "leadership_active", `${level?.icon || "🏆"} ${level?.name || "Rəhbərlik"} statusun təsdiqləndi.`);
+  await safeInsertAudit(request.user_id, "rehberlik_tesdiqlendi", { level:request.level, amount:level?.dailyBonus || 0 });
+  await refreshAppData();
+}
+async function rejectLeadershipRequest(requestId){
+  const request = adminData.leadershipRequests.find(item => item.id === requestId);
+  const { error } = await supabaseClient.from("leadership_requests").update({ status:"rejected" }).eq("id", requestId);
+  if(error){ alert(error.message); return; }
+  if(request){
+    const level = getLeadershipByLevel(request.level);
+    await safeInsertNotification(request.user_id, "leadership_rejected", `${level?.icon || "🏆"} ${level?.name || "Rəhbərlik"} sorğun rədd edildi.`);
+    await safeInsertAudit(request.user_id, "rehberlik_redd_edildi", { level:request.level });
+  }
+  await refreshAppData();
+}
 async function approveWithdraw(withdrawId){
-  const {data,error}=await supabaseClient.from("withdraw_requests").update({status:"approved"}).eq("id",withdrawId).select();
-  if(error){ alert("Təsdiq alınmadı: " + error.message); return; }
-  if(!data || !data.length){ alert("Təsdiq yazılmadı."); return; }
-  await loadAdminWithdrawRequests();
+  const request = adminData.withdrawRequests.find(item => item.id === withdrawId);
+  const { error } = await supabaseClient.from("withdraw_requests").update({ status:"approved" }).eq("id", withdrawId);
+  if(error){ alert(error.message); return; }
+  if(request){
+    await safeInsertNotification(request.user_id, "withdraw_approved", `Pul çıxarışı təsdiqləndi: ${formatCurrency(request.amount)}.`);
+    await safeInsertAudit(request.user_id, "cixaris_tesdiqlendi", { amount:request.amount, method:request.method });
+  }
+  await refreshAppData();
 }
 async function rejectWithdraw(withdrawId){
-  const {data,error}=await supabaseClient.from("withdraw_requests").update({status:"rejected"}).eq("id",withdrawId).select();
-  if(error){ alert("Rədd edilmədi: " + error.message); return; }
-  if(!data || !data.length){ alert("Rədd yazılmadı."); return; }
-  await loadAdminWithdrawRequests();
+  const request = adminData.withdrawRequests.find(item => item.id === withdrawId);
+  const { error } = await supabaseClient.from("withdraw_requests").update({ status:"rejected" }).eq("id", withdrawId);
+  if(error){ alert(error.message); return; }
+  if(request){
+    await safeInsertNotification(request.user_id, "withdraw_rejected", `Pul çıxarışı sorğun rədd edildi: ${formatCurrency(request.amount)}.`);
+    await safeInsertAudit(request.user_id, "cixaris_redd_edildi", { amount:request.amount, method:request.method });
+  }
+  await refreshAppData();
 }
-
-function subscribeInvestments(){
-  if(investmentChannel) supabaseClient.removeChannel(investmentChannel);
-  investmentChannel = supabaseClient
-    .channel("investment-status-" + user.id + "-" + Date.now())
-    .on("postgres_changes",{event:"*",schema:"public",table:"investments",filter:"user_id=eq."+user.id},async()=>{ await loadInvestment(); })
-    .subscribe();
-}
-function subscribeProfile(){
-  if(profileChannel) supabaseClient.removeChannel(profileChannel);
-  profileChannel = supabaseClient
-    .channel("profile-status-" + user.id + "-" + Date.now())
-    .on("postgres_changes",{event:"*",schema:"public",table:"profiles",filter:"id=eq."+user.id},async()=>{
-      await loadProfile();
-      await loadReferral();
-      await loadInvestment();
-    })
-    .subscribe();
-}
-function startAutoRefresh(){
-  if(refreshInterval) clearInterval(refreshInterval);
-  refreshInterval = setInterval(async()=>{
-    if(!user) return;
-    await loadInvestment();
-    await loadReferral();
-    await loadWithdrawHistory();
-    if(user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-      await loadAdminLeaderRequests();
+async function register(){
+  const email = document.getElementById("regEmail").value.trim();
+  const password = document.getElementById("regPassword").value;
+  const referral = document.getElementById("regReferral").value.trim().toUpperCase();
+  const msgId = "regMsg";
+  setMessage(msgId, "Hesab yaradılır...", "var(--yellow)");
+  try{
+    if(!email || !password) throw new Error("Email və şifrəni doldurun.");
+    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+    if(error) throw error;
+    const { error: profileError } = await supabaseClient.from("profiles").insert({ id:data.user.id, email, referral_code:generateCode(), referred_by:referral || null });
+    if(profileError) throw profileError;
+    if(referral){
+      const { data: owner } = await supabaseClient.from("profiles").select("id,email").eq("referral_code", referral).maybeSingle();
+      if(owner?.id){
+        await safeInsertNotification(owner.id, "new_referral", `Yeni referal qoşuldu: ${email}`);
+        await safeInsertAudit(owner.id, "yeni_referal_qosuldu", { email });
+      }
     }
-  },3000);
+    setMessage(msgId, "Hesab yaradıldı. İndi daxil ola bilərsən.", "var(--green)");
+    setTimeout(showLogin, 900);
+  }catch(error){
+    setMessage(msgId, error.message || "Qeydiyyat xətası.", "var(--red)");
+  }
 }
-
-async function openApp(u){
-  user = u;
-
+async function login(){
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+  try{
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if(error) throw error;
+    await openApp(data.user);
+  }catch(error){
+    setMessage("loginMsg", error.message || "Email və ya şifrə yanlışdır.", "var(--red)");
+  }
+}
+async function openApp(authUser){
+  user = authUser;
   document.getElementById("loginPage").classList.add("hidden");
   document.getElementById("registerPage").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
-
-  document.getElementById("email").innerText = user.email;
-
-  if(user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
-    document.getElementById("adminBtn").classList.remove("hidden");
-  }
-
-  await loadProfile();
-  await loadEarnings();
-  await loadReferral();
-  await loadInvestment();
-  await loadWithdrawHistory();
-
-  subscribeInvestments();
-  subscribeProfile();
-  startAutoRefresh();
-
+  document.getElementById("adminBtn").classList.toggle("hidden", !isAdmin());
+  await heartbeatPresence();
+  if(presenceInterval) clearInterval(presenceInterval);
+  presenceInterval = setInterval(heartbeatPresence, 60000);
+  await refreshAppData();
+  if(refreshInterval) clearInterval(refreshInterval);
+  refreshInterval = setInterval(async()=>{
+    try{
+      await heartbeatPresence();
+      await refreshAppData();
+    }catch{}
+  }, 20000);
   page("home");
 }
-
-async function loadAdminInvestments(){
-  if(!user || user.email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return;
-
-  const {data,error} = await supabaseClient.from("investments").select("id,user_id,amount,status,created_at,receipt_url").order("created_at",{ascending:false});
-  const box = document.getElementById("adminInvest");
-
-  if(error){ box.innerHTML = `<p class="msg">${escapeHtml(error.message)}</p>`; return; }
-
-  const list=(data || []).filter(x=>String(x.status||"").toLowerCase().trim()==="pending");
-  box.innerHTML =
-    list.length
-    ? list.map(x=>{
-      const safeId=escapeHtml(x.id);
-      const safeUserId=escapeHtml(x.user_id);
-      const safeAmount=Number(x.amount||0).toFixed(2);
-      const safeDate=new Date(x.created_at).toLocaleString("az-AZ");
-      const receiptHtml = x.receipt_url
-        ? `<div class="row"><span>Çek</span><a href="${escapeHtml(x.receipt_url)}" target="_blank" rel="noopener noreferrer" style="color:#9d87ff">Çekə bax 🔗</a></div>`
-        : "";
-      return `
-        <div class="admin-item" id="inv-${safeId}">
-          <div class="row"><span>İstifadəçi</span><b style="word-break:break-all;font-size:12px">${safeUserId}</b></div>
-          <div class="row"><span>Məbləğ</span><b>${safeAmount} $</b></div>
-          ${receiptHtml}
-          <div class="row"><span>Tarix</span><b>${safeDate}</b></div>
-          <button class="approve-btn" onclick="approveInvestment('${safeId}')">Təsdiqlə ✅</button>
-          <button class="reject-btn" onclick="rejectInvestment('${safeId}')">Rədd et ❌</button>
-        </div>
-      `;
-    }).join("")
-    : "<p class='muted'>Gözləyən yatırım sorğusu yoxdur.</p>";
-}
-
-async function approveInvestment(investmentId){
-  const {data,error} = await supabaseClient.from("investments").update({status:"approved"}).eq("id",investmentId).select();
-  if(error){ alert("Təsdiq alınmadı: " + error.message); return; }
-  if(!data || !data.length){ alert("Təsdiq yazılmadı. Supabase RLS siyasətini yoxlamaq lazımdır."); return; }
-  await loadAdminInvestments();
-}
-async function rejectInvestment(investmentId){
-  const {data,error} = await supabaseClient.from("investments").update({status:"rejected"}).eq("id",investmentId).select();
-  if(error){ alert("Rədd edilmədi: " + error.message); return; }
-  if(!data || !data.length){ alert("Rədd əməliyyatı yazılmadı. Supabase RLS siyasətini yoxlamaq lazımdır."); return; }
-  await loadAdminInvestments();
-}
-
 async function logout(){
-  if(investmentChannel) supabaseClient.removeChannel(investmentChannel);
-  if(profileChannel) supabaseClient.removeChannel(profileChannel);
   if(refreshInterval) clearInterval(refreshInterval);
-  if(countdownTimer) clearInterval(countdownTimer);
-
+  if(presenceInterval) clearInterval(presenceInterval);
+  if(missionTimer) clearInterval(missionTimer);
+  refreshInterval = null;
+  presenceInterval = null;
+  missionTimer = null;
   await supabaseClient.auth.signOut();
   location.reload();
 }
-
 (async function init(){
-  const {data} = await supabaseClient.auth.getUser();
+  prefillReferralFromUrl();
+  const { data } = await supabaseClient.auth.getUser();
   if(data?.user) await openApp(data.user);
 })();
 </script>
