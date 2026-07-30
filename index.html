@@ -1,983 +1,626 @@
 <!DOCTYPE html>
 <html lang="az">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Noventra - İnvestisiya Platforması</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sərmayə Platforması</title>
+    <!-- Supabase JS Client library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #e2e8f0;
+            --danger-color: #ef4444;
+            --success-color: #22c55e;
+        }
 
-<!-- Supabase JS Library -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-<style>
-:root {
-  --bg-dark: #070b16;
-  --card-bg: rgba(17, 24, 39, 0.75);
-  --card-border: rgba(255, 255, 255, 0.08);
-  --accent-gold: #f6d365;
-  --accent-coral: #fda085;
-  --green: #10b981;
-  --red: #ef4444;
-  --purple: #8b5cf6;
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-}
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 24px;
+            margin-bottom: 20px;
+        }
 
-body {
-  background: var(--bg-dark);
-  background-image: 
-    radial-gradient(at 0% 0%, rgba(246, 211, 101, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(253, 160, 133, 0.08) 0px, transparent 50%);
-  background-attachment: fixed;
-  color: var(--text-main);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  min-height: 100vh;
-  padding-bottom: 80px;
-}
+        h2 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 1.5rem;
+            text-align: center;
+        }
 
-.hidden { display: none !important; }
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-/* Glassmorphism Containers */
-.box, .card {
-  background: var(--card-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  padding: 24px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
 
-.card:hover {
-  border-color: rgba(246, 211, 101, 0.25);
-}
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
 
-/* Authentication Screen */
-.auth {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-}
+        input:focus {
+            border-color: var(--primary-color);
+        }
 
-.auth .box {
-  width: 100%;
-  max-width: 400px;
-  animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
 
-.logo {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 900;
-  letter-spacing: 6px;
-  background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 24px;
-}
+        button:hover {
+            background-color: var(--primary-hover);
+        }
 
-/* Form Controls */
-input, select, textarea {
-  width: 100%;
-  padding: 14px 16px;
-  margin: 8px 0;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(11, 17, 29, 0.7);
-  color: #fff;
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
+        button.danger {
+            background-color: var(--danger-color);
+        }
 
-input:focus, select:focus {
-  border-color: var(--accent-gold);
-  box-shadow: 0 0 0 3px rgba(246, 211, 101, 0.15);
-}
+        button.danger:hover {
+            background-color: #dc2626;
+        }
 
-button {
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: 700;
-  font-size: 15px;
-  transition: all 0.2s ease;
-}
+        .switch-auth {
+            text-align: center;
+            margin-top: 14px;
+            font-size: 0.9rem;
+        }
 
-button:active {
-  transform: scale(0.98);
-}
+        .switch-auth a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+        }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
+        .profile-info {
+            margin-bottom: 20px;
+        }
 
-.btn-main {
-  background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
-  color: #000;
-  box-shadow: 0 4px 15px rgba(246, 211, 101, 0.25);
-}
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
 
-.btn-green { background: var(--green); color: #fff; }
-.btn-red { background: var(--red); color: #fff; }
+        .info-row:last-child {
+            border-bottom: none;
+        }
 
-.switch {
-  text-align: center;
-  margin-top: 18px;
-  color: var(--accent-gold);
-  font-size: 14px;
-  cursor: pointer;
-  font-weight: 600;
-}
+        .badge {
+            background-color: #e0e7ff;
+            color: var(--primary-color);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
 
-.msg {
-  text-align: center;
-  margin-top: 12px;
-  font-size: 14px;
-  color: var(--red);
-}
+        .alert {
+            padding: 10px 14px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            font-size: 0.9rem;
+            display: none;
+        }
 
-/* App Header & Layout */
-#app {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 20px 16px;
-  animation: fadeIn 0.3s ease;
-}
+        .alert-danger {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
 
-/* Navigation Bar */
-.nav {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin: 20px 0;
-  background: rgba(17, 24, 39, 0.6);
-  padding: 6px;
-  border-radius: 16px;
-  border: 1px solid var(--card-border);
-}
+        .alert-success {
+            background-color: #dcfce7;
+            color: #166534;
+        }
 
-.nav button {
-  background: transparent;
-  color: var(--text-muted);
-  border-radius: 10px;
-  padding: 10px 16px;
-  font-weight: 600;
-  font-size: 14px;
-  width: auto;
-  flex: 1;
-}
+        .hidden {
+            display: none !important;
+        }
 
-.nav button.active {
-  background: linear-gradient(135deg, var(--accent-gold), var(--accent-coral));
-  color: #000;
-  box-shadow: 0 2px 10px rgba(246, 211, 101, 0.2);
-}
-
-/* Grids & Cards */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 16px;
-}
-
-.value {
-  font-size: 28px;
-  font-weight: 800;
-  margin-top: 8px;
-  letter-spacing: -0.5px;
-}
-
-.gold { color: var(--accent-gold); }
-.green { color: var(--green); }
-.purple { color: var(--purple); }
-.muted { color: var(--text-muted); font-size: 14px; }
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.row:last-child { border-bottom: none; }
-
-.info {
-  background: rgba(11, 17, 29, 0.5);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 12px;
-  padding: 14px;
-  margin-top: 12px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #cbd5e1;
-}
-
-/* VIP Cards */
-.vip-card {
-  border: 1px solid rgba(246, 211, 101, 0.3);
-  position: relative;
-  overflow: hidden;
-}
-
-.vip-card.locked {
-  border-color: rgba(255, 255, 255, 0.08);
-  opacity: 0.6;
-}
-
-.vip-title {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--accent-gold);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Task Item */
-.task-item {
-  border: 1px solid var(--card-border);
-  padding: 16px;
-  border-radius: 14px;
-  margin-bottom: 12px;
-  background: rgba(11, 17, 29, 0.4);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Admin Table */
-.admin-table-wrapper {
-  overflow-x: auto;
-  margin-top: 12px;
-}
-
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 13px;
-}
-
-.admin-table th, .admin-table td {
-  border: 1px solid var(--card-border);
-  padding: 10px;
-  text-align: left;
-}
-
-.admin-table th {
-  background: rgba(11, 17, 29, 0.8);
-  color: var(--accent-gold);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* Mobile Optimizations */
-@media (max-width: 600px) {
-  body { padding-bottom: 90px; }
-  .nav {
-    position: fixed;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    z-index: 1000;
-    margin: 0;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  }
-  .nav button { padding: 8px 10px; font-size: 12px; }
-  .task-item { flex-direction: column; gap: 12px; align-items: stretch; }
-}
-</style>
+        .admin-section {
+            border-top: 2px dashed var(--border-color);
+            margin-top: 20px;
+            padding-top: 20px;
+        }
+    </style>
 </head>
-
 <body>
 
-<!-- Auth Page: Login -->
-<section id="loginPage" class="auth">
-  <div class="box">
-    <div class="logo">NOVENTRA</div>
-    <input id="loginEmail" type="email" placeholder="Email ünvanı">
-    <input id="loginPassword" type="password" placeholder="Şifrə">
-    <button class="btn-main" onclick="login()">Daxil Ol</button>
-    <div class="switch" onclick="showRegister()">Hesabınız yoxdur? Qeydiyyatdan keçin</div>
-    <div id="loginMsg" class="msg"></div>
-  </div>
-</section>
+<div class="container">
+    <div id="alertBox" class="alert"></div>
 
-<!-- Auth Page: Register -->
-<section id="registerPage" class="auth hidden">
-  <div class="box">
-    <div class="logo">NOVENTRA</div>
-    <input id="regEmail" type="email" placeholder="Email ünvanı">
-    <input id="regPassword" type="password" placeholder="Şifrə (min. 6 simvol)">
-    <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)">
-    <button class="btn-main" onclick="register()">Qeydiyyatı Tamamla</button>
-    <div class="switch" onclick="showLogin()">Hesabınız var? Giriş edin</div>
-    <div id="regMsg" class="msg"></div>
-  </div>
-</section>
-
-<!-- Main App Section -->
-<section id="app" class="hidden">
-  <div class="logo" style="margin-bottom: 10px;">NOVENTRA</div>
-
-  <!-- Navigation -->
-  <nav class="nav">
-    <button id="nav-home" onclick="page('home')">Ana Səhifə</button>
-    <button id="nav-vip" onclick="page('vip')">VIP</button>
-    <button id="nav-tasks" onclick="page('tasks')">Tapşırıqlar</button>
-    <button id="nav-account" onclick="page('account')">Hesabım</button>
-    <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
-  </nav>
-
-  <!-- Dashboard Page -->
-  <div id="homePage">
-    <div class="grid">
-      <div class="card">
-        <div class="muted">Ümumi Balans</div>
-        <div id="balance" class="value gold">0.00 AZN</div>
-      </div>
-      <div class="card">
-        <div class="muted">Qazanılan Bonuslar</div>
-        <div id="bonus" class="value green">0.00 AZN</div>
-      </div>
-      <div class="card">
-        <div class="muted">Mövcud VIP Status</div>
-        <div id="status" class="value gold">Yeni istifadəçi</div>
-      </div>
+    <!-- REGISTER CARD -->
+    <div id="registerCard" class="card">
+        <h2>Qeydiyyat</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="regEmail">E-poçt</label>
+                <input type="email" id="regEmail" required placeholder="nümunə@mail.com">
+            </div>
+            <div class="form-group">
+                <label for="regPassword">Şifrə</label>
+                <input type="password" id="regPassword" required placeholder="******">
+            </div>
+            <div class="form-group">
+                <label for="regRef">Referal Kodu (İstəyə bağlı)</label>
+                <input type="text" id="regRef" placeholder="Məsələn: REF1234">
+            </div>
+            <button type="submit" id="regBtn">Qeydiyyatdan Keç</button>
+        </form>
+        <div class="switch-auth">
+            Hesabınız var? <a href="#" id="toLogin">Daxil olun</a>
+        </div>
     </div>
 
-    <div class="card" style="margin-top: 20px;">
-      <h3 style="margin-bottom: 12px; color: var(--accent-gold);">Liderlik Statusu</h3>
-      <div class="row">
-        <span class="muted">Mövcud Səviyyə:</span>
-        <b id="leadershipLevel" class="purple">Səviyyə 0</b>
-      </div>
-      <div class="row">
-        <span class="muted">Aktiv Referallar:</span>
-        <b id="activeRefCount" class="gold">0 nəfər</b>
-      </div>
-      <div class="info">
-        Liderlik statusu dəvət etdiyiniz aktiv VIP istifadəçilərin sayına əsasən avtomatik yüksəlir.
-      </div>
-    </div>
-  </div>
-
-  <!-- VIP Packages Page -->
-  <div id="vipPage" class="hidden">
-    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">💎 VIP İnvestisiya Paketləri</h2>
-    <div id="vipArea" class="grid"></div>
-  </div>
-
-  <!-- Daily Tasks Page -->
-  <div id="tasksPage" class="hidden">
-    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">📋 Gündəlik Tapşırıqlar</h2>
-    <div class="card">
-      <p class="muted" style="margin-bottom: 16px;">Gündəlik tapşırıqları icra edərək balansınıza əlavə gəlir əldə edin.</p>
-      <div id="tasksList"></div>
-    </div>
-  </div>
-
-  <!-- Account Page -->
-  <div id="accountPage" class="hidden">
-    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">👤 Şəxsi Kabinet</h2>
-    
-    <div class="card">
-      <div class="row">
-        <span class="muted">Email</span>
-        <b id="email"></b>
-      </div>
-      <div class="row">
-        <span class="muted">Dəvət Kodunuz</span>
-        <b id="refCode" class="gold">-</b>
-      </div>
-      <div class="row">
-        <span class="muted">Aktiv VIP</span>
-        <b id="vipStatus" class="green">Yoxdur</b>
-      </div>
+    <!-- LOGIN CARD -->
+    <div id="loginCard" class="card hidden">
+        <h2>Daxil Ol</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="loginEmail">E-poçt</label>
+                <input type="email" id="loginEmail" required placeholder="nümunə@mail.com">
+            </div>
+            <div class="form-group">
+                <label for="loginPassword">Şifrə</label>
+                <input type="password" id="loginPassword" required placeholder="******">
+            </div>
+            <button type="submit" id="loginBtn">Daxil Ol</button>
+        </form>
+        <div class="switch-auth">
+            Hesabınız yoxdur? <a href="#" id="toRegister">Qeydiyyatdan keçin</a>
+        </div>
     </div>
 
-    <div class="card" style="margin-top: 16px;">
-      <h3>Referal Keçidi</h3>
-      <div class="info">
-        Sizin şəxsi dəvət kodunuz:
-        <div id="shareCode" class="gold" style="font-size: 22px; font-weight: bold; margin-top: 6px;">-</div>
-      </div>
-      <button class="btn-main" style="margin-top: 12px;" onclick="copyReferral()">Kodu Kopyala</button>
+    <!-- DASHBOARD CARD -->
+    <div id="dashboardCard" class="card hidden">
+        <h2>Şəxsi Kabinet</h2>
+        <div class="profile-info">
+            <div class="info-row">
+                <span>E-poçt:</span>
+                <strong id="userEmail">-</strong>
+            </div>
+            <div class="info-row">
+                <span>Balans:</span>
+                <strong><span id="userBalance">0.00</span> AZN</strong>
+            </div>
+            <div class="info-row">
+                <span>VIP Səviyyə:</span>
+                <span class="badge" id="userVip">VIP 0</span>
+            </div>
+            <div class="info-row">
+                <span>Referal Kodunuz:</span>
+                <strong id="userRefCode">-</strong>
+            </div>
+            <div class="info-row">
+                <span>Status:</span>
+                <span id="userAdminStatus" class="badge">İstifadəçi</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="depositAmount">Balansı Artır (AZN)</label>
+            <input type="number" id="depositAmount" min="1" placeholder="Məbləğ daxil edin">
+        </div>
+        <button id="depositBtn" style="margin-bottom: 12px;">Balansı Yenilə</button>
+
+        <!-- ADMIN PANEL SECTION -->
+        <div id="adminSection" class="admin-section hidden">
+            <h3 style="text-align: center; margin-top:0;">Admin Panel</h3>
+            <div class="form-group">
+                <label for="targetUserEmail">Hədəf İstifadəçi E-poçtu</label>
+                <input type="email" id="targetUserEmail" placeholder="istifadeci@mail.com">
+            </div>
+            <div class="form-group">
+                <label for="adminSetBalance">Yeni Balans</label>
+                <input type="number" id="adminSetBalance" placeholder="50.00">
+            </div>
+            <button id="adminUpdateBtn" style="margin-bottom: 10px;">İstifadəçi Balansını Dəyiş</button>
+            <button id="adminBlockBtn" class="danger">İstifadəçini Blokla / Blokdan Çıxar</button>
+        </div>
+
+        <button id="logoutBtn" class="danger" style="margin-top: 20px;">Çıxış Et</button>
     </div>
-
-    <div class="card" style="margin-top: 16px;">
-      <h3>Məbləğ Çıxarışı</h3>
-      <input id="withdrawAmount" type="number" placeholder="Çıxarış Məbləği (min. 8 AZN)" min="8">
-      <select id="withdrawMethod">
-        <option value="card">Bank Kartı</option>
-        <option value="crypto">Kripto Pul Qabı (USDT / TRC20)</option>
-      </select>
-      <input id="withdrawInfo" placeholder="Kart nömrəsi və ya Rekvizitlər">
-      <button class="btn-main" style="margin-top: 8px;" onclick="withdrawRequest()">Çıxarış Sorğusu Göndər</button>
-      <div id="withdrawMsg" class="msg"></div>
-    </div>
-
-    <button class="btn-red" style="margin-top: 20px;" onclick="logout()">Hesabdan Çıx</button>
-  </div>
-
-  <!-- Admin Panel Page -->
-  <div id="adminPage" class="hidden">
-    <h2 style="margin-bottom: 16px; color: var(--accent-gold);">⚙️ İdarəetmə Paneli</h2>
-
-    <div class="card" style="margin-bottom: 16px;">
-      <h3>Gözləyən Yatırım Sorğuları</h3>
-      <div id="adminInvestments" style="margin-top: 10px;"></div>
-    </div>
-
-    <div class="card" style="margin-bottom: 16px;">
-      <h3>Gözləyən Çıxarış Sorğuları</h3>
-      <div id="adminWithdraw" style="margin-top: 10px;"></div>
-    </div>
-
-    <div class="card">
-      <h3>İstifadəçi Siyahısı</h3>
-      <div id="adminUsers" class="admin-table-wrapper"></div>
-    </div>
-  </div>
-</section>
+</div>
 
 <script>
-// Supabase Configuration
-const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
-const SUPABASE_KEY = "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    // 1. Supabase Initialization
+    const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_4uogckOVNwIrH72gbNlSxg_ywvZ1BE1";
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-let user = null;
-let profile = null;
+    // Global State
+    let currentUser = null;
+    let currentProfile = null;
 
-const REFERRAL_BONUS_PERCENTAGE = 0.05;
+    // DOM Elements
+    const registerCard = document.getElementById('registerCard');
+    const loginCard = document.getElementById('loginCard');
+    const dashboardCard = document.getElementById('dashboardCard');
+    
+    const registerForm = document.getElementById('registerForm');
+    const loginForm = document.getElementById('loginForm');
+    
+    const alertBox = document.getElementById('alertBox');
+    const toLogin = document.getElementById('toLogin');
+    const toRegister = document.getElementById('toRegister');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-const VIP_LIST = [
-  { id: 1, name: "VIP 1", price: 25, days: 45, reward: 1.50, locked: false },
-  { id: 2, name: "VIP 2", price: 35, days: 50, reward: 2.30, locked: false },
-  { id: 3, name: "VIP 3", price: 50, days: 60, reward: 3.58, locked: false },
-  { id: 4, name: "VIP 4", price: 150, days: 70, reward: 8.00, locked: false },
-  { id: 5, name: "VIP 5", price: 300, days: 80, reward: 22.00, referrals: 7, locked: false },
-  { id: 6, name: "VIP 6", price: 500, days: 90, reward: 36.00, referrals: 8, locked: false },
-  { id: 7, name: "VIP 7", price: 1000, days: 100, reward: 68.00, referrals: 9, locked: false },
-  { id: 8, name: "VIP 8", price: 2000, days: 120, reward: 116.50, referrals: 10, locked: false },
-  { id: 9, name: "VIP 9", price: 0, days: 0, reward: 259.00, locked: true },
-  { id: 10, name: "VIP 10", price: 0, days: 0, reward: 710.00, locked: true },
-  { id: 11, name: "VIP 11", price: 0, days: 0, reward: 1870.00, locked: true }
-];
+    const userEmailEl = document.getElementById('userEmail');
+    const userBalanceEl = document.getElementById('userBalance');
+    const userVipEl = document.getElementById('userVip');
+    const userRefCodeEl = document.getElementById('userRefCode');
+    const userAdminStatusEl = document.getElementById('userAdminStatus');
+    
+    const depositAmountInput = document.getElementById('depositAmount');
+    const depositBtn = document.getElementById('depositBtn');
+    
+    const adminSection = document.getElementById('adminSection');
+    const targetUserEmailInput = document.getElementById('targetUserEmail');
+    const adminSetBalanceInput = document.getElementById('adminSetBalance');
+    const adminUpdateBtn = document.getElementById('adminUpdateBtn');
+    const adminBlockBtn = document.getElementById('adminBlockBtn');
 
-const DAILY_TASKS = [
-  { id: 1, title: "Səhifəyə Günlük Giriş", reward: 0.20, desc: "Sistemə daxil olaraq gündəlik bonusunuzu qazanın." },
-  { id: 2, title: "VIP Məlumatlandırma", reward: 0.30, desc: "Yenilənmiş VIP paketləri nəzərdən keçirin." }
-];
+    // Helper: Show Alert
+    function showAlert(message, type = 'danger') {
+        alertBox.textContent = message;
+        alertBox.className = `alert alert-${type}`;
+        alertBox.style.display = 'block';
+        setTimeout(() => {
+            alertBox.style.display = 'none';
+        }, 5000);
+    }
 
-const LEADERSHIP_LEVELS = [
-  { level: 1, minRefs: 3, title: "Bronz Lider" },
-  { level: 2, minRefs: 10, title: "Gümüş Lider" },
-  { level: 3, minRefs: 25, title: "Qızıl Lider" },
-  { level: 4, minRefs: 50, title: "Platin Lider" }
-];
+    // Helper: Generate Random Referral Code
+    function generateRefCode() {
+        return 'REF' + Math.floor(100000 + Math.random() * 900000);
+    }
 
-// Navigation Manager
-function page(name) {
-  const pages = ["homePage", "vipPage", "tasksPage", "accountPage", "adminPage"];
-  pages.forEach(p => {
-    const el = document.getElementById(p);
-    if(el) el.classList.add("hidden");
-  });
-
-  document.querySelectorAll(".nav button").forEach(b => b.classList.remove("active"));
-
-  const targetId = name + "Page";
-  const target = document.getElementById(targetId);
-  if(target) target.classList.remove("hidden");
-
-  const navBtn = document.getElementById("nav-" + name);
-  if(navBtn) navBtn.classList.add("active");
-
-  if(name === "vip") renderVip();
-  if(name === "tasks") renderTasks();
-  if(name === "admin" && profile && profile.role === "admin") {
-    loadAdminData();
-  }
-}
-
-function showRegister() {
-  document.getElementById("loginPage").classList.add("hidden");
-  document.getElementById("registerPage").classList.remove("hidden");
-}
-
-function showLogin() {
-  document.getElementById("registerPage").classList.add("hidden");
-  document.getElementById("loginPage").classList.remove("hidden");
-}
-
-function renderVip() {
-  const box = document.getElementById("vipArea");
-  if(!box) return;
-
-  box.innerHTML = VIP_LIST.map(v => `
-    <div class="card vip-card ${v.locked ? 'locked' : ''}">
-      <div class="vip-title">
-        <span>${v.name}</span>
-        ${v.locked ? '🔒' : ''}
-      </div>
-      <div class="info">
-        Qiymət: <b>${v.locked ? "Bağlı" : v.price + " AZN"}</b><br>
-        Müddət: <b>${v.days ? v.days + " gün" : "-"}</b><br>
-        Gündəlik qazanc: <b>${v.reward} AZN</b><br>
-        ${v.referrals ? "Tələb edilən referal: " + v.referrals + " nəfər<br>" : ""}
-      </div>
-      ${!v.locked ? `<button class="btn-main" style="margin-top:14px;" onclick="buyVip(${v.id}, ${v.price})">Yatırım Et (${v.price} AZN)</button>` : ''}
-    </div>
-  `).join("");
-}
-
-function renderTasks() {
-  const box = document.getElementById("tasksList");
-  if(!box) return;
-
-  const today = new Date().toISOString().split('T')[0];
-  const isDone = profile.last_task_date === today;
-
-  box.innerHTML = DAILY_TASKS.map(t => `
-    <div class="task-item">
-      <div>
-        <h4 style="color: var(--accent-gold);">${t.title} (+${t.reward} AZN)</h4>
-        <p class="muted">${t.desc}</p>
-      </div>
-      <button class="btn-main" style="width: auto; padding: 10px 20px;" ${isDone ? 'disabled' : ''} onclick="claimTask(${t.reward})">
-        ${isDone ? 'Tamamlandı' : 'Tamamla'}
-      </button>
-    </div>
-  `).join("");
-}
-
-async function claimTask(reward) {
-  const today = new Date().toISOString().split('T')[0];
-  if(profile.last_task_date === today) {
-    alert("Bu gün üçün olan tapşırıqları artıq tamamlamısınız.");
-    return;
-  }
-
-  const newBalance = (profile.balance || 0) + reward;
-  const { error } = await supabaseClient
-    .from("profiles")
-    .update({ balance: newBalance, last_task_date: today })
-    .eq("id", user.id);
-
-  if(error) {
-    alert("Xəta baş verdi: " + error.message);
-  } else {
-    alert(`Təbrik edirik! ${reward} AZN balansınıza əlavə olundu.`);
-    await loadProfile();
-    renderTasks();
-  }
-}
-
-async function register() {
-  const email = document.getElementById("regEmail").value.trim();
-  const password = document.getElementById("regPassword").value;
-  const referral = document.getElementById("regReferral").value.trim();
-  const msg = document.getElementById("regMsg");
-
-  if(!email || !password || password.length < 6) {
-    msg.innerText = "Düzgün email və şifrə (min. 6 simvol) daxil edin.";
-    return;
-  }
-
-  const { data, error } = await supabaseClient.auth.signUp({ email, password });
-
-  if(error) {
-    msg.innerText = error.message;
-    return;
-  }
-
-  if(data.user) {
-    const refCodeGenerated = "NV" + Math.random().toString(36).substring(2, 8).toUpperCase();
-    await supabaseClient.from("profiles").insert({
-      id: data.user.id,
-      email: email,
-      balance: 0,
-      bonus: 0,
-      current_vip: "Yeni istifadəçi",
-      referral_code: refCodeGenerated,
-      referred_by: referral || null,
-      role: "user"
+    // Switch Views
+    toLogin.addEventListener('click', (e) => {
+        e.preventDefault();
+        registerCard.classList.add('hidden');
+        loginCard.classList.remove('hidden');
     });
-  }
 
-  msg.style.color = "#10b981";
-  msg.innerText = "Qeydiyyat uğurla tamamlandı. Daxil olunur...";
-  setTimeout(() => { if(data.user) openApp(data.user); }, 1200);
-}
+    toRegister.addEventListener('click', (e) => {
+        e.preventDefault();
+        loginCard.classList.add('hidden');
+        registerCard.classList.remove('hidden');
+    });
 
-async function login() {
-  const email = document.getElementById("loginEmail").value.trim();
-  const password = document.getElementById("loginPassword").value;
-  const msg = document.getElementById("loginMsg");
+    // 4 & 5. Fetch and Sync Profile with Supabase
+    async function loadProfile(user) {
+        try {
+            let { data: profile, error } = await supabase
+                .from('profiles')
+                .select('*')
+                .eq('id', user.id)
+                .maybeSingle();
 
-  if(!email || !password) {
-    msg.innerText = "Məlumatları tam daxil edin";
-    return;
-  }
+            if (error) throw error;
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            // Əgər profil yoxdursa, yeni yaradılır (Upsert)
+            if (!profile) {
+                const newProfile = {
+                    id: user.id,
+                    email: user.email,
+                    balance: 0.00,
+                    vip_level: 0,
+                    referral_code: generateRefCode(),
+                    is_admin: false,
+                    is_blocked: false
+                };
+                
+                const { data: createdProfile, error: createError } = await supabase
+                    .from('profiles')
+                    .upsert(newProfile)
+                    .select()
+                    .single();
 
-  if(error) {
-    msg.innerText = "Email və ya şifrə yanlışdır";
-    return;
-  }
+                if (createError) throw createError;
+                profile = createdProfile;
+            }
 
-  openApp(data.user);
-}
+            if (profile.is_blocked) {
+                showAlert('Hesabınız bloklanıb! Sistemə daxil ola bilməzsiniz.');
+                await supabase.auth.signOut();
+                return;
+            }
 
-async function openApp(u) {
-  user = u;
-  document.getElementById("loginPage").classList.add("hidden");
-  document.getElementById("registerPage").classList.add("hidden");
-  document.getElementById("app").classList.remove("hidden");
-
-  document.getElementById("email").innerText = user.email;
-
-  await loadProfile();
-  await updateLeadershipAndStats();
-  await processDailyProfits();
-
-  const adminBtn = document.getElementById("adminBtn");
-  if(profile && profile.role === "admin") {
-    adminBtn.classList.remove("hidden");
-  } else {
-    adminBtn.classList.add("hidden");
-  }
-
-  page("home");
-}
-
-async function loadProfile() {
-  const { data } = await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .maybeSingle();
-
-  profile = data || {};
-
-  document.getElementById("balance").innerText = (profile.balance || 0).toFixed(2) + " AZN";
-  document.getElementById("bonus").innerText = (profile.bonus || 0).toFixed(2) + " AZN";
-  document.getElementById("status").innerText = profile.current_vip || "Yeni istifadəçi";
-
-  document.getElementById("refCode").innerText = profile.referral_code || "-";
-  document.getElementById("shareCode").innerText = profile.referral_code || "-";
-  document.getElementById("vipStatus").innerText = profile.current_vip || "Yoxdur";
-}
-
-async function updateLeadershipAndStats() {
-  if(!profile || !profile.referral_code) return;
-
-  const { data: refs } = await supabaseClient
-    .from("profiles")
-    .select("id, current_vip")
-    .eq("referred_by", profile.referral_code);
-
-  const activeRefsCount = refs ? refs.filter(r => r.current_vip && r.current_vip !== "Yeni istifadəçi" && r.current_vip !== "Yoxdur").length : 0;
-  document.getElementById("activeRefCount").innerText = activeRefsCount + " nəfər";
-
-  let currentTitle = "Səviyyə 0";
-  for(let l of LEADERSHIP_LEVELS) {
-    if(activeRefsCount >= l.minRefs) currentTitle = l.title;
-  }
-
-  document.getElementById("leadershipLevel").innerText = currentTitle;
-}
-
-async function copyReferral() {
-  const code = document.getElementById("refCode").innerText;
-  if(!code || code === "-") return;
-  await navigator.clipboard.writeText(code);
-  alert("Dəvət kodunuz kopyalandı: " + code);
-}
-
-async function withdrawRequest() {
-  const amount = Number(document.getElementById("withdrawAmount").value || 0);
-  const method = document.getElementById("withdrawMethod").value;
-  const info = document.getElementById("withdrawInfo").value.trim();
-  const msg = document.getElementById("withdrawMsg");
-
-  if(amount < 8) {
-    msg.innerText = "Minimum çıxarış məbləği 8 AZN-dir.";
-    return;
-  }
-
-  if((profile.balance || 0) < amount) {
-    msg.innerText = "Balansınızda kifayət qədər məbləğ yoxdur.";
-    return;
-  }
-
-  if(!info) {
-    msg.innerText = "Rekvizit məlumatlarını daxil edin.";
-    return;
-  }
-
-  const newBal = profile.balance - amount;
-  const { error: balErr } = await supabaseClient
-    .from("profiles")
-    .update({ balance: newBal })
-    .eq("id", user.id);
-
-  if(balErr) {
-    msg.innerText = "Xəta baş verdi: " + balErr.message;
-    return;
-  }
-
-  const { error } = await supabaseClient.from("withdraw_requests").insert({
-    user_id: user.id,
-    amount: amount,
-    method: method,
-    account_info: info,
-    status: "pending"
-  });
-
-  if(error) {
-    await supabaseClient.from("profiles").update({ balance: profile.balance }).eq("id", user.id);
-    msg.innerText = error.message;
-    return;
-  }
-
-  msg.style.color = "#10b981";
-  msg.innerText = "Çıxarış sorğusu uğurla yaradıldı.";
-  document.getElementById("withdrawAmount").value = "";
-  document.getElementById("withdrawInfo").value = "";
-  await loadProfile();
-}
-
-async function buyVip(vipId, price) {
-  await loadProfile();
-
-  if((profile.balance || 0) < price) {
-    alert(`Kifayət qədər balans yoxdur! Tələb olunan: ${price} AZN, Sizin balansınız: ${(profile.balance || 0).toFixed(2)} AZN`);
-    return;
-  }
-
-  const newBalance = profile.balance - price;
-  const { error: balanceError } = await supabaseClient
-    .from("profiles")
-    .update({ balance: newBalance })
-    .eq("id", user.id);
-
-  if(balanceError) {
-    alert("Balans yenilənərkən xəta: " + balanceError.message);
-    return;
-  }
-
-  const { error: investError } = await supabaseClient.from("investments").insert({
-    user_id: user.id,
-    vip_id: vipId,
-    amount: price,
-    status: "pending"
-  });
-
-  if(investError) {
-    await supabaseClient.from("profiles").update({ balance: profile.balance }).eq("id", user.id);
-    alert("Yatırım xətası: " + investError.message);
-  } else {
-    alert(`Sorğu göndərildi. ${price} AZN balansınızdan çıxıldı və admin təsdiqinə göndərildi.`);
-    await loadProfile();
-  }
-}
-
-async function processDailyProfits() {
-  if(!user) return;
-
-  const { data: investments } = await supabaseClient
-    .from("investments")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("status", "approved");
-
-  if(!investments || investments.length === 0) return;
-
-  const now = new Date();
-  let totalAddedEarnings = 0;
-
-  for(let inv of investments) {
-    const vip = VIP_LIST.find(v => v.id === inv.vip_id);
-    if(!vip) continue;
-
-    const baseDateStr = inv.approved_at || inv.created_at;
-    const approvalDate = baseDateStr ? new Date(baseDateStr) : now;
-    const expireDate = new Date(approvalDate.getTime() + (vip.days * 24 * 60 * 60 * 1000));
-
-    if(now > expireDate) {
-      await supabaseClient.from("investments").update({ status: "expired" }).eq("id", inv.id);
-      continue;
+            currentUser = user;
+            currentProfile = profile;
+            renderDashboard();
+        } catch (err) {
+            console.error('Profil yüklənmə xətası:', err);
+            showAlert('Profil məlumatları yüklənərkən xəta baş verdi: ' + err.message);
+        }
     }
 
-    const lastCalcStr = inv.last_profit_calc || baseDateStr;
-    const lastCalc = lastCalcStr ? new Date(lastCalcStr) : now;
-    const diffHours = (now - lastCalc) / (1000 * 60 * 60);
+    // Render Dashboard Info
+    function renderDashboard() {
+        if (!currentProfile) return;
 
-    if(diffHours >= 24) {
-      const daysEarned = Math.floor(diffHours / 24);
-      const earnedAmount = daysEarned * vip.reward;
-      totalAddedEarnings += earnedAmount;
+        registerCard.classList.add('hidden');
+        loginCard.classList.add('hidden');
+        dashboardCard.classList.remove('hidden');
 
-      const newLastCalc = new Date(lastCalc.getTime() + (daysEarned * 24 * 60 * 60 * 1000));
-      await supabaseClient.from("investments").update({ last_profit_calc: newLastCalc.toISOString() }).eq("id", inv.id);
+        userEmailEl.textContent = currentProfile.email || currentUser.email;
+        userBalanceEl.textContent = Number(currentProfile.balance || 0).toFixed(2);
+        userVipEl.textContent = `VIP ${currentProfile.vip_level || 0}`;
+        userRefCodeEl.textContent = currentProfile.referral_code || '-';
+        
+        if (currentProfile.is_admin) {
+            userAdminStatusEl.textContent = "Admin";
+            userAdminStatusEl.style.backgroundColor = "#fef3c7";
+            userAdminStatusEl.style.color = "#d97706";
+            adminSection.classList.remove('hidden');
+        } else {
+            userAdminStatusEl.textContent = "İstifadəçi";
+            userAdminStatusEl.style.backgroundColor = "#e0e7ff";
+            userAdminStatusEl.style.color = "#2563eb";
+            adminSection.classList.add('hidden');
+        }
     }
-  }
 
-  if(totalAddedEarnings > 0) {
-    const newBalance = (profile.balance || 0) + totalAddedEarnings;
-    await supabaseClient.from("profiles").update({ balance: newBalance }).eq("id", user.id);
-    await loadProfile();
-  }
-}
+    // 5. Save/Update Profile Helper
+    async function saveProfile(updates) {
+        if (!currentUser) return null;
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .update(updates)
+                .eq('id', currentUser.id)
+                .select()
+                .single();
 
-async function loadAdminData() {
-  const investBox = document.getElementById("adminInvestments");
-  const withdrawBox = document.getElementById("adminWithdraw");
-  const usersBox = document.getElementById("adminUsers");
-
-  const { data: investments } = await supabaseClient.from("investments").select("*").eq("status", "pending");
-  const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*").eq("status", "pending");
-  const { data: allUsers } = await supabaseClient.from("profiles").select("*");
-
-  investBox.innerHTML = (investments && investments.length) ? investments.map(i => `
-    <div class="row">
-      <span>ID: ${i.user_id.substring(0,8)}... | VIP ${i.vip_id} (${i.amount} AZN)</span>
-      <div style="display:flex; gap:6px;">
-        <button class="btn-green" onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id}, ${i.amount})" style="width:auto; padding:6px 12px;">Təsdiqlə</button>
-        <button class="btn-red" onclick="rejectInvestment('${i.id}', '${i.user_id}', ${i.amount})" style="width:auto; padding:6px 12px;">Rədd et</button>
-      </div>
-    </div>
-  `).join("") : "<p class='muted'>Gözləyən yatırım yoxdur</p>";
-
-  withdrawBox.innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
-    <div class="row">
-      <span>${w.account_info} - ${w.amount} AZN (${w.method})</span>
-      <div style="display:flex; gap:6px;">
-        <button class="btn-green" onclick="approveWithdrawal('${w.id}')" style="width:auto; padding:6px 12px;">Təsdiqlə</button>
-        <button class="btn-red" onclick="rejectWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:6px 12px;">Rədd et</button>
-      </div>
-    </div>
-  `).join("") : "<p class='muted'>Gözləyən çıxarış yoxdur</p>";
-
-  usersBox.innerHTML = (allUsers && allUsers.length) ? `
-    <table class="admin-table">
-      <thead>
-        <tr>
-          <th>Email</th>
-          <th>Balans</th>
-          <th>Bonus</th>
-          <th>VIP</th>
-          <th>Rol</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${allUsers.map(u => `
-          <tr>
-            <td>${u.email}</td>
-            <td>${(u.balance || 0).toFixed(2)} AZN</td>
-            <td>${(u.bonus || 0).toFixed(2)} AZN</td>
-            <td>${u.current_vip || 'Yoxdur'}</td>
-            <td>${u.role || 'user'}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  ` : "<p class='muted'>İstifadəçi tapılmadı</p>";
-}
-
-async function approveInvestment(id, userId, vipId, amount) {
-  const nowIso = new Date().toISOString();
-
-  await supabaseClient.from("investments").update({
-    status: "approved",
-    approved_at: nowIso,
-    last_profit_calc: nowIso
-  }).eq("id", id);
-
-  await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
-
-  const { data: buyerProfile } = await supabaseClient.from("profiles").select("referred_by").eq("id", userId).maybeSingle();
-
-  if(buyerProfile && buyerProfile.referred_by) {
-    const { data: referrer } = await supabaseClient.from("profiles").select("id, bonus").eq("referral_code", buyerProfile.referred_by).maybeSingle();
-    if(referrer) {
-      const bonusAmount = amount * REFERRAL_BONUS_PERCENTAGE;
-      await supabaseClient.from("profiles").update({ bonus: (referrer.bonus || 0) + bonusAmount }).eq("id", referrer.id);
+            if (error) throw error;
+            currentProfile = data;
+            renderDashboard();
+            return data;
+        } catch (err) {
+            console.error('Profil yeniləmə xətası:', err);
+            showAlert('Dəyişikliklər saxlanılarkən xəta baş verdi: ' + err.message);
+            return null;
+        }
     }
-  }
 
-  alert("Yatırım təsdiqləndi.");
-  loadAdminData();
-}
+    // 3. Register Functionality
+    registerForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value;
 
-async function rejectInvestment(id, userId, amount) {
-  await supabaseClient.from("investments").update({ status: "rejected" }).eq("id", id);
-  const { data: targetUser } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
+        try {
+            const { data, error } = await supabase.auth.signUp({
+                email,
+                password
+            });
 
-  if(targetUser) {
-    await supabaseClient.from("profiles").update({ balance: (targetUser.balance || 0) + amount }).eq("id", userId);
-  }
+            if (error) throw error;
 
-  alert("Yatırım rədd edildi və məbləğ istifadəçiyə qaytarıldı.");
-  loadAdminData();
-}
+            if (data.user) {
+                showAlert('Qeydiyyat uğurla tamamlandı!', 'success');
+                // İlk profili yaradırıq
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .upsert({
+                        id: data.user.id,
+                        email: data.user.email,
+                        balance: 0.00,
+                        vip_level: 0,
+                        referral_code: generateRefCode(),
+                        is_admin: false,
+                        is_blocked: false
+                    });
 
-async function approveWithdrawal(id) {
-  await supabaseClient.from("withdraw_requests").update({ status: "approved" }).eq("id", id);
-  alert("Çıxarış təsdiqləndi.");
-  loadAdminData();
-}
+                if (profileError) console.error("Initial profile setup warning:", profileError);
 
-async function rejectWithdrawal(id, userId, amount) {
-  await supabaseClient.from("withdraw_requests").update({ status: "rejected" }).eq("id", id);
-  const { data: targetUser } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
+                if (data.session) {
+                    await loadProfile(data.user);
+                } else {
+                    showAlert('Təsdiq linki e-poçt ünvanınıza göndərildi. Zəhmət olmasa e-poçtunuzu yoxlayın.', 'success');
+                    registerCard.classList.add('hidden');
+                    loginCard.classList.remove('hidden');
+                }
+            }
+        } catch (err) {
+            showAlert(err.message);
+        }
+    });
 
-  if(targetUser) {
-    await supabaseClient.from("profiles").update({ balance: (targetUser.balance || 0) + amount }).eq("id", userId);
-  }
+    // 3. Login Functionality
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
 
-  alert("Çıxarış rədd edildi və balans bərpa olundu.");
-  loadAdminData();
-}
+        try {
+            const { data, error } = await supabase.auth.signInWithPassword({
+                email,
+                password
+            });
 
-async function logout() {
-  await supabaseClient.auth.signOut();
-  location.reload();
-}
+            if (error) throw error;
 
-// Session State Listener
-supabaseClient.auth.onAuthStateChange((event, session) => {
-  if (session?.user) {
-    openApp(session.user);
-  } else {
-    document.getElementById("app").classList.add("hidden");
-    document.getElementById("loginPage").classList.remove("hidden");
-  }
-});
+            if (data.user) {
+                await loadProfile(data.user);
+            }
+        } catch (err) {
+            showAlert('Giriş xətası: ' + err.message);
+        }
+    });
+
+    // 3. Logout Functionality
+    logoutBtn.addEventListener('click', async () => {
+        try {
+            await supabase.auth.signOut();
+            currentUser = null;
+            currentProfile = null;
+            dashboardCard.classList.add('hidden');
+            loginCard.classList.remove('hidden');
+            showAlert('Uğurla çıxış edildı.', 'success');
+        } catch (err) {
+            showAlert('Çıxış edərkən xəta baş verdi: ' + err.message);
+        }
+    });
+
+    // Balance Increase Action
+    depositBtn.addEventListener('click', async () => {
+        const amount = parseFloat(depositAmountInput.value);
+        if (isNaN(amount) || amount <= 0) {
+            showAlert('Düzgün məbləğ daxil edin');
+            return;
+        }
+
+        const newBalance = Number(currentProfile.balance || 0) + amount;
+        const res = await saveProfile({ balance: newBalance });
+        if (res) {
+            depositAmountInput.value = '';
+            showAlert('Balans uğurla artırıldı!', 'success');
+        }
+    });
+
+    // Admin Action: Update User Balance
+    adminUpdateBtn.addEventListener('click', async () => {
+        const targetEmail = targetUserEmailInput.value.trim();
+        const newBal = parseFloat(adminSetBalanceInput.value);
+
+        if (!targetEmail || isNaN(newBal)) {
+            showAlert('E-poçt və yeni balansı düzgün daxil edin');
+            return;
+        }
+
+        try {
+            const { data, error } = await supabase
+                .from('profiles')
+                .update({ balance: newBal })
+                .eq('email', targetEmail)
+                .select();
+
+            if (error) throw error;
+
+            if (data && data.length > 0) {
+                showAlert(`${targetEmail} üçün balans ${newBal} AZN olaraq yeniləndi`, 'success');
+                adminSetBalanceInput.value = '';
+                if (targetEmail === currentProfile.email) {
+                    await loadProfile(currentUser);
+                }
+            } else {
+                showAlert('İstifadəçi tapılmadı');
+            }
+        } catch (err) {
+            showAlert('Xəta: ' + err.message);
+        }
+    });
+
+    // Admin Action: Block/Unblock User
+    adminBlockBtn.addEventListener('click', async () => {
+        const targetEmail = targetUserEmailInput.value.trim();
+
+        if (!targetEmail) {
+            showAlert('Hədəf istifadəçi e-poçtunu daxil edin');
+            return;
+        }
+
+        try {
+            // Əvvəl mövcud statusunu oxuyuruq
+            const { data: targetProfile, error: fetchErr } = await supabase
+                .from('profiles')
+                .select('is_blocked')
+                .eq('email', targetEmail)
+                .single();
+
+            if (fetchErr || !targetProfile) {
+                showAlert('İstifadəçi tapılmadı');
+                return;
+            }
+
+            const newBlockState = !targetProfile.is_blocked;
+
+            const { error: updateErr } = await supabase
+                .from('profiles')
+                .update({ is_blocked: newBlockState })
+                .eq('email', targetEmail);
+
+            if (updateErr) throw updateErr;
+
+            showAlert(`${targetEmail} ${newBlockState ? 'bloklandı' : 'blokdan çıxarıldı'}`, 'success');
+        } catch (err) {
+            showAlert('Xəta: ' + err.message);
+        }
+    });
+
+    // Initialize & Handle Auth State Change
+    window.addEventListener('DOMContentLoaded', async () => {
+        // Mövcud sessiyanı yoxlayırıq
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (session && session.user) {
+            await loadProfile(session.user);
+        } else {
+            loginCard.classList.remove('hidden');
+        }
+
+        // Sessiyanın canlı izlənməsi
+        supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === 'SIGNED_IN' && session) {
+                await loadProfile(session.user);
+            } else if (event === 'SIGNED_OUT') {
+                currentUser = null;
+                currentProfile = null;
+                dashboardCard.classList.add('hidden');
+                registerCard.classList.add('hidden');
+                loginCard.classList.remove('hidden');
+            }
+        });
+    });
 </script>
 
 </body>
