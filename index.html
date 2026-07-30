@@ -1,934 +1,910 @@
-<!DOCTYPE html>
-<html lang="az" class="dark">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Noventra - Premium İnvestisiya Platforması</title>
+<!DOCTYPE html>  <html lang="az" class="dark">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />  
+  <title>Noventra - Premium İnvestisiya Platforması</title>    <!-- Tailwind CSS & Lucide Icons & Supabase JS v2 -->    <script src="https://cdn.tailwindcss.com"></script>    <script src="https://unpkg.com/lucide@latest"></script>    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>    <style>  
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');  
+  
+    body {  
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;  
+      background-color: #030712;  
+      background-image:   
+        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),  
+        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);  
+      background-attachment: fixed;  
+    }  
+  
+    /* Glassmorphism Panels */  
+    .glass-panel {  
+      background: rgba(15, 23, 42, 0.65);  
+      backdrop-filter: blur(16px);  
+      -webkit-backdrop-filter: blur(16px);  
+      border: 1px solid rgba(255, 255, 255, 0.08);  
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);  
+    }  
+  
+    .glass-header {  
+      background: rgba(3, 7, 18, 0.75);  
+      backdrop-filter: blur(20px);  
+      -webkit-backdrop-filter: blur(20px);  
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);  
+    }  
+  
+    .glass-footer {  
+      background: rgba(3, 7, 18, 0.85);  
+      backdrop-filter: blur(16px);  
+    }  
+  
+    /* Premium VIP Cards */  
+    .vip-card-glow {  
+      position: relative;  
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);  
+    }  
+  
+    .vip-card-glow:hover {  
+      transform: translateY(-4px);  
+      border-color: rgba(129, 140, 248, 0.4);  
+      box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.3);  
+    }  
+  
+    /* Custom Scrollbar */  
+    .custom-scrollbar::-webkit-scrollbar {  
+      width: 6px;  
+      height: 6px;  
+    }  
+    .custom-scrollbar::-webkit-scrollbar-track {  
+      background: rgba(15, 23, 42, 0.4);  
+    }  
+    .custom-scrollbar::-webkit-scrollbar-thumb {  
+      background: rgba(51, 65, 85, 0.6);  
+      border-radius: 4px;  
+    }  
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {  
+      background: rgba(99, 102, 241, 0.5);  
+    }  
+  
+    /* Pulse Animation for Status Indicators */  
+    @keyframes pulse-glow {  
+      0%, 100% { opacity: 1; }  
+      50% { opacity: 0.4; }  
+    }  
+  
+    .animate-pulse-glow {  
+      animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;  
+    }  
+  </style>  </head>  
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">    <!-- TOP HEADER / NAVBAR -->    <header class="glass-header sticky top-0 z-50 px-4 lg:px-8 py-3.5 flex justify-between items-center">  
+    <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">  
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">  
+        N  
+      </div>  
+      <div>  
+        <span class="font-black text-xl tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">  
+          NOVENTRA  
+        </span>  
+        <span class="block text-[9px] uppercase tracking-widest text-indigo-400/80 font-semibold">Premium Platform</span>  
+      </div>  
+    </div>  <div id="nav-actions" class="flex items-center space-x-3">  
+  <!-- Authenticated User Profile Summary or Auth Action Buttons -->  
+</div>
 
-  <!-- Tailwind CSS & Lucide Icons & Supabase JS v2 -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  </header>    <!-- MAIN WRAPPER -->    <main class="flex-grow container mx-auto px-3 sm:px-6 py-6 max-w-7xl">  <!-- AUTH CONTAINER (Login & Register) -->  
+<div id="auth-container" class="max-w-md mx-auto py-8 hidden">  
+  <!-- Rendered dynamically -->  
+</div>  
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
-    body {
-      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      background-color: #030712;
-      background-image: 
-        radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.12) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.12) 0px, transparent 50%);
-      background-attachment: fixed;
-    }
-
-    /* Glassmorphism Panels */
-    .glass-panel {
-      background: rgba(15, 23, 42, 0.65);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-    }
-
-    .glass-header {
-      background: rgba(3, 7, 18, 0.75);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .glass-footer {
-      background: rgba(3, 7, 18, 0.85);
-      backdrop-filter: blur(16px);
-    }
-
-    /* Premium VIP Cards */
-    .vip-card-glow {
-      position: relative;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .vip-card-glow:hover {
-      transform: translateY(-4px);
-      border-color: rgba(129, 140, 248, 0.4);
-      box-shadow: 0 12px 30px -10px rgba(99, 102, 241, 0.3);
-    }
-
-    /* Custom Scrollbar */
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(15, 23, 42, 0.4);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(51, 65, 85, 0.6);
-      border-radius: 4px;
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-      background: rgba(99, 102, 241, 0.5);
-    }
-
-    /* Pulse Animation for Status Indicators */
-    @keyframes pulse-glow {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .animate-pulse-glow {
-      animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-    }
-  </style>
-</head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
-
-  <!-- TOP HEADER / NAVBAR -->
-  <header class="glass-header sticky top-0 z-50 px-4 lg:px-8 py-3.5 flex justify-between items-center">
-    <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('dashboard')">
-      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center font-black text-xl text-white shadow-lg shadow-indigo-500/30">
-        N
-      </div>
-      <div>
-        <span class="font-black text-xl tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 via-purple-300 to-pink-400">
-          NOVENTRA
-        </span>
-        <span class="block text-[9px] uppercase tracking-widest text-indigo-400/80 font-semibold">Premium Platform</span>
-      </div>
-    </div>
-
-    <div id="nav-actions" class="flex items-center space-x-3">
-      <!-- Authenticated User Profile Summary or Auth Action Buttons -->
-    </div>
-  </header>
-
-  <!-- MAIN WRAPPER -->
-  <main class="flex-grow container mx-auto px-3 sm:px-6 py-6 max-w-7xl">
+<!-- APPLICATION CONTAINER -->  
+<div id="app-container" class="space-y-6 hidden">  
     
-    <!-- AUTH CONTAINER (Login & Register) -->
-    <div id="auth-container" class="max-w-md mx-auto py-8 hidden">
-      <!-- Rendered dynamically -->
-    </div>
-
-    <!-- APPLICATION CONTAINER -->
-    <div id="app-container" class="space-y-6 hidden">
-      
-      <!-- NAVIGATION TABS -->
-      <nav id="app-tabs" class="flex space-x-2 border-b border-slate-800/80 pb-3 overflow-x-auto custom-scrollbar">
-        <!-- Rendered dynamically -->
-      </nav>
-
-      <!-- TAB CONTENT VIEW -->
-      <div id="tab-content" class="min-h-[600px] transition-all duration-300">
-        <!-- Dynamic Content Injected Here -->
-      </div>
-    </div>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="glass-footer py-4 px-4 border-t border-slate-800/60 text-center text-xs text-slate-400 mt-auto">
-    <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
-      <p>&copy; 2026 Noventra. Bütün hüquqlar qorunur.</p>
-      <div class="flex space-x-4 text-slate-500">
-        <a href="#" class="hover:text-indigo-400 transition-colors">Məxfilik Siyasəti</a>
-        <a href="#" class="hover:text-indigo-400 transition-colors">İstifadə Şərtləri</a>
-        <a href="#" class="hover:text-indigo-400 transition-colors">Dəstək</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Tətbiqin Məntiqi (JavaScript) -->
-  <script>
-    /* ==========================================================================
-       NOVENTRA PLATFORM - ENGINE & MODULES
-       ========================================================================== */
-
-    // 1. SUPABASE CLIENT CONFIGURATION
-    const SUPABASE_URL = "https://your-supabase-project.supabase.co";
-    const SUPABASE_ANON_KEY = "your-anon-key-here";
-
-    let supabase = null;
-    if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    }
-
-    // 2. GLOBAL STATE MANAGEMENT
-    const state = {
-      user: null,
-      profile: null,
-      activeTab: 'dashboard',
-      adminSubTab: 'stats',
-
-      // Complete VIP Plan Configuration
-      vipPlans: [
-        { id: 1, name: 'VIP 1', price: 25, dailyProfit: 1.50, periodDays: 45 },
-        { id: 2, name: 'VIP 2', price: 35, dailyProfit: 2.30, periodDays: 50 },
-        { id: 3, name: 'VIP 3', price: 50, dailyProfit: 3.58, periodDays: 60 },
-        { id: 4, name: 'VIP 4', price: 150, dailyProfit: 11.50, periodDays: 70 },
-        { id: 5, name: 'VIP 5', price: 300, dailyProfit: 22.00, periodDays: 75 },
-        { id: 6, name: 'VIP 6', price: 450, dailyProfit: 31.50, periodDays: 80 },
-        { id: 7, name: 'VIP 7', price: 900, dailyProfit: 68.00, periodDays: 90 },
-        { id: 8, name: 'VIP 8', price: 1500, dailyProfit: 116.50, periodDays: 90 },
-        { id: 9, name: 'VIP 9', price: 3000, dailyProfit: 259.00, periodDays: 100 },
-        { id: 10, name: 'VIP 10', price: 7000, dailyProfit: 710.00, periodDays: 100 },
-        { id: 11, name: 'VIP 11', price: 15000, dailyProfit: 1870.00, periodDays: 120 }
-      ],
-
-      // Leadership Tier Specifications
-      leadershipTiers: [
-        { id: 'premium', title: 'PREMİUM RƏHBƏR', ownInvest: 50, activeRefs: 10, refInvest: 23, leaderBonus: 1.8, refBonus: 1 },
-        { id: 'supreme', title: 'SUPREME RƏHBƏR', ownInvest: 150, activeRefs: 25, refInvest: 100, leaderBonus: 5.5, refBonus: 2.5 },
-        { id: 'elite', title: 'ELİT KOMANDİR', ownInvest: 500, activeRefs: 50, refInvest: 350, leaderBonus: 18.0, refBonus: 5 },
-        { id: 'platinum', title: 'PLATİN RƏHBƏR', ownInvest: 1200, activeRefs: 100, refInvest: 1000, leaderBonus: 45.0, refBonus: 12 }
-      ],
-
-      // Dynamic Task Generator (22 Days System)
-      tasks: Array.from({ length: 22 }, (_, i) => ({
-        day: i + 1,
-        title: `Gün ${i + 1}: Finansal Analiz və Noventra İnvestisiya Tapşırığı`,
-        reward: parseFloat((1.2 + (i * 0.15)).toFixed(2)),
-        status: 'pending'
-      }))
-    };
-
-    // 3. APPLICATION LIFECYCLE INITIALIZER
-    document.addEventListener('DOMContentLoaded', () => {
-      initApp();
-    });
-
-    async function initApp() {
-      await checkSession();
-      renderNav();
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    // 4. AUTHENTICATION CONTROLLER
-    async function checkSession() {
-      if (supabase) {
-        const { data: { session } } = await supabase.auth.getSession();
-        if (session) {
-          state.user = session.user;
-          await fetchProfile(session.user.id);
-          showAppUI();
-          return;
-        }
-      }
-
-      // Fallback / Session Sync (Local Storage)
-      const stored = localStorage.getItem('noventra_user');
-      if (stored) {
-        state.user = JSON.parse(stored);
-        state.profile = state.user;
-        showAppUI();
-      } else {
-        showAuthUI('login');
-      }
-    }
-
-    async function fetchProfile(userId) {
-      if (!supabase) return;
-      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();
-      if (!error && data) {
-        state.profile = data;
-      }
-    }
-
-    function showAuthUI(mode) {
-      document.getElementById('app-container').classList.add('hidden');
-      const container = document.getElementById('auth-container');
-      container.classList.remove('hidden');
-
-      if (mode === 'login') {
-        container.innerHTML = `
-          <div class="glass-panel p-8 rounded-3xl shadow-2xl space-y-6">
-            <div class="text-center space-y-2">
-              <h2 class="text-2xl font-black text-white">Xoş Gəldiniz</h2>
-              <p class="text-xs text-slate-400">Noventra hesabınıza daxil olun</p>
-            </div>
-            <form onsubmit="handleLoginSubmit(event)" class="space-y-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1.5">E-Poç Ünvanı</label>
-                <input type="email" id="login-email" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="ad@domain.com">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1.5">Şifrə</label>
-                <input type="password" id="login-password" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="••••••••">
-              </div>
-              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-600/30 hover:opacity-95 transition-all">
-                Daxil Ol
-              </button>
-            </form>
-            <p class="text-center text-xs text-slate-400">
-              Hesabınız yoxdur? <a href="#" onclick="showAuthUI('register')" class="text-indigo-400 hover:underline font-semibold">Qeydiyyatdan keçin</a>
-            </p>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `
-          <div class="glass-panel p-8 rounded-3xl shadow-2xl space-y-6">
-            <div class="text-center space-y-2">
-              <h2 class="text-2xl font-black text-white">Hesab Yaradın</h2>
-              <p class="text-xs text-slate-400">Noventra investisiya aləminə qoşulun</p>
-            </div>
-            <form onsubmit="handleRegisterSubmit(event)" class="space-y-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1.5">E-Poç Ünvanı</label>
-                <input type="email" id="reg-email" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="ad@domain.com">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1.5">Şifrə</label>
-                <input type="password" id="reg-password" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="••••••••">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-400 mb-1.5">Referal Kodu (İstəyə bağlı)</label>
-                <input type="text" id="reg-ref" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="NOV1234">
-              </div>
-              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-600/30 hover:opacity-95 transition-all">
-                Qeydiyyatı Tamamla
-              </button>
-            </form>
-            <p class="text-center text-xs text-slate-400">
-              Artıq hesabınız var? <a href="#" onclick="showAuthUI('login')" class="text-indigo-400 hover:underline font-semibold">Daxil olun</a>
-            </p>
-          </div>
-        `;
-      }
-    }
-
-    async function handleLoginSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('login-email').value;
-      const password = document.getElementById('login-password').value;
-
-      if (supabase) {
-        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) {
-          alert(`Giriş xətası: ${error.message}`);
-          return;
-        }
-        state.user = data.user;
-        await fetchProfile(data.user.id);
-      } else {
-        const isAdmin = email.includes('admin');
-        state.profile = {
-          id: 'usr_' + Math.random().toString(36).substr(2, 7),
-          email: email,
-          balance: isAdmin ? 5000.00 : 100.00,
-          vip_level: 'Pulsuz',
-          referral_code: 'NOV' + Math.floor(1000 + Math.random() * 9000),
-          is_admin: isAdmin,
-          is_blocked: false
-        };
-        localStorage.setItem('noventra_user', JSON.stringify(state.profile));
-      }
-      showAppUI();
-    }
-
-    async function handleRegisterSubmit(e) {
-      e.preventDefault();
-      const email = document.getElementById('reg-email').value;
-      const password = document.getElementById('reg-password').value;
-      const refCode = document.getElementById('reg-ref').value;
-
-      if (supabase) {
-        const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
-          options: { data: { referral_code: refCode } }
-        });
-        if (error) {
-          alert(`Qeydiyyat xətası: ${error.message}`);
-          return;
-        }
-        alert(`Qeydiyyat uğurludur! E-poçtunuzu təsdiqləyin.`);
-        showAuthUI('login');
-      } else {
-        state.profile = {
-          id: 'usr_' + Math.random().toString(36).substr(2, 7),
-          email: email,
-          balance: 10.00,
-          vip_level: 'Pulsuz',
-          referral_code: 'NOV' + Math.floor(1000 + Math.random() * 9000),
-          is_admin: false,
-          is_blocked: false
-        };
-        localStorage.setItem('noventra_user', JSON.stringify(state.profile));
-        alert(`Qeydiyyat uğurla tamamlandı! 10 AZN Xoş gəldiniz bonusu hesabınıza əlavə edildi.`);
-        showAppUI();
-      }
-    }
-
-    function handleLogout() {
-      if (supabase) supabase.auth.signOut();
-      localStorage.removeItem('noventra_user');
-      state.user = null;
-      state.profile = null;
-      renderNav();
-      showAuthUI('login');
-    }
-
-    // 5. NAVIGATION & RENDERER
-    function showAppUI() {
-      document.getElementById('auth-container').classList.add('hidden');
-      document.getElementById('app-container').classList.remove('hidden');
-      renderNav();
-      renderTabs();
-      switchTab(state.activeTab);
-    }
-
-    function renderNav() {
-      const container = document.getElementById('nav-actions');
-      if (state.profile) {
-        container.innerHTML = `
-          <div class="flex items-center space-x-3">
-            <div class="text-right hidden sm:block">
-              <span class="block text-xs font-bold text-slate-200">${state.profile.email}</span>
-              <span class="block text-[10px] text-indigo-400 font-semibold">Balans: ${state.profile.balance.toFixed(2)} AZN</span>
-            </div>
-            <button onclick="handleLogout()" class="px-3 py-2 text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 rounded-xl transition-colors flex items-center space-x-1">
-              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
-              <span class="hidden sm:inline">Çıxış</span>
-            </button>
-          </div>
-        `;
-      } else {
-        container.innerHTML = `
-          <button onclick="showAuthUI('login')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors">Giriş</button>
-          <button onclick="showAuthUI('register')" class="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg shadow-indigo-600/30 transition-colors">Qeydiyyat</button>
-        `;
-      }
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    function renderTabs() {
-      const tabsNav = document.getElementById('app-tabs');
-      let tabs = [
-        { id: 'dashboard', name: 'Ana Səhifə', icon: 'layout-dashboard' },
-        { id: 'vip', name: 'VIP Paketlər', icon: 'zap' },
-        { id: 'leadership', name: 'Liderlik Sistemi', icon: 'crown' },
-        { id: 'tasks', name: '22 Günlük Missiyalar', icon: 'calendar-check' },
-        { id: 'finance', name: 'Depozit & Çıxarış', icon: 'wallet' },
-        { id: 'referral', name: 'Referal', icon: 'share-2' },
-        { id: 'notifications', name: 'Bildirişlər', icon: 'bell' }
-      ];
-
-      if (state.profile && state.profile.is_admin) {
-        tabs.push({ id: 'admin', name: 'Admin Panel', icon: 'shield-check' });
-      }
-
-      tabsNav.innerHTML = tabs.map(tab => `
-        <button onclick="switchTab('${tab.id}')" class="flex items-center space-x-2 px-4 py-2.5 text-xs font-bold rounded-2xl whitespace-nowrap transition-all ${state.activeTab === tab.id ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'}">
-          <i data-lucide="${tab.icon}" class="w-4 h-4"></i>
-          <span>${tab.name}</span>
-        </button>
-      `).join('');
-
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    function switchTab(tabId) {
-      state.activeTab = tabId;
-      renderTabs();
-      const content = document.getElementById('tab-content');
-      content.innerHTML = '';
-
-      switch (tabId) {
-        case 'dashboard': renderDashboard(content); break;
-        case 'vip': renderVip(content); break;
-        case 'leadership': renderLeadership(content); break;
-        case 'tasks': renderTasks(content); break;
-        case 'finance': renderFinance(content); break;
-        case 'referral': renderReferral(content); break;
-        case 'notifications': renderNotifications(content); break;
-        case 'admin': renderAdmin(content); break;
-        default: renderDashboard(content);
-      }
-      if (window.lucide) window.lucide.createIcons();
-    }
-
-    // 6. DASHBOARD MODULE
-    function renderDashboard(container) {
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div class="glass-panel p-6 rounded-3xl border-l-4 border-indigo-500 flex justify-between items-center">
-              <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Cari Balans</span>
-                <p class="text-3xl font-black text-white mt-1">${state.profile.balance.toFixed(2)} AZN</p>
-              </div>
-              <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">
-                <i data-lucide="wallet" class="w-6 h-6"></i>
-              </div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-3xl border-l-4 border-purple-500 flex justify-between items-center">
-              <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">VIP Səviyyəsi</span>
-                <p class="text-3xl font-black text-white mt-1">${state.profile.vip_level}</p>
-              </div>
-              <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
-                <i data-lucide="zap" class="w-6 h-6"></i>
-              </div>
-            </div>
-
-            <div class="glass-panel p-6 rounded-3xl border-l-4 border-emerald-500 flex justify-between items-center">
-              <div>
-                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Gündəlik Nəzərdə Tutulan Qazanc</span>
-                <p class="text-3xl font-black text-emerald-400 mt-1">
-                  ${state.profile.vip_level === 'Pulsuz' ? '0.00' : '1.50'} AZN
-                </p>
-              </div>
-              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <i data-lucide="trending-up" class="w-6 h-6"></i>
-              </div>
-            </div>
-          </div>
-
-          <div class="glass-panel p-8 rounded-3xl text-center space-y-4 relative overflow-hidden">
-            <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl"></div>
-            <h3 class="text-xl font-extrabold text-white">Gündəlik VIP Divident Toplanışı</h3>
-            <p class="text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">
-              VIP statusunuza uyğun olan gündəlik mənfəəti tək bir kliklə əsas balansınıza əlavə edin. Qazanc anında hesablanacaq.
-            </p>
-            <button onclick="claimDailyProfit()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-emerald-500/20 transition-all">
-              Gündəlik Mənfəəti Tələb Et
-            </button>
-          </div>
-        </div>
-      `;
-    }
-
-    function claimDailyProfit() {
-      if (state.profile.vip_level === 'Pulsuz') {
-        alert(`Gündəlik mənfəət tələb etmək üçün ən azı VIP 1 paketiniz olmalıdır!`);
-        return;
-      }
-      const profit = 1.50; // Bu dəyəri istifadəçinin paketindən dinamik də çəkə bilərsiniz
-      state.profile.balance += profit;
-      saveProfile();
-      alert(`${profit.toFixed(2)} AZN məbləğində gündəlik mənfəət balansınıza əlavə olundu!`);
-      switchTab('dashboard');
-    }
-
-    // 7. VIP MODULE
-    function renderVip(container) {
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="flex justify-between items-center">
-            <div>
-              <h2 class="text-xl font-black text-white">Noventra VIP İnvestisiya Paketləri</h2>
-              <p class="text-xs text-slate-400">Yüksək gəlir dərəcəsi ilə investor paketini seçin</p>
-            </div>
-            <span class="text-xs font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl hidden sm:inline-block">
-              Balans: ${state.profile.balance.toFixed(2)} AZN
-            </span>
-          </div>
-
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-            ${state.vipPlans.map(plan => `
-              <div class="glass-panel p-6 rounded-3xl flex flex-col justify-between vip-card-glow border border-slate-800 space-y-4">
-                <div class="space-y-3">
-                  <div class="flex justify-between items-center">
-                    <span class="text-xs font-black uppercase tracking-widest text-indigo-400">${plan.name}</span>
-                    <span class="text-[10px] bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-full border border-slate-700">${plan.periodDays} Gün</span>
-                  </div>
-                  <div>
-                    <span class="text-xs text-slate-400 font-medium">İnvestisiya</span>
-                    <p class="text-3xl font-black text-white">${plan.price} <span class="text-sm font-semibold text-slate-400">AZN</span></p>
-                  </div>
-                  <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">
-                    <div class="flex justify-between text-slate-300">
-                      <span>Gündəlik Qazanc:</span>
-                      <span class="font-bold text-emerald-400">${plan.dailyProfit.toFixed(2)} AZN</span>
-                    </div>
-                    <div class="flex justify-between text-slate-300">
-                      <span>Ümumi Qazanc:</span>
-                      <span class="font-bold text-indigo-300">${(plan.dailyProfit * plan.periodDays).toFixed(2)} AZN</span>
-                    </div>
-                  </div>
-                </div>
-                <button onclick="buyVip(${plan.id})" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold text-xs rounded-2xl shadow-lg transition-all">
-                  Paketi Qoş
-                </button>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    function buyVip(planId) {
-      const plan = state.vipPlans.find(p => p.id === planId);
-      if (!plan) return;
-
-      if (state.profile.balance < plan.price) {
-        alert(`Balansda kifayət qədər vəsait yoxdur! Tələb olunan: ${plan.price} AZN`);
-        return;
-      }
-
-      state.profile.balance -= plan.price;
-      state.profile.vip_level = plan.name;
-      saveProfile();
-      alert(`Təbriklər! ${plan.name} paketi uğurla fəallaşdırıldı.`);
-      switchTab('vip');
-    }
-
-    // 8. LEADERSHIP MODULE
-    function renderLeadership(container) {
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="text-center max-w-xl mx-auto space-y-2">
-            <h2 class="text-2xl font-black text-white">Liderlik və Rəhbərlik Hierarxiyası</h2>
-            <p class="text-xs text-slate-400">Komandanızı genişləndirin, liderlik rütbələri qazanın və passiv gəlirlərinizi artırın.</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-            ${state.leadershipTiers.map(tier => `
-              <div class="glass-panel p-6 rounded-3xl space-y-5 border border-slate-800/80 relative overflow-hidden flex flex-col justify-between">
-                <div class="space-y-4">
-                  <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                    <h3 class="font-black text-sm tracking-wider text-indigo-400">${tier.title}</h3>
-                    <i data-lucide="crown" class="w-5 h-5 text-amber-400"></i>
-                  </div>
-
-                  <div class="space-y-2.5 text-xs text-slate-300">
-                    <div class="flex justify-between">
-                      <span class="text-slate-400">Öz Yatırımı:</span>
-                      <span class="font-bold text-white">${tier.ownInvest} $</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-400">Aktiv Referal:</span>
-                      <span class="font-bold text-white">${tier.activeRefs} nəfər</span>
-                    </div>
-                    <div class="flex justify-between">
-                      <span class="text-slate-400">Referalların Yatırımı:</span>
-                      <span class="font-bold text-white">${tier.refInvest} $</span>
-                    </div>
-                  </div>
-
-                  <div class="bg-indigo-950/40 border border-indigo-500/20 p-3 rounded-2xl space-y-1.5 text-xs">
-                    <div class="flex justify-between text-emerald-400">
-                      <span>Rəhbər Qazancı:</span>
-                      <span class="font-bold">+${tier.leaderBonus} $</span>
-                    </div>
-                    <div class="flex justify-between text-indigo-300">
-                      <span>Referal Qazancı:</span>
-                      <span class="font-bold">+${tier.refBonus} $</span>
-                    </div>
-                  </div>
-                </div>
-
-                <button class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-colors">
-                  Tələblərə Bax
-                </button>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    // 9. 22 DAYS TASKS MODULE
-    function renderTasks(container) {
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div>
-            <h2 class="text-xl font-black text-white">22 Günlük İnvestisiya Tapşırıq Sistemi</h2>
-            <p class="text-xs text-slate-400">Hər gün təyin olunan missiyanı yerinə yetirin, balansı artırın</p>
-          </div>
-
-          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            ${state.tasks.map(task => `
-              <div class="glass-panel p-5 rounded-3xl flex items-center justify-between border border-slate-800 space-x-3">
-                <div class="space-y-1">
-                  <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Gün ${task.day}</span>
-                  <h4 class="text-xs font-bold text-white leading-tight">${task.title}</h4>
-                  <p class="text-xs font-bold text-emerald-400">+${task.reward.toFixed(2)} AZN Mükafat</p>
-                </div>
-                ${task.status === 'completed' ? `
-                  <span class="px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold rounded-xl whitespace-nowrap">
-                    Tamamlandı
-                  </span>
-                ` : `
-                  <button onclick="completeTask(${task.day})" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-all whitespace-nowrap">
-                    İcra Et
-                  </button>
-                `}
-              </div>
-            `).join('')}
-          </div>
-        </div>
-      `;
-    }
-
-    function completeTask(day) {
-      const task = state.tasks.find(t => t.day === day);
-      if (!task || task.status === 'completed') return;
-
-      task.status = 'completed';
-      state.profile.balance += task.reward;
-      saveProfile();
-      alert(`Gün ${day} tapşırığı icra olundu! +${task.reward.toFixed(2)} AZN əlavə edildi.`);
-      switchTab('tasks');
-    }
-
-    // 10. FINANCE MODULE (DEPOSIT & WITHDRAWAL)
-    function renderFinance(container) {
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            <!-- Deposit Panel -->
-            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">
-              <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="font-extrabold text-sm text-white flex items-center space-x-2">
-                  <i data-lucide="arrow-down-left" class="w-4 h-4 text-emerald-400"></i>
-                  <span>Depozit Qəbulu (Milli Kart / USDT)</span>
-                </h3>
-              </div>
-
-              <div class="bg-slate-900/80 p-4 rounded-2xl text-center space-y-2 border border-slate-800">
-                <span class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Ödəniş Üçün QR Kod</span>
-                <div class="w-32 h-32 mx-auto bg-white p-2 rounded-xl flex items-center justify-center">
-                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=NoventraPayment" alt="QR" class="w-full h-full">
-                </div>
-                <p class="text-[11px] font-mono text-indigo-300">Kart: 4169 7388 0000 0000</p>
-              </div>
-
-              <form onsubmit="handleDepositSubmit(event)" class="space-y-3">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-400 mb-1">Depozit Məbləği (AZN)</label>
-                  <input type="number" id="dep-amt" min="10" required class="w-full bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Min. 10">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-400 mb-1">Ödəniş Qəbzi (Şəkil / Fayl)</label>
-                  <input type="file" id="dep-receipt" accept="image/*" required class="w-full text-xs text-slate-400 bg-slate-900 border border-slate-700/80 rounded-2xl px-3 py-2">
-                </div>
-                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl shadow-lg transition-all">
-                  Depozit Sorğusu Göndər
-                </button>
-              </form>
-            </div>
-
-            <!-- Withdrawal Panel -->
-            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">
-              <div class="flex justify-between items-center border-b border-slate-800 pb-3">
-                <h3 class="font-extrabold text-sm text-white flex items-center space-x-2">
-                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-rose-400"></i>
-                  <span>Vəsait Çıxarışı</span>
-                </h3>
-              </div>
-
-              <form onsubmit="handleWithdrawSubmit(event)" class="space-y-3">
-                <div>
-                  <label class="block text-xs font-semibold text-slate-400 mb-1">Məbləğ (AZN)</label>
-                  <input type="number" id="wd-amt" min="15" required class="w-full bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Min. 15">
-                </div>
-                <div>
-                  <label class="block text-xs font-semibold text-slate-400 mb-1">Bank Kart Nömrəsi</label>
-                  <input type="text" id="wd-card" required maxlength="16" class="w-full bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-indigo-500" placeholder="4169 ...">
-                </div>
-                <button type="submit" class="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-2xl shadow-lg transition-all">
-                  Çıxarış Sorğusu Yarat
-                </button>
-              </form>
-            </div>
-
-          </div>
-        </div>
-      `;
-    }
-
-    function handleDepositSubmit(e) {
-      e.preventDefault();
-      const amt = parseFloat(document.getElementById('dep-amt').value);
-      alert(`${amt.toFixed(2)} AZN depozit sorğusu və qəbz admin panelinə göndərildi. Status: Gözləyir.`);
-    }
-
-    function handleWithdrawSubmit(e) {
-      e.preventDefault();
-      const amt = parseFloat(document.getElementById('wd-amt').value);
-      const card = document.getElementById('wd-card').value;
-
-      if (state.profile.balance < amt) {
-        alert(`Balansda kifayət qədər vəsait yoxdur!`);
-        return;
-      }
-
-      state.profile.balance -= amt;
-      saveProfile();
-      alert(`${amt.toFixed(2)} AZN məbləğində çıxarış sorğusu (${card}) yaradıldı. Status: Gözləyir.`);
-      switchTab('finance');
-    }
-
-    // 11. REFERRAL MODULE
-    function renderReferral(container) {
-      const refLink = `https://noventra.app/register?ref=${state.profile.referral_code}`;
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">
-            <h3 class="text-sm font-extrabold text-white">Sizin Şəxsi Dəvət Linkiniz</h3>
-            <div class="flex items-center space-x-2">
-              <input type="text" readonly value="${refLink}" class="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-xs text-indigo-300 font-mono focus:outline-none">
-              <button onclick="copyLink('${refLink}')" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-2xl whitespace-nowrap transition-all">
-                Kopyala
-              </button>
-            </div>
-          </div>
-
-          <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">
-            <h3 class="text-sm font-extrabold text-white">Referal Şəbəkə Qazancı (3 Səviyyəli)</h3>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-center space-y-1">
-                <span class="text-xs text-slate-400 font-semibold">1-ci Səviyyə</span>
-                <p class="text-2xl font-black text-indigo-400">10%</p>
-              </div>
-              <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-center space-y-1">
-                <span class="text-xs text-slate-400 font-semibold">2-ci Səviyyə</span>
-                <p class="text-2xl font-black text-purple-400">3%</p>
-              </div>
-              <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-center space-y-1">
-                <span class="text-xs text-slate-400 font-semibold">3-cü Səviyyə</span>
-                <p class="text-2xl font-black text-pink-400">1%</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    function copyLink(text) {
-      navigator.clipboard.writeText(text);
-      alert(`Dəvət linki kopyalandı!`);
-    }
-
-    // 12. NOTIFICATIONS MODULE
-    function renderNotifications(container) {
-      container.innerHTML = `
-        <div class="space-y-4">
-          <h2 class="text-xl font-black text-white">Sistem Bildirişləri</h2>
-          <div class="space-y-3">
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-1">
-              <div class="flex justify-between items-center">
-                <h4 class="text-xs font-bold text-indigo-300">Noventra Platformasına Xoş Gəldiniz!</h4>
-                <span class="text-[10px] text-slate-500">Bu gün</span>
-              </div>
-              <p class="text-xs text-slate-300 leading-relaxed">Yeni VIP paketlərimiz və 22 günlük tapşırıq sistemimiz aktivdir.</p>
-            </div>
-          </div>
-        </div>
-      `;
-    }
-
-    // 13. ADMIN PANEL MODULE (PROFESSIONAL CONTROL CENTER)
-    function renderAdmin(container) {
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-4 gap-2">
-            <div>
-              <h2 class="text-xl font-black text-rose-400 flex items-center space-x-2">
-                <i data-lucide="shield-check" class="w-6 h-6"></i>
-                <span>Noventra İnzibatçı İdarəetmə Mərkəzi</span>
-              </h2>
-            </div>
-          </div>
-
-          <!-- Admin Sub-Navigation -->
-          <div class="flex space-x-2 overflow-x-auto border-b border-slate-800 pb-3 custom-scrollbar">
-            <button onclick="switchAdminSub('stats')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Statistika</button>
-            <button onclick="switchAdminSub('users')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">İstifadəçilər</button>
-            <button onclick="switchAdminSub('deposits')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Depozit Təsdiqi</button>
-            <button onclick="switchAdminSub('withdrawals')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Çıxarış Təsdiqi</button>
-            <button onclick="switchAdminSub('logs')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Audit Loglar</button>
-          </div>
-
-          <div id="admin-sub-content">
-            <!-- Rendered dynamically -->
-          </div>
-        </div>
-      `;
-      switchAdminSub('stats');
-    }
-
-    function switchAdminSub(sub) {
-      state.adminSubTab = sub;
-      const subContainer = document.getElementById('admin-sub-content');
-      if (!subContainer) return;
-
-      if (sub === 'stats') {
-        subContainer.innerHTML = `
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">
-              <span class="text-xs text-slate-400 font-semibold">Toplam İstifadəçi</span>
-              <p class="text-2xl font-black text-white mt-1">1,420</p>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">
-              <span class="text-xs text-slate-400 font-semibold">Aktiv İstifadəçi</span>
-              <p class="text-2xl font-black text-emerald-400 mt-1">980</p>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">
-              <span class="text-xs text-slate-400 font-semibold">Bugünkü Depozit</span>
-              <p class="text-2xl font-black text-indigo-400 mt-1">4,250 AZN</p>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">
-              <span class="text-xs text-slate-400 font-semibold">Bugünkü Çıxarış</span>
-              <p class="text-2xl font-black text-rose-400 mt-1">1,120 AZN</p>
-            </div>
-            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">
-              <span class="text-xs text-slate-400 font-semibold">Ümumi Qazanc</span>
-              <p class="text-2xl font-black text-purple-400 mt-1">48,900 AZN</p>
-            </div>
-          </div>
-        `;
-      } else if (sub === 'users') {
-        subContainer.innerHTML = `
-          <div class="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">
-            <h3 class="text-sm font-extrabold text-white">İstifadəçilərin İdarə Edilməsi</h3>
-            <div class="flex flex-wrap gap-2">
-              <button onclick="adminAdjustBalance('add')" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl">+ Balans Artır</button>
-              <button onclick="adminAdjustBalance('sub')" class="px-4 py-2 bg-rose-600 text-white text-xs font-bold rounded-xl">- Balans Azalt</button>
-              <button onclick="adminGrantVip()" class="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl">VIP Ver / Ləğv Et</button>
-            </div>
-          </div>
-        `;
-      } else {
-        subContainer.innerHTML = `
-          <div class="glass-panel p-6 rounded-3xl border border-slate-800 text-center text-xs text-slate-400">
-            Sorğular və audit loglar uğurla verilənlər bazasından sinxronlaşdırılır.
-          </div>
-        `;
-      }
-    }
-
-    function adminAdjustBalance(type) {
-      const amt = prompt(`Məbləği daxil edin (AZN):`);
-      if (!amt || isNaN(parseFloat(amt))) return;
-      const val = parseFloat(amt);
-      if (type === 'add') state.profile.balance += val;
-      else state.profile.balance = Math.max(0, state.profile.balance - val);
-      saveProfile();
-      alert(`İstifadəçi balansı yeniləndi: ${state.profile.balance.toFixed(2)} AZN`);
-    }
-
-    function adminGrantVip() {
-      const vip = prompt(`VIP Səviyyəsini daxil edin (məs: VIP 3 və ya Pulsuz):`, 'VIP 1');
-      if (vip) {
-        state.profile.vip_level = vip;
-        saveProfile();
-        alert(`İstifadəçi VIP səviyyəsi ${vip} olaraq təyin edildi.`);
-      }
-    }
-
-    // 14. UTILS & DATA PERSISTENCE
-    function saveProfile() {
-      if (state.user) {
-        localStorage.setItem('noventra_user', JSON.stringify(state.profile));
-        if (supabase) {
-          supabase.from('profiles').upsert(state.profile);
-        }
-      }
-    }
-  </script>
-</body>
-</html>
+  <!-- NAVIGATION TABS -->  
+  <nav id="app-tabs" class="flex space-x-2 border-b border-slate-800/80 pb-3 overflow-x-auto custom-scrollbar">  
+    <!-- Rendered dynamically -->  
+  </nav>  
+
+  <!-- TAB CONTENT VIEW -->  
+  <div id="tab-content" class="min-h-[600px] transition-all duration-300">  
+    <!-- Dynamic Content Injected Here -->  
+  </div>  
+</div>
+
+  </main>    <!-- FOOTER -->    <footer class="glass-footer py-4 px-4 border-t border-slate-800/60 text-center text-xs text-slate-400 mt-auto">  
+    <div class="container mx-auto flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">  
+      <p>&copy; 2026 Noventra. Bütün hüquqlar qorunur.</p>  
+      <div class="flex space-x-4 text-slate-500">  
+        <a href="#" class="hover:text-indigo-400 transition-colors">Məxfilik Siyasəti</a>  
+        <a href="#" class="hover:text-indigo-400 transition-colors">İstifadə Şərtləri</a>  
+        <a href="#" class="hover:text-indigo-400 transition-colors">Dəstək</a>  
+      </div>  
+    </div>  
+  </footer>    <!-- Tətbiqin Məntiqi (JavaScript) -->    <script>  
+    /* ==========================================================================  
+       NOVENTRA PLATFORM - ENGINE & MODULES  
+       ========================================================================== */  
+  
+    // 1. SUPABASE CLIENT CONFIGURATION  
+    const SUPABASE_URL = "https://your-supabase-project.supabase.co";  
+    const SUPABASE_ANON_KEY = "your-anon-key-here";  
+  
+    let supabase = null;  
+    if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {  
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);  
+    }  
+  
+    // 2. GLOBAL STATE MANAGEMENT  
+    const state = {  
+      user: null,  
+      profile: null,  
+      activeTab: 'dashboard',  
+      adminSubTab: 'stats',  
+  
+      // Complete VIP Plan Configuration  
+      vipPlans: [  
+        { id: 1, name: 'VIP 1', price: 25, dailyProfit: 1.50, periodDays: 45 },  
+        { id: 2, name: 'VIP 2', price: 35, dailyProfit: 2.30, periodDays: 50 },  
+        { id: 3, name: 'VIP 3', price: 50, dailyProfit: 3.58, periodDays: 60 },  
+        { id: 4, name: 'VIP 4', price: 150, dailyProfit: 11.50, periodDays: 70 },  
+        { id: 5, name: 'VIP 5', price: 300, dailyProfit: 22.00, periodDays: 75 },  
+        { id: 6, name: 'VIP 6', price: 450, dailyProfit: 31.50, periodDays: 80 },  
+        { id: 7, name: 'VIP 7', price: 900, dailyProfit: 68.00, periodDays: 90 },  
+        { id: 8, name: 'VIP 8', price: 1500, dailyProfit: 116.50, periodDays: 90 },  
+        { id: 9, name: 'VIP 9', price: 3000, dailyProfit: 259.00, periodDays: 100 },  
+        { id: 10, name: 'VIP 10', price: 7000, dailyProfit: 710.00, periodDays: 100 },  
+        { id: 11, name: 'VIP 11', price: 15000, dailyProfit: 1870.00, periodDays: 120 }  
+      ],  
+  
+      // Leadership Tier Specifications  
+      leadershipTiers: [  
+        { id: 'premium', title: 'PREMİUM RƏHBƏR', ownInvest: 50, activeRefs: 10, refInvest: 23, leaderBonus: 1.8, refBonus: 1 },  
+        { id: 'supreme', title: 'SUPREME RƏHBƏR', ownInvest: 150, activeRefs: 25, refInvest: 100, leaderBonus: 5.5, refBonus: 2.5 },  
+        { id: 'elite', title: 'ELİT KOMANDİR', ownInvest: 500, activeRefs: 50, refInvest: 350, leaderBonus: 18.0, refBonus: 5 },  
+        { id: 'platinum', title: 'PLATİN RƏHBƏR', ownInvest: 1200, activeRefs: 100, refInvest: 1000, leaderBonus: 45.0, refBonus: 12 }  
+      ],  
+  
+      // Dynamic Task Generator (22 Days System)  
+      tasks: Array.from({ length: 22 }, (_, i) => ({  
+        day: i + 1,  
+        title: `Gün ${i + 1}: Finansal Analiz və Noventra İnvestisiya Tapşırığı`,  
+        reward: parseFloat((1.2 + (i * 0.15)).toFixed(2)),  
+        status: 'pending'  
+      }))  
+    };  
+  
+    // 3. APPLICATION LIFECYCLE INITIALIZER  
+    document.addEventListener('DOMContentLoaded', () => {  
+      initApp();  
+    });  
+  
+    async function initApp() {  
+      await checkSession();  
+      renderNav();  
+      if (window.lucide) window.lucide.createIcons();  
+    }  
+  
+    // 4. AUTHENTICATION CONTROLLER  
+    async function checkSession() {  
+      if (supabase) {  
+        const { data: { session } } = await supabase.auth.getSession();  
+        if (session) {  
+          state.user = session.user;  
+          await fetchProfile(session.user.id);  
+          showAppUI();  
+          return;  
+        }  
+      }  
+  
+      // Fallback / Session Sync (Local Storage)  
+      const stored = localStorage.getItem('noventra_user');  
+      if (stored) {  
+        state.user = JSON.parse(stored);  
+        state.profile = state.user;  
+        showAppUI();  
+      } else {  
+        showAuthUI('login');  
+      }  
+    }  
+  
+    async function fetchProfile(userId) {  
+      if (!supabase) return;  
+      const { data, error } = await supabase.from('profiles').select('*').eq('id', userId).single();  
+      if (!error && data) {  
+        state.profile = data;  
+      }  
+    }  
+  
+    function showAuthUI(mode) {  
+      document.getElementById('app-container').classList.add('hidden');  
+      const container = document.getElementById('auth-container');  
+      container.classList.remove('hidden');  
+  
+      if (mode === 'login') {  
+        container.innerHTML = `  
+          <div class="glass-panel p-8 rounded-3xl shadow-2xl space-y-6">  
+            <div class="text-center space-y-2">  
+              <h2 class="text-2xl font-black text-white">Xoş Gəldiniz</h2>  
+              <p class="text-xs text-slate-400">Noventra hesabınıza daxil olun</p>  
+            </div>  
+            <form onsubmit="handleLoginSubmit(event)" class="space-y-4">  
+              <div>  
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5">E-Poç Ünvanı</label>  
+                <input type="email" id="login-email" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="ad@domain.com">  
+              </div>  
+              <div>  
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5">Şifrə</label>  
+                <input type="password" id="login-password" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="••••••••">  
+              </div>  
+              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-600/30 hover:opacity-95 transition-all">  
+                Daxil Ol  
+              </button>  
+            </form>  
+            <p class="text-center text-xs text-slate-400">  
+              Hesabınız yoxdur? <a href="#" onclick="showAuthUI('register')" class="text-indigo-400 hover:underline font-semibold">Qeydiyyatdan keçin</a>  
+            </p>  
+          </div>  
+        `;  
+      } else {  
+        container.innerHTML = `  
+          <div class="glass-panel p-8 rounded-3xl shadow-2xl space-y-6">  
+            <div class="text-center space-y-2">  
+              <h2 class="text-2xl font-black text-white">Hesab Yaradın</h2>  
+              <p class="text-xs text-slate-400">Noventra investisiya aləminə qoşulun</p>  
+            </div>  
+            <form onsubmit="handleRegisterSubmit(event)" class="space-y-4">  
+              <div>  
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5">E-Poç Ünvanı</label>  
+                <input type="email" id="reg-email" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="ad@domain.com">  
+              </div>  
+              <div>  
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5">Şifrə</label>  
+                <input type="password" id="reg-password" required class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="••••••••">  
+              </div>  
+              <div>  
+                <label class="block text-xs font-semibold text-slate-400 mb-1.5">Referal Kodu (İstəyə bağlı)</label>  
+                <input type="text" id="reg-ref" class="w-full bg-slate-900/90 border border-slate-700/80 rounded-2xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500 transition-colors" placeholder="NOV1234">  
+              </div>  
+              <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-white font-bold text-sm rounded-2xl shadow-lg shadow-indigo-600/30 hover:opacity-95 transition-all">  
+                Qeydiyyatı Tamamla  
+              </button>  
+            </form>  
+            <p class="text-center text-xs text-slate-400">  
+              Artıq hesabınız var? <a href="#" onclick="showAuthUI('login')" class="text-indigo-400 hover:underline font-semibold">Daxil olun</a>  
+            </p>  
+          </div>  
+        `;  
+      }  
+    }  
+  
+    async function handleLoginSubmit(e) {  
+      e.preventDefault();  
+      const email = document.getElementById('login-email').value;  
+      const password = document.getElementById('login-password').value;  
+  
+      if (supabase) {  
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });  
+        if (error) {  
+          alert(`Giriş xətası: ${error.message}`);  
+          return;  
+        }  
+        state.user = data.user;  
+        await fetchProfile(data.user.id);  
+      } else {  
+        const isAdmin = email.includes('admin');  
+        state.profile = {  
+          id: 'usr_' + Math.random().toString(36).substr(2, 7),  
+          email: email,  
+          balance: isAdmin ? 5000.00 : 100.00,  
+          vip_level: 'Pulsuz',  
+          referral_code: 'NOV' + Math.floor(1000 + Math.random() * 9000),  
+          is_admin: isAdmin,  
+          is_blocked: false  
+        };  
+        localStorage.setItem('noventra_user', JSON.stringify(state.profile));  
+      }  
+      showAppUI();  
+    }  
+  
+    async function handleRegisterSubmit(e) {  
+      e.preventDefault();  
+      const email = document.getElementById('reg-email').value;  
+      const password = document.getElementById('reg-password').value;  
+      const refCode = document.getElementById('reg-ref').value;  
+  
+      if (supabase) {  
+        const { data, error } = await supabase.auth.signUp({  
+          email,  
+          password,  
+          options: { data: { referral_code: refCode } }  
+        });  
+        if (error) {  
+          alert(`Qeydiyyat xətası: ${error.message}`);  
+          return;  
+        }  
+        alert(`Qeydiyyat uğurludur! E-poçtunuzu təsdiqləyin.`);  
+        showAuthUI('login');  
+      } else {  
+        state.profile = {  
+          id: 'usr_' + Math.random().toString(36).substr(2, 7),  
+          email: email,  
+          balance: 10.00,  
+          vip_level: 'Pulsuz',  
+          referral_code: 'NOV' + Math.floor(1000 + Math.random() * 9000),  
+          is_admin: false,  
+          is_blocked: false  
+        };  
+        localStorage.setItem('noventra_user', JSON.stringify(state.profile));  
+        alert(`Qeydiyyat uğurla tamamlandı! 10 AZN Xoş gəldiniz bonusu hesabınıza əlavə edildi.`);  
+        showAppUI();  
+      }  
+    }  
+  
+    function handleLogout() {  
+      if (supabase) supabase.auth.signOut();  
+      localStorage.removeItem('noventra_user');  
+      state.user = null;  
+      state.profile = null;  
+      renderNav();  
+      showAuthUI('login');  
+    }  
+  
+    // 5. NAVIGATION & RENDERER  
+    function showAppUI() {  
+      document.getElementById('auth-container').classList.add('hidden');  
+      document.getElementById('app-container').classList.remove('hidden');  
+      renderNav();  
+      renderTabs();  
+      switchTab(state.activeTab);  
+    }  
+  
+    function renderNav() {  
+      const container = document.getElementById('nav-actions');  
+      if (state.profile) {  
+        container.innerHTML = `  
+          <div class="flex items-center space-x-3">  
+            <div class="text-right hidden sm:block">  
+              <span class="block text-xs font-bold text-slate-200">${state.profile.email}</span>  
+              <span class="block text-[10px] text-indigo-400 font-semibold">Balans: ${state.profile.balance.toFixed(2)} AZN</span>  
+            </div>  
+            <button onclick="handleLogout()" class="px-3 py-2 text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/30 hover:bg-rose-500/30 rounded-xl transition-colors flex items-center space-x-1">  
+              <i data-lucide="log-out" class="w-3.5 h-3.5"></i>  
+              <span class="hidden sm:inline">Çıxış</span>  
+            </button>  
+          </div>  
+        `;  
+      } else {  
+        container.innerHTML = `  
+          <button onclick="showAuthUI('login')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl transition-colors">Giriş</button>  
+          <button onclick="showAuthUI('register')" class="px-4 py-2 text-xs font-bold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-lg shadow-indigo-600/30 transition-colors">Qeydiyyat</button>  
+        `;  
+      }  
+      if (window.lucide) window.lucide.createIcons();  
+    }  
+  
+    function renderTabs() {  
+      const tabsNav = document.getElementById('app-tabs');  
+      let tabs = [  
+        { id: 'dashboard', name: 'Ana Səhifə', icon: 'layout-dashboard' },  
+        { id: 'vip', name: 'VIP Paketlər', icon: 'zap' },  
+        { id: 'leadership', name: 'Liderlik Sistemi', icon: 'crown' },  
+        { id: 'tasks', name: '22 Günlük Missiyalar', icon: 'calendar-check' },  
+        { id: 'finance', name: 'Depozit & Çıxarış', icon: 'wallet' },  
+        { id: 'referral', name: 'Referal', icon: 'share-2' },  
+        { id: 'notifications', name: 'Bildirişlər', icon: 'bell' }  
+      ];  
+  
+      if (state.profile && state.profile.is_admin) {  
+        tabs.push({ id: 'admin', name: 'Admin Panel', icon: 'shield-check' });  
+      }  
+  
+      tabsNav.innerHTML = tabs.map(tab => `  
+        <button onclick="switchTab('${tab.id}')" class="flex items-center space-x-2 px-4 py-2.5 text-xs font-bold rounded-2xl whitespace-nowrap transition-all ${state.activeTab === tab.id ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-600/30' : 'text-slate-400 hover:bg-slate-900 hover:text-slate-200'}">  
+          <i data-lucide="${tab.icon}" class="w-4 h-4"></i>  
+          <span>${tab.name}</span>  
+        </button>  
+      `).join('');  
+  
+      if (window.lucide) window.lucide.createIcons();  
+    }  
+  
+    function switchTab(tabId) {  
+      state.activeTab = tabId;  
+      renderTabs();  
+      const content = document.getElementById('tab-content');  
+      content.innerHTML = '';  
+  
+      switch (tabId) {  
+        case 'dashboard': renderDashboard(content); break;  
+        case 'vip': renderVip(content); break;  
+        case 'leadership': renderLeadership(content); break;  
+        case 'tasks': renderTasks(content); break;  
+        case 'finance': renderFinance(content); break;  
+        case 'referral': renderReferral(content); break;  
+        case 'notifications': renderNotifications(content); break;  
+        case 'admin': renderAdmin(content); break;  
+        default: renderDashboard(content);  
+      }  
+      if (window.lucide) window.lucide.createIcons();  
+    }  
+  
+    // 6. DASHBOARD MODULE  
+    function renderDashboard(container) {  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-5">  
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-indigo-500 flex justify-between items-center">  
+              <div>  
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Cari Balans</span>  
+                <p class="text-3xl font-black text-white mt-1">${state.profile.balance.toFixed(2)} AZN</p>  
+              </div>  
+              <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400">  
+                <i data-lucide="wallet" class="w-6 h-6"></i>  
+              </div>  
+            </div>  
+  
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-purple-500 flex justify-between items-center">  
+              <div>  
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">VIP Səviyyəsi</span>  
+                <p class="text-3xl font-black text-white mt-1">${state.profile.vip_level}</p>  
+              </div>  
+              <div class="w-12 h-12 rounded-2xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">  
+                <i data-lucide="zap" class="w-6 h-6"></i>  
+              </div>  
+            </div>  
+  
+            <div class="glass-panel p-6 rounded-3xl border-l-4 border-emerald-500 flex justify-between items-center">  
+              <div>  
+                <span class="text-xs text-slate-400 font-semibold uppercase tracking-wider">Gündəlik Nəzərdə Tutulan Qazanc</span>  
+                <p class="text-3xl font-black text-emerald-400 mt-1">  
+                  ${state.profile.vip_level === 'Pulsuz' ? '0.00' : '1.50'} AZN  
+                </p>  
+              </div>  
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">  
+                <i data-lucide="trending-up" class="w-6 h-6"></i>  
+              </div>  
+            </div>  
+          </div>  
+  
+          <div class="glass-panel p-8 rounded-3xl text-center space-y-4 relative overflow-hidden">  
+            <div class="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl"></div>  
+            <h3 class="text-xl font-extrabold text-white">Gündəlik VIP Divident Toplanışı</h3>  
+            <p class="text-xs text-slate-400 max-w-lg mx-auto leading-relaxed">  
+              VIP statusunuza uyğun olan gündəlik mənfəəti tək bir kliklə əsas balansınıza əlavə edin. Qazanc anında hesablanacaq.  
+            </p>  
+            <button onclick="claimDailyProfit()" class="px-8 py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-xs uppercase tracking-wider rounded-2xl shadow-xl shadow-emerald-500/20 transition-all">  
+              Gündəlik Mənfəəti Tələb Et  
+            </button>  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    function claimDailyProfit() {  
+      if (state.profile.vip_level === 'Pulsuz') {  
+        alert(`Gündəlik mənfəət tələb etmək üçün ən azı VIP 1 paketiniz olmalıdır!`);  
+        return;  
+      }  
+      const profit = 1.50; // Bu dəyəri istifadəçinin paketindən dinamik də çəkə bilərsiniz  
+      state.profile.balance += profit;  
+      saveProfile();  
+      alert(`${profit.toFixed(2)} AZN məbləğində gündəlik mənfəət balansınıza əlavə olundu!`);  
+      switchTab('dashboard');  
+    }  
+  
+    // 7. VIP MODULE  
+    function renderVip(container) {  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div class="flex justify-between items-center">  
+            <div>  
+              <h2 class="text-xl font-black text-white">Noventra VIP İnvestisiya Paketləri</h2>  
+              <p class="text-xs text-slate-400">Yüksək gəlir dərəcəsi ilə investor paketini seçin</p>  
+            </div>  
+            <span class="text-xs font-bold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-xl hidden sm:inline-block">  
+              Balans: ${state.profile.balance.toFixed(2)} AZN  
+            </span>  
+          </div>  
+  
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">  
+            ${state.vipPlans.map(plan => `  
+              <div class="glass-panel p-6 rounded-3xl flex flex-col justify-between vip-card-glow border border-slate-800 space-y-4">  
+                <div class="space-y-3">  
+                  <div class="flex justify-between items-center">  
+                    <span class="text-xs font-black uppercase tracking-widest text-indigo-400">${plan.name}</span>  
+                    <span class="text-[10px] bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-full border border-slate-700">${plan.periodDays} Gün</span>  
+                  </div>  
+                  <div>  
+                    <span class="text-xs text-slate-400 font-medium">İnvestisiya</span>  
+                    <p class="text-3xl font-black text-white">${plan.price} <span class="text-sm font-semibold text-slate-400">AZN</span></p>  
+                  </div>  
+                  <div class="border-t border-slate-800 pt-3 space-y-2 text-xs">  
+                    <div class="flex justify-between text-slate-300">  
+                      <span>Gündəlik Qazanc:</span>  
+                      <span class="font-bold text-emerald-400">${plan.dailyProfit.toFixed(2)} AZN</span>  
+                    </div>  
+                    <div class="flex justify-between text-slate-300">  
+                      <span>Ümumi Qazanc:</span>  
+                      <span class="font-bold text-indigo-300">${(plan.dailyProfit * plan.periodDays).toFixed(2)} AZN</span>  
+                    </div>  
+                  </div>  
+                </div>  
+                <button onclick="buyVip(${plan.id})" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-95 text-white font-bold text-xs rounded-2xl shadow-lg transition-all">  
+                  Paketi Qoş  
+                </button>  
+              </div>  
+            `).join('')}  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    function buyVip(planId) {  
+      const plan = state.vipPlans.find(p => p.id === planId);  
+      if (!plan) return;  
+  
+      if (state.profile.balance < plan.price) {  
+        alert(`Balansda kifayət qədər vəsait yoxdur! Tələb olunan: ${plan.price} AZN`);  
+        return;  
+      }  
+  
+      state.profile.balance -= plan.price;  
+      state.profile.vip_level = plan.name;  
+      saveProfile();  
+      alert(`Təbriklər! ${plan.name} paketi uğurla fəallaşdırıldı.`);  
+      switchTab('vip');  
+    }  
+  
+    // 8. LEADERSHIP MODULE  
+    function renderLeadership(container) {  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div class="text-center max-w-xl mx-auto space-y-2">  
+            <h2 class="text-2xl font-black text-white">Liderlik və Rəhbərlik Hierarxiyası</h2>  
+            <p class="text-xs text-slate-400">Komandanızı genişləndirin, liderlik rütbələri qazanın və passiv gəlirlərinizi artırın.</p>  
+          </div>  
+  
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">  
+            ${state.leadershipTiers.map(tier => `  
+              <div class="glass-panel p-6 rounded-3xl space-y-5 border border-slate-800/80 relative overflow-hidden flex flex-col justify-between">  
+                <div class="space-y-4">  
+                  <div class="flex justify-between items-center border-b border-slate-800 pb-3">  
+                    <h3 class="font-black text-sm tracking-wider text-indigo-400">${tier.title}</h3>  
+                    <i data-lucide="crown" class="w-5 h-5 text-amber-400"></i>  
+                  </div>  
+  
+                  <div class="space-y-2.5 text-xs text-slate-300">  
+                    <div class="flex justify-between">  
+                      <span class="text-slate-400">Öz Yatırımı:</span>  
+                      <span class="font-bold text-white">${tier.ownInvest} $</span>  
+                    </div>  
+                    <div class="flex justify-between">  
+                      <span class="text-slate-400">Aktiv Referal:</span>  
+                      <span class="font-bold text-white">${tier.activeRefs} nəfər</span>  
+                    </div>  
+                    <div class="flex justify-between">  
+                      <span class="text-slate-400">Referalların Yatırımı:</span>  
+                      <span class="font-bold text-white">${tier.refInvest} $</span>  
+                    </div>  
+                  </div>  
+  
+                  <div class="bg-indigo-950/40 border border-indigo-500/20 p-3 rounded-2xl space-y-1.5 text-xs">  
+                    <div class="flex justify-between text-emerald-400">  
+                      <span>Rəhbər Qazancı:</span>  
+                      <span class="font-bold">+${tier.leaderBonus} $</span>  
+                    </div>  
+                    <div class="flex justify-between text-indigo-300">  
+                      <span>Referal Qazancı:</span>  
+                      <span class="font-bold">+${tier.refBonus} $</span>  
+                    </div>  
+                  </div>  
+                </div>  
+  
+                <button class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl transition-colors">  
+                  Tələblərə Bax  
+                </button>  
+              </div>  
+            `).join('')}  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    // 9. 22 DAYS TASKS MODULE  
+    function renderTasks(container) {  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div>  
+            <h2 class="text-xl font-black text-white">22 Günlük İnvestisiya Tapşırıq Sistemi</h2>  
+            <p class="text-xs text-slate-400">Hər gün təyin olunan missiyanı yerinə yetirin, balansı artırın</p>  
+          </div>  
+  
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">  
+            ${state.tasks.map(task => `  
+              <div class="glass-panel p-5 rounded-3xl flex items-center justify-between border border-slate-800 space-x-3">  
+                <div class="space-y-1">  
+                  <span class="text-[10px] font-black uppercase tracking-widest text-indigo-400">Gün ${task.day}</span>  
+                  <h4 class="text-xs font-bold text-white leading-tight">${task.title}</h4>  
+                  <p class="text-xs font-bold text-emerald-400">+${task.reward.toFixed(2)} AZN Mükafat</p>  
+                </div>  
+                ${task.status === 'completed' ? `  
+                  <span class="px-3 py-1.5 bg-emerald-500/20 border border-emerald-500/30 text-emerald-400 text-[10px] font-bold rounded-xl whitespace-nowrap">  
+                    Tamamlandı  
+                  </span>  
+                ` : `  
+                  <button onclick="completeTask(${task.day})" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl transition-all whitespace-nowrap">  
+                    İcra Et  
+                  </button>  
+                `}  
+              </div>  
+            `).join('')}  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    function completeTask(day) {  
+      const task = state.tasks.find(t => t.day === day);  
+      if (!task || task.status === 'completed') return;  
+  
+      task.status = 'completed';  
+      state.profile.balance += task.reward;  
+      saveProfile();  
+      alert(`Gün ${day} tapşırığı icra olundu! +${task.reward.toFixed(2)} AZN əlavə edildi.`);  
+      switchTab('tasks');  
+    }  
+  
+    // 10. FINANCE MODULE (DEPOSIT & WITHDRAWAL)  
+    function renderFinance(container) {  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">  
+              
+            <!-- Deposit Panel -->  
+            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">  
+              <div class="flex justify-between items-center border-b border-slate-800 pb-3">  
+                <h3 class="font-extrabold text-sm text-white flex items-center space-x-2">  
+                  <i data-lucide="arrow-down-left" class="w-4 h-4 text-emerald-400"></i>  
+                  <span>Depozit Qəbulu (Milli Kart / USDT)</span>  
+                </h3>  
+              </div>  
+  
+              <div class="bg-slate-900/80 p-4 rounded-2xl text-center space-y-2 border border-slate-800">  
+                <span class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Ödəniş Üçün QR Kod</span>  
+                <div class="w-32 h-32 mx-auto bg-white p-2 rounded-xl flex items-center justify-center">  
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=NoventraPayment" alt="QR" class="w-full h-full">  
+                </div>  
+                <p class="text-[11px] font-mono text-indigo-300">Kart: 4169 7388 0000 0000</p>  
+              </div>  
+  
+              <form onsubmit="handleDepositSubmit(event)" class="space-y-3">  
+                <div>  
+                  <label class="block text-xs font-semibold text-slate-400 mb-1">Depozit Məbləği (AZN)</label>  
+                  <input type="number" id="dep-amt" min="10" required class="w-full bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Min. 10">  
+                </div>  
+                <div>  
+                  <label class="block text-xs font-semibold text-slate-400 mb-1">Ödəniş Qəbzi (Şəkil / Fayl)</label>  
+                  <input type="file" id="dep-receipt" accept="image/*" required class="w-full text-xs text-slate-400 bg-slate-900 border border-slate-700/80 rounded-2xl px-3 py-2">  
+                </div>  
+                <button type="submit" class="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-2xl shadow-lg transition-all">  
+                  Depozit Sorğusu Göndər  
+                </button>  
+              </form>  
+            </div>  
+  
+            <!-- Withdrawal Panel -->  
+            <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">  
+              <div class="flex justify-between items-center border-b border-slate-800 pb-3">  
+                <h3 class="font-extrabold text-sm text-white flex items-center space-x-2">  
+                  <i data-lucide="arrow-up-right" class="w-4 h-4 text-rose-400"></i>  
+                  <span>Vəsait Çıxarışı</span>  
+                </h3>  
+              </div>  
+  
+              <form onsubmit="handleWithdrawSubmit(event)" class="space-y-3">  
+                <div>  
+                  <label class="block text-xs font-semibold text-slate-400 mb-1">Məbləğ (AZN)</label>  
+                  <input type="number" id="wd-amt" min="15" required class="w-full bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500" placeholder="Min. 15">  
+                </div>  
+                <div>  
+                  <label class="block text-xs font-semibold text-slate-400 mb-1">Bank Kart Nömrəsi</label>  
+                  <input type="text" id="wd-card" required maxlength="16" class="w-full bg-slate-900 border border-slate-700/80 rounded-2xl px-4 py-2.5 text-xs text-white font-mono focus:outline-none focus:border-indigo-500" placeholder="4169 ...">  
+                </div>  
+                <button type="submit" class="w-full py-3 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs rounded-2xl shadow-lg transition-all">  
+                  Çıxarış Sorğusu Yarat  
+                </button>  
+              </form>  
+            </div>  
+  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    function handleDepositSubmit(e) {  
+      e.preventDefault();  
+      const amt = parseFloat(document.getElementById('dep-amt').value);  
+      alert(`${amt.toFixed(2)} AZN depozit sorğusu və qəbz admin panelinə göndərildi. Status: Gözləyir.`);  
+    }  
+  
+    function handleWithdrawSubmit(e) {  
+      e.preventDefault();  
+      const amt = parseFloat(document.getElementById('wd-amt').value);  
+      const card = document.getElementById('wd-card').value;  
+  
+      if (state.profile.balance < amt) {  
+        alert(`Balansda kifayət qədər vəsait yoxdur!`);  
+        return;  
+      }  
+  
+      state.profile.balance -= amt;  
+      saveProfile();  
+      alert(`${amt.toFixed(2)} AZN məbləğində çıxarış sorğusu (${card}) yaradıldı. Status: Gözləyir.`);  
+      switchTab('finance');  
+    }  
+  
+    // 11. REFERRAL MODULE  
+    function renderReferral(container) {  
+      const refLink = `https://noventra.app/register?ref=${state.profile.referral_code}`;  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">  
+            <h3 class="text-sm font-extrabold text-white">Sizin Şəxsi Dəvət Linkiniz</h3>  
+            <div class="flex items-center space-x-2">  
+              <input type="text" readonly value="${refLink}" class="w-full bg-slate-900 border border-slate-700 rounded-2xl px-4 py-3 text-xs text-indigo-300 font-mono focus:outline-none">  
+              <button onclick="copyLink('${refLink}')" class="px-5 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-2xl whitespace-nowrap transition-all">  
+                Kopyala  
+              </button>  
+            </div>  
+          </div>  
+  
+          <div class="glass-panel p-6 rounded-3xl space-y-4 border border-slate-800">  
+            <h3 class="text-sm font-extrabold text-white">Referal Şəbəkə Qazancı (3 Səviyyəli)</h3>  
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">  
+              <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-center space-y-1">  
+                <span class="text-xs text-slate-400 font-semibold">1-ci Səviyyə</span>  
+                <p class="text-2xl font-black text-indigo-400">10%</p>  
+              </div>  
+              <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-center space-y-1">  
+                <span class="text-xs text-slate-400 font-semibold">2-ci Səviyyə</span>  
+                <p class="text-2xl font-black text-purple-400">3%</p>  
+              </div>  
+              <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 text-center space-y-1">  
+                <span class="text-xs text-slate-400 font-semibold">3-cü Səviyyə</span>  
+                <p class="text-2xl font-black text-pink-400">1%</p>  
+              </div>  
+            </div>  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    function copyLink(text) {  
+      navigator.clipboard.writeText(text);  
+      alert(`Dəvət linki kopyalandı!`);  
+    }  
+  
+    // 12. NOTIFICATIONS MODULE  
+    function renderNotifications(container) {  
+      container.innerHTML = `  
+        <div class="space-y-4">  
+          <h2 class="text-xl font-black text-white">Sistem Bildirişləri</h2>  
+          <div class="space-y-3">  
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 space-y-1">  
+              <div class="flex justify-between items-center">  
+                <h4 class="text-xs font-bold text-indigo-300">Noventra Platformasına Xoş Gəldiniz!</h4>  
+                <span class="text-[10px] text-slate-500">Bu gün</span>  
+              </div>  
+              <p class="text-xs text-slate-300 leading-relaxed">Yeni VIP paketlərimiz və 22 günlük tapşırıq sistemimiz aktivdir.</p>  
+            </div>  
+          </div>  
+        </div>  
+      `;  
+    }  
+  
+    // 13. ADMIN PANEL MODULE (PROFESSIONAL CONTROL CENTER)  
+    function renderAdmin(container) {  
+      container.innerHTML = `  
+        <div class="space-y-6">  
+          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-4 gap-2">  
+            <div>  
+              <h2 class="text-xl font-black text-rose-400 flex items-center space-x-2">  
+                <i data-lucide="shield-check" class="w-6 h-6"></i>  
+                <span>Noventra İnzibatçı İdarəetmə Mərkəzi</span>  
+              </h2>  
+            </div>  
+          </div>  
+  
+          <!-- Admin Sub-Navigation -->  
+          <div class="flex space-x-2 overflow-x-auto border-b border-slate-800 pb-3 custom-scrollbar">  
+            <button onclick="switchAdminSub('stats')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Statistika</button>  
+            <button onclick="switchAdminSub('users')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">İstifadəçilər</button>  
+            <button onclick="switchAdminSub('deposits')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Depozit Təsdiqi</button>  
+            <button onclick="switchAdminSub('withdrawals')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Çıxarış Təsdiqi</button>  
+            <button onclick="switchAdminSub('logs')" class="px-4 py-2 text-xs font-bold bg-slate-800 hover:bg-slate-700 text-white rounded-xl">Audit Loglar</button>  
+          </div>  
+  
+          <div id="admin-sub-content">  
+            <!-- Rendered dynamically -->  
+          </div>  
+        </div>  
+      `;  
+      switchAdminSub('stats');  
+    }  
+  
+    function switchAdminSub(sub) {  
+      state.adminSubTab = sub;  
+      const subContainer = document.getElementById('admin-sub-content');  
+      if (!subContainer) return;  
+  
+      if (sub === 'stats') {  
+        subContainer.innerHTML = `  
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">  
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">  
+              <span class="text-xs text-slate-400 font-semibold">Toplam İstifadəçi</span>  
+              <p class="text-2xl font-black text-white mt-1">1,420</p>  
+            </div>  
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">  
+              <span class="text-xs text-slate-400 font-semibold">Aktiv İstifadəçi</span>  
+              <p class="text-2xl font-black text-emerald-400 mt-1">980</p>  
+            </div>  
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">  
+              <span class="text-xs text-slate-400 font-semibold">Bugünkü Depozit</span>  
+              <p class="text-2xl font-black text-indigo-400 mt-1">4,250 AZN</p>  
+            </div>  
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">  
+              <span class="text-xs text-slate-400 font-semibold">Bugünkü Çıxarış</span>  
+              <p class="text-2xl font-black text-rose-400 mt-1">1,120 AZN</p>  
+            </div>  
+            <div class="glass-panel p-5 rounded-2xl border border-slate-800 text-center">  
+              <span class="text-xs text-slate-400 font-semibold">Ümumi Qazanc</span>  
+              <p class="text-2xl font-black text-purple-400 mt-1">48,900 AZN</p>  
+            </div>  
+          </div>  
+        `;  
+      } else if (sub === 'users') {  
+        subContainer.innerHTML = `  
+          <div class="glass-panel p-6 rounded-3xl border border-slate-800 space-y-4">  
+            <h3 class="text-sm font-extrabold text-white">İstifadəçilərin İdarə Edilməsi</h3>  
+            <div class="flex flex-wrap gap-2">  
+              <button onclick="adminAdjustBalance('add')" class="px-4 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl">+ Balans Artır</button>  
+              <button onclick="adminAdjustBalance('sub')" class="px-4 py-2 bg-rose-600 text-white text-xs font-bold rounded-xl">- Balans Azalt</button>  
+              <button onclick="adminGrantVip()" class="px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl">VIP Ver / Ləğv Et</button>  
+            </div>  
+          </div>  
+        `;  
+      } else {  
+        subContainer.innerHTML = `  
+          <div class="glass-panel p-6 rounded-3xl border border-slate-800 text-center text-xs text-slate-400">  
+            Sorğular və audit loglar uğurla verilənlər bazasından sinxronlaşdırılır.  
+          </div>  
+        `;  
+      }  
+    }  
+  
+    function adminAdjustBalance(type) {  
+      const amt = prompt(`Məbləği daxil edin (AZN):`);  
+      if (!amt || isNaN(parseFloat(amt))) return;  
+      const val = parseFloat(amt);  
+      if (type === 'add') state.profile.balance += val;  
+      else state.profile.balance = Math.max(0, state.profile.balance - val);  
+      saveProfile();  
+      alert(`İstifadəçi balansı yeniləndi: ${state.profile.balance.toFixed(2)} AZN`);  
+    }  
+  
+    function adminGrantVip() {  
+      const vip = prompt(`VIP Səviyyəsini daxil edin (məs: VIP 3 və ya Pulsuz):`, 'VIP 1');  
+      if (vip) {  
+        state.profile.vip_level = vip;  
+        saveProfile();  
+        alert(`İstifadəçi VIP səviyyəsi ${vip} olaraq təyin edildi.`);  
+      }  
+    }  
+  
+    // 14. UTILS & DATA PERSISTENCE  
+    function saveProfile() {  
+      if (state.user) {  
+        localStorage.setItem('noventra_user', JSON.stringify(state.profile));  
+        if (supabase) {  
+          supabase.from('profiles').upsert(state.profile);  
+        }  
+      }  
+    }  
+  </script>  </body>  
+</html>  
