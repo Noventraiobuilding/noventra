@@ -12,9 +12,7 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-*{
-  box-sizing:border-box;
-}
+*{ box-sizing:border-box; }
 
 body{
   margin:0;
@@ -28,9 +26,7 @@ body{
   min-height: 100vh;
 }
 
-.hidden{
-  display:none!important;
-}
+.hidden{ display:none!important; }
 
 .auth{
   min-height:100vh;
@@ -40,7 +36,6 @@ body{
   padding:20px;
 }
 
-/* Premium qara şüşə kartlar */
 .box,
 .card,
 .glass-panel {
@@ -48,19 +43,13 @@ body{
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
   border: 1px solid rgba(212,175,55,.25);
-  box-shadow: 
-    0 20px 50px rgba(0,0,0,.7),
-    0 0 25px rgba(212,175,55,.08);
+  box-shadow: 0 20px 50px rgba(0,0,0,.7), 0 0 25px rgba(212,175,55,.08);
   border-radius: 22px;
   padding: 25px;
 }
 
-.box{
-  width:100%;
-  max-width:430px;
-}
+.box{ width:100%; max-width:430px; }
 
-/* Başlıq */
 .glass-header {
   background: rgba(5,5,5,.88);
   backdrop-filter: blur(20px);
@@ -70,7 +59,6 @@ body{
   margin-bottom: 20px;
 }
 
-/* Logo */
 .logo{
   text-align:center;
   font-size:32px;
@@ -83,25 +71,7 @@ body{
   text-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
 }
 
-.bg-gradient-to-tr {
-  background: linear-gradient(135deg,#8a6b16,#f7d774,#b8860b) !important;
-  color:#000 !important;
-}
-
-.text-transparent {
-  background-image: linear-gradient(
-    90deg,
-    #f7d774,
-    #d4af37,
-    #fff0a8
-  ) !important;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-input,
-select,
-textarea{
+input, select, textarea{
   width:100%;
   padding:14px;
   margin:9px 0;
@@ -119,7 +89,6 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
 }
 
-/* Düymələr */
 button{
   width:100%;
   padding:14px;
@@ -131,10 +100,7 @@ button{
   transition: all .3s ease;
 }
 
-button:hover {
-  transform: translateY(-2px);
-  opacity: 0.95;
-}
+button:hover { transform: translateY(-2px); opacity: 0.95; }
 
 .main{
   background: linear-gradient(135deg, #8a6b16, #d4af37, #f7d774);
@@ -145,9 +111,7 @@ button:hover {
   box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
 }
 
-.main:hover {
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
-}
+.main:hover { box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4); }
 
 .switch{
   text-align:center;
@@ -155,28 +119,13 @@ button:hover {
   color:#f7d774;
   cursor:pointer;
   font-weight: 600;
-  transition: color 0.2s;
 }
+.switch:hover { color: #fff; }
 
-.switch:hover {
-  color: #fff;
-}
+.msg{ text-align:center; margin-top:12px; color:#ff7777; }
 
-.msg{
-  text-align:center;
-  margin-top:12px;
-  color:#ff7777;
-}
-
-#app{
-  max-width:1100px;
-  margin:auto;
-  padding:20px;
-}
-
-.header{
-  text-align:center;
-}
+#app{ max-width:1100px; margin:auto; padding:20px; }
+.header{ text-align:center; }
 
 .nav{
   display:flex;
@@ -192,7 +141,7 @@ button:hover {
   color:#aaa;
   white-space:nowrap;
   cursor:pointer;
-  padding:12px 24px;
+  padding:12px 20px;
   border-radius:10px 10px 0 0;
   border: 1px solid transparent;
   width: auto;
@@ -206,39 +155,12 @@ button:hover {
   box-shadow: 0 0 15px rgba(212,175,55,.3);
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:20px;
-}
+.grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.two{ display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:20px; }
+.value{ font-size:28px; font-weight:800; margin-top:10px; letter-spacing: 0.5px; }
 
-.two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  margin-top:20px;
-}
-
-.value{
-  font-size:28px;
-  font-weight:800;
-  margin-top:10px;
-  letter-spacing: 0.5px;
-}
-
-/* Qızılı mətn uyğunlaşdırması */
-.green,
-.yellow,
-.purple,
-.text-indigo-400,
-.text-purple-400,
-.text-emerald-400 {
-  color:#d4af37 !important;
-}
-
-.muted{
-  color:#8995aa;
-}
+.yellow{ color:#d4af37 !important; }
+.muted{ color:#8995aa; }
 
 .row{
   display:flex;
@@ -258,76 +180,30 @@ button:hover {
   line-height:1.6;
 }
 
-/* VIP kartlar və glow effekti */
-.vip-card,
-.vip-card-glow {
-  margin-top:0px;
+.vip-card{
   border:1px solid rgba(212,175,55,.35);
   background: rgba(12,12,12,.85);
   transition: all .3s ease;
 }
-
-.vip-card:hover,
-.vip-card-glow:hover {
+.vip-card:hover{
   box-shadow: 0 0 35px rgba(212,175,55,.35);
   border-color:#d4af37;
   transform: translateY(-4px);
 }
 
-.vip-card.locked-card{
-  border-color: rgba(255,255,255,0.1);
-  opacity: 0.5;
-  box-shadow: none;
-}
+.vip-title{ font-size:22px; color:#f7d774; font-weight:bold; }
+h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
 
-.vip-card.locked-card:hover {
-  transform: none;
-  box-shadow: none;
-}
-
-.vip-title{
-  font-size:22px;
-  color:#f7d774;
-  font-weight:bold;
-}
-
-.locked{
-  color:#777;
-}
-
-h1, h2, h3 {
-  color: #fff;
-  letter-spacing: 0.5px;
-}
-
-/* Modal Styling */
 .modal-overlay {
   position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
   display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar {
-  height: 6px;
-  width: 6px;
-}
+::-webkit-scrollbar { height: 6px; width: 6px; }
+::-webkit-scrollbar-track { background: #050505; }
+::-webkit-scrollbar-thumb { background:#d4af37; border-radius: 10px; }
 
-::-webkit-scrollbar-track {
-  background: #050505;
-}
-
-::-webkit-scrollbar-thumb,
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background:#d4af37;
-  border-radius: 10px;
-}
-
-@media(max-width:700px){
-  .grid,
-  .two{
-    grid-template-columns:1fr;
-  }
-}
+@media(max-width:700px){ .grid, .two{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -360,10 +236,12 @@ h1, h2, h3 {
     <div class="logo" style="margin-bottom:0;">NOVENTRA</div>
   </div>
   
-  <nav class="nav custom-scrollbar">
+  <nav class="nav">
     <button id="nav-home" onclick="page('home')">Ana səhifə</button>
     <button id="nav-vip" onclick="page('vip')">VIP</button>
+    <button id="nav-task" onclick="page('task')">🤖 Analiz Mərkəzi</button>
     <button id="nav-leadership" onclick="page('leadership')">Rəhbərlik</button>
+    <button id="nav-support" onclick="page('support')">📞 Dəstək</button>
     <button id="nav-account" onclick="page('account')">Hesabım</button>
     <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
   </nav>
@@ -387,66 +265,97 @@ h1, h2, h3 {
     </div>
   </div>
   
-  <!-- VIP SƏHİFƏSİ (REFERAL ŞƏRTLƏRİ SİLİNDİ) -->
   <div id="vipPage" class="hidden">
     <h1>💎 VIP Paketlər</h1>
     <div id="vipArea" class="grid"></div>
   </div>
 
-  <!-- RƏHBƏRLİK MƏRKƏZİ -->
+  <div id="taskPage" class="hidden">
+    <h1>🤖 Süni İntellekt Analiz Mərkəzi</h1>
+    <div class="card" style="max-width: 600px; margin: auto; text-align: center;">
+      <div class="vip-title" style="margin-bottom: 10px;">Gündəlik Bazar Analizi</div>
+      <p class="muted">Hər gün 1 dəfə süni intellekt sistemimizin maliyyə bazarlarını təhlil etməsinə dəstək olun və gündəlik qazancınızı aktivləşdirin.</p>
+      
+      <div id="taskStatusBox" class="info" style="margin: 20px 0; font-size: 18px;">
+        Status: <b id="taskStatusText" class="yellow">Yoxlanılır...</b>
+      </div>
+
+      <div id="taskProcessArea" class="hidden" style="margin: 20px 0;">
+        <div id="taskStepText" class="yellow" style="font-weight: 700; font-size: 16px; margin-bottom: 15px;">Analizə başlanılır...</div>
+        <div style="background: rgba(212,175,55,0.1); border-radius: 10px; height: 8px; width: 100%; overflow: hidden;">
+          <div id="taskProgressBar" style="background: #d4af37; height: 100%; width: 0%; transition: width 0.8s ease;"></div>
+        </div>
+      </div>
+
+      <button id="startTaskBtn" class="main" onclick="runAiAnalysis()">Gündəlik Analizi Başlat</button>
+    </div>
+  </div>
+
   <div id="leadershipPage" class="hidden">
     <h1>🏛 Rəhbərlik Mərkəzi</h1>
     <div class="grid">
       <div class="card vip-card">
         <div class="vip-title">🥇 Elit Rəhbər</div>
         <div class="info">
-          Şərt: <b>6 Referal (VIP 3)</b><br>
+          Şərt: <b>6 Referal (VIP 3 və ya yuxarı)</b><br>
           Gündəlik qazanc: <b>5.00 AZN</b><br>
           Referal bonusu: <b>+1.00 AZN</b>
         </div>
+        <button class="main" onclick="claimLeadership('elit', 6, 3)">Statusu Aktivləşdir</button>
       </div>
       <div class="card vip-card">
         <div class="vip-title">💎 Brilyant Rəhbər</div>
         <div class="info">
-          Şərt: <b>9 Referal (VIP 4)</b><br>
+          Şərt: <b>9 Referal (VIP 4 və ya yuxarı)</b><br>
           Gündəlik qazanc: <b>12.00 AZN</b><br>
           Referal bonusu: <b>+2.00 AZN</b>
         </div>
+        <button class="main" onclick="claimLeadership('brilyant', 9, 4)">Statusu Aktivləşdir</button>
       </div>
       <div class="card vip-card">
         <div class="vip-title">👑 Platin Rəhbər</div>
         <div class="info">
-          Şərt: <b>7 Referal (VIP 5)</b><br>
+          Şərt: <b>7 Referal (VIP 5 və ya yuxarı)</b><br>
           Gündəlik qazanc: <b>22.00 AZN</b><br>
           Referal bonusu: <b>+5.00 AZN</b>
         </div>
+        <button class="main" onclick="claimLeadership('platin', 7, 5)">Statusu Aktivləşdir</button>
       </div>
       <div class="card vip-card">
         <div class="vip-title">🏛 İmperial Direktor</div>
         <div class="info">
-          Şərt: <b>8 Referal (VIP 6)</b><br>
+          Şərt: <b>8 Referal (VIP 6 və ya yuxarı)</b><br>
           Gündəlik qazanc: <b>36.00 AZN</b><br>
           Referal bonusu: <b>+25.00 AZN</b>
         </div>
+        <button class="main" onclick="claimLeadership('imperial', 8, 6)">Statusu Aktivləşdir</button>
       </div>
+    </div>
+  </div>
+
+  <!-- TELEGRAM DƏSTƏK BOTU SƏHİFƏSİ (@NoventraTeamBot) -->
+  <div id="supportPage" class="hidden">
+    <h1>📞 Noventra Rəsmi Dəstək Botu</h1>
+    <div class="card" style="max-width: 600px; margin: auto; text-align: center;">
+      <div class="vip-title" style="margin-bottom: 10px;">Noventra Support Bot</div>
+      <p class="muted">Hər hansı sualınız, depozit və ya çıxarış problemlərinizlə bağlı birbaşa rəsmi Telegram dəstək botumuza yaza bilərsiniz. Adminlər sizə dərhal cavab verəcək.</p>
+      
+      <div class="info" style="margin: 20px 0;">
+        Telegram Bot Linki:
+        <div id="telegramLinkDisplay" class="yellow" style="font-size: 18px; font-weight: bold; margin-top: 8px; word-break: break-all;">https://t.me/NoventraTeamBot</div>
+      </div>
+
+      <button class="main" onclick="openTelegramBot()">Telegram Botuna Keçid Et</button>
     </div>
   </div>
   
   <div id="accountPage" class="hidden">
     <h1>👤 Hesabım</h1>
     <div class="card">
-      <div class="row">
-        <span class="muted">Email</span>
-        <b id="email"></b>
-      </div>
-      <div class="row">
-        <span class="muted">Referal kod</span>
-        <b id="refCode" class="yellow">-</b>
-      </div>
-      <div class="row">
-        <span class="muted">VIP status</span>
-        <b id="vipStatus" class="yellow">Yoxdur</b>
-      </div>
+      <div class="row"><span class="muted">Email</span><b id="email"></b></div>
+      <div class="row"><span class="muted">Referal kod</span><b id="refCode" class="yellow">-</b></div>
+      <div class="row"><span class="muted">VIP status</span><b id="vipStatus" class="yellow">Yoxdur</b></div>
+      <div class="row"><span class="muted">Rəhbərlik statusu</span><b id="leadStatusDisplay" class="yellow">Yoxdur</b></div>
     </div>
     
     <div class="card" style="margin-top:20px;">
@@ -475,6 +384,22 @@ h1, h2, h3 {
   
   <div id="adminPage" class="hidden">
     <h1>Admin Panel</h1>
+    
+    <div class="card" style="margin-bottom:20px; border-color:#d4af37;">
+      <h2>💳 Ödəniş Kartını / Hesabını Dəyiş</h2>
+      <div class="muted" style="margin-bottom:10px;">İstifadəçilərin depozit edərkən gördüyü kart məlumatı:</div>
+      <input id="adminCardInput" placeholder="Məs: 4169... (Ad Soyad və ya M10 nömrəsi)">
+      <button class="main" onclick="updateAdminSetting('deposit_info', 'adminCardInput', 'Ödəniş kartı')">Yadda saxla</button>
+    </div>
+
+    <!-- ADMIN TELEGRAM BOT LİNKİNİ DƏYİŞDİRMƏ PANELİ -->
+    <div class="card" style="margin-bottom:20px; border-color:#d4af37;">
+      <h2>💬 Telegram Bot Linkini Dəyiş</h2>
+      <div class="muted" style="margin-bottom:10px;">İstifadəçilərin dəstək bölməsində görəcəyi Telegram bot linki:</div>
+      <input id="adminTelegramInput" placeholder="Məs: https://t.me/NoventraTeamBot">
+      <button class="main" onclick="updateAdminSetting('telegram_link', 'adminTelegramInput', 'Telegram bot linki')">Yadda saxla</button>
+    </div>
+
     <div class="card">
       <h2>Depozit sorğuları</h2>
       <div id="adminDeposits"></div>
@@ -498,7 +423,7 @@ h1, h2, h3 {
     <div class="info" style="margin-bottom:15px;">
       Ödəniş Kartı / M10:
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-        <b id="depositCardNum" class="yellow">4127 0000 0000 0000</b>
+        <b id="depositCardNum" class="yellow">Yüklənir...</b>
         <button onclick="copyCardNum()" style="width:auto; padding:6px 12px; background:#d4af37; color:#000;">Kopyala</button>
       </div>
     </div>
@@ -520,10 +445,8 @@ const ADMIN_EMAIL = "Ayazdiana666@gmail.com";
 
 let user = null;
 let profile = null;
+let currentTelegramUrl = "https://t.me/NoventraTeamBot";
 
-const REFERRAL_BONUS_PERCENTAGE = 0.05;
-
-// VIP PAKETLƏRDƏN REFERAL ŞƏRTİ TAMAMİLƏ SİLİNDİ
 const VIP_LIST = [
   { id: 1, name: "VIP 1", price: 25, days: 45, reward: 1.50, locked: false },
   { id: 2, name: "VIP 2", price: 35, days: 50, reward: 2.30, locked: false },
@@ -539,7 +462,7 @@ const VIP_LIST = [
 ];
 
 function page(name){
-  ["homePage", "vipPage", "leadershipPage", "accountPage", "adminPage"].forEach(x => {
+  ["homePage", "vipPage", "taskPage", "leadershipPage", "supportPage", "accountPage", "adminPage"].forEach(x => {
     const el = document.getElementById(x);
     if(el) el.classList.add("hidden");
   });
@@ -549,7 +472,9 @@ function page(name){
   let id = {
     home: "homePage",
     vip: "vipPage",
+    task: "taskPage",
     leadership: "leadershipPage",
+    support: "supportPage",
     account: "accountPage",
     admin: "adminPage"
   }[name];
@@ -561,6 +486,8 @@ function page(name){
   if(navBtn) navBtn.classList.add("active");
 
   if(name === "vip") renderVip();
+  if(name === "task") checkTaskAvailability();
+  if(name === "support") loadTelegramLink();
   if(name === "admin" && user && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()){
     loadAdminData();
   }
@@ -583,9 +510,7 @@ function renderVip(){
   box.innerHTML = VIP_LIST.map(v => {
     return `
       <div class="card vip-card ${v.locked ? 'locked-card' : ''}">
-        <div class="vip-title">
-          ${v.name} ${v.locked ? "🔒" : ""}
-        </div>
+        <div class="vip-title">${v.name} ${v.locked ? "🔒" : ""}</div>
         <div class="info">
           Qiymət: <b>${v.locked ? "Kilidli" : v.price + " AZN"}</b><br>
           Müddət: <b>${v.days ? v.days + " gün" : "-"}</b><br>
@@ -598,12 +523,119 @@ function renderVip(){
   }).join("");
 }
 
-// DEPOZİT MODAL FUNKSİYALARI
-function openDepositModal(){ document.getElementById("depositModal").classList.remove("hidden"); }
+async function loadTelegramLink(){
+  const { data } = await supabaseClient.from("settings").select("value").eq("key", "telegram_link").maybeSingle();
+  if(data && data.value) {
+    currentTelegramUrl = data.value;
+    document.getElementById("telegramLinkDisplay").innerText = data.value;
+  } else {
+    document.getElementById("telegramLinkDisplay").innerText = currentTelegramUrl;
+  }
+}
+
+function openTelegramBot(){
+  if(currentTelegramUrl) {
+    window.open(currentTelegramUrl, "_blank");
+  } else {
+    alert("Telegram bot linki təyin edilməyib.");
+  }
+}
+
+async function checkTaskAvailability(){
+  if(!profile) return;
+  const lastTaskDate = profile.last_task_date;
+  const now = new Date();
+
+  const statusText = document.getElementById("taskStatusText");
+  const startBtn = document.getElementById("startTaskBtn");
+
+  if(lastTaskDate){
+    const lastDate = new Date(lastTaskDate);
+    const diffHours = (now - lastDate) / (1000 * 60 * 60);
+    if(diffHours < 24){
+      statusText.innerText = "Bugünkü analiz artıq yerinə yetirilib ✅";
+      startBtn.classList.add("hidden");
+      return;
+    }
+  }
+
+  statusText.innerText = "Bugünkü analiz gözlənilir ⏳";
+  startBtn.classList.remove("hidden");
+}
+
+async function runAiAnalysis(){
+  const startBtn = document.getElementById("startTaskBtn");
+  const processArea = document.getElementById("taskProcessArea");
+  const stepText = document.getElementById("taskStepText");
+  const progressBar = document.getElementById("taskProgressBar");
+  const statusText = document.getElementById("taskStatusText");
+
+  startBtn.classList.add("hidden");
+  processArea.classList.remove("hidden");
+
+  const steps = [
+    { text: "Bazar məlumatları oxunur...", progress: "25%" },
+    { text: "Likvidlik və risk əmsalları hesablanır...", progress: "60%" },
+    { text: "Süni intellekt qərarı formalaşdırılır...", progress: "90%" },
+    { text: "Analiz uğurla tamamlandı! Qazanc hesablandı.", progress: "100%" }
+  ];
+
+  for(let i = 0; i < steps.length; i++){
+    stepText.innerText = steps[i].text;
+    progressBar.style.width = steps[i].progress;
+    await new Promise(r => setTimeout(r, 1200));
+  }
+
+  const nowIso = new Date().toISOString();
+  await supabaseClient.from("profiles").update({ last_task_date: nowIso }).eq("id", user.id);
+  
+  await loadProfile();
+  
+  processArea.classList.add("hidden");
+  statusText.innerText = "Bugünkü analiz tamamlandı ✅";
+  alert("Təbriklər! Gündəlik analiz tapşırığı uğurla yerinə yetirildi.");
+}
+
+async function claimLeadership(leadTitle, requiredCount, requiredVipMin){
+  if(!profile || !profile.referral_code) return;
+
+  const { data: referrals } = await supabaseClient
+    .from("profiles")
+    .select("id, current_vip")
+    .eq("referred_by", profile.referral_code);
+
+  let validRefCount = 0;
+  if(referrals){
+    for(let ref of referrals){
+      if(ref.current_vip && ref.current_vip.startsWith("VIP ")) {
+        const vipNum = parseInt(ref.current_vip.replace("VIP ", ""));
+        if(vipNum >= requiredVipMin) validRefCount++;
+      }
+    }
+  }
+
+  if(validRefCount >= requiredCount){
+    await supabaseClient.from("profiles").update({ leadership_status: leadTitle }).eq("id", user.id);
+    alert(`Təbriklər! Siz "${leadTitle.toUpperCase()} Rəhbər" statusunu qazandınız!`);
+    await loadProfile();
+  } else {
+    alert(`Şərtlər hələ ödənmədi!\n\nTələb olunan: ${requiredCount} nəfər (VIP ${requiredVipMin} və yuxarı)\nSənin uyğun referal sayın: ${validRefCount}`);
+  }
+}
+
+async function openDepositModal(){
+  document.getElementById("depositModal").classList.remove("hidden");
+  const { data } = await supabaseClient.from("settings").select("value").eq("key", "deposit_info").maybeSingle();
+  if(data) {
+    document.getElementById("depositCardNum").innerText = data.value;
+  }
+}
+
 function closeDepositModal(){ document.getElementById("depositModal").classList.add("hidden"); }
+
 function copyCardNum(){
   navigator.clipboard.writeText(document.getElementById("depositCardNum").innerText);
-  alert("Kart nömrəsi kopyalandı!");
+  alert("Ödəniş məlumatı kopyalandı!");
 }
 
 async function submitDeposit(){
@@ -616,15 +648,11 @@ async function submitDeposit(){
   }
 
   const { error } = await supabaseClient.from("deposits").insert({
-    user_id: user.id,
-    amount: amount,
-    sender_account: sender,
-    status: "pending"
+    user_id: user.id, amount: amount, sender_account: sender, status: "pending"
   });
 
-  if(error){
-    alert("Xəta: " + error.message);
-  } else {
+  if(error) alert("Xəta: " + error.message);
+  else {
     alert("Depozit sorğunuz təsdiq üçün adminə göndərildi!");
     closeDepositModal();
   }
@@ -636,38 +664,22 @@ async function register(){
   const referral = document.getElementById("regReferral").value.trim();
   const msg = document.getElementById("regMsg");
 
-  if(!email || !password){
-    msg.innerText = "Email və şifrə daxil edin";
-    return;
-  }
+  if(!email || !password){ msg.innerText = "Email və şifrə daxil edin"; return; }
 
   const { data, error } = await supabaseClient.auth.signUp({ email, password });
-
-  if(error){
-    msg.innerText = error.message;
-    return;
-  }
+  if(error){ msg.innerText = error.message; return; }
 
   if(data.user){
     const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
-    await supabaseClient
-      .from("profiles")
-      .insert({
-        id: data.user.id,
-        email: email,
-        balance: 0,
-        bonus: 0,
-        current_vip: "Yeni istifadəçi",
-        referral_code: refCodeGenerated,
-        referred_by: referral || null
-      });
+    await supabaseClient.from("profiles").insert({
+      id: data.user.id, email: email, balance: 0, bonus: 0,
+      current_vip: "Yeni istifadəçi", leadership_status: "Yoxdur",
+      referral_code: refCodeGenerated, referred_by: referral || null
+    });
   }
 
   msg.innerText = "Hesab yaradıldı. Giriş edilir...";
-  setTimeout(() => {
-    if(data.user) openApp(data.user);
-    else showLogin();
-  }, 1000);
+  setTimeout(() => { if(data.user) openApp(data.user); else showLogin(); }, 1000);
 }
 
 async function login(){
@@ -675,28 +687,19 @@ async function login(){
   const password = document.getElementById("loginPassword").value;
   const msg = document.getElementById("loginMsg");
 
-  if(!email || !password){
-    msg.innerText = "Email və şifrə daxil edin";
-    return;
-  }
+  if(!email || !password){ msg.innerText = "Email və şifrə daxil edin"; return; }
 
   const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-
-  if(error){
-    msg.innerText = "Email və ya şifrə səhvdir";
-    return;
-  }
+  if(error){ msg.innerText = "Email və ya şifrə səhvdir"; return; }
 
   openApp(data.user);
 }
 
 async function openApp(u){
   user = u;
-
   document.getElementById("loginPage").classList.add("hidden");
   document.getElementById("registerPage").classList.add("hidden");
   document.getElementById("app").classList.remove("hidden");
-
   document.getElementById("email").innerText = user.email;
 
   const adminBtn = document.getElementById("adminBtn");
@@ -712,21 +715,16 @@ async function openApp(u){
 }
 
 async function loadProfile(){
-  const { data } = await supabaseClient
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .maybeSingle();
-
+  const { data } = await supabaseClient.from("profiles").select("*").eq("id", user.id).maybeSingle();
   profile = data || {};
 
   document.getElementById("balance").innerText = (profile.balance || 0).toFixed(2) + " AZN";
   document.getElementById("bonus").innerText = (profile.bonus || 0).toFixed(2) + " AZN";
   document.getElementById("status").innerText = profile.current_vip || "Yeni istifadəçi";
-
   document.getElementById("refCode").innerText = profile.referral_code || "-";
   document.getElementById("shareCode").innerText = profile.referral_code || "-";
   document.getElementById("vipStatus").innerText = profile.current_vip || "Yoxdur";
+  document.getElementById("leadStatusDisplay").innerText = profile.leadership_status || "Yoxdur";
 }
 
 async function copyReferral(){
@@ -742,97 +740,49 @@ async function withdrawRequest(){
   const info = document.getElementById("withdrawInfo").value.trim();
   const msg = document.getElementById("withdrawMsg");
 
-  if(amount < 8){
-    msg.innerText = "Minimum çıxarış 8 AZN olmalıdır";
-    return;
-  }
+  if(amount < 8){ msg.innerText = "Minimum çıxarış 8 AZN olmalıdır"; return; }
+  if((profile.balance || 0) < amount){ msg.innerText = "Balansınızda kifayət qədər vəsait yoxdur"; return; }
+  if(!info){ msg.innerText = "Məlumat daxil edin"; return; }
 
-  if((profile.balance || 0) < amount){
-    msg.innerText = "Balansınızda kifayət qədər vəsait yoxdur";
-    return;
-  }
+  const { error } = await supabaseClient.from("withdraw_requests").insert({
+    user_id: user.id, amount: amount, method: method, account_info: info, status: "pending"
+  });
 
-  if(!info){
-    msg.innerText = "Məlumat daxil edin";
-    return;
-  }
-
-  const { error } = await supabaseClient
-    .from("withdraw_requests")
-    .insert({
-      user_id: user.id,
-      amount: amount,
-      method: method,
-      account_info: info,
-      status: "pending"
-    });
-
-  if(error){
-    msg.innerText = error.message;
-    return;
-  }
-
+  if(error){ msg.innerText = error.message; return; }
   msg.innerText = "Çıxarış sorğusu göndərildi!";
   document.getElementById("withdrawAmount").value = "";
   document.getElementById("withdrawInfo").value = "";
 }
 
 async function buyVip(vipId, price){
-  if(price < 25){
-    alert("Minimum yatırım məbləği 25 AZN-dir.");
-    return;
-  }
-
+  if(price < 25){ alert("Minimum yatırım məbləği 25 AZN-dir."); return; }
   await loadProfile();
 
   if((profile.balance || 0) < price){
-    alert(`Balansınızda kifayət qədər vəsait yoxdur! Lazım olan məbləğ: ${price} AZN, Sizin balansınız: ${(profile.balance || 0).toFixed(2)} AZN\n\nDepozit edərək balansınızı artırın.`);
+    alert(`Balansınızda kifayət qədər vəsait yoxdur! Lazım olan: ${price} AZN`);
     openDepositModal();
     return;
   }
 
   const newBalance = profile.balance - price;
+  await supabaseClient.from("profiles").update({ balance: newBalance }).eq("id", user.id);
 
-  const { error: balanceError } = await supabaseClient
-    .from("profiles")
-    .update({ balance: newBalance })
-    .eq("id", user.id);
-
-  if(balanceError){
-    alert("Balans yenilənərkən xəta baş verdi: " + balanceError.message);
-    return;
-  }
-
-  const { error: investError } = await supabaseClient
-    .from("investments")
-    .insert({
-      user_id: user.id,
-      vip_id: vipId,
-      amount: price,
-      status: "pending"
-    });
+  const { error: investError } = await supabaseClient.from("investments").insert({
+    user_id: user.id, vip_id: vipId, amount: price, status: "pending"
+  });
 
   if(investError){
-    await supabaseClient
-      .from("profiles")
-      .update({ balance: profile.balance })
-      .eq("id", user.id);
-    alert("Yatırım yaradılarkən xəta baş verdi: " + investError.message);
+    await supabaseClient.from("profiles").update({ balance: profile.balance }).eq("id", user.id);
+    alert("Xəta: " + investError.message);
   } else {
-    alert(`Yatırım sorğunuz göndərildi! Balansınızdan ${price} AZN çıxıldı. Təsdiq üçün adminə yönləndirildi.`);
+    alert(`Yatırım sorğunuz göndərildi! ${price} AZN balansınızdan çıxıldı.`);
     await loadProfile();
   }
 }
 
 async function processDailyProfits(){
   if(!user) return;
-
-  const { data: investments } = await supabaseClient
-    .from("investments")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("status", "approved");
-
+  const { data: investments } = await supabaseClient.from("investments").select("*").eq("user_id", user.id).eq("status", "approved");
   if(!investments || investments.length === 0) return;
 
   const now = new Date();
@@ -857,29 +807,33 @@ async function processDailyProfits(){
 
     if(diffHours >= 24){
       const daysEarned = Math.floor(diffHours / 24);
-      const earnedAmount = daysEarned * vip.reward;
-      totalAddedEarnings += earnedAmount;
+      let earnedAmount = daysEarned * vip.reward;
 
+      if(profile.leadership_status === 'elit') earnedAmount += (daysEarned * 1.00);
+      else if(profile.leadership_status === 'brilyant') earnedAmount += (daysEarned * 2.00);
+      else if(profile.leadership_status === 'platin') earnedAmount += (daysEarned * 5.00);
+      else if(profile.leadership_status === 'imperial') earnedAmount += (daysEarned * 25.00);
+
+      totalAddedEarnings += earnedAmount;
       const newLastCalc = new Date(lastCalc.getTime() + (daysEarned * 24 * 60 * 60 * 1000));
-      await supabaseClient
-        .from("investments")
-        .update({ last_profit_calc: newLastCalc.toISOString() })
-        .eq("id", inv.id);
+      await supabaseClient.from("investments").update({ last_profit_calc: newLastCalc.toISOString() }).eq("id", inv.id);
     }
   }
 
   if(totalAddedEarnings > 0){
     const newBalance = (profile.balance || 0) + totalAddedEarnings;
-    await supabaseClient
-      .from("profiles")
-      .update({ balance: newBalance })
-      .eq("id", user.id);
-      
+    await supabaseClient.from("profiles").update({ balance: newBalance }).eq("id", user.id);
     await loadProfile();
   }
 }
 
 async function loadAdminData(){
+  const { data: setDa } = await supabaseClient.from("settings").select("value").eq("key", "deposit_info").maybeSingle();
+  if(setDa) document.getElementById("adminCardInput").value = setDa.value;
+
+  const { data: setTg } = await supabaseClient.from("settings").select("value").eq("key", "telegram_link").maybeSingle();
+  if(setTg) document.getElementById("adminTelegramInput").value = setTg.value;
+
   const depBox = document.getElementById("adminDeposits");
   const investBox = document.getElementById("adminInvestments");
   const withdrawBox = document.getElementById("adminWithdraw");
@@ -891,55 +845,59 @@ async function loadAdminData(){
   depBox.innerHTML = (deposits && deposits.length) ? deposits.map(d => `
     <div class="row">
       <span>${d.sender_account} - ${d.amount} AZN</span>
-      <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000;">Təsdiqlə</button>
+      <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount})" style="width:auto; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
     </div>
   `).join("") : "<p class='muted'>Gözləyən depozit yoxdur</p>";
 
   investBox.innerHTML = (investments && investments.length) ? investments.map(i => `
     <div class="row">
-      <span>İstifadəçi: ${i.user_id.substring(0,8)}... | VIP ${i.vip_id} (${i.amount} AZN)</span>
-      <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id}, ${i.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000;">Təsdiqlə</button>
+      <span>VIP ${i.vip_id} (${i.amount} AZN)</span>
+      <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id}, ${i.amount})" style="width:auto; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
     </div>
   `).join("") : "<p class='muted'>Gözləyən yatırım yoxdur</p>";
 
   withdrawBox.innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
     <div class="row">
-      <span>${w.account_info} - ${w.amount} AZN (${w.method})</span>
-      <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000;">Təsdiqlə</button>
+      <span>${w.account_info} - ${w.amount} AZN</span>
+      <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
     </div>
   `).join("") : "<p class='muted'>Gözləyən çıxarış yoxdur</p>";
+}
+
+async function updateAdminSetting(keyName, inputId, labelName){
+  const newVal = document.getElementById(inputId).value.trim();
+  if(!newVal){ alert("Məlumat boş ola bilməz!"); return; }
+
+  const { error } = await supabaseClient.from("settings").update({ value: newVal }).eq("key", keyName);
+  if(error) alert("Xəta: " + error.message);
+  else alert(labelName + " uğurla yeniləndi!");
 }
 
 async function approveDeposit(depId, userId, amount){
   const { data: prof } = await supabaseClient.from("profiles").select("balance").eq("id", userId).single();
   const newBal = (prof?.balance || 0) + amount;
-  
   await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
   await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
-  
   alert("Depozit təsdiqləndi!");
   loadAdminData();
 }
 
-async function approveInvestment(id, userId, vipId, amount){
+async function approveInvestment(id, userId, vipId){
   const nowIso = new Date().toISOString();
   await supabaseClient.from("investments").update({ status: "approved", approved_at: nowIso, last_profit_calc: nowIso }).eq("id", id);
   await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
-  
   alert("Yatırım təsdiqləndi!");
   loadAdminData();
 }
 
 async function approveWithdrawal(id, userId, amount){
   const { data: userProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
-
   if(userProf && (userProf.balance >= amount)){
-    const newBal = userProf.balance - amount;
-    await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
+    await supabaseClient.from("profiles").update({ balance: userProf.balance - amount }).eq("id", userId);
     await supabaseClient.from("withdraw_requests").update({ status: "approved" }).eq("id", id);
     alert("Çıxarış təsdiqləndi!");
   } else {
-    alert("İstifadəçinin balansında kifayət qədər vəsait yoxdur.");
+    alert("Balansda kifayət qədər vəsait yoxdur.");
   }
   loadAdminData();
 }
@@ -951,9 +909,7 @@ async function logout(){
 
 async function checkSession(){
   const { data } = await supabaseClient.auth.getUser();
-  if(data?.user){
-    openApp(data.user);
-  }
+  if(data?.user) openApp(data.user);
 }
 
 checkSession();
