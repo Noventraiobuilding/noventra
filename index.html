@@ -873,21 +873,30 @@ async function loadAdminData(){
     <div class="row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
       <div><span><b>Kart/Nömrə:</b> ${d.sender_account} | <b>Məbləğ:</b> ${d.amount} AZN</span></div>
       ${d.receipt_url ? `<div><a href="${d.receipt_url}" target="_blank"><img src="${d.receipt_url}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #d4af37;" title="Qəbzi böyütmək üçün toxun"></a></div>` : '<div class="muted">Qəbz yoxdur</div>'}
-      <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount}, '${d.receipt_url || ''}')" style="width:100%; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə və Qəbzi Sil</button>
+      <div style="display:flex; gap:10px; width:100%;">
+        <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount}, '${d.receipt_url || ''}')" style="flex:1; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə və Qəbzi Sil</button>
+        <button onclick="rejectDeposit('${d.id}', '${d.receipt_url || ''}')" style="flex:1; padding:8px 16px; background:#ef4444; color:#fff;">Rədd et</button>
+      </div>
     </div>
   `).join("") : "<p class='muted'>Gözləyən depozit yoxdur</p>";
 
   investBox.innerHTML = (investments && investments.length) ? investments.map(i => `
-    <div class="row">
-      <span>VIP ${i.vip_id} (${i.amount} AZN)</span>
-      <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id})" style="width:auto; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
+    <div class="row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+      <span><b>VIP ${i.vip_id}</b> (${i.amount} AZN)</span>
+      <div style="display:flex; gap:10px; width:100%;">
+        <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id})" style="flex:1; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
+        <button onclick="rejectInvestment('${i.id}', '${i.user_id}', ${i.amount})" style="flex:1; padding:8px 16px; background:#ef4444; color:#fff;">Rədd et</button>
+      </div>
     </div>
   `).join("") : "<p class='muted'>Gözləyən yatırım yoxdur</p>";
 
   withdrawBox.innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
-    <div class="row">
-      <span>${w.account_info} - ${w.amount} AZN</span>
-      <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
+    <div class="row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+      <span><b>Hesab:</b> ${w.account_info} | <b>Məbləğ:</b> ${w.amount} AZN</span>
+      <div style="display:flex; gap:10px; width:100%;">
+        <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="flex:1; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
+        <button onclick="rejectWithdrawal('${w.id}')" style="flex:1; padding:8px 16px; background:#ef4444; color:#fff;">Rədd et</button>
+      </div>
     </div>
   `).join("") : "<p class='muted'>Gözləyən çıxarış yoxdur</p>";
 }
@@ -924,11 +933,41 @@ async function approveDeposit(depId, userId, amount, receiptUrl){
   loadAdminData();
 }
 
+async function rejectDeposit(depId, receiptUrl){
+  await supabaseClient.from("deposits").update({ status: "rejected" }).eq("id", depId);
+
+  if(receiptUrl) {
+    try {
+      const urlParts = receiptUrl.split('/receipts/');
+      if(urlParts.length > 1) {
+        const filePath = 'receipts/' + urlParts[1];
+        await supabaseClient.storage.from("receipts").remove([filePath]);
+      }
+    } catch(err) {
+      console.error("Şəkil silinərkən xəta:", err);
+    }
+  }
+
+  alert("Depozit sorğusu rədd edildi və qəbz şəkli silindi.");
+  loadAdminData();
+}
+
 async function approveInvestment(id, userId, vipId){
   const nowIso = new Date().toISOString();
   await supabaseClient.from("investments").update({ status: "approved", approved_at: nowIso, last_profit_calc: nowIso }).eq("id", id);
   await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
   alert("Yatırım təsdiqləndi!");
+  loadAdminData();
+}
+
+async function rejectInvestment(id, userId, amount){
+  // Yatırım rədd ediləndə istifadəçinin balansına pulu geri qaytarırıq
+  const { data: userProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
+  if(userProf){
+    await supabaseClient.from("profiles").update({ balance: (userProf.balance || 0) + amount }).eq("id", userId);
+  }
+  await supabaseClient.from("investments").update({ status: "rejected" }).eq("id", id);
+  alert("Yatırım sorğusu rədd edildi və məbləğ istifadəçiyə geri qaytarıldı.");
   loadAdminData();
 }
 
@@ -941,6 +980,12 @@ async function approveWithdrawal(id, userId, amount){
   } else {
     alert("Balansda kifayət qədər vəsait yoxdur.");
   }
+  loadAdminData();
+}
+
+async function rejectWithdrawal(id){
+  await supabaseClient.from("withdraw_requests").update({ status: "rejected" }).eq("id", id);
+  alert("Çıxarış sorğusu rədd edildi.");
   loadAdminData();
 }
 
