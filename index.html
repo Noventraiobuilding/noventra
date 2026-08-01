@@ -213,8 +213,8 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     <div class="logo">NOVENTRA</div>
     <input id="loginEmail" type="email" placeholder="Email">
     <input id="loginPassword" type="password" placeholder="Şifrə">
-    <button class="main" onclick="login()">Daxil ol</button>
-    <div class="switch" onclick="showRegister()">Hesab yarat</div>
+    <button id="loginBtn" class="main">Daxil ol</button>
+    <div id="toRegister" class="switch">Hesab yarat</div>
     <div id="loginMsg" class="msg"></div>
   </div>
 </section>
@@ -225,8 +225,8 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     <input id="regEmail" type="email" placeholder="Email">
     <input id="regPassword" type="password" placeholder="Şifrə">
     <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)">
-    <button class="main" onclick="register()">Qeydiyyatdan keç</button>
-    <div class="switch" onclick="showLogin()">Girişə qayıt</div>
+    <button id="regBtn" class="main">Qeydiyyatdan keç</button>
+    <div id="toLogin" class="switch">Girişə qayıt</div>
     <div id="regMsg" class="msg"></div>
   </div>
 </section>
@@ -387,7 +387,7 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     <div class="card" style="margin-bottom:20px; border-color:#d4af37;">
       <h2>💳 Ödəniş Kartını / Hesabını Dəyiş</h2>
       <div class="muted" style="margin-bottom:10px;">İstifadəçilərin depozit edərkən gördüyü kart məlumatı:</div>
-      <input id="adminCardInput" placeholder="Məs: 4169... (Ad Soyad və ya M10 nömrəsi)">
+      <input id="adminCardInput" placeholder="Məs: 5243 7544 3976 1469">
       <button class="main" onclick="updateAdminSetting('deposit_info', 'adminCardInput', 'Ödəniş kartı')">Yadda saxla</button>
     </div>
 
@@ -461,6 +461,14 @@ const VIP_LIST = [
   { id: 10, name: "VIP 10", price: 0, days: 0, reward: 710.00, locked: true },
   { id: 11, name: "VIP 11", price: 0, days: 0, reward: 1870.00, locked: true }
 ];
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("loginBtn").addEventListener("click", login);
+  document.getElementById("regBtn").addEventListener("click", register);
+  document.getElementById("toRegister").addEventListener("click", showRegister);
+  document.getElementById("toLogin").addEventListener("click", showLogin);
+  checkSession();
+});
 
 function page(name){
   ["homePage", "vipPage", "taskPage", "leadershipPage", "supportPage", "accountPage", "adminPage"].forEach(x => {
@@ -669,7 +677,7 @@ async function openDepositModal(){
   if(data && data.value) {
     document.getElementById("depositCardNum").innerText = data.value;
   } else {
-    document.getElementById("depositCardNum").innerText = "Admin hələ kart əlavə etməyib";
+    document.getElementById("depositCardNum").innerText = "5243 7544 3976 1469";
   }
 }
 
@@ -677,7 +685,6 @@ function closeDepositModal(){ document.getElementById("depositModal").classList.
 
 function copyCardNum(){
   const cardText = document.getElementById("depositCardNum").innerText;
-  if(cardText.includes("hələ")) { alert("Ödəniş kartı təyin edilməyib!"); return; }
   navigator.clipboard.writeText(cardText);
   alert("Ödəniş məlumatı kopyalandı!");
 }
@@ -699,10 +706,9 @@ async function submitDeposit(){
 
   const file = fileInput.files[0];
   const fileExt = file.name.split('.').pop();
-  const fileName = `${Math.random().toString(36.substring(2))}_${Date.now()}.${fileExt}`;
+  const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
   const filePath = `receipts/${fileName}`;
 
-  // Şəkli Supabase Storage-ə yükləyirik
   const { error: uploadError } = await supabaseClient.storage.from("receipts").upload(filePath, file);
   
   if(uploadError){
@@ -902,7 +908,6 @@ async function approveDeposit(depId, userId, amount, receiptUrl){
   await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
   await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
 
-  // Əgər qəbz şəkli varsa, Storage-dən tamamilə silirik
   if(receiptUrl) {
     try {
       const urlParts = receiptUrl.split('/receipts/');
@@ -948,8 +953,6 @@ async function checkSession(){
   const { data } = await supabaseClient.auth.getUser();
   if(data?.user) openApp(data.user);
 }
-
-checkSession();
 </script>
 </body>
 </html>
