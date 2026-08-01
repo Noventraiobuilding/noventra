@@ -300,10 +300,10 @@ h1, h2, h3 {
   letter-spacing: 0.5px;
 }
 
-/* Tab aktiv rəng alt alternativi */
-.bg-gradient-to-r {
-  background: linear-gradient(90deg, #8a6b16, #d4af37, #f7d774) !important;
-  color:#000 !important;
+/* Modal Styling */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px);
+  display: flex; justify-content: center; align-items: center; z-index: 1000; padding: 20px;
 }
 
 /* Custom Scrollbar */
@@ -363,6 +363,7 @@ h1, h2, h3 {
   <nav class="nav custom-scrollbar">
     <button id="nav-home" onclick="page('home')">Ana səhifə</button>
     <button id="nav-vip" onclick="page('vip')">VIP</button>
+    <button id="nav-leadership" onclick="page('leadership')">Rəhbərlik</button>
     <button id="nav-account" onclick="page('account')">Hesabım</button>
     <button id="adminBtn" class="hidden" onclick="page('admin')">Admin</button>
   </nav>
@@ -373,6 +374,7 @@ h1, h2, h3 {
       <div class="card">
         <div class="muted">Balans</div>
         <div id="balance" class="value yellow">0.00 AZN</div>
+        <button class="main" style="margin-top:12px;" onclick="openDepositModal()">+ Depozit et</button>
       </div>
       <div class="card">
         <div class="muted">Bonuslar</div>
@@ -385,9 +387,49 @@ h1, h2, h3 {
     </div>
   </div>
   
+  <!-- VIP SƏHİFƏSİ (REFERAL ŞƏRTLƏRİ SİLİNDİ) -->
   <div id="vipPage" class="hidden">
     <h1>💎 VIP Paketlər</h1>
     <div id="vipArea" class="grid"></div>
+  </div>
+
+  <!-- RƏHBƏRLİK MƏRKƏZİ -->
+  <div id="leadershipPage" class="hidden">
+    <h1>🏛 Rəhbərlik Mərkəzi</h1>
+    <div class="grid">
+      <div class="card vip-card">
+        <div class="vip-title">🥇 Elit Rəhbər</div>
+        <div class="info">
+          Şərt: <b>6 Referal (VIP 3)</b><br>
+          Gündəlik qazanc: <b>5.00 AZN</b><br>
+          Referal bonusu: <b>+1.00 AZN</b>
+        </div>
+      </div>
+      <div class="card vip-card">
+        <div class="vip-title">💎 Brilyant Rəhbər</div>
+        <div class="info">
+          Şərt: <b>9 Referal (VIP 4)</b><br>
+          Gündəlik qazanc: <b>12.00 AZN</b><br>
+          Referal bonusu: <b>+2.00 AZN</b>
+        </div>
+      </div>
+      <div class="card vip-card">
+        <div class="vip-title">👑 Platin Rəhbər</div>
+        <div class="info">
+          Şərt: <b>7 Referal (VIP 5)</b><br>
+          Gündəlik qazanc: <b>22.00 AZN</b><br>
+          Referal bonusu: <b>+5.00 AZN</b>
+        </div>
+      </div>
+      <div class="card vip-card">
+        <div class="vip-title">🏛 İmperial Direktor</div>
+        <div class="info">
+          Şərt: <b>8 Referal (VIP 6)</b><br>
+          Gündəlik qazanc: <b>36.00 AZN</b><br>
+          Referal bonusu: <b>+25.00 AZN</b>
+        </div>
+      </div>
+    </div>
   </div>
   
   <div id="accountPage" class="hidden">
@@ -434,6 +476,10 @@ h1, h2, h3 {
   <div id="adminPage" class="hidden">
     <h1>Admin Panel</h1>
     <div class="card">
+      <h2>Depozit sorğuları</h2>
+      <div id="adminDeposits"></div>
+    </div>
+    <div class="card" style="margin-top:20px;">
       <h2>Yatırım sorğuları</h2>
       <div id="adminInvestments"></div>
     </div>
@@ -443,6 +489,27 @@ h1, h2, h3 {
     </div>
   </div>
 </section>
+
+<!-- DEPOZİT MODALI -->
+<div id="depositModal" class="modal-overlay hidden">
+  <div class="box">
+    <h2 class="yellow" style="margin-bottom:15px; text-align:center;">Balansı Artır (Depozit)</h2>
+    
+    <div class="info" style="margin-bottom:15px;">
+      Ödəniş Kartı / M10:
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
+        <b id="depositCardNum" class="yellow">4127 0000 0000 0000</b>
+        <button onclick="copyCardNum()" style="width:auto; padding:6px 12px; background:#d4af37; color:#000;">Kopyala</button>
+      </div>
+    </div>
+
+    <input id="depAmount" type="number" placeholder="Yatırılan Məbləğ (AZN)">
+    <input id="depSender" placeholder="Ödəniş etdiyiniz Kart/Nömrə">
+    
+    <button class="main" onclick="submitDeposit()">Ödənişi etdim, Təsdiqə göndər</button>
+    <button onclick="closeDepositModal()" style="background:transparent; color:#aaa; margin-top:8px;">Bağla</button>
+  </div>
+</div>
 
 <script>
 const SUPABASE_URL = "https://yafncpfkjmealuwmvcgc.supabase.co";
@@ -454,24 +521,25 @@ const ADMIN_EMAIL = "Ayazdiana666@gmail.com";
 let user = null;
 let profile = null;
 
-const REFERRAL_BONUS_PERCENTAGE = 0.05; // 5% bonus for referrer
+const REFERRAL_BONUS_PERCENTAGE = 0.05;
 
+// VIP PAKETLƏRDƏN REFERAL ŞƏRTİ TAMAMİLƏ SİLİNDİ
 const VIP_LIST = [
   { id: 1, name: "VIP 1", price: 25, days: 45, reward: 1.50, locked: false },
   { id: 2, name: "VIP 2", price: 35, days: 50, reward: 2.30, locked: false },
   { id: 3, name: "VIP 3", price: 50, days: 60, reward: 3.58, locked: false },
   { id: 4, name: "VIP 4", price: 150, days: 70, reward: 8.00, locked: false },
-  { id: 5, name: "VIP 5", price: 300, days: 80, reward: 22.00, referrals: 7, locked: false },
-  { id: 6, name: "VIP 6", price: 500, days: 90, reward: 36.00, referrals: 8, locked: false },
-  { id: 7, name: "VIP 7", price: 1000, days: 100, reward: 68.00, referrals: 9, locked: false },
-  { id: 8, name: "VIP 8", price: 2000, days: 120, reward: 116.50, referrals: 10, locked: false },
+  { id: 5, name: "VIP 5", price: 300, days: 80, reward: 22.00, locked: false },
+  { id: 6, name: "VIP 6", price: 500, days: 90, reward: 36.00, locked: false },
+  { id: 7, name: "VIP 7", price: 1000, days: 100, reward: 68.00, locked: false },
+  { id: 8, name: "VIP 8", price: 2000, days: 120, reward: 116.50, locked: false },
   { id: 9, name: "VIP 9", price: 0, days: 0, reward: 259.00, locked: true },
   { id: 10, name: "VIP 10", price: 0, days: 0, reward: 710.00, locked: true },
   { id: 11, name: "VIP 11", price: 0, days: 0, reward: 1870.00, locked: true }
 ];
 
 function page(name){
-  ["homePage", "vipPage", "accountPage", "adminPage"].forEach(x => {
+  ["homePage", "vipPage", "leadershipPage", "accountPage", "adminPage"].forEach(x => {
     const el = document.getElementById(x);
     if(el) el.classList.add("hidden");
   });
@@ -481,6 +549,7 @@ function page(name){
   let id = {
     home: "homePage",
     vip: "vipPage",
+    leadership: "leadershipPage",
     account: "accountPage",
     admin: "adminPage"
   }[name];
@@ -521,13 +590,44 @@ function renderVip(){
           Qiymət: <b>${v.locked ? "Kilidli" : v.price + " AZN"}</b><br>
           Müddət: <b>${v.days ? v.days + " gün" : "-"}</b><br>
           Gündəlik qazanc: <b>${v.reward} AZN</b><br>
-          Status: <b>${v.locked ? "Bağlı" : "Aktiv"}</b><br>
-          ${v.referrals ? "Referal tələb: " + v.referrals + " nəfər<br>" : ""}
+          Status: <b>${v.locked ? "Bağlı" : "Aktiv"}</b>
         </div>
         ${!v.locked ? `<button class="main" style="margin-top:15px;" onclick="buyVip(${v.id}, ${v.price})">Yatırım Et (${v.price} AZN)</button>` : ''}
       </div>
     `;
   }).join("");
+}
+
+// DEPOZİT MODAL FUNKSİYALARI
+function openDepositModal(){ document.getElementById("depositModal").classList.remove("hidden"); }
+function closeDepositModal(){ document.getElementById("depositModal").classList.add("hidden"); }
+function copyCardNum(){
+  navigator.clipboard.writeText(document.getElementById("depositCardNum").innerText);
+  alert("Kart nömrəsi kopyalandı!");
+}
+
+async function submitDeposit(){
+  const amount = Number(document.getElementById("depAmount").value || 0);
+  const sender = document.getElementById("depSender").value.trim();
+
+  if(amount <= 0 || !sender){
+    alert("Zəhmət olmasa məbləği və ödəniş etdiyiniz nömrəni daxil edin.");
+    return;
+  }
+
+  const { error } = await supabaseClient.from("deposits").insert({
+    user_id: user.id,
+    amount: amount,
+    sender_account: sender,
+    status: "pending"
+  });
+
+  if(error){
+    alert("Xəta: " + error.message);
+  } else {
+    alert("Depozit sorğunuz təsdiq üçün adminə göndərildi!");
+    closeDepositModal();
+  }
 }
 
 async function register(){
@@ -541,10 +641,7 @@ async function register(){
     return;
   }
 
-  const { data, error } = await supabaseClient.auth.signUp({
-    email,
-    password
-  });
+  const { data, error } = await supabaseClient.auth.signUp({ email, password });
 
   if(error){
     msg.innerText = error.message;
@@ -583,10 +680,7 @@ async function login(){
     return;
   }
 
-  const { data, error } = await supabaseClient.auth.signInWithPassword({
-    email,
-    password
-  });
+  const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
 
   if(error){
     msg.innerText = "Email və ya şifrə səhvdir";
@@ -618,7 +712,7 @@ async function openApp(u){
 }
 
 async function loadProfile(){
-  const { data, error } = await supabaseClient
+  const { data } = await supabaseClient
     .from("profiles")
     .select("*")
     .eq("id", user.id)
@@ -692,7 +786,8 @@ async function buyVip(vipId, price){
   await loadProfile();
 
   if((profile.balance || 0) < price){
-    alert(`Balansınızda kifayət qədər vəsait yoxdur! Lazım olan məbləğ: ${price} AZN, Sizin balansınız: ${(profile.balance || 0).toFixed(2)} AZN`);
+    alert(`Balansınızda kifayət qədər vəsait yoxdur! Lazım olan məbləğ: ${price} AZN, Sizin balansınız: ${(profile.balance || 0).toFixed(2)} AZN\n\nDepozit edərək balansınızı artırın.`);
+    openDepositModal();
     return;
   }
 
@@ -732,13 +827,13 @@ async function buyVip(vipId, price){
 async function processDailyProfits(){
   if(!user) return;
 
-  const { data: investments, error } = await supabaseClient
+  const { data: investments } = await supabaseClient
     .from("investments")
     .select("*")
     .eq("user_id", user.id)
     .eq("status", "approved");
 
-  if(error || !investments || investments.length === 0) return;
+  if(!investments || investments.length === 0) return;
 
   const now = new Date();
   let totalAddedEarnings = 0;
@@ -766,21 +861,10 @@ async function processDailyProfits(){
       totalAddedEarnings += earnedAmount;
 
       const newLastCalc = new Date(lastCalc.getTime() + (daysEarned * 24 * 60 * 60 * 1000));
-        
-      let updatePayload = { last_profit_calc: newLastCalc.toISOString() };
-      let { error: updateErr } = await supabaseClient
+      await supabaseClient
         .from("investments")
-        .update(updatePayload)
+        .update({ last_profit_calc: newLastCalc.toISOString() })
         .eq("id", inv.id);
-
-      if(updateErr){
-        delete updatePayload.last_profit_calc;
-        updatePayload.updated_at = newLastCalc.toISOString();
-        await supabaseClient
-          .from("investments")
-          .update(updatePayload)
-          .eq("id", inv.id);
-      }
     }
   }
 
@@ -796,92 +880,58 @@ async function processDailyProfits(){
 }
 
 async function loadAdminData(){
+  const depBox = document.getElementById("adminDeposits");
   const investBox = document.getElementById("adminInvestments");
   const withdrawBox = document.getElementById("adminWithdraw");
 
-  const { data: investments } = await supabaseClient
-    .from("investments")
-    .select("*")
-    .eq("status", "pending");
+  const { data: deposits } = await supabaseClient.from("deposits").select("*").eq("status", "pending");
+  const { data: investments } = await supabaseClient.from("investments").select("*").eq("status", "pending");
+  const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*").eq("status", "pending");
 
-  const { data: withdrawals } = await supabaseClient
-    .from("withdraw_requests")
-    .select("*")
-    .eq("status", "pending");
+  depBox.innerHTML = (deposits && deposits.length) ? deposits.map(d => `
+    <div class="row">
+      <span>${d.sender_account} - ${d.amount} AZN</span>
+      <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000;">Təsdiqlə</button>
+    </div>
+  `).join("") : "<p class='muted'>Gözləyən depozit yoxdur</p>";
 
   investBox.innerHTML = (investments && investments.length) ? investments.map(i => `
     <div class="row">
       <span>İstifadəçi: ${i.user_id.substring(0,8)}... | VIP ${i.vip_id} (${i.amount} AZN)</span>
-      <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id}, ${i.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000; font-weight:bold;">Təsdiqlə</button>
+      <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id}, ${i.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000;">Təsdiqlə</button>
     </div>
   `).join("") : "<p class='muted'>Gözləyən yatırım yoxdur</p>";
 
   withdrawBox.innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
     <div class="row">
       <span>${w.account_info} - ${w.amount} AZN (${w.method})</span>
-      <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000; font-weight:bold;">Təsdiqlə</button>
+      <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="width:auto; padding:8px 16px; background:linear-gradient(135deg, #8a6b16, #d4af37); color:#000;">Təsdiqlə</button>
     </div>
   `).join("") : "<p class='muted'>Gözləyən çıxarış yoxdur</p>";
 }
 
+async function approveDeposit(depId, userId, amount){
+  const { data: prof } = await supabaseClient.from("profiles").select("balance").eq("id", userId).single();
+  const newBal = (prof?.balance || 0) + amount;
+  
+  await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
+  await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
+  
+  alert("Depozit təsdiqləndi!");
+  loadAdminData();
+}
+
 async function approveInvestment(id, userId, vipId, amount){
   const nowIso = new Date().toISOString();
-    
-  let updateData = {
-    status: "approved",
-    approved_at: nowIso,
-    last_profit_calc: nowIso
-  };
-
-  let { error: updateError } = await supabaseClient
-    .from("investments")
-    .update(updateData)
-    .eq("id", id);
-
-  if(updateError){
-    delete updateData.approved_at;
-    delete updateData.last_profit_calc;
-    await supabaseClient
-      .from("investments")
-      .update(updateData)
-      .eq("id", id);
-  }
-
+  await supabaseClient.from("investments").update({ status: "approved", approved_at: nowIso, last_profit_calc: nowIso }).eq("id", id);
   await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
-
-  const { data: buyerProfile } = await supabaseClient
-    .from("profiles")
-    .select("referred_by")
-    .eq("id", userId)
-    .maybeSingle();
-
-  if(buyerProfile && buyerProfile.referred_by){
-    const { data: referrer } = await supabaseClient
-      .from("profiles")
-      .select("id, bonus")
-      .eq("referral_code", buyerProfile.referred_by)
-      .maybeSingle();
-
-    if(referrer){
-      const bonusAmount = amount * REFERRAL_BONUS_PERCENTAGE;
-      const newBonus = (referrer.bonus || 0) + bonusAmount;
-      await supabaseClient
-        .from("profiles")
-        .update({ bonus: newBonus })
-        .eq("id", referrer.id);
-    }
-  }
-
+  
   alert("Yatırım təsdiqləndi!");
   loadAdminData();
 }
 
 async function approveWithdrawal(id, userId, amount){
-  const { data: userProf } = await supabaseClient
-    .from("profiles")
-    .select("balance")
-    .eq("id", userId)
-    .maybeSingle();
+  const { data: userProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
 
   if(userProf && (userProf.balance >= amount)){
     const newBal = userProf.balance - amount;
