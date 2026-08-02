@@ -10,8 +10,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
-
 *{ box-sizing:border-box; }
 
 body{
@@ -37,8 +35,7 @@ body{
 }
 
 .box,
-.card,
-.glass-panel {
+.card {
   background: rgba(10,10,10,.78);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
@@ -122,7 +119,7 @@ button:hover { transform: translateY(-2px); opacity: 0.95; }
 }
 .switch:hover { color: #fff; }
 
-.msg{ text-align:center; margin-top:12px; color:#ff7777; }
+.msg{ text-align:center; margin-top:12px; color:#ff7777; font-size:14px; word-break:break-all; min-height: 20px; }
 
 #app{ max-width:1100px; margin:auto; padding:20px; }
 .header{ text-align:center; }
@@ -223,7 +220,7 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
   <div class="box">
     <div class="logo">NOVENTRA</div>
     <input id="regEmail" type="email" placeholder="Email">
-    <input id="regPassword" type="password" placeholder="Şifrə">
+    <input id="regPassword" type="password" placeholder="Şifrə (minimum 6 simvol)">
     <input id="regReferral" placeholder="Dəvət kodu (istəyə bağlı)">
     <button id="regBtn" class="main">Qeydiyyatdan keç</button>
     <div id="toLogin" class="switch">Girişə qayıt</div>
@@ -735,42 +732,73 @@ async function register(){
   const password = document.getElementById("regPassword").value;
   const referral = document.getElementById("regReferral").value.trim();
   const msg = document.getElementById("regMsg");
+  msg.innerText = "";
 
   if(!email || !password){ msg.innerText = "Email və şifrə daxil edin"; return; }
+  if(password.length < 6){ msg.innerText = "Şifrə ən azı 6 simvoldan ibarət olmalıdır"; return; }
 
   const { data, error } = await supabaseClient.auth.signUp({ email, password });
-  if(error){ msg.innerText = error.message; return; }
-
-  if(data.user){
-    const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
-    await supabaseClient.from("profiles").insert({
-      id: data.user.id, email: email, balance: 0, bonus: 0,
-      current_vip: "Yeni istifadəçi", leadership_status: "Yoxdur",
-      referral_code: refCodeGenerated, referred_by: referral || null
-    });
+  
+  if(error){ 
+    msg.innerText = "Qeydiyyat xətası: " + error.message; 
+    return; 
   }
 
-  msg.innerText = "Hesab yaradıldı. Giriş edilir...";
-  setTimeout(() => { 
-    if(data.user) {
-      openApp(data.user); 
-    } else {
-      showLogin();
+  if(data && data.user){
+    const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
+    
+    // Profil cədvəlinə əlavə edirik, əgər profil artıq mövcuddursa catch edirik ki, proqram dayanmasın
+    try {
+      await supabaseClient.from("profiles").insert({
+        id: data.user.id, 
+        email: email, 
+        balance: 0, 
+        bonus: 0,
+        current_vip: "Yeni istifadəçi", 
+        leadership_status: "Yoxdur",
+        referral_code: refCodeGenerated, 
+        referred_by: referral || null
+      });
+    } catch(e) {
+      console.error("Profil yaradılarkən xəta (ola bilər ki artıq mövcuddur):", e);
     }
-  }, 1000);
+
+    msg.innerText = "Uğurla qeydiyyatdan keçdiniz! Giriş edilir...";
+    
+    // Əgər Supabase avtomatik session veribsə birbaşa açırıq, əks halda login edirik
+    setTimeout(async () => {
+      if(data.session) {
+        openApp(data.user);
+      } else {
+        // Sessiya dərhal qayıtmadısa, avtomatik login funksiyasını çağırırıq ki, istifadəçi səhifəyə keçsin
+        const loginRes = await supabaseClient.auth.signInWithPassword({ email, password });
+        if(loginRes.data && loginRes.data.user) {
+          openApp(loginRes.data.user);
+        } else {
+          showLogin();
+          document.getElementById("loginMsg").innerText = "Qeydiyyat tamamlandı, zəhmət olmasa daxil olun.";
+        }
+      }
+    }, 1200);
+  } else {
+    msg.innerText = "Qeydiyyat zamanı gözlənilməz xəta baş verdi.";
+  }
 }
 
 async function login(){
   const email = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
   const msg = document.getElementById("loginMsg");
+  msg.innerText = "";
 
   if(!email || !password){ msg.innerText = "Email və şifrə daxil edin"; return; }
 
   const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-  if(error){ msg.innerText = "Email və ya şifrə səhvdir"; return; }
+  if(error){ msg.innerText = "Email və ya şifrə səhvdir: " + error.message; return; }
 
-  openApp(data.user);
+  if(data && data.user) {
+    openApp(data.user);
+  }
 }
 
 async function openApp(u){
@@ -793,7 +821,23 @@ async function openApp(u){
 
 async function loadProfile(){
   const { data } = await supabaseClient.from("profiles").select("*").eq("id", user.id).maybeSingle();
-  profile = data || {};
+  if(!data) {
+    // Əgər profil bazada yoxdursa, avtomatik yaradırıq ki, səhv çıxmasın
+    const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
+    const newProfile = {
+      id: user.id, 
+      email: user.email, 
+      balance: 0, 
+      bonus: 0,
+      current_vip: "Yeni istifadəçi", 
+      leadership_status: "Yoxdur",
+      referral_code: refCodeGenerated
+    };
+    await supabaseClient.from("profiles").insert(newProfile);
+    profile = newProfile;
+  } else {
+    profile = data;
+  }
 
   document.getElementById("balance").innerText = (profile.balance || 0).toFixed(2) + " AZN";
   document.getElementById("bonus").innerText = (profile.bonus || 0).toFixed(2) + " AZN";
@@ -816,6 +860,7 @@ async function withdrawRequest(){
   const method = document.getElementById("withdrawMethod").value;
   const info = document.getElementById("withdrawInfo").value.trim();
   const msg = document.getElementById("withdrawMsg");
+  msg.innerText = "";
 
   if(amount < 8){ msg.innerText = "Minimum çıxarış 8 AZN olmalıdır"; return; }
   if((profile.balance || 0) < amount){ msg.innerText = "Balansınızda kifayət qədər vəsait yoxdur"; return; }
