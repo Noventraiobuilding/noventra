@@ -427,7 +427,6 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     </div>
 
     <input id="depAmount" type="number" placeholder="Yatırılan Məbləğ (AZN)">
-    <input id="depSender" placeholder="Ödəniş etdiyiniz Kart/Nömrə">
     
     <div class="muted" style="margin-top:10px; font-size: 14px;">Ödəniş qəbzinin şəklini yükləyin:</div>
     <input id="depReceiptFile" type="file" accept="image/*" style="padding: 10px;">
@@ -691,11 +690,10 @@ function copyCardNum(){
 
 async function submitDeposit(){
   const amount = Number(document.getElementById("depAmount").value || 0);
-  const sender = document.getElementById("depSender").value.trim();
   const fileInput = document.getElementById("depReceiptFile");
 
-  if(amount <= 0 || !sender){
-    alert("Zəhmət olmasa məbləği və ödəniş etdiyiniz nömrəni daxil edin.");
+  if(amount <= 0){
+    alert("Zəhmət olmasa yatırılacaq məbləği daxil edin.");
     return;
   }
 
@@ -720,7 +718,7 @@ async function submitDeposit(){
   const receiptUrl = publicURLData.publicUrl;
 
   const { error } = await supabaseClient.from("deposits").insert({
-    user_id: user.id, amount: amount, sender_account: sender, receipt_url: receiptUrl, status: "pending"
+    user_id: user.id, amount: amount, sender_account: "Mobil/Kart", receipt_url: receiptUrl, status: "pending"
   });
 
   if(error) alert("Xəta: " + error.message);
@@ -728,7 +726,6 @@ async function submitDeposit(){
     alert("Depozit sorğunuz və qəbz şəkli adminə göndərildi!");
     closeDepositModal();
     document.getElementById("depAmount").value = "";
-    document.getElementById("depSender").value = "";
     fileInput.value = "";
   }
 }
@@ -754,7 +751,13 @@ async function register(){
   }
 
   msg.innerText = "Hesab yaradıldı. Giriş edilir...";
-  setTimeout(() => { if(data.user) openApp(data.user); else showLogin(); }, 1000);
+  setTimeout(() => { 
+    if(data.user) {
+      openApp(data.user); 
+    } else {
+      showLogin();
+    }
+  }, 1000);
 }
 
 async function login(){
@@ -871,7 +874,7 @@ async function loadAdminData(){
 
   depBox.innerHTML = (deposits && deposits.length) ? deposits.map(d => `
     <div class="row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-      <div><span><b>Kart/Nömrə:</b> ${d.sender_account} | <b>Məbləğ:</b> ${d.amount} AZN</span></div>
+      <div><span><b>Məbləğ:</b> ${d.amount} AZN</span></div>
       ${d.receipt_url ? `<div><a href="${d.receipt_url}" target="_blank"><img src="${d.receipt_url}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #d4af37;" title="Qəbzi böyütmək üçün toxun"></a></div>` : '<div class="muted">Qəbz yoxdur</div>'}
       <div style="display:flex; gap:10px; width:100%;">
         <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount}, '${d.receipt_url || ''}')" style="flex:1; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə və Qəbzi Sil</button>
@@ -961,7 +964,6 @@ async function approveInvestment(id, userId, vipId){
 }
 
 async function rejectInvestment(id, userId, amount){
-  // Yatırım rədd ediləndə istifadəçinin balansına pulu geri qaytarırıq
   const { data: userProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
   if(userProf){
     await supabaseClient.from("profiles").update({ balance: (userProf.balance || 0) + amount }).eq("id", userId);
