@@ -737,7 +737,16 @@ async function register(){
   if(!email || !password){ msg.innerText = "Email və şifrə daxil edin"; return; }
   if(password.length < 6){ msg.innerText = "Şifrə ən azı 6 simvoldan ibarət olmalıdır"; return; }
 
-  const { data, error } = await supabaseClient.auth.signUp({ email, password });
+  // Dəyişiklik burada tətbiq olundu: referal kod options vasitəsilə ötürülür
+  const { data, error } = await supabaseClient.auth.signUp({ 
+    email, 
+    password,
+    options: {
+      data: {
+        referral_code_used: referral
+      }
+    }
+  });
   
   if(error){ 
     msg.innerText = "Qeydiyyat xətası: " + error.message; 
@@ -747,7 +756,6 @@ async function register(){
   if(data && data.user){
     const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
     
-    // Profil cədvəlinə əlavə edirik, əgər profil artıq mövcuddursa catch edirik ki, proqram dayanmasın
     try {
       await supabaseClient.from("profiles").insert({
         id: data.user.id, 
@@ -765,12 +773,10 @@ async function register(){
 
     msg.innerText = "Uğurla qeydiyyatdan keçdiniz! Giriş edilir...";
     
-    // Əgər Supabase avtomatik session veribsə birbaşa açırıq, əks halda login edirik
     setTimeout(async () => {
       if(data.session) {
         openApp(data.user);
       } else {
-        // Sessiya dərhal qayıtmadısa, avtomatik login funksiyasını çağırırıq ki, istifadəçi səhifəyə keçsin
         const loginRes = await supabaseClient.auth.signInWithPassword({ email, password });
         if(loginRes.data && loginRes.data.user) {
           openApp(loginRes.data.user);
@@ -822,7 +828,6 @@ async function openApp(u){
 async function loadProfile(){
   const { data } = await supabaseClient.from("profiles").select("*").eq("id", user.id).maybeSingle();
   if(!data) {
-    // Əgər profil bazada yoxdursa, avtomatik yaradırıq ki, səhv çıxmasın
     const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
     const newProfile = {
       id: user.id, 
