@@ -737,7 +737,6 @@ async function register(){
   if(!email || !password){ msg.innerText = "Email və şifrə daxil edin"; return; }
   if(password.length < 6){ msg.innerText = "Şifrə ən azı 6 simvoldan ibarət olmalıdır"; return; }
 
-  // Dəyişiklik burada tətbiq olundu: referal kod options vasitəsilə ötürülür
   const { data, error } = await supabaseClient.auth.signUp({ 
     email, 
     password,
@@ -749,28 +748,12 @@ async function register(){
   });
   
   if(error){ 
-    msg.innerText = "Qeydiyyat xətası: " + error.message; 
+    msg.innerText = "Qeydiyyat xətası: " + (error.message || JSON.stringify(error)); 
+    console.error("Supabase Reg Error:", error);
     return; 
   }
 
   if(data && data.user){
-    const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
-    
-    try {
-      await supabaseClient.from("profiles").insert({
-        id: data.user.id, 
-        email: email, 
-        balance: 0, 
-        bonus: 0,
-        current_vip: "Yeni istifadəçi", 
-        leadership_status: "Yoxdur",
-        referral_code: refCodeGenerated, 
-        referred_by: referral || null
-      });
-    } catch(e) {
-      console.error("Profil yaradılarkən xəta (ola bilər ki artıq mövcuddur):", e);
-    }
-
     msg.innerText = "Uğurla qeydiyyatdan keçdiniz! Giriş edilir...";
     
     setTimeout(async () => {
