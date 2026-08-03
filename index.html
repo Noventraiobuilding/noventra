@@ -547,14 +547,19 @@ function openTelegramBot(){
 }
 
 async function checkTaskAvailability(){
-  if(!profile) return;
-  const lastTaskDate = profile.last_task_date;
-  const now = new Date();
-
+  if(!user) return;
   const statusText = document.getElementById("taskStatusText");
   const startBtn = document.getElementById("startTaskBtn");
 
-  if(!profile.current_vip || profile.current_vip === "Yeni istifadəçi" || !profile.current_vip.startsWith("VIP ")){
+  // İstifadəçinin bu gün hələ analiz edilməmiş aktiv yatırımlarını yoxlayırıq
+  const today = new Date().toISOString().split('T')[0];
+  const { data: activeInvests } = await supabaseClient
+    .from("investments")
+    .select("id, last_analyzed_date")
+    .eq("user_id", user.id)
+    .eq("status", "active");
+
+  if(!activeInvests || activeInvests.length === 0){
     statusText.innerText = "Analiz üçün aktiv VIP paketiniz olmalıdır 🔒";
     startBtn.innerText = "VIP Paket Seçməyə Get";
     startBtn.onclick = () => page('vip');
@@ -562,38 +567,23 @@ async function checkTaskAvailability(){
     return;
   }
 
-  startBtn.innerText = "Gündəlik Analizi Başlat";
-  startBtn.onclick = runAiAnalysis;
+  // Bu gün üçün analiz oluna biləcək paket qalıbmı?
+  const pendingInvests = activeInvests.filter(i => !i.last_analyzed_date || i.last_analyzed_date < today);
 
-  if(lastTaskDate){
-    const lastDate = new Date(lastTaskDate);
-    const diffHours = (now - lastDate) / (1000 * 60 * 60);
-    if(diffHours < 24){
-      statusText.innerText = "Bugünkü analiz artıq yerinə yetirilib ✅";
-      startBtn.classList.add("hidden");
-      return;
-    }
+  if(pendingInvests.length === 0){
+    statusText.innerText = "Bugünkü analiz artıq yerinə yetirilib ✅";
+    startBtn.classList.add("hidden");
+    return;
   }
 
+  startBtn.innerText = "Gündəlik Analizi Başlat";
+  startBtn.onclick = runAiAnalysis;
   statusText.innerText = "Bugünkü analiz gözlənilir ⏳";
   startBtn.classList.remove("hidden");
 }
 
 async function runAiAnalysis(){
-  if(!profile || !profile.current_vip || !profile.current_vip.startsWith("VIP ")) {
-    alert("Analiz etmək üçün əvvəlcə VIP paketə yatırım etməlisiniz!");
-    page('vip');
-    return;
-  }
-
-  const vipIdStr = profile.current_vip.replace("VIP ", "");
-  const vipObj = VIP_LIST.find(v => v.id == vipIdStr);
-  
-  if(!vipObj){
-    alert("Aktiv VIP paketiniz tapılmadı.");
-    page('vip');
-    return;
-  }
+  if(!user) return;
 
   const startBtn = document.getElementById("startTaskBtn");
   const processArea = document.getElementById("taskProcessArea");
@@ -604,40 +594,42 @@ async function runAiAnalysis(){
   startBtn.classList.add("hidden");
   processArea.classList.remove("hidden");
 
-  let earnedReward = vipObj.reward;
-  let leadershipBonusText = "";
-  if(profile.leadership_status === 'elit') { earnedReward += 1.00; leadershipBonusText = " (+1.00 AZN Rəhbər bonusu)"; }
-  else if(profile.leadership_status === 'brilyant') { earnedReward += 2.00; leadershipBonusText = " (+2.00 AZN Rəhbər bonusu)"; }
-  else if(profile.leadership_status === 'platin') { earnedReward += 5.00; leadershipBonusText = " (+5.00 AZN Rəhbər bonusu)"; }
-  else if(profile.leadership_status === 'imperial') { earnedReward += 25.00; leadershipBonusText = " (+25.00 AZN Rəhbər bonusu)"; }
-
+  // Vizual yüklənmə prosesi (4 saniyə)
   const steps = [
-    { text: "Bazar məlumatları oxunur...", progress: "25%" },
+    { text: "Bazar məlumatları və aktiv VIP-lər oxunur...", progress: "25%" },
     { text: "Likvidlik və risk əmsalları hesablanır...", progress: "60%" },
-    { text: "Süni intellekt qərarı formalaşdırılır...", progress: "90%" },
-    { text: `Analiz tamamlandı! +${earnedReward.toFixed(2)} AZN qazanc əlavə olundu.`, progress: "100%" }
+    { text: "Süni intellekt qərarı və ümumi qazanc formalaşdırılır...", progress: "90%" }
   ];
 
   for(let i = 0; i < steps.length; i++){
     stepText.innerText = steps[i].text;
     progressBar.style.width = steps[i].progress;
-    await new Promise(r => setTimeout(r, 1200));
+    await new Promise(r => setTimeout(r, 1000));
   }
 
-  const currentBal = profile.balance || 0;
-  const newBalance = currentBal + earnedReward;
-  const nowIso = new Date().toISOString();
+  // Bazada yazdığımız SQL funksiyasını çağırırıq
+  const { data, error } = await supabaseClient.rpc('claim_daily_profit', { p_user_id: user.id });
 
-  await supabaseClient.from("profiles").update({ 
-    balance: newBalance, 
-    last_task_date: nowIso 
-  }).eq("id", user.id);
-  
-  await loadProfile();
-  
-  processArea.classList.add("hidden");
-  statusText.innerText = "Bugünkü analiz tamamlandı ✅";
-  alert(`Təbriklər! Gündəlik analiz uğurla başa çatdı və ${profile.current_vip} qazancınız olaraq balansınıza +${earnedReward.toFixed(2)} AZN${leadershipBonusText} əlavə olundu!`);
+  if (error) {
+    alert("Xəta baş verdi: " + error.message);
+    processArea.classList.add("hidden");
+    startBtn.classList.remove("hidden");
+  } else {
+    if (data.success) {
+      stepText.innerText = `Analiz tamamlandı! +${data.profit} AZN qazanc əlavə olundu.`;
+      progressBar.style.width = "100%";
+      await new Promise(r => setTimeout(r, 800));
+
+      await loadProfile();
+      processArea.classList.add("hidden");
+      statusText.innerText = "Bugünkü analiz tamamlandı ✅";
+      alert(`Təbriklər! Gündəlik analiz uğurla başa çatdı və bütün aktiv VIP paketlərinizin qazancı olaraq balansınıza +${data.profit} AZN əlavə olundu!`);
+    } else {
+      processArea.classList.add("hidden");
+      alert(data.message);
+      checkTaskAvailability();
+    }
+  }
 }
 
 async function claimLeadership(leadTitle, requiredCount, requiredVipMin){
@@ -877,8 +869,12 @@ async function buyVip(vipId, price){
   const newBalance = profile.balance - price;
   await supabaseClient.from("profiles").update({ balance: newBalance }).eq("id", user.id);
 
+  // VIP siyahısından günlük qazancı tapırıq
+  const vipObj = VIP_LIST.find(v => v.id === vipId);
+  const dailyProfit = vipObj ? vipObj.reward : 0;
+
   const { error: investError } = await supabaseClient.from("investments").insert({
-    user_id: user.id, vip_id: vipId, amount: price, status: "pending"
+    user_id: user.id, vip_id: vipId, amount: price, daily_profit: dailyProfit, status: "pending"
   });
 
   if(investError){
@@ -901,17 +897,18 @@ async function loadAdminData(){
   const investBox = document.getElementById("adminInvestments");
   const withdrawBox = document.getElementById("adminWithdraw");
 
-  const { data: deposits } = await supabaseClient.from("deposits").select("*").eq("status", "pending");
+  const { data: deposits } = await supabaseClient.from("deposits").select("*").order('created_at', { ascending: false });
   const { data: investments } = await supabaseClient.from("investments").select("*").eq("status", "pending");
   const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*").eq("status", "pending");
 
   depBox.innerHTML = (deposits && deposits.length) ? deposits.map(d => `
     <div class="row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-      <div><span><b>Məbləğ:</b> ${d.amount} AZN</span></div>
+      <div><span><b>Məbləğ:</b> ${d.amount} AZN | <b>Status:</b> ${d.status}</span></div>
       ${d.receipt_url ? `<div><a href="${d.receipt_url}" target="_blank"><img src="${d.receipt_url}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid #d4af37;" title="Qəbzi böyütmək üçün toxun"></a></div>` : '<div class="muted">Qəbz yoxdur</div>'}
-      <div style="display:flex; gap:10px; width:100%;">
-        <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount}, '${d.receipt_url || ''}')" style="flex:1; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə və Qəbzi Sil</button>
-        <button onclick="rejectDeposit('${d.id}', '${d.receipt_url || ''}')" style="flex:1; padding:8px 16px; background:#ef4444; color:#fff;">Rədd et</button>
+      <div style="display:flex; gap:8px; width:100%;">
+        ${d.status === 'pending' ? `<button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount}, '${d.receipt_url || ''}')" style="flex:1; padding:8px; background:#d4af37; color:#000;">Təsdiqlə</button>` : ''}
+        <button onclick="rejectDeposit('${d.id}')" style="flex:1; padding:8px; background:#f59e0b; color:#fff;">Rədd et</button>
+        <button onclick="deleteDepositRecord('${d.id}', '${d.receipt_url || ''}')" style="flex:1; padding:8px; background:#ef4444; color:#fff;">Sil</button>
       </div>
     </div>
   `).join("") : "<p class='muted'>Gözləyən depozit yoxdur</p>";
@@ -953,24 +950,20 @@ async function approveDeposit(depId, userId, amount, receiptUrl){
   await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
   await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
 
-  if(receiptUrl) {
-    try {
-      const urlParts = receiptUrl.split('/receipts/');
-      if(urlParts.length > 1) {
-        const filePath = 'receipts/' + urlParts[1];
-        await supabaseClient.storage.from("receipts").remove([filePath]);
-      }
-    } catch(err) {
-      console.error("Şəkil silinərkən xəta:", err);
-    }
-  }
-
-  alert("Depozit təsdiqləndi və qəbz şəkli sistemdən silindi!");
+  alert("Depozit təsdiqləndi və balans artırıldı!");
   loadAdminData();
 }
 
-async function rejectDeposit(depId, receiptUrl){
+async function rejectDeposit(depId){
   await supabaseClient.from("deposits").update({ status: "rejected" }).eq("id", depId);
+  alert("Depozit sorğusu rədd edildi.");
+  loadAdminData();
+}
+
+async function deleteDepositRecord(depId, receiptUrl){
+  if(!confirm("Bu qəbzi və sorğunu bazadan tamamilə silmək istədiyinizə əminsiniz?")) return;
+
+  await supabaseClient.from("deposits").delete().eq("id", depId);
 
   if(receiptUrl) {
     try {
@@ -984,15 +977,15 @@ async function rejectDeposit(depId, receiptUrl){
     }
   }
 
-  alert("Depozit sorğusu rədd edildi və qəbz şəkli silindi.");
+  alert("Qəbz və sorğu sistemdən silindi!");
   loadAdminData();
 }
 
 async function approveInvestment(id, userId, vipId){
   const nowIso = new Date().toISOString();
-  await supabaseClient.from("investments").update({ status: "approved", approved_at: nowIso, last_profit_calc: nowIso }).eq("id", id);
+  await supabaseClient.from("investments").update({ status: "active", approved_at: nowIso }).eq("id", id);
   await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
-  alert("Yatırım təsdiqləndi!");
+  alert("Yatırım təsdiqləndi və aktivləşdirildi!");
   loadAdminData();
 }
 
