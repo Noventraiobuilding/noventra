@@ -551,7 +551,9 @@ async function checkTaskAvailability(){
   const statusText = document.getElementById("taskStatusText");
   const startBtn = document.getElementById("startTaskBtn");
 
-  const today = new Date().toISOString().split('T')[0];
+  // Bakı vaxtına (UTC+4) uyğun cari günün əldə edilməsi
+  const today = new Date(new Date().getTime() + (4 * 60 * 60 * 1000)).toISOString().split('T')[0];
+  
   const { data: activeInvests } = await supabaseClient
     .from("investments")
     .select("id, last_analyzed_date")
