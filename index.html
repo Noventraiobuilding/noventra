@@ -551,7 +551,6 @@ async function checkTaskAvailability(){
   const statusText = document.getElementById("taskStatusText");
   const startBtn = document.getElementById("startTaskBtn");
 
-  // İstifadəçinin bu gün hələ analiz edilməmiş aktiv yatırımlarını yoxlayırıq
   const today = new Date().toISOString().split('T')[0];
   const { data: activeInvests } = await supabaseClient
     .from("investments")
@@ -567,7 +566,6 @@ async function checkTaskAvailability(){
     return;
   }
 
-  // Bu gün üçün analiz oluna biləcək paket qalıbmı?
   const pendingInvests = activeInvests.filter(i => !i.last_analyzed_date || i.last_analyzed_date < today);
 
   if(pendingInvests.length === 0){
@@ -594,7 +592,6 @@ async function runAiAnalysis(){
   startBtn.classList.add("hidden");
   processArea.classList.remove("hidden");
 
-  // Vizual yüklənmə prosesi (4 saniyə)
   const steps = [
     { text: "Bazar məlumatları və aktiv VIP-lər oxunur...", progress: "25%" },
     { text: "Likvidlik və risk əmsalları hesablanır...", progress: "60%" },
@@ -607,7 +604,6 @@ async function runAiAnalysis(){
     await new Promise(r => setTimeout(r, 1000));
   }
 
-  // Bazada yazdığımız SQL funksiyasını çağırırıq
   const { data, error } = await supabaseClient.rpc('claim_daily_profit', { p_user_id: user.id });
 
   if (error) {
@@ -741,7 +737,6 @@ async function register(){
   
   if(error){ 
     msg.innerText = "Qeydiyyat xətası: " + (error.message || JSON.stringify(error)); 
-    console.error("Supabase Reg Error:", error);
     return; 
   }
 
@@ -869,7 +864,6 @@ async function buyVip(vipId, price){
   const newBalance = profile.balance - price;
   await supabaseClient.from("profiles").update({ balance: newBalance }).eq("id", user.id);
 
-  // VIP siyahısından günlük qazancı tapırıq
   const vipObj = VIP_LIST.find(v => v.id === vipId);
   const dailyProfit = vipObj ? vipObj.reward : 0;
 
@@ -938,7 +932,7 @@ async function updateAdminSetting(keyName, inputId, labelName){
   const newVal = document.getElementById(inputId).value.trim();
   if(!newVal){ alert("Məlumat boş ola bilməz!"); return; }
 
-  const { error } = await supabaseClient.from("settings").update({ value: newVal }).eq("key", keyName);
+  const { error } = await supabaseClient.from("settings").upsert({ key: keyName, value: newVal }, { onConflict: 'key' });
   if(error) alert("Xəta: " + error.message);
   else alert(labelName + " uğurla yeniləndi!");
 }
