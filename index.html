@@ -364,13 +364,9 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     </div>
     
     <div class="card" style="margin-top:20px;">
-      <h2>Çıxarış</h2>
+      <h2>Çıxarış (Binance ID)</h2>
       <input id="withdrawAmount" type="number" placeholder="Məbləğ (minimum 8 AZN)" min="8">
-      <select id="withdrawMethod">
-        <option value="card">Bank kartı</option>
-        <option value="crypto">Kripto hesab</option>
-      </select>
-      <input id="withdrawInfo" placeholder="Kart və ya hesab məlumatı">
+      <input id="withdrawInfo" placeholder="Binance ID daxil edin (Məs: 1193420155)">
       <button class="main" onclick="withdrawRequest()">Çıxarış göndər</button>
       <div id="withdrawMsg" class="msg"></div>
     </div>
@@ -382,10 +378,10 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     <h1>Admin Panel</h1>
     
     <div class="card" style="margin-bottom:20px; border-color:#d4af37;">
-      <h2>💳 Ödəniş Kartını / Hesabını Dəyiş</h2>
-      <div class="muted" style="margin-bottom:10px;">İstifadəçilərin depozit edərkən gördüyü kart məlumatı:</div>
-      <input id="adminCardInput" placeholder="Məs: 5243 7544 3976 1469">
-      <button class="main" onclick="updateAdminSetting('deposit_info', 'adminCardInput', 'Ödəniş kartı')">Yadda saxla</button>
+      <h2>💳 Admin Ödəniş Binance ID-ni Dəyiş</h2>
+      <div class="muted" style="margin-bottom:10px;">İstifadəçilərin depozit edərkən görəcəyi Binance ID:</div>
+      <input id="adminCardInput" placeholder="Məs: 1193420155">
+      <button class="main" onclick="updateAdminSetting('deposit_info', 'adminCardInput', 'Ödəniş Binance ID')">Yadda saxla</button>
     </div>
 
     <div class="card" style="margin-bottom:20px; border-color:#d4af37;">
@@ -416,9 +412,9 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
     <h2 class="yellow" style="margin-bottom:15px; text-align:center;">Balansı Artır (Depozit)</h2>
     
     <div class="info" style="margin-bottom:15px;">
-      Ödəniş Kartı / M10:
+      Binance ID (Admin Hesabı):
       <div style="display:flex; justify-content:space-between; align-items:center; margin-top:5px;">
-        <b id="depositCardNum" class="yellow">Yüklənir...</b>
+        <b id="depositCardNum" class="yellow">1193420155</b>
         <button onclick="copyCardNum()" style="width:auto; padding:6px 12px; background:#d4af37; color:#000;">Kopyala</button>
       </div>
     </div>
@@ -551,7 +547,6 @@ async function checkTaskAvailability(){
   const statusText = document.getElementById("taskStatusText");
   const startBtn = document.getElementById("startTaskBtn");
 
-  // Bakı vaxtına (UTC+4) uyğun cari günün əldə edilməsi
   const today = new Date(new Date().getTime() + (4 * 60 * 60 * 1000)).toISOString().split('T')[0];
   
   const { data: activeInvests } = await supabaseClient
@@ -663,7 +658,7 @@ async function openDepositModal(){
   if(data && data.value) {
     document.getElementById("depositCardNum").innerText = data.value;
   } else {
-    document.getElementById("depositCardNum").innerText = "5243 7544 3976 1469";
+    document.getElementById("depositCardNum").innerText = "1193420155";
   }
 }
 
@@ -672,7 +667,7 @@ function closeDepositModal(){ document.getElementById("depositModal").classList.
 function copyCardNum(){
   const cardText = document.getElementById("depositCardNum").innerText;
   navigator.clipboard.writeText(cardText);
-  alert("Ödəniş məlumatı kopyalandı!");
+  alert("Binance ID kopyalandı!");
 }
 
 async function submitDeposit(){
@@ -705,7 +700,7 @@ async function submitDeposit(){
   const receiptUrl = publicURLData.publicUrl;
 
   const { error } = await supabaseClient.from("deposits").insert({
-    user_id: user.id, amount: amount, sender_account: "Mobil/Kart", receipt_url: receiptUrl, status: "pending"
+    user_id: user.id, amount: amount, sender_account: "Binance", receipt_url: receiptUrl, status: "pending"
   });
 
   if(error) alert("Xəta: " + error.message);
@@ -834,17 +829,16 @@ async function copyReferral(){
 
 async function withdrawRequest(){
   const amount = Number(document.getElementById("withdrawAmount").value || 0);
-  const method = document.getElementById("withdrawMethod").value;
   const info = document.getElementById("withdrawInfo").value.trim();
   const msg = document.getElementById("withdrawMsg");
   msg.innerText = "";
 
   if(amount < 8){ msg.innerText = "Minimum çıxarış 8 AZN olmalıdır"; return; }
   if((profile.balance || 0) < amount){ msg.innerText = "Balansınızda kifayət qədər vəsait yoxdur"; return; }
-  if(!info){ msg.innerText = "Məlumat daxil edin"; return; }
+  if(!info){ msg.innerText = "Binance ID daxil edin"; return; }
 
   const { error } = await supabaseClient.from("withdraw_requests").insert({
-    user_id: user.id, amount: amount, method: method, account_info: info, status: "pending"
+    user_id: user.id, amount: amount, method: "Binance ID", account_info: info, status: "pending"
   });
 
   if(error){ msg.innerText = error.message; return; }
@@ -921,7 +915,7 @@ async function loadAdminData(){
 
   withdrawBox.innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
     <div class="row" style="flex-direction: column; align-items: flex-start; gap: 8px;">
-      <span><b>Hesab:</b> ${w.account_info} | <b>Məbləğ:</b> ${w.amount} AZN</span>
+      <span><b>Binance ID:</b> ${w.account_info} | <b>Məbləğ:</b> ${w.amount} AZN</span>
       <div style="display:flex; gap:10px; width:100%;">
         <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="flex:1; padding:8px 16px; background:#d4af37; color:#000;">Təsdiqlə</button>
         <button onclick="rejectWithdrawal('${w.id}')" style="flex:1; padding:8px 16px; background:#ef4444; color:#fff;">Rədd et</button>
