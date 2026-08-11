@@ -352,8 +352,6 @@ h1, h2, h3 { color: #fff; letter-spacing: 0.5px; }
       <div class="row"><span class="muted">Referal kod</span><b id="refCode" class="yellow">-</b></div>
       <div class="row"><span class="muted">VIP status</span><b id="vipStatus" class="yellow">Yoxdur</b></div>
       <div class="row"><span class="muted">Rəhbərlik statusu</span><b id="leadStatusDisplay" class="yellow">Yoxdur</b></div>
-      <div class="row"><span class="muted">Dəvət etdiyiniz dostlar</span><b id="accountReferralCount" class="yellow">0 nəfər</b></div>
-      <div class="row"><span class="muted">Referal qazancınız</span><b id="accountReferralBalance" class="yellow">0.00 AZN</b></div>
     </div>
     
     <div class="card" style="margin-top:20px;">
@@ -805,9 +803,7 @@ async function loadProfile(){
       bonus: 0,
       current_vip: "Yeni istifadəçi", 
       leadership_status: "Yoxdur",
-      referral_code: refCodeGenerated,
-      referral_count: 0,
-      referral_balance: 0
+      referral_code: refCodeGenerated
     };
     await supabaseClient.from("profiles").insert(newProfile);
     profile = newProfile;
@@ -822,8 +818,6 @@ async function loadProfile(){
   document.getElementById("shareCode").innerText = profile.referral_code || "-";
   document.getElementById("vipStatus").innerText = profile.current_vip || "Yoxdur";
   document.getElementById("leadStatusDisplay").innerText = profile.leadership_status || "Yoxdur";
-  document.getElementById("accountReferralCount").innerText = (profile.referral_count || 0) + " nəfər";
-  document.getElementById("accountReferralBalance").innerText = (profile.referral_balance || 0).toFixed(2) + " AZN";
 }
 
 async function copyReferral(){
@@ -1024,4 +1018,4 @@ async function checkSession(){
 }
 </script>
 </body>
-</html>
+  </html>
