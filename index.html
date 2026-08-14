@@ -258,22 +258,22 @@ button:active { transform: scale(0.98); }
   <!-- 1. ANA SƏHİFƏ -->
   <div id="homePage">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-      <h2 id="welcomeUser" style="margin:0; font-size: 22px;">Hi, User!</h2>
+      <h2 id="welcomeUser" style="margin:0; font-size: 22px;">Salam, İstifadəçi!</h2>
       <span style="font-size: 20px; cursor: pointer;">🔔</span>
     </div>
 
     <div class="balance-card">
-      <div class="muted">Total Balance</div>
+      <div class="muted">Ümumi Balans</div>
       <div id="balance" class="value">0.00 AZN</div>
       <div class="card-details">
-        <span>Noventra Card</span>
+        <span>Noventra Kart</span>
         <span>VIP: <b id="status" style="color:#000;">Yoxdur</b></span>
       </div>
     </div>
 
     <div class="quick-actions">
       <div class="action-btn" onclick="openDepositModal()">
-        <div>📥</div> Top Up
+        <div>📥</div> Artır
       </div>
       <div class="action-btn" onclick="page('task')">
         <div>🤖</div> Analiz
@@ -287,14 +287,14 @@ button:active { transform: scale(0.98); }
     </div>
 
     <div style="margin-top: 25px;">
-      <h3 style="font-size: 16px; margin-bottom: 12px;">Recent Transactions</h3>
+      <h3 style="font-size: 16px; margin-bottom: 12px;">Son Əməliyyatlar</h3>
       <div id="recentTransactions" class="card" style="padding: 10px 15px;">
         <div class="muted" style="text-align:center; padding: 15px;">Aktivlik yoxdur</div>
       </div>
     </div>
   </div>
   
-  <!-- 2. ANALİZ MƏRKƏZİ (Statistika / Start Analysis) -->
+  <!-- 2. ANALİZ MƏRKƏZİ -->
   <div id="taskPage" class="hidden">
     <h2>🤖 Süni İntellekt Analizi</h2>
     <div class="card" style="text-align: center; margin-top: 20px;">
@@ -316,7 +316,7 @@ button:active { transform: scale(0.98); }
     </div>
   </div>
 
-  <!-- 3. ÖDƏNİŞ / VIP PAKETLƏR -->
+  <!-- 3. VIP PAKETLƏR -->
   <div id="vipPage" class="hidden">
     <h2>💎 VIP Paketlər</h2>
     <div id="vipArea" style="margin-top: 15px;"></div>
@@ -328,7 +328,7 @@ button:active { transform: scale(0.98); }
     <div id="leadershipArea" style="margin-top: 15px;"></div>
   </div>
   
-  <!-- 5. PROFİL BÖLMƏSİ (UI Kit üslubunda) -->
+  <!-- 5. PROFİL BÖLMƏSİ -->
   <div id="accountPage" class="hidden">
     <h2>👤 Profil</h2>
     
@@ -338,19 +338,19 @@ button:active { transform: scale(0.98); }
     </div>
 
     <div class="profile-menu-item" onclick="openSubModal('personalInfoModal')">
-      <span>Personal Info</span><span>➔</span>
+      <span>Şəxsi Məlumatlar</span><span>➔</span>
     </div>
     <div class="profile-menu-item" onclick="openSubModal('walletModal')">
-      <span>My Wallets & Withdraw</span><span>➔</span>
+      <span>Cüzdanlar və Çıxarış</span><span>➔</span>
     </div>
     <div class="profile-menu-item" onclick="openSubModal('referralModal')">
-      <span>Referrals & Team</span><span>➔</span>
+      <span>Referallar və Komanda</span><span>➔</span>
     </div>
     <div class="profile-menu-item" onclick="page('leadership')">
-      <span>Leadership Status</span><span>➔</span>
+      <span>Rəhbərlik Statusu</span><span>➔</span>
     </div>
     <div class="profile-menu-item" onclick="openTelegramBot()">
-      <span>Support Bot</span><span>➔</span>
+      <span>Dəstək Botu</span><span>➔</span>
     </div>
 
     <button class="main" style="background: linear-gradient(135deg, #7f1d1d, #ef4444); color:white; margin-top:20px;" onclick="logout()">Çıxış et</button>
@@ -388,7 +388,7 @@ button:active { transform: scale(0.98); }
     </div>
   </div>
 
-  <!-- ALT NAVİQASİYA PANELİ (5 İkonlu UI Kit) -->
+  <!-- ALT NAVİQASİYA PANELİ -->
   <nav class="bottom-nav">
     <button id="nav-home" class="nav-item active" onclick="page('home')">🏠</button>
     <button id="nav-vip" class="nav-item" onclick="page('vip')">💎</button>
@@ -415,7 +415,7 @@ button:active { transform: scale(0.98); }
   </div>
 </div>
 
-<!-- PERSONAL INFO MODAL -->
+<!-- ŞƏXSİ MƏLUMATLAR MODALI -->
 <div id="personalInfoModal" class="modal-overlay hidden">
   <div class="box">
     <h3 class="yellow" style="margin-top:0; text-align:center;">Şəxsi Məlumatlar</h3>
@@ -426,7 +426,7 @@ button:active { transform: scale(0.98); }
   </div>
 </div>
 
-<!-- MY WALLETS / WITHDRAW MODAL -->
+<!-- CÜZDAN VƏ ÇIXARIŞ MODALI -->
 <div id="walletModal" class="modal-overlay hidden">
   <div class="box" style="max-height: 85vh; overflow-y: auto;">
     <h3 class="yellow" style="margin-top:0; text-align:center;">Çıxarış (Binance ID)</h3>
@@ -438,7 +438,7 @@ button:active { transform: scale(0.98); }
   </div>
 </div>
 
-<!-- REFERRAL & TEAM MODAL -->
+<!-- REFERAL MODALI -->
 <div id="referralModal" class="modal-overlay hidden">
   <div class="box" style="max-height: 85vh; overflow-y: auto;">
     <h3 class="yellow" style="margin-top:0; text-align:center;">Referal Sistemim</h3>
@@ -448,7 +448,7 @@ button:active { transform: scale(0.98); }
     <button class="main" onclick="copyReferral()" style="margin-bottom:15px;">Linki Kopyala</button>
     <h4 style="font-size:14px; margin-bottom:8px;">Dəvət etdiyiniz istifadəçilər:</h4>
     <div id="referralListArea" style="font-size:13px;">
-      <div class="muted">Yüklөнir...</div>
+      <div class="muted">Yüklənir...</div>
     </div>
     <button class="main" onclick="closeSubModal('referralModal')" style="margin-top:15px;">Bağla</button>
   </div>
@@ -557,7 +557,6 @@ async function renderLeadership(){
   const box = document.getElementById("leadershipArea");
   if(!box || !profile) return;
 
-  // İstifadəçinin referallarını yoxlayaq
   const { data: refs } = await supabaseClient
     .from("profiles")
     .select("id, current_vip")
@@ -567,9 +566,14 @@ async function renderLeadership(){
     let validCount = 0;
     if(refs) {
       refs.forEach(r => {
-        if(r.current_vip && r.current_vip.startsWith("VIP ")) {
-          const num = parseInt(r.current_vip.replace("VIP ", ""));
-          if(num >= l.reqMinVip) validCount++;
+        if(r.current_vip) {
+          const vips = r.current_vip.split(',').map(s => s.trim());
+          vips.forEach(vp => {
+            if(vp.startsWith("VIP ")) {
+              const num = parseInt(vp.replace("VIP ", ""));
+              if(num >= l.reqMinVip) validCount++;
+            }
+          });
         }
       });
     }
@@ -584,15 +588,13 @@ async function renderLeadership(){
           Gündəlik qazanc: <b>${l.dailyReward} AZN</b><br>
           Referal bonusu: <b>+${l.refBonus} AZN / hər referal</b><br>
           Sənin uyğun referal sayın: <b>${validCount} / ${l.reqCount}</b><br>
-          ${remaining > typeNum(0) ? `<span style="color:#ffaa00;">Qal además: ${remaining} nəfər</span>` : `<span style="color:#00ff66;">Şərtlər tamamlandı! ✅</span>`}
+          ${remaining > 0 ? `<span style="color:#ffaa00;">Qalan: ${remaining} nəfər</span>` : `<span style="color:#00ff66;">Şərtlər tamamlandı! ✅</span>`}
         </div>
         <button class="main" style="margin-top:12px;" onclick="claimLeadership('${l.id}', ${l.reqCount}, ${l.reqMinVip})">${isCompleted && profile.leadership_status === l.id ? 'Aktivdir' : 'Statusu Aktivləşdir'}</button>
       </div>
     `;
   }).join("");
 }
-
-function typeNum(n){ return n; }
 
 async function loadTelegramLink(){
   const { data } = await supabaseClient.from("settings").select("value").eq("key", "telegram_link").maybeSingle();
@@ -627,7 +629,6 @@ async function checkTaskAvailability(){
     return;
   }
 
-  // Bugünkü analiz yoxlanışı
   let alreadyDoneToday = false;
   if(activeInvests && activeInvests.length > 0) {
     if(activeInvests.every(i => i.last_analyzed_date === today)) {
@@ -647,7 +648,6 @@ async function checkTaskAvailability(){
   startBtn.classList.remove("hidden");
 }
 
-// 10 Saniyəlik 0-dan 100-ə Analiz və Qazanc Hesablanması (VIP + Leadership)
 async function runAiAnalysis(){
   if(!user || !profile) return;
 
@@ -660,23 +660,19 @@ async function runAiAnalysis(){
   startBtn.classList.add("hidden");
   processArea.classList.remove("hidden");
 
-  // 10 saniyə ərzində 0-dan 100-ə progress
   let progress = 0;
-  const intervalTime = 100; // hər 100ms-dən bir
   const totalSteps = 100;
   
   for(let i = 0; i <= totalSteps; i++) {
     progress = i;
     progressBar.style.width = progress + "%";
     stepText.innerText = `Süni intellekt bazar analizi aparılır... (${progress}%)`;
-    await new Promise(r => setTimeout(r, 100)); // 100 * 100ms = 10 saniyə
+    await new Promise(r => setTimeout(r, 100));
   }
 
-  // Qazancın hesablanması
   let totalReward = 0;
   const today = new Date().toISOString().split('T')[0];
 
-  // 1. VIP qazancı
   const { data: activeInvests } = await supabaseClient
     .from("investments")
     .select("*")
@@ -692,13 +688,11 @@ async function runAiAnalysis(){
     }
   }
 
-  // 2. Rəhbərlik (Leadership) qazancı və referal bonusları
   if(profile.leadership_status && profile.leadership_status !== "Yoxdur") {
     const leadObj = LEADERSHIP_LIST.find(l => l.id === profile.leadership_status);
     if(leadObj) {
       totalReward += Number(leadObj.dailyReward);
       
-      // Referal sayına görə əlavə bonuslar
       const { data: refs } = await supabaseClient
         .from("profiles")
         .select("id")
@@ -717,7 +711,6 @@ async function runAiAnalysis(){
     return;
   }
 
-  // Balansı yeniləyirik
   const newBalance = Number(profile.balance || 0) + totalReward;
   const { error: upErr } = await supabaseClient
     .from("profiles")
@@ -747,9 +740,14 @@ async function claimLeadership(leadId, reqCount, reqMinVip){
   let validCount = 0;
   if(refs) {
     refs.forEach(r => {
-      if(r.current_vip && r.current_vip.startsWith("VIP ")) {
-        const num = parseInt(r.current_vip.replace("VIP ", ""));
-        if(num >= reqMinVip) validCount++;
+      if(r.current_vip) {
+        const vips = r.current_vip.split(',').map(s => s.trim());
+        vips.forEach(vp => {
+          if(vp.startsWith("VIP ")) {
+            const num = parseInt(vp.replace("VIP ", ""));
+            if(num >= reqMinVip) validCount++;
+          }
+        });
       }
     });
   }
@@ -820,7 +818,6 @@ async function register(){
   if(error){ msg.innerText = error.message; return; }
 
   if(data && data.user) {
-    // Profil yaradılması
     const refCodeGenerated = "NV" + Math.random().toString(36).substring(2,8).toUpperCase();
     await supabaseClient.from("profiles").insert({
       id: data.user.id,
@@ -873,9 +870,8 @@ async function loadProfile(){
     document.getElementById("balance").innerText = (profile.balance || 0).toFixed(2) + " AZN";
     document.getElementById("status").innerText = profile.current_vip || "Yoxdur";
     
-    // Yalnız adı yazırıq (məsələn: "Hi, Zamin!")
-    const firstName = profile.full_name ? profile.full_name.split(' ')[0] : "User";
-    document.getElementById("welcomeUser").innerText = `Hi, ${firstName}!`;
+    const firstName = profile.full_name ? profile.full_name.split(' ')[0] : "İstifadəçi";
+    document.getElementById("welcomeUser").innerText = `Salam, ${firstName}!`;
   }
 }
 
@@ -888,7 +884,6 @@ async function loadProfileUIData(){
   document.getElementById("modalRefCode").innerText = profile.referral_code || "-";
   document.getElementById("shareCode").innerText = profile.referral_code || "-";
 
-  // Referal siyahısının yüklənməsi
   const { data: refs } = await supabaseClient
     .from("profiles")
     .select("full_name, email, current_vip")
@@ -971,7 +966,6 @@ async function loadAdminData(){
   const { data: setTg } = await supabaseClient.from("settings").select("value").eq("key", "telegram_link").maybeSingle();
   if(setTg) document.getElementById("adminTelegramInput").value = setTg.value;
 
-  // Sorğuları və istifadəçi profillərini join edərək çəkirik ki, admin kim olduğunu dəqiq görsün
   const { data: deposits } = await supabaseClient.from("deposits").select("*, profiles(full_name, email)").order('created_at', { ascending: false });
   const { data: investments } = await supabaseClient.from("investments").select("*, profiles(full_name, email)").eq("status", "pending");
   const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*, profiles(full_name, email)").eq("status", "pending");
@@ -1018,7 +1012,6 @@ async function updateAdminSetting(keyName, inputId){
   alert("Yeniləndi!");
 }
 
-// Xətasız birbaşa balans artırma (Depozit Təsdiqi)
 async function approveDeposit(depId, userId, amount){
   const { data: targetProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
   if(!targetProf) { alert("Profil tapılmadı"); return; }
@@ -1038,7 +1031,20 @@ async function rejectDeposit(depId){
 
 async function approveInvestment(id, userId, vipId){
   await supabaseClient.from("investments").update({ status: "active" }).eq("id", id);
-  await supabaseClient.from("profiles").update({ current_vip: "VIP " + vipId }).eq("id", userId);
+  
+  const { data: prof } = await supabaseClient.from("profiles").select("current_vip").eq("id", userId).maybeSingle();
+  let newVipStr = "VIP " + vipId;
+  if(prof && prof.current_vip && prof.current_vip !== "Yoxdur") {
+    let existingVips = prof.current_vip.split(',').map(s => s.trim());
+    if(!existingVips.includes("VIP " + vipId)) {
+      existingVips.push("VIP " + vipId);
+      newVipStr = existingVips.join(", ");
+    } else {
+      newVipStr = prof.current_vip;
+    }
+  }
+
+  await supabaseClient.from("profiles").update({ current_vip: newVipStr }).eq("id", userId);
   alert("Yatırım təsdiqləndi!");
   loadAdminData();
 }
