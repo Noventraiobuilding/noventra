@@ -454,6 +454,24 @@ const VIP_LIST = [
   { id: 11, name: "VIP 11", price: 0, days: 0, reward: 1870.00, locked: true }
 ];
 
+// --- YENİ TƏHLÜKƏSİZ BALANS ARTIRMA FUNKSİYASI (RPC) ---
+async function addBalanceToUser(targetUserId, amountToAdd, note) {
+  const { data, error } = await supabaseClient.rpc('update_user_balance', {
+    p_user_id: targetUserId,
+    p_amount: amountToAdd,
+    p_description: note
+  });
+
+  if (error) {
+    console.error("Xəta baş verdi:", error.message);
+    alert("Balans artırılmadı!");
+  } else {
+    console.log("Balans uğurla artırıldı!");
+    alert("Balans yeniləndi!");
+    await loadProfile(); // Səhifədəki balansı yeniləmək üçün
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("loginBtn").addEventListener("click", login);
   document.getElementById("regBtn").addEventListener("click", register);
@@ -1018,4 +1036,4 @@ async function checkSession(){
 }
 </script>
 </body>
-  </html>
+</html>
