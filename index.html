@@ -992,7 +992,8 @@ async function loadAdminData(){
       <div><b>VIP Paket:</b> VIP ${i.vip_id} (${i.amount} AZN)</div>
       <div style="display:flex; gap:6px; width:100%;">
         <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id})" style="background:#00ff66; color:#000;">Təsdiq</button>
-        <button onclick="rejectInvestment('${i.id}', '${i.user_id}', ${i.amount})" style="background:#ef4444; color:#fff;">Rədd</button>
+        <button onclick="rejectInvestment('${i.id}', '${i.user_id}', ${i.amount})" style="background:#ffaa00; color:#000;">Rədd</button>
+        <button onclick="deleteInvestment('${i.id}')" style="background:#ef4444; color:#fff;">Sil</button>
       </div>
     </div>
   `).join("") : "<p class='muted'>Yatırım yoxdur</p>";
@@ -1003,7 +1004,8 @@ async function loadAdminData(){
       <div><b>Binance ID:</b> ${w.account_info} | <b>Məbləğ:</b> ${w.amount} AZN</div>
       <div style="display:flex; gap:6px; width:100%;">
         <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="background:#00ff66; color:#000;">Təsdiq</button>
-        <button onclick="rejectWithdrawal('${w.id}')" style="background:#ef4444; color:#fff;">Rədd</button>
+        <button onclick="rejectWithdrawal('${w.id}')" style="background:#ffaa00; color:#000;">Rədd</button>
+        <button onclick="deleteWithdrawal('${w.id}')" style="background:#ef4444; color:#fff;">Sil</button>
       </div>
     </div>
   `).join("") : "<p class='muted'>Çıxarış yoxdur</p>";
@@ -1035,12 +1037,13 @@ async function approveDeposit(depId, userId, amount){
 }
 
 async function deleteDeposit(depId){
-  await supabaseClient.from("deposits").delete().eq("id", depId);
-  loadAdminData();
+  if(confirm("Bu depozit sorğunu silmək istədiyinizə əminsiniz?")) {
+    await supabaseClient.from("deposits").delete().eq("id", depId);
+    loadAdminData();
+  }
 }
 
 async function approveInvestment(id, userId, vipId){
-  // Pul artıq alınanda balansdan çıxıldığı üçün təsdiq zamanı balansa toxunmuruq
   await supabaseClient.from("investments").update({ status: "active" }).eq("id", id);
   
   const { data: prof } = await supabaseClient.from("profiles").select("current_vip").eq("id", userId).maybeSingle();
@@ -1071,6 +1074,13 @@ async function rejectInvestment(id, userId, amount){
   loadAdminData();
 }
 
+async function deleteInvestment(id){
+  if(confirm("Bu yatırım sorğunu silmək istədiyinizə əminsiniz?")) {
+    await supabaseClient.from("investments").delete().eq("id", id);
+    loadAdminData();
+  }
+}
+
 async function approveWithdrawal(id, userId, amount){
   const { data: targetProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
   if(targetProf && Number(targetProf.balance || 0) >= Number(amount)){
@@ -1086,6 +1096,13 @@ async function approveWithdrawal(id, userId, amount){
 async function rejectWithdrawal(id){
   await supabaseClient.from("withdraw_requests").update({ status: "rejected" }).eq("id", id);
   loadAdminData();
+}
+
+async function deleteWithdrawal(id){
+  if(confirm("Bu çıxarış sorğunu silmək istədiyinizə əminsiniz?")) {
+    await supabaseClient.from("withdraw_requests").delete().eq("id", id);
+    loadAdminData();
+  }
 }
 
 async function logout(){
