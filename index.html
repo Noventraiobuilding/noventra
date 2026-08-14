@@ -970,7 +970,7 @@ async function loadAdminData(){
   const { data: setTg } = await supabaseClient.from("settings").select("value").eq("key", "telegram_link").maybeSingle();
   if(setTg) document.getElementById("adminTelegramInput").value = setTg.value;
 
-  const { data: deposits } = await supabaseClient.from("deposits").select("*").order('created_at', { ascending: false });
+  const { data: deposits } = await supabaseClient.from("deposits").select("*").eq("status", "pending").order('created_at', { ascending: false });
   const { data: investments } = await supabaseClient.from("investments").select("*").eq("status", "pending");
   const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*").eq("status", "pending");
 
@@ -980,8 +980,8 @@ async function loadAdminData(){
       <div><b>Məbləğ:</b> ${d.amount} AZN | <b>Status:</b> ${d.status}</div>
       ${d.receipt_url ? `<a href="${d.receipt_url}" target="_blank"><img src="${d.receipt_url}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;"></a>` : ''}
       <div style="display:flex; gap:6px; width:100%;">
-        ${d.status === 'pending' ? `<button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount})" style="background:#00ff66; color:#000;">Təsdiq</button>` : ''}
-        <button onclick="rejectDeposit('${d.id}')" style="background:#ef4444; color:#fff;">Rədd</button>
+        <button onclick="approveDeposit('${d.id}', '${d.user_id}', ${d.amount})" style="background:#00ff66; color:#000;">Təsdiq</button>
+        <button onclick="deleteDeposit('${d.id}')" style="background:#ef4444; color:#fff;">Sil</button>
       </div>
     </div>
   `).join("") : "<p class='muted'>Depozit yoxdur</p>";
@@ -1034,8 +1034,8 @@ async function approveDeposit(depId, userId, amount){
   loadAdminData();
 }
 
-async function rejectDeposit(depId){
-  await supabaseClient.from("deposits").update({ status: "rejected" }).eq("id", depId);
+async function deleteDeposit(depId){
+  await supabaseClient.from("deposits").delete().eq("id", depId);
   loadAdminData();
 }
 
@@ -1043,16 +1043,17 @@ async function approveInvestment(id, userId, vipId){
   await supabaseClient.from("investments").update({ status: "active" }).eq("id", id);
   
   const { data: prof } = await supabaseClient.from("profiles").select("current_vip").eq("id", userId).maybeSingle();
-  let newVipStr = "VIP " + vipId;
+  let vipsList = [];
   if(prof && prof.current_vip && prof.current_vip !== "Yoxdur") {
-    let existingVips = prof.current_vip.split(',').map(s => s.trim());
-    if(!existingVips.includes("VIP " + vipId)) {
-      existingVips.push("VIP " + vipId);
-      newVipStr = existingVips.join(", ");
-    } else {
-      newVipStr = prof.current_vip;
-    }
+    vipsList = prof.current_vip.split(',').map(s => s.trim());
   }
+  
+  const newVipTag = "VIP " + vipId;
+  if(!vipsList.includes(newVipTag)) {
+    vipsList.push(newVipTag);
+  }
+  
+  const newVipStr = vipsList.join(", ");
 
   await supabaseClient.from("profiles").update({ current_vip: newVipStr }).eq("id", userId);
   alert("Yatırım təsdiqləndi!");
