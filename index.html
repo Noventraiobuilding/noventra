@@ -970,13 +970,13 @@ async function loadAdminData(){
   const { data: setTg } = await supabaseClient.from("settings").select("value").eq("key", "telegram_link").maybeSingle();
   if(setTg) document.getElementById("adminTelegramInput").value = setTg.value;
 
-  const { data: deposits } = await supabaseClient.from("deposits").select("*, profiles(full_name, email)").order('created_at', { ascending: false });
-  const { data: investments } = await supabaseClient.from("investments").select("*, profiles(full_name, email)").eq("status", "pending");
-  const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*, profiles(full_name, email)").eq("status", "pending");
+  const { data: deposits } = await supabaseClient.from("deposits").select("*").order('created_at', { ascending: false });
+  const { data: investments } = await supabaseClient.from("investments").select("*").eq("status", "pending");
+  const { data: withdrawals } = await supabaseClient.from("withdraw_requests").select("*").eq("status", "pending");
 
   document.getElementById("adminDeposits").innerHTML = (deposits && deposits.length) ? deposits.map(d => `
     <div class="row" style="flex-direction:column; align-items:flex-start; gap:6px;">
-      <div><b>Ad/Email:</b> ${d.profiles?.full_name || d.profiles?.email || 'Naməlum'}</div>
+      <div><b>User ID:</b> ${d.user_id.substring(0,8)}...</div>
       <div><b>Məbləğ:</b> ${d.amount} AZN | <b>Status:</b> ${d.status}</div>
       ${d.receipt_url ? `<a href="${d.receipt_url}" target="_blank"><img src="${d.receipt_url}" style="width:60px; height:60px; object-fit:cover; border-radius:6px;"></a>` : ''}
       <div style="display:flex; gap:6px; width:100%;">
@@ -988,7 +988,7 @@ async function loadAdminData(){
 
   document.getElementById("adminInvestments").innerHTML = (investments && investments.length) ? investments.map(i => `
     <div class="row" style="flex-direction:column; align-items:flex-start; gap:6px;">
-      <div><b>İstifadəçi:</b> ${i.profiles?.full_name || i.profiles?.email || 'Naməlum'}</div>
+      <div><b>User ID:</b> ${i.user_id.substring(0,8)}...</div>
       <div><b>VIP Paket:</b> VIP ${i.vip_id} (${i.amount} AZN)</div>
       <div style="display:flex; gap:6px; width:100%;">
         <button onclick="approveInvestment('${i.id}', '${i.user_id}', ${i.vip_id})" style="background:#00ff66; color:#000;">Təsdiq</button>
@@ -999,7 +999,7 @@ async function loadAdminData(){
 
   document.getElementById("adminWithdraw").innerHTML = (withdrawals && withdrawals.length) ? withdrawals.map(w => `
     <div class="row" style="flex-direction:column; align-items:flex-start; gap:6px;">
-      <div><b>İstifadəçi:</b> ${w.profiles?.full_name || w.profiles?.email || 'Naməlum'}</div>
+      <div><b>User ID:</b> ${w.user_id.substring(0,8)}...</div>
       <div><b>Binance ID:</b> ${w.account_info} | <b>Məbləğ:</b> ${w.amount} AZN</div>
       <div style="display:flex; gap:6px; width:100%;">
         <button onclick="approveWithdrawal('${w.id}', '${w.user_id}', ${w.amount})" style="background:#00ff66; color:#000;">Təsdiq</button>
