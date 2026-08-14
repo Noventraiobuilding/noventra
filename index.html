@@ -454,24 +454,6 @@ const VIP_LIST = [
   { id: 11, name: "VIP 11", price: 0, days: 0, reward: 1870.00, locked: true }
 ];
 
-// --- YENİ TƏHLÜKƏSİZ BALANS ARTIRMA FUNKSİYASI (RPC) ---
-async function addBalanceToUser(targetUserId, amountToAdd, note) {
-  const { data, error } = await supabaseClient.rpc('update_user_balance', {
-    p_user_id: targetUserId,
-    p_amount: amountToAdd,
-    p_description: note
-  });
-
-  if (error) {
-    console.error("Xəta baş verdi:", error.message);
-    alert("Balans artırılmadı!");
-  } else {
-    console.log("Balans uğurla artırıldı!");
-    alert("Balans yeniləndi!");
-    await loadProfile(); // Səhifədəki balansı yeniləmək üçün
-  }
-}
-
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("loginBtn").addEventListener("click", login);
   document.getElementById("regBtn").addEventListener("click", register);
@@ -951,14 +933,24 @@ async function updateAdminSetting(keyName, inputId, labelName){
   else alert(labelName + " uğurla yeniləndi!");
 }
 
+// --- YENİLƏNMİŞ TƏHLÜKƏSİZ DEPOZİT TƏSDİQLƏMƏ FUNKSİYASI ---
 async function approveDeposit(depId, userId, amount, receiptUrl){
-  const { data: prof } = await supabaseClient.from("profiles").select("balance").eq("id", userId).single();
-  const newBal = (prof?.balance || 0) + amount;
+  // RPC vasitəsilə təhlükəsiz balans artımı
+  const { error: rpcError } = await supabaseClient.rpc('update_user_balance', {
+    p_user_id: userId,
+    p_amount: amount,
+    p_description: 'Depozit təsdiqi'
+  });
+
+  if (rpcError) {
+    alert("Xəta baş verdi: " + rpcError.message);
+    return;
+  }
   
-  await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
+  // Depozit statusunu 'approved' edirik
   await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
 
-  alert("Depozit təsdiqləndi və balans artırıldı!");
+  alert("Depozit uğurla təsdiqləndi və balans artırıldı!");
   loadAdminData();
 }
 
