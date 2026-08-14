@@ -335,7 +335,7 @@ button:active { transform: scale(0.98); }
       <span>Şəxsi Məlumatlar</span><span>➔</span>
     </div>
     <div class="profile-menu-item" onclick="openSubModal('walletModal')">
-      <span>Cüzdanlar və Çıxarış</span><span>➔</span>
+      <span>Cüzdanlar və Tarixçə</span><span>➔</span>
     </div>
     <div class="profile-menu-item" onclick="openSubModal('referralModal')">
       <span>Referallar və Komanda</span><span>➔</span>
@@ -423,12 +423,18 @@ button:active { transform: scale(0.98); }
 <!-- CÜZDAN VƏ ÇIXARIŞ MODALI -->
 <div id="walletModal" class="modal-overlay hidden">
   <div class="box" style="max-height: 85vh; overflow-y: auto;">
-    <h3 class="yellow" style="margin-top:0; text-align:center;">Çıxarış (Binance ID)</h3>
+    <h3 class="yellow" style="margin-top:0; text-align:center;">Çıxarış və Tarixçə</h3>
     <input id="withdrawAmount" type="number" placeholder="Məbləğ (min 8 AZN)" min="8">
     <input id="withdrawInfo" placeholder="Binance ID (Məs: 1193420155)">
     <button class="main" onclick="withdrawRequest()">Çıxarış Et</button>
     <div id="withdrawMsg" class="msg"></div>
-    <button onclick="closeSubModal('walletModal')" style="background:transparent; color:#aaa; margin-top:8px;">Bağla</button>
+
+    <h4 style="font-size:14px; margin-top:20px; margin-bottom:8px;">Çıxarış Tarixçəniz:</h4>
+    <div id="withdrawHistoryArea" style="font-size:13px;">
+      <div class="muted">Yüklənir...</div>
+    </div>
+
+    <button onclick="closeSubModal('walletModal')" style="background:transparent; color:#aaa; margin-top:15px;">Bağla</button>
   </div>
 </div>
 
@@ -437,9 +443,9 @@ button:active { transform: scale(0.98); }
   <div class="box" style="max-height: 85vh; overflow-y: auto;">
     <h3 class="yellow" style="margin-top:0; text-align:center;">Referal Sistemim</h3>
     <div class="info" style="text-align:center;">
-      Dəvət Kodunuz: <div id="shareCode" class="yellow" style="font-size:18px; font-weight:800; margin-top:4px;">-</div>
+      Referal Kodunuz: <div id="shareCode" class="yellow" style="font-size:18px; font-weight:800; margin-top:4px;">-</div>
     </div>
-    <button class="main" onclick="copyReferral()" style="margin-bottom:15px;">Linki Kopyala</button>
+    <button class="main" onclick="copyReferral()" style="margin-bottom:15px;">Referal Kodu Kopyala</button>
     <h4 style="font-size:14px; margin-bottom:8px;">Dəvət etdiyiniz istifadəçilər:</h4>
     <div id="referralListArea" style="font-size:13px;">
       <div class="muted">Yüklənir...</div>
@@ -511,6 +517,7 @@ function page(name){
   const activeBtn = document.getElementById("nav-" + name);
   if(activeBtn) activeBtn.classList.add("active");
 
+  if(name === "home") loadRecentTransactions();
   if(name === "vip") renderVip();
   if(name === "leadership") renderLeadership();
   if(name === "task") checkTaskAvailability();
@@ -792,6 +799,7 @@ async function submitDeposit(){
     closeDepositModal();
     document.getElementById("depAmount").value = "";
     fileInput.value = "";
+    loadRecentTransactions();
   }
 }
 
@@ -888,6 +896,8 @@ async function loadProfileUIData(){
   document.getElementById("modalRefCode").innerText = profile.referral_code || "-";
   document.getElementById("shareCode").innerText = profile.referral_code || "-";
 
+  loadWithdrawHistory();
+
   const { data: refs } = await supabaseClient
     .from("profiles")
     .select("full_name, email, current_vip")
@@ -906,7 +916,78 @@ async function loadProfileUIData(){
   }
 }
 
-function openSubModal(modalId){ document.getElementById(modalId).classList.remove("hidden"); }
+async function loadWithdrawHistory(){
+  if(!user) return;
+  const { data: withdraws } = await supabaseClient
+    .from("withdraw_requests")
+    .select("*")
+    .eq("user_id", user.id)
+    .order('created_at', { ascending: false });
+
+  const historyArea = document.getElementById("withdrawHistoryArea");
+  if(withdraws && withdraws.length > 0) {
+    historyArea.innerHTML = withdraws.map(w => {
+      let statusColor = "#ffaa00";
+      let statusText = "Gözləmədə";
+      if(w.status === "approved") { statusColor = "#00ff66"; statusText = "Təsdiqləndi"; }
+      if(w.status === "rejected") { statusColor = "#ef4444"; statusText = "Rədd edildi"; }
+
+      const dateStr = new Date(w.created_at).toLocaleDateString('az-AZ', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      return `
+        <div class="row">
+          <div>
+            <b>${w.amount} AZN</b> (${w.method})<br>
+            <span class="muted" style="font-size:11px;">${dateStr}</span>
+          </div>
+          <span style="color:${statusColor}; font-weight:700;">${statusText}</span>
+        </div>
+      `;
+    }).join("");
+  } else {
+    historyArea.innerHTML = `<div class="muted">Çıxarış tarixçəniz yoxdur.</div>`;
+  }
+}
+
+async function loadRecentTransactions(){
+  if(!user) return;
+  const { data: withdraws } = await supabaseClient.from("withdraw_requests").select("amount, status, created_at").eq("user_id", user.id).order('created_at', { ascending: false }).limit(3);
+  const { data: deposits } = await supabaseClient.from("deposits").select("amount, status, created_at").eq("user_id", user.id).order('created_at', { ascending: false }).limit(3);
+
+  let combined = [];
+  if(withdraws) withdraws.forEach(w => combined.push({ type: 'Çıxarış', amount: -w.amount, status: w.status, date: w.created_at }));
+  if(deposits) deposits.forEach(d => combined.push({ type: 'Depozit', amount: d.amount, status: d.status, date: d.created_at }));
+
+  combined.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  const recentArea = document.getElementById("recentTransactions");
+  if(combined.length > 0) {
+    recentArea.innerHTML = combined.slice(0, 4).map(item => {
+      let stColor = "#ffaa00";
+      if(item.status === "approved") stColor = "#00ff66";
+      if(item.status === "rejected") stColor = "#ef4444";
+
+      return `
+        <div class="row" style="padding: 8px 0;">
+          <div>
+            <b>${item.type}</b><br>
+            <span class="muted" style="font-size:11px;">${new Date(item.date).toLocaleDateString('az-AZ', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+          </div>
+          <div style="text-align:right;">
+            <b style="color:${item.amount > 0 ? '#00ff66' : '#fff'}">${item.amount > 0 ? '+' : ''}${item.amount} AZN</b><br>
+            <span style="font-size:11px; color:${stColor};">${item.status}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  } else {
+    recentArea.innerHTML = `<div class="muted" style="text-align:center; padding: 15px;">Aktivlik yoxdur</div>`;
+  }
+}
+
+function openSubModal(modalId){ 
+  document.getElementById(modalId).classList.remove("hidden");
+  if(modalId === 'walletModal') loadWithdrawHistory();
+}
 function closeSubModal(modalId){ document.getElementById(modalId).classList.add("hidden"); }
 
 async function copyReferral(){
@@ -934,6 +1015,7 @@ async function withdrawRequest(){
     msg.innerText = "Çıxarış sorğusu göndərildi!";
     document.getElementById("withdrawAmount").value = "";
     document.getElementById("withdrawInfo").value = "";
+    loadWithdrawHistory();
   }
 }
 
