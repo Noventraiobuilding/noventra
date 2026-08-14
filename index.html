@@ -99,7 +99,6 @@ button:active { transform: scale(0.98); }
 
 #app { max-width: 480px; margin: auto; padding: 15px 15px 90px 15px; }
 
-/* Home Total Balance Card */
 .balance-card {
   background: linear-gradient(135deg, #00b347, #00ff66);
   color: #000;
@@ -112,7 +111,6 @@ button:active { transform: scale(0.98); }
 .balance-card .value { font-size: 28px; font-weight: 900; margin: 5px 0 15px 0; color: #000; }
 .card-details { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; color: rgba(0,0,0,0.7); }
 
-/* Quick Actions Grid */
 .quick-actions {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -132,7 +130,6 @@ button:active { transform: scale(0.98); }
 }
 .action-btn div:first-child { font-size: 18px; margin-bottom: 5px; }
 
-/* Bottom Nav Bar (UI Kit style) */
 .bottom-nav {
   position: fixed;
   bottom: 0; left: 0; right: 0;
@@ -808,7 +805,6 @@ async function register(){
 
   if(!email || !password){ msg.innerText = "Email və şifrəni daxil edin"; return; }
 
-  // Əgər ad boş buraxılıbsa, Gmail-in @ işarəsinə qədər olan hissəsini götürürük
   if(!name){
     name = email.split('@')[0];
   }
@@ -870,7 +866,6 @@ async function loadProfile(){
   if(data){
     profile = data;
     
-    // Əgər bazada ad boşdursa və ya yoxdursa, avtomatik email-in @ qədər olan hissəsini təyin edirik
     if(!profile.full_name && user.email) {
       profile.full_name = user.email.split('@')[0];
       await supabaseClient.from("profiles").update({ full_name: profile.full_name }).eq("id", user.id);
@@ -1022,14 +1017,20 @@ async function updateAdminSetting(keyName, inputId){
 }
 
 async function approveDeposit(depId, userId, amount){
-  const { data: targetProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
-  if(!targetProf) { alert("Profil tapılmadı"); return; }
+  const { data: targetProf, error: fetchErr } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
+  if(fetchErr || !targetProf) { alert("İstifadəçi profili tapılmadı: " + (fetchErr?.message || '')); return; }
 
-  const newBal = Number(targetProf.balance || 0) + Number(amount);
-  await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
-  await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
+  const currentBal = Number(targetProf.balance || 0);
+  const depositAmount = Number(amount || 0);
+  const newBal = currentBal + depositAmount;
 
-  alert("Depozit təsdiqləndi və balans artırıldı!");
+  const { error: upBalErr } = await supabaseClient.from("profiles").update({ balance: newBal }).eq("id", userId);
+  if(upBalErr) { alert("Balans artırılarkən xəta: " + upBalErr.message); return; }
+
+  const { error: upDepErr } = await supabaseClient.from("deposits").update({ status: "approved" }).eq("id", depId);
+  if(upDepErr) { alert("Depozit statusu yenilənərkən xəta: " + upDepErr.message); return; }
+
+  alert(`Depozit təsdiqləndi! İstifadəçinin balansına +${depositAmount} AZN əlavə edildi.`);
   loadAdminData();
 }
 
@@ -1061,7 +1062,7 @@ async function approveInvestment(id, userId, vipId){
 async function rejectInvestment(id, userId, amount){
   const { data: targetProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
   if(targetProf){
-    await supabaseClient.from("profiles").update({ balance: Number(targetProf.balance || 0) + amount }).eq("id", userId);
+    await supabaseClient.from("profiles").update({ balance: Number(targetProf.balance || 0) + Number(amount) }).eq("id", userId);
   }
   await supabaseClient.from("investments").update({ status: "rejected" }).eq("id", id);
   alert("Yatırım rədd edildi və məbləğ geri qaytarıldı.");
@@ -1070,8 +1071,8 @@ async function rejectInvestment(id, userId, amount){
 
 async function approveWithdrawal(id, userId, amount){
   const { data: targetProf } = await supabaseClient.from("profiles").select("balance").eq("id", userId).maybeSingle();
-  if(targetProf && targetProf.balance >= amount){
-    await supabaseClient.from("profiles").update({ balance: targetProf.balance - amount }).eq("id", userId);
+  if(targetProf && Number(targetProf.balance || 0) >= Number(amount)){
+    await supabaseClient.from("profiles").update({ balance: Number(targetProf.balance) - Number(amount) }).eq("id", userId);
     await supabaseClient.from("withdraw_requests").update({ status: "approved" }).eq("id", id);
     alert("Çıxarış təsdiqləndi!");
   } else {
